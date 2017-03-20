@@ -1,11 +1,9 @@
+const fs = require('fs');
+
 /**
- * findProvidesModule
- * 
- * @description
  * Recursively crawles given directories and builds a map
  * of provided modules along with their absolute path.
  */
-
 function findProvidesModule(directories, opts = {}) {
   const options = Object.assign(opts, defaultOpts);
 
