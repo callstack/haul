@@ -40,6 +40,9 @@ const getPlatformFileName = (fileName, platforms) => {
     : fileName;
 };
 
+/**
+ * Returns name of the module provided by given file (if present)
+ */
 const getProvidedModuleName = (fileName) => {
   const content = fs.readFileSync(fileName, 'utf-8');
   return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
@@ -50,7 +53,7 @@ const getProvidedModuleName = (fileName) => {
  * haste modules 
  */
 function findProvidesModule(directories, opts = {}) {
-  const options = Object.assign({}, opts, defaultOpts);
+  const options = Object.assign({}, defaultOpts, opts);
 
   let modulesMap = {};
 
@@ -90,8 +93,6 @@ function findProvidesModule(directories, opts = {}) {
   };
 
   directories.forEach(walk);
-
-  console.log(modulesMap);
 
   return modulesMap;
 }
