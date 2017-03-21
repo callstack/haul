@@ -1,2 +1,6 @@
 # react-native-cli
-React Native CLI built on open tooling
+React Native CLI built on open tooling.
+
+Features:
+* Webpack
+* Commander
