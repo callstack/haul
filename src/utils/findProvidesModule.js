@@ -4,29 +4,29 @@
  * 
  * findProvidesModule.js
  */
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const defaultOpts = {
   // An array of folders to ignore when building map of modules
   // within given directory
   blacklist: [
-    'node_modules',
-    '__tests__',
-    '__mocks__',
-    '__fixtures__',
-    'react-packager',
-    'androidTest',
+    "node_modules",
+    "__tests__",
+    "__mocks__",
+    "__fixtures__",
+    "react-packager",
+    "androidTest"
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ['ios', 'android', 'native', 'web'],
+  platforms: ["ios", "android", "native", "web"]
 };
 
 /**
  * Returns Javascript file name or null for others
  */
-const getJSFileName = (fileName) => {
+const getJSFileName = fileName => {
   return (/^(.*)\.js$/.exec(fileName) || [])[1];
 };
 
@@ -34,17 +34,15 @@ const getJSFileName = (fileName) => {
  * Returns file name without platform extension (if present)
  */
 const getPlatformFileName = (fileName, platforms) => {
-  const [_, realName, extension] = (/^(.*)\.(\w+)$/.exec(fileName) || []);
-  return platforms.indexOf(extension) >= 0
-    ? realName
-    : fileName;
+  const [_, realName, extension] = /^(.*)\.(\w+)$/.exec(fileName) || [];
+  return platforms.indexOf(extension) >= 0 ? realName : fileName;
 };
 
 /**
  * Returns name of the module provided by given file (if present)
  */
-const getProvidedModuleName = (fileName) => {
-  const content = fs.readFileSync(fileName, 'utf-8');
+const getProvidedModuleName = fileName => {
+  const content = fs.readFileSync(fileName, "utf-8");
   return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
 };
 
@@ -57,7 +55,7 @@ function findProvidesModule(directories, opts = {}) {
 
   let modulesMap = {};
 
-  const walk = (dir) => {
+  const walk = dir => {
     const stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
@@ -77,16 +75,16 @@ function findProvidesModule(directories, opts = {}) {
       }
 
       const fileName = getPlatformFileName(jsFileName, options.platforms);
-      
+
       const moduleName = getProvidedModuleName(dir);
       if (!moduleName) {
         return;
       }
 
-      // Throw when duplicated modules are provided from a different 
+      // Throw when duplicated modules are provided from a different
       // fileName
       if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
-        throw new Error('Duplicate haste module found');
+        throw new Error("Duplicate haste module found");
       }
       modulesMap[moduleName] = fileName;
     }
