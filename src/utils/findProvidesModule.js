@@ -40,6 +40,11 @@ const getPlatformFileName = (fileName, platforms) => {
     : fileName;
 };
 
+const getProvidedModuleName = (fileName) => {
+  const content = fs.readFileSync(fileName, 'utf-8');
+  return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
+};
+
 /**
  * Recursively loops over given directories and returns a map of all
  * haste modules 
@@ -47,7 +52,7 @@ const getPlatformFileName = (fileName, platforms) => {
 function findProvidesModule(directories, opts = {}) {
   const options = Object.assign({}, opts, defaultOpts);
 
-  let ret = {};
+  let modulesMap = {};
 
   const walk = (dir) => {
     const stat = fs.statSync(dir);
@@ -70,26 +75,25 @@ function findProvidesModule(directories, opts = {}) {
 
       const fileName = getPlatformFileName(jsFileName, options.platforms);
       
-      const moduleMatch = /\* @providesModule ([\w\.]+)/.exec(
-        fs.readFileSync(dir, 'utf-8')
-      );
-
-      if (moduleMatch) {
-        // Throw when duplicated modules are provided from a different 
-        // fileName
-        if (ret[moduleMatch[1]] && ret[moduleMatch[1]] !== fileName) {
-          throw new Error('Duplicate haste module found');
-        }
-        ret[moduleMatch[1]] = fileName;
+      const moduleName = getProvidedModuleName(dir);
+      if (!moduleName) {
+        return;
       }
+
+      // Throw when duplicated modules are provided from a different 
+      // fileName
+      if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
+        throw new Error('Duplicate haste module found');
+      }
+      modulesMap[moduleName] = fileName;
     }
   };
 
   directories.forEach(walk);
 
-  console.log(ret);
+  console.log(modulesMap);
 
-  return ret;
+  return modulesMap;
 }
 
 findProvidesModule(['/Users/grabbou/Repositories/HelloWorld/node_modules/react-native']);
