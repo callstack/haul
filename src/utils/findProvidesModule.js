@@ -97,6 +97,4 @@ function findProvidesModule(directories, opts = {}) {
   return modulesMap;
 }
 
-findProvidesModule(['/Users/grabbou/Repositories/HelloWorld/node_modules/react-native']);
-
 module.exports = findProvidesModule;
