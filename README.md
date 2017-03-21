@@ -2,5 +2,5 @@
 React Native CLI built on open tooling.
 
 Features:
-* Webpack
+* Webpack (via Express.js to support HMR and Live Reload)
 * Commander
