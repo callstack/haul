@@ -24,6 +24,23 @@ const defaultOpts = {
 };
 
 /**
+ * Returns Javascript file name or null for others
+ */
+const getJSFileName = (fileName) => {
+  return (/^(.*)\.js$/.exec(fileName) || [])[1];
+};
+
+/**
+ * Returns file name without platform extension (if present)
+ */
+const getPlatformFileName = (fileName, platforms) => {
+  const [_, realName, extension] = (/^(.*)\.(\w+)$/.exec(fileName) || []);
+  return platforms.indexOf(extension) >= 0
+    ? realName
+    : fileName;
+};
+
+/**
  * Recursively loops over given directories and returns a map of all
  * haste modules 
  */
@@ -46,16 +63,12 @@ function findProvidesModule(directories, opts = {}) {
     }
 
     if (stat.isFile()) {
-      const fileMatch = /^(.*)\.js$/.exec(dir);
-      if (!fileMatch) {
+      const jsFileName = getJSFileName(dir);
+      if (!jsFileName) {
         return;
       }
 
-      const platformMatch = /^(.*)\.(\w+)$/.exec(fileMatch[1]);
-      const hasPlatformImpl = platformMatch
-        && options.platforms.indexOf(platformMatch[2]) >= 0;
-      
-      const basePath = hasPlatformImpl ? platformMatch[1] : fileMatch[1];
+      const fileName = getPlatformFileName(jsFileName, options.platforms);
       
       const moduleMatch = /\* @providesModule ([\w\.]+)/.exec(
         fs.readFileSync(dir, 'utf-8')
@@ -63,11 +76,11 @@ function findProvidesModule(directories, opts = {}) {
 
       if (moduleMatch) {
         // Throw when duplicated modules are provided from a different 
-        // basePath
-        if (ret[moduleMatch[1]] && ret[moduleMatch[1]] !== basePath) {
+        // fileName
+        if (ret[moduleMatch[1]] && ret[moduleMatch[1]] !== fileName) {
           throw new Error('Duplicate haste module found');
         }
-        ret[moduleMatch[1]] = basePath;
+        ret[moduleMatch[1]] = fileName;
       }
     }
   };
