@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "prettier": "^0.22.0"
+    "babel": "^6.23.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-react-native": "^1.9.1",
+    "babel-runtime": "^6.23.0",
+    "prettier": "^0.22.0",
+    "react-native": "^0.42.3"
   }
 }
