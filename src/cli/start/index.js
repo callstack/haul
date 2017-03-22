@@ -14,7 +14,11 @@ const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
  */
 function start() {
   const config = makeReactNativeConfig(
-    require(path.join(process.cwd(), "webpack.config.js"))
+    require(path.join(process.cwd(), "webpack.config.js")),
+    {
+      port: 8081,
+      dev: false,
+    }
   );
 
   const compiler = webpack(config);

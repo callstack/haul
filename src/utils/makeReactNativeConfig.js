@@ -8,109 +8,64 @@ const webpack = require("webpack");
 const path = require("path");
 const findProvidesModule = require("./findProvidesModule");
 
-/**
- * Default array of platforms
- */
-const platforms = ["ios", "android", "windows"];
+const PLATFORMS = ["ios", "android", "windows"];
 
 /**
- * Environment to use for bundling
+ * Returns default config based on environment 
  */
-const dev = true;
-
-/**
- * Default set of loaders
- */
-const loaders = [
-  {
-    test: /\.js?$/,
-    loader: "babel-loader",
-    options: {
-      presets: ["react-native"]
-    }
-  },
-  { test: /\.json$/, loader: "json-loader" }
-];
-
-/**
- * Settings passed to Webpack to create platform-specific settings
- */
-const defaultSettings = {
-  platforms,
-  dev,
-  loaders
-};
-
-function makeReactNativeConfig(func) {
-  const configs = platforms.map(platform => {
-    const settings = Object.assign({}, defaultSettings, { platform });
-    return attachDefaults(func(settings), settings);
-  });
-
-  // @todo figure out how to handle multiple configs
-  // best is to create a map of webpack compilers and dev middleware for each platform,
-  // than, based on platform=VALUE from URL request, decide which one to load
-  return configs[0];
-}
-
-/**
- * Attaches common settings for Webpack config to work.
- */
-function attachDefaults(config, settings) {
-  config.plugins = (config.plugins || []).concat([
-    new webpack.DefinePlugin({
-      __DEV__: settings.dev
-    })
-  ]);
-
-  config.resolve = Object.assign(
-    {},
+const getDefaultConfig = ({ platform, dev, port }) => ({
+  // Platform we are building for
+  platform: platform,
+  // Entry point with polyfills
+  entry: require.resolve("./polyfillEnvironment.js"),
+  // Built-in loaders
+  loaders: [
     {
-      alias: findProvidesModule([
-        path.resolve(process.cwd(), "node_modules/react-native")
-      ]),
-      extensions: ["", `.${settings.platform}.js`, ".js"]
+      test: /\.js?$/,
+      loader: "babel-loader",
+      options: {
+        presets: ["react-native"]
+      }
     },
-    config.resolve || {}
-  );
-
-  // Changing `devServer` is not supported
-  // Too tightly coupled with React Native for now
-  config.devServer = {
-    port: 8081,
+    { test: /\.json$/, loader: "json-loader" }
+  ],
+  // Default plugins
+  plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: dev
+    })
+  ],
+  // Default resolve
+  resolve: {
+    alias: findProvidesModule([
+      path.resolve(process.cwd(), "node_modules/react-native")
+    ]),
+    extensions: ["", `.${platform}.js`, ".js"]
+  },
+  // Default devServer settings
+  devServer: {
+    port,
     quiet: true,
     noInfo: true,
     lazy: true,
-    filename: `[name].${settings.platform}.bundle`,
+    filename: `[name].${platform}.bundle`,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
     },
     publicPath: "/",
     stats: { colors: true }
-  };
+  }
+});
 
-  // `Output` of bundler is opaque
-  config.output = {
-    filename: `[name].${settings.platform}.bundle`,
-    path: "/",
-    publicPath: "/"
-  };
+function makeReactNativeConfig(func, env) {
+  const configs = PLATFORMS.map(platform => {
+    const defaultConfig = getDefaultConfig(env);
+    return func(defaultConfig);
+  });
 
-  // Entry point
-  config.entry = {
-    index: [require.resolve("./polyfillEnvironment.js"), ...config.entry.index]
-  };
-
-  config.module = Object.assign(
-    {},
-    {
-      loaders
-    },
-    config.module
-  );
-
-  return config;
+  // @todo handle all the platforms later
+  return configs[0];
 }
 
 module.exports = makeReactNativeConfig;
