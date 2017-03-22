@@ -3,8 +3,19 @@
  * All rights reserved.
  */
 
-function start() {
+const webpack = require('webpack');
+const Server = require('../../server');
+const path = require('path');
 
+function start() {
+  const config = require(path.join(process.cwd(), 'webpack.config.js'));
+  const compiler = webpack(config);
+
+  const app = new Server(compiler);
+
+  app.listen(8081, "127.0.0.1", () => {
+	  console.log("Starting server on http://localhost:8081");
+  });
 }
 
 module.exports = start;
