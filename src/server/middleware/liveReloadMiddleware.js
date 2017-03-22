@@ -10,17 +10,16 @@ function liveReloadMiddleware(compiler) {
   let watchers = [];
 
   return (req, res, next) => {
-    
     /**
      * React Native client opens connection at `/onchange`
      * and awaits reload signal (http status code - 205)
      */
-    if (req.url === '/onchange') {
+    if (req.url === "/onchange") {
       const watcher = { req, res };
-      
+
       watchers.push(watcher);
 
-      req.on('close', () => {
+      req.on("close", () => {
         watchers.splice(watchers.indexOf(watcher), 1);
       });
 
@@ -32,12 +31,12 @@ function liveReloadMiddleware(compiler) {
      */
     compiler.plugin("done", () => {
       const headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
+        "Content-Type": "application/json; charset=UTF-8"
       };
 
       watchers.forEach(({ res }) => {
         res.writeHead(205, headers);
-        res.end(JSON.stringify({changed: true}));
+        res.end(JSON.stringify({ changed: true }));
       });
 
       watchers = [];
