@@ -13,7 +13,7 @@ const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
  * Starts development server
  */
 function start() {
-  const config = makeReactNativeConfig(
+  const configs = makeReactNativeConfig(
     require(path.join(process.cwd(), "webpack.config.js")),
     {
       port: 8081,
@@ -21,7 +21,8 @@ function start() {
     }
   );
 
-  const compiler = webpack(config);
+  // @todo handle all platforms available
+  const compiler = webpack(configs[0]);
 
   const app = new Server(compiler);
   app.listen(8081, "127.0.0.1", () => {

@@ -58,14 +58,15 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   }
 });
 
+/**
+ * Creates an array of configs based on changing `env` for every
+ * platform and returns
+ */
 function makeReactNativeConfig(func, env) {
-  const configs = PLATFORMS.map(platform => {
+  return PLATFORMS.map(platform => {
     const defaultConfig = getDefaultConfig(env);
     return func(defaultConfig);
   });
-
-  // @todo handle all the platforms later
-  return configs[0];
 }
 
 module.exports = makeReactNativeConfig;
