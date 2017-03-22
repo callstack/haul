@@ -1,6 +1,14 @@
-# haul
-Haul is a new command line tools for React Native, built from scratch and brought to you by Callstack.
+<div align="center">
+ <h1>haul</h1>
+  <p>
+    haul is a command line interface to React Native built on Webpack. It is an alternative to `packager`
+    and `react-native` cli.
+  </p>
+</div>
 
-Features:
-* Webpack (via Express.js to support HMR and Live Reload)
-* Commander
+<h2 align="center">Install</h2>
+
+```bash
+npm install --save-dev haul-cli
+```
+
