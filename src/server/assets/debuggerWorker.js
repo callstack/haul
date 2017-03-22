@@ -10,7 +10,7 @@
 /* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */
 /* eslint no-unused-vars: 0 */
 
-'use strict';
+"use strict";
 
 onmessage = (function() {
   var visibilityState;
@@ -18,20 +18,20 @@ onmessage = (function() {
     var hasWarned = false;
     return function() {
       // Wait until `YellowBox` gets initialized before displaying the warning.
-      if (hasWarned || console.warn.toString().includes('[native code]')) {
+      if (hasWarned || console.warn.toString().includes("[native code]")) {
         return;
       }
       hasWarned = true;
       console.warn(
-        'Remote debugger is in a background tab which may cause apps to ' +
-        'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
-        'a separate window).'
+        "Remote debugger is in a background tab which may cause apps to " +
+          "perform slowly. Fix this by foregrounding the tab (or opening it in " +
+          "a separate window)."
       );
     };
   })();
 
   var messageHandlers = {
-    'executeApplicationScript': function(message, sendReply) {
+    executeApplicationScript: function(message, sendReply) {
       for (var key in message.inject) {
         self[key] = JSON.parse(message.inject[key]);
       }
@@ -43,20 +43,20 @@ onmessage = (function() {
       }
       sendReply(null /* result */, error);
     },
-    'setDebuggerVisibility': function(message) {
+    setDebuggerVisibility: function(message) {
       visibilityState = message.visibilityState;
-    },
+    }
   };
 
   return function(message) {
-    if (visibilityState === 'hidden') {
+    if (visibilityState === "hidden") {
       showVisibilityWarning();
     }
 
     var object = message.data;
 
     var sendReply = function(result, error) {
-      postMessage({replyID: object.id, result: result, error: error});
+      postMessage({ replyID: object.id, result: result, error: error });
     };
 
     var handler = messageHandlers[object.method];
@@ -67,8 +67,11 @@ onmessage = (function() {
       // Other methods get called on the bridge
       var returnValue = [[], [], [], 0];
       try {
-        if (typeof __fbBatchedBridge === 'object') {
-          returnValue = __fbBatchedBridge[object.method].apply(null, object.arguments);
+        if (typeof __fbBatchedBridge === "object") {
+          returnValue = __fbBatchedBridge[object.method].apply(
+            null,
+            object.arguments
+          );
         }
       } finally {
         sendReply(JSON.stringify(returnValue));

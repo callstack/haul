@@ -3,15 +3,15 @@
  * All rights reserved.
  */
 
-const webpack = require('webpack');
-const Server = require('../../server');
-const path = require('path');
+const webpack = require("webpack");
+const Server = require("../../server");
+const path = require("path");
 
 /**
  * Starts development server
  */
 function start() {
-  const config = require(path.join(process.cwd(), 'webpack.config.js'));
+  const config = require(path.join(process.cwd(), "webpack.config.js"));
   const compiler = webpack(config);
 
   const app = new Server(compiler);
