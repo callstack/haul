@@ -15,6 +15,7 @@ const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
 function start() {
   const configs = makeReactNativeConfig(
     require(path.join(process.cwd(), "webpack.config.js")),
+    // @todo make these command options and think what else support
     {
       port: 8081,
       dev: false,
