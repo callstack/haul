@@ -19,9 +19,18 @@ const platforms = ["ios", "android", "windows"];
 const dev = true;
 
 /**
- * Default entry point
+ * Default set of loaders
  */
-const entry = "index";
+const loaders = [
+  {
+    test: /\.js?$/,
+    loader: "babel-loader",
+    options: {
+      presets: ["react-native"]
+    }
+  },
+  { test: /\.json$/, loader: "json-loader" }
+];
 
 /**
  * Settings passed to Webpack to create platform-specific settings
@@ -29,7 +38,7 @@ const entry = "index";
 const defaultSettings = {
   platforms,
   dev,
-  entry
+  loaders
 };
 
 function makeReactNativeConfig(func) {
@@ -96,16 +105,7 @@ function attachDefaults(config, settings) {
   config.module = Object.assign(
     {},
     {
-      loaders: [
-        {
-          test: /\.js?$/,
-          loader: "babel-loader",
-          options: {
-            presets: ["react-native"]
-          }
-        },
-        { test: /\.json$/, loader: "json-loader" }
-      ]
+      loaders
     },
     config.module
   );
