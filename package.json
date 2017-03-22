@@ -1,10 +1,13 @@
 {
-  "name": "react-native-cli",
+  "name": "rncli",
+  "description": "React Native Command Line Tools",
+  "bin": "./src/cli",
   "dependencies": {
     "babel": "^6.23.0",
     "babel-loader": "^6.4.1",
     "babel-preset-react-native": "^1.9.1",
     "babel-runtime": "^6.23.0",
+    "commander": "^2.9.0",
     "express": "^4.15.2"
   },
   "peerDependencies": {
