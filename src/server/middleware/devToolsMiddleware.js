@@ -25,7 +25,7 @@ const getChromeAppName = () => {
  */
 const launchChrome = (url) => {
   opn(url, { app: getChromeAppName() }, (err) => {
-    console.error('Google Chrome excited with error', err);
+    console.error('Google Chrome exited with error', err);
   });
 };
 
