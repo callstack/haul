@@ -16,7 +16,6 @@ function liveReloadMiddleware(compiler) {
      * and awaits reload signal (http status code - 205)
      */
     if (req.url === '/onchange') {
-      console.log('Registered watcher');
       const watcher = { req, res };
       
       watchers.push(watcher);
@@ -32,8 +31,6 @@ function liveReloadMiddleware(compiler) {
      * On new `build`, notify all registered watchers to reload
      */
     compiler.plugin("done", () => {
-      console.log('Reloading');
-
       const headers = {
         'Content-Type': 'application/json; charset=UTF-8',
       };
