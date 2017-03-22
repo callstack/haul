@@ -5,8 +5,8 @@
  * makeReactNativeConfig.js
  */
 const webpack = require("webpack");
-const path = require('path');
-const findProvidesModule = require('./findProvidesModule');
+const path = require("path");
+const findProvidesModule = require("./findProvidesModule");
 
 /**
  * Default array of platforms
@@ -21,7 +21,7 @@ const dev = true;
 /**
  * Default entry point
  */
-const entry = 'index';
+const entry = "index";
 
 /**
  * Settings passed to Webpack to create platform-specific settings
@@ -34,10 +34,7 @@ const defaultSettings = {
 
 function makeReactNativeConfig(func) {
   const configs = platforms.map(platform => {
-    const settings = Object.assign({},
-      defaultSettings,
-      { platform }
-    );
+    const settings = Object.assign({}, defaultSettings, { platform });
     return attachDefaults(func(settings), settings);
   });
 
@@ -78,39 +75,40 @@ function attachDefaults(config, settings) {
     filename: `[name].${settings.platform}.bundle`,
     watchOptions: {
       aggregateTimeout: 300,
-      poll: 1000,
+      poll: 1000
     },
-    publicPath: '/',
-    stats: { colors: true },
+    publicPath: "/",
+    stats: { colors: true }
   };
 
   // `Output` of bundler is opaque
   config.output = {
     filename: `[name].${settings.platform}.bundle`,
-    path: '/',
-    publicPath: '/',
-  };
-  
-  // Entry point
-  config.entry = {
-    index: [
-      require.resolve('./polyfillEnvironment.js'),
-      ...config.entry.index,
-    ],
+    path: "/",
+    publicPath: "/"
   };
 
-  config.module = {
-    loaders: [
-      {
-        test: /\.js?$/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['react-native'],
-        },
-      },
-      { test: /\.json$/, loader: 'json-loader' },
-    ],
+  // Entry point
+  config.entry = {
+    index: [require.resolve("./polyfillEnvironment.js"), ...config.entry.index]
   };
+
+  config.module = Object.assign(
+    {},
+    {
+      loaders: [
+        {
+          test: /\.js?$/,
+          loader: "babel-loader",
+          options: {
+            presets: ["react-native"]
+          }
+        },
+        { test: /\.json$/, loader: "json-loader" }
+      ]
+    },
+    config.module
+  );
 
   return config;
 }
