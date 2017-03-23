@@ -32,7 +32,7 @@ program
   .action((cmd) => {
     logger.clear();
     logger.printLogo();
-    logger.error(`Command '${cmd}' not recognized`);
+    logger.error(`:x:  Command '${cmd}' not recognized`);
     program.help();
   });
 

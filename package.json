@@ -18,9 +18,10 @@
     "express": "^4.15.2",
     "flow-bin": "^0.42.0",
     "happypack": "^3.0.3",
+    "node-emoji": "^1.5.1",
     "pre-commit": "^1.2.2",
-    "webpack": "2.x",
-    "webpack-dev-middleware": "1.10.1"
+    "webpack": "^2.3.1",
+    "webpack-dev-middleware": "^1.10.1"
   },
   "peerDependencies": {
     "react-native": "^0.42.3"
