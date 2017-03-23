@@ -11,4 +11,6 @@ type Command = {
   action: (ctx: Context) => void,
 };
 
-type Context = {};
+type Context = {
+  console: any,
+};

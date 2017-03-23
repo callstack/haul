@@ -12,7 +12,9 @@ import type { Command, Context } from "../types";
 
 const commands: Array<Command> = [require("./start")];
 
-const ctx: Context = {};
+const ctx: Context = {
+  console: console,
+};
 
 commands.forEach(cmd => {
   program

@@ -11,10 +11,12 @@ const path = require("path");
 
 const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
 
+import type { Context } from '../../types';
+
 /**
  * Starts development server
  */
-function start() {
+function start({ console }: Context) {
   const config = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(path.join(process.cwd(), "webpack.config.js")),
