@@ -23,9 +23,18 @@ const WebSocketProxy = require("./util/webSocketProxy.js");
  * Packager-like Server running on top of Webpack
  */
 class Server {
-  constructor(compiler, options = {}) {
+  constructor(compiler) {
     const appHandler = new Express();
-    const webpackMiddleware = webpackDevMiddleware(compiler, options);
+    const webpackMiddleware = webpackDevMiddleware(compiler, {
+      lazy: false,
+      noInfo: true,
+      watchOptions: {
+        aggregateTimeout: 300,
+        poll: 1000
+      },
+      publicPath: "/",
+      stats: { colors: true }
+    });
 
     this.httpServer = http.createServer(appHandler);
 
