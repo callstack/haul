@@ -23,7 +23,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
     loaders: [
       {
         test: /\.js?$/,
-        loader: "babel-loader",
+        loader: "babel-loader?cacheDirectory=true",
       },
       { test: /\.json$/, loader: "json-loader" }
     ]
