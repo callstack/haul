@@ -23,6 +23,7 @@ function start({ console }: Context, _: Array<string>, opts: *) {
     {
       port: opts.port,
       dev: opts.dev,
+      platform: opts.platform,
       cwd: process.cwd()
     }
   );
@@ -51,6 +52,11 @@ module.exports = {
       description: "Whether build in development mode",
       default: true,
       parse: (val: string) => JSON.parse(val)
+    },
+    {
+      name: "--platform [ios|android]",
+      description: "Platform to bundle for",
+      default: "ios"
     }
   ]
 };
