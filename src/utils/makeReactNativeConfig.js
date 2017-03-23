@@ -22,7 +22,7 @@ type ConfigOptions = {
 
 // @todo type this
 type WebpackConfig = {
-  entry: Array<string> | string,
+  entry: Array<string> | string
 };
 
 type WebpackConfigFactory =
@@ -40,14 +40,18 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
     rules: [
       {
         test: /\.jsx?$/,
-        loader: "happypack/loader?id=babel"
+        loader: "happypack/loader?id=babel",
+        exclude: /node_modules\/(?!react)/,
       },
-      { test: /\.json$/, loader: "json-loader" }
+      {
+        test: /\.json$/,
+        loader: "json-loader"
+      }
     ]
   },
   output: {
     path: "/",
-    filename: "index.${platform}.bundle"
+    filename: `index.${platform}.bundle`
   },
   // Default plugins
   plugins: [
@@ -60,30 +64,15 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
       id: "babel",
       loaders: [
         `babel-loader?presets[]=react-native&plugins[]=${require.resolve("./fixRequireIssues")}`
-      ]
+      ],
+      verbose: false,
     })
   ],
   // Default resolve
   resolve: {
-    alias: findProvidesModule([
-      path.resolve(cwd, "node_modules/react-native")
-    ]),
+    alias: findProvidesModule([path.resolve(cwd, "node_modules/react-native")]),
     extensions: [`.${platform}.js`, ".js"]
   },
-  // Default devServer settings
-  devServer: {
-    port,
-    quiet: true,
-    noInfo: true,
-    lazy: true,
-    filename: `[name].bundle`,
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000
-    },
-    publicPath: "/",
-    stats: { colors: true }
-  }
 });
 
 /**
@@ -114,7 +103,7 @@ function makeReactNativeConfig(
     return config;
   });
 
-  return configs[PLATFORMS.indexOf(options.platform)];
+  return configs[PLATFORMS.indexOf(options.platform)]
 }
 
 module.exports = makeReactNativeConfig;
