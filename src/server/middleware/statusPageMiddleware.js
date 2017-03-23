@@ -15,3 +15,5 @@ function statusPageMiddleware(req, res, next) {
   } 
   next();
 }
+
+module.exports = statusPageMiddleware;

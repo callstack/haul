@@ -24,9 +24,6 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
       {
         test: /\.js?$/,
         loader: "babel-loader",
-        options: {
-          presets: ["react-native"]
-        }
       },
       { test: /\.json$/, loader: "json-loader" }
     ]
