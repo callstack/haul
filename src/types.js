@@ -8,7 +8,7 @@
 type Command = {
   name: string,
   description: string,
-  action: Function
+  action: (ctx: Context) => void,
 };
 
 type Context = {};
