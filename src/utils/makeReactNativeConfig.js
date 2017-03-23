@@ -8,7 +8,7 @@ const webpack = require("webpack");
 const path = require("path");
 const findProvidesModule = require("./findProvidesModule");
 
-const PLATFORMS = ["ios", "android", "windows"];
+const PLATFORMS = ["ios", "android"];
 
 /**
  * Returns default config based on environment 
@@ -19,16 +19,22 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   // Entry point with polyfills
   entry: require.resolve("./polyfillEnvironment.js"),
   // Built-in loaders
-  loaders: [
-    {
-      test: /\.js?$/,
-      loader: "babel-loader",
-      options: {
-        presets: ["react-native"]
-      }
-    },
-    { test: /\.json$/, loader: "json-loader" }
-  ],
+  module: {
+    loaders: [
+      {
+        test: /\.js?$/,
+        loader: "babel-loader",
+        options: {
+          presets: ["react-native"]
+        }
+      },
+      { test: /\.json$/, loader: "json-loader" }
+    ]
+  },
+  output: {
+    path: "/",
+    filename: `${platform}.bundle`,
+  },
   // Default plugins
   plugins: [
     new webpack.DefinePlugin({
@@ -48,7 +54,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
     quiet: true,
     noInfo: true,
     lazy: true,
-    filename: `[name].${platform}.bundle`,
+    filename: `[name].bundle`,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
@@ -61,9 +67,13 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
 /**
  * Creates an array of configs based on changing `env` for every
  * platform and returns
+ * 
+ * @todo that should return an array of all configs so we can handle
+ * many platforms at one go
  */
-function makeReactNativeConfig(func, env) {
+function makeReactNativeConfig(func, options) {
   return PLATFORMS.map(platform => {
+    const env = Object.assign({}, options, { platform });
     const defaultConfig = getDefaultConfig(env);
     return func(defaultConfig);
   });
