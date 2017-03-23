@@ -33,7 +33,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   },
   output: {
     path: "/",
-    filename: `${platform}.bundle`
+    filename: `index.${platform}.bundle`
   },
   // Default plugins
   plugins: [
@@ -68,16 +68,22 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
  * Creates an array of configs based on changing `env` for every
  * platform and returns
  */
-function makeReactNativeConfig(func, options) {
+function makeReactNativeConfig(userWebpackConfig, options) {
   return PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultConfig = getDefaultConfig(env);
 
-    // @todo validate etc.
-    const userConfig = func(defaultConfig);
-    userConfig.entry = [PATH_TO_POLYFILLS, userConfig.entry];
+    const config = Object.assign(
+      {},
+      defaultConfig,
+      typeof userWebpackConfig === "function"
+        ? userWebpackConfig(defaultConfig)
+        : userWebpackConfig
+    );
+    
+    config.entry = [PATH_TO_POLYFILLS, config.entry];
 
-    return userConfig;
+    return config;
   });
 }
 
