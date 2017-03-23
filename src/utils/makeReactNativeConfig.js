@@ -15,8 +15,6 @@ const PLATFORMS = ["ios", "android"];
  * Returns default config based on environment 
  */
 const getDefaultConfig = ({ platform, dev, port }) => ({
-  // Platform we are building for
-  platform: platform,
   // Default polyfills and entry-point setup
   entry: [
     require.resolve("./polyfillEnvironment.js"),
@@ -79,24 +77,19 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
 function makeReactNativeConfig(userWebpackConfig, options) {
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
-    const defaultConfig = getDefaultConfig(env);
+    const defaultWebpackConfig = getDefaultConfig(env);
 
     const config = Object.assign(
       {},
-      defaultConfig,
+      defaultWebpackConfig,
       typeof userWebpackConfig === "function"
-        ? userWebpackConfig(defaultConfig)
+        ? userWebpackConfig(env, defaultWebpackConfig)
         : userWebpackConfig
     );
     
     // For simplicity, we don't require users to extend
     // default config.entry but do it for them.
     config.entry = defaultConfig.entry.concat(config.entry);
-    
-    // Platform is extraneous part of Webpack config that we pass to 
-    // configure variants. With Webpack 2.x, it has to be removed
-    // before setting up compiler
-    delete config.platform;
 
     return config;
   });

@@ -29,7 +29,7 @@ and return entry point based on platform.
 
 If you are planning to override any of Webpack properties, like `module.loaders` or `resolve.moduleDirectories`, be sure to load defaults:
 ```js
-module.exports = ({ platform, resolve }) => {
+module.exports = ({ platform }, { resolve }) => {
   entry: `./index.${platform}.js`,
   resolve: {
     ...resolve,
@@ -37,3 +37,4 @@ module.exports = ({ platform, resolve }) => {
   },
 };
 ```
+They are passed to function as a 2nd parameter.
