@@ -41,7 +41,7 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
       {
         test: /\.jsx?$/,
         loader: "happypack/loader?id=babel",
-        exclude: /node_modules\/(?!(react|react-*)).*/,
+        exclude: /node_modules\/(?!react)/,
       },
       {
         test: /\.json$/,
