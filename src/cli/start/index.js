@@ -21,7 +21,7 @@ function start() {
     {
       port: 8081,
       dev: true,
-      platform: "ios",
+      platform: "ios"
     }
   );
 
@@ -34,7 +34,7 @@ function start() {
 }
 
 module.exports = {
-  name: 'start',
-  description: 'Starts a new webpack server',
-  action: start,
+  name: "start",
+  description: "Starts a new webpack server",
+  action: start
 };

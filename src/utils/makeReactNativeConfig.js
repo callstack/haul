@@ -21,7 +21,7 @@ type ConfigOptions = {
 
 // @todo type this
 type WebpackConfig = {
-  entry: Array<string> | string,
+  entry: Array<string> | string
 };
 
 type WebpackConfigFactory =
