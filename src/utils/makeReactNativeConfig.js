@@ -18,8 +18,7 @@ type ConfigOptions = {
 };
 
 // @todo type this
-type WebpackConfig = {};
-type DefaultWebpackConfig = {};
+type WebpackConfig;
 
 type WebpackConfigFactory =
   | ((ConfigOptions, DefaultWebpackConfig) => WebpackConfig)
