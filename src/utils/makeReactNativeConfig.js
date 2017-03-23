@@ -21,7 +21,7 @@ type ConfigOptions = {
 
 // @todo type this
 type WebpackConfig = {
-  entry: Array<string> | string
+  entry: Array<string> | string,
 };
 
 type WebpackConfigFactory =
@@ -46,7 +46,7 @@ const getDefaultConfig = ({ platform, dev, port }): WebpackConfig => ({
   },
   output: {
     path: "/",
-    filename: `index.${platform}.bundle`
+    filename: "index.${platform}.bundle"
   },
   // Default plugins
   plugins: [
@@ -107,7 +107,6 @@ function makeReactNativeConfig(
 
     // For simplicity, we don't require users to extend
     // default config.entry but do it for them.
-
     // $FlowFixMe: Doesn't work with union here
     config.entry = defaultWebpackConfig.entry.concat(config.entry);
 
