@@ -12,6 +12,7 @@ const http = require("http");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const devToolsMiddleware = require("./middleware/devToolsMiddleware");
 const liveReloadMiddleware = require("./middleware/liveReloadMiddleware");
+const statusPageMiddleware = require("./middleware/statusPageMiddleware");
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
@@ -33,9 +34,11 @@ class Server {
       "/debugger-proxy"
     );
 
+    // Middlewares
     appHandler
       .use(devToolsMiddleware(debuggerProxy))
       .use(liveReloadMiddleware(compiler))
+      .use(statusPageMiddleware)
       .use(webpackMiddleware);
   }
 
