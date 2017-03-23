@@ -4,12 +4,8 @@
   "description": "Haul is a new command line tools for React Native",
   "bin": "./src/cli",
   "scripts": {
-    "test": "flow src",
-    "prettier": "git diff --name-only HEAD | grep '.*.js' | xargs prettier --write"
+    "test": "flow src"
   },
-  "pre-commit": [
-    "prettier"
-  ],
   "dependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.24.0",
