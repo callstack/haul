@@ -11,14 +11,26 @@ const findProvidesModule = require("./findProvidesModule");
 
 const PLATFORMS = ["ios", "android"];
 
+type ConfigOptions = {
+  port: number,
+  platform: "ios" | "android",
+  dev: boolean
+};
+
+// @todo type this
+type WebpackConfig = {};
+type DefaultWebpackConfig = {};
+
+type WebpackConfigFactory =
+  | ((ConfigOptions, DefaultWebpackConfig) => WebpackConfig)
+  | WebpackConfig;
+
 /**
  * Returns default config based on environment 
  */
-const getDefaultConfig = ({ platform, dev, port }) => ({
+const getDefaultConfig = ({ platform, dev, port }): DefaultWebpackConfig => ({
   // Default polyfills and entry-point setup
-  entry: [
-    require.resolve("./polyfillEnvironment.js"),
-  ],
+  entry: [require.resolve("./polyfillEnvironment.js")],
   // Built-in loaders
   module: {
     rules: [
@@ -74,7 +86,10 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
  * Creates an array of configs based on changing `env` for every
  * platform and returns
  */
-function makeReactNativeConfig(userWebpackConfig, options) {
+function makeReactNativeConfig(
+  userWebpackConfig: WebpackConfigFactory,
+  options: ConfigOptions
+): WebpackConfig {
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultWebpackConfig = getDefaultConfig(env);
@@ -86,7 +101,7 @@ function makeReactNativeConfig(userWebpackConfig, options) {
         ? userWebpackConfig(env, defaultWebpackConfig)
         : userWebpackConfig
     );
-    
+
     // For simplicity, we don't require users to extend
     // default config.entry but do it for them.
     config.entry = defaultWebpackConfig.entry.concat(config.entry);
@@ -94,7 +109,6 @@ function makeReactNativeConfig(userWebpackConfig, options) {
     return config;
   });
 
-  // @todo solve performance when returning many
   return configs[PLATFORMS.indexOf(options.platform)];
 }
 

@@ -30,4 +30,8 @@ function start() {
   });
 }
 
-module.exports = start;
+module.exports = {
+  name: 'start',
+  description: 'Starts a new webpack server',
+  action: start,
+};
