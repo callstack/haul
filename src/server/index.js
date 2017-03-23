@@ -1,6 +1,8 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ * 
+ * @flow
  */
 
 const Express = require("express");
@@ -20,24 +22,51 @@ const statusPageMiddleware = require("./middleware/statusPageMiddleware");
 const WebSocketProxy = require("./util/webSocketProxy.js");
 
 /**
+ * Better build reporter for Webpack builds
+ */
+const buildReporter = (reporterOptions) => {
+  const { state, stats, options } = reporterOptions;
+  
+  if (!state) {
+    console.log('Compiling...');
+  }
+
+  if (!stats.hasErrors() && !stats.hasWarnings()) {
+    const time = stats.endTime - stats.startTime;
+    console.log(`Compiled in ${time}ms`);
+    return;
+  }
+   
+  if (stats.hasWarnings()) {
+    console.log('Compiled with warnings');
+    return;
+  }
+
+  if (stats.hasErrors()) {
+    console.log('Failed to compile');
+    return;
+  }
+}
+
+/**
  * Packager-like Server running on top of Webpack
  */
-class Server {
-  constructor(compiler) {
-    const appHandler = new Express();
+function createServer(compiler: any) {
+  const appHandler = new Express();
     const webpackMiddleware = webpackDevMiddleware(compiler, {
       lazy: false,
       noInfo: true,
+      reporter: buildReporter,
       watchOptions: {
         aggregateTimeout: 300,
         poll: 1000
       }
     });
 
-    this.httpServer = http.createServer(appHandler);
+    const httpServer = http.createServer(appHandler);
 
     const debuggerProxy = new WebSocketProxy(
-      this.httpServer,
+      httpServer,
       "/debugger-proxy"
     );
 
@@ -47,14 +76,8 @@ class Server {
       .use(liveReloadMiddleware(compiler))
       .use(statusPageMiddleware)
       .use(webpackMiddleware);
-  }
-
-  /**
-   * Starts listening to incoming requests
-   */
-  listen(...args) {
-    return this.httpServer.listen(...args);
-  }
+    
+    return httpServer;
 }
 
-module.exports = Server;
+module.exports = createServer;
