@@ -22,7 +22,7 @@ type ConfigOptions = {
 
 // @todo type this
 type WebpackConfig = {
-  entry: Array<string> | string,
+  entry: Array<string> | string
 };
 
 type WebpackConfigFactory =
@@ -40,14 +40,18 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
     rules: [
       {
         test: /\.jsx?$/,
-        loader: "happypack/loader?id=babel"
+        loader: "happypack/loader?id=babel",
+        exclude: /node_modules\/(?!(react|react-*)).*/,
       },
-      { test: /\.json$/, loader: "json-loader" }
+      {
+        test: /\.json$/,
+        loader: "json-loader"
+      }
     ]
   },
   output: {
     path: "/",
-    filename: "index.${platform}.bundle"
+    filename: `index.${platform}.bundle`
   },
   // Default plugins
   plugins: [
@@ -65,9 +69,7 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
   ],
   // Default resolve
   resolve: {
-    alias: findProvidesModule([
-      path.resolve(cwd, "node_modules/react-native")
-    ]),
+    alias: findProvidesModule([path.resolve(cwd, "node_modules/react-native")]),
     extensions: [`.${platform}.js`, ".js"]
   },
   // Default devServer settings
