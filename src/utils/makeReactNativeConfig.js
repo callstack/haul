@@ -89,7 +89,7 @@ function makeReactNativeConfig(userWebpackConfig, options) {
     
     // For simplicity, we don't require users to extend
     // default config.entry but do it for them.
-    config.entry = defaultConfig.entry.concat(config.entry);
+    config.entry = defaultWebpackConfig.entry.concat(config.entry);
 
     return config;
   });
