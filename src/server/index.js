@@ -31,9 +31,7 @@ class Server {
       watchOptions: {
         aggregateTimeout: 300,
         poll: 1000
-      },
-      publicPath: "/",
-      stats: { colors: true }
+      }
     });
 
     this.httpServer = http.createServer(appHandler);
