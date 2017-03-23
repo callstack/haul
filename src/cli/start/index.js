@@ -11,20 +11,20 @@ const path = require("path");
 
 const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
 
-import type { Context } from '../../types';
+import type { Context } from "../../types";
 
 /**
  * Starts development server
  */
-function start({ console }: Context) {
+function start({ console }: Context, _: Array<string>, opts: *) {
   const config = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(path.join(process.cwd(), "webpack.config.js")),
     {
-      port: 8081,
-      dev: true,
-      platform: "ios",
-      cwd: process.cwd(),
+      port: opts.port,
+      dev: opts.dev,
+      platform: opts.platform,
+      cwd: process.cwd()
     }
   );
 
@@ -38,6 +38,25 @@ function start({ console }: Context) {
 
 module.exports = {
   name: "start",
-  description: "Starts a new webpack server",
-  action: start
+  description: "Starts a new Webpack server",
+  action: start,
+  options: [
+    {
+      name: "--port [number]",
+      description: "Port to run your webpack server",
+      default: 8081,
+      parse: (val: string) => +val
+    },
+    {
+      name: "--dev [true|false]",
+      description: "Whether build in development mode",
+      default: true,
+      parse: (val: string) => JSON.parse(val)
+    },
+    {
+      name: "--platform [ios|android]",
+      description: "Platform to bundle for",
+      default: "ios"
+    }
+  ]
 };

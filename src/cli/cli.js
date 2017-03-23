@@ -16,15 +16,30 @@ const ctx: Context = {
   console: console,
 };
 
-commands.forEach(cmd => {
-  program
-    .command(cmd.name)
-    .description(cmd.description)
-    .action(() => {
+commands.forEach((command: Command) => {
+  const options = command.options || [];
+
+  const cmd = program
+    .command(command.name)
+    .description(command.description)
+    .action(function run() {
       logger.clear();
       logger.printLogo();
-      cmd.action(ctx);
+
+      const options = this.opts();
+      const argv: Array<string> = Array.from(arguments).slice(0, -1);
+
+      command.action(ctx, argv, options);
     });
+
+  options
+    .forEach(opt => cmd.option(
+      opt.name,
+      opt.description,
+      opt.parse || ((val) => val),
+      typeof opt.default === 'function' ? opt.default(ctx) : opt.default,
+    ));
+
 });
 
 program
