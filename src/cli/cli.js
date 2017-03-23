@@ -23,6 +23,3 @@ commands.forEach(cmd => {
 });
 
 program.version(pjson.version).parse(process.argv);
-
-
-
