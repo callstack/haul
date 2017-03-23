@@ -1,10 +1,11 @@
 {
   "name": "haul",
+  "version": "0.0.1",
   "description": "Haul is a new command line tools for React Native",
   "bin": "./src/cli",
   "scripts": {
     "test": "flow src",
-    "prettier": "git diff — name-only HEAD | grep '.*.js' | xargs prettier — write"
+    "prettier": "git diff --name-only HEAD | grep '.*.js' | xargs prettier --write"
   },
   "pre-commit": [
     "prettier"
