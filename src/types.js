@@ -5,7 +5,7 @@
  * types.js
  */
 
-type Command = {
+export type Command = {
   name: string,
   description?: string,
   action: (ctx: Context, argv: Array<string>, args: Object) => void,
@@ -17,6 +17,17 @@ type Command = {
   }>
 };
 
-type Context = {
-  console: any
+export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
+type LoggerPrint = (...args: any[]) => void;
+export type Logger = {
+  clear: () => void,
+  printLogo: LoggerPrintLogo,
+  info: LoggerPrint,
+  warn: LoggerPrint,
+  error: LoggerPrint,
+  success: LoggerPrint,
+}
+
+export type Context = {
+  console: Logger
 };
