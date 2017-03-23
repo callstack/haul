@@ -39,7 +39,13 @@ commands.forEach((command: Command) => {
       opt.parse || ((val) => val),
       typeof opt.default === 'function' ? opt.default(ctx) : opt.default,
     ));
-
+  
+  cmd._helpInformation = cmd.helpInformation.bind(cmd);
+  cmd.helpInformation = function() {
+    logger.clear();
+    logger.printLogo(2);
+    return this._helpInformation();
+  };
 });
 
 program

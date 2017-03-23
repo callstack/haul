@@ -1,19 +1,24 @@
+/* @flow */
 const chalk = require("chalk");
 const emoji = require("node-emoji");
 
-const clear = () => {
+import type { LoggerPrintLogo, Logger } from '../types';
+
+const clear = (): void => {
   process.stdout.write("\u001B[2J\u001B[0;0f");
 };
 
-const printLogo = (enchance = chalk.blue) => {
+const printLogo: LoggerPrintLogo = (offset = 0, enchance = chalk.blue) => {
+  const logoLines: string[] = [
+    " _                 _",
+    "| |__   __ _ _   _| |",
+    "| '_ \\ / _\` | | | | |",
+    "| | | | (_| | |_| | |",
+    "|_| |_|\\__,_|\\__,_|_|"
+  ];
   console.log(
     enchance(
-      " _                 _\n" +
-        "| |__   __ _ _   _| |\n" +
-        "| '_ \\ / _\` | | | | |\n" +
-        "| | | | (_| | |_| | |\n" +
-        "|_| |_|\\__,_|\\__,_|_|\n" +
-        "\n"
+      logoLines.map(line => `${' '.repeat(offset)}${line}`).join("\n"), "\n"
     )
   );
 };
@@ -25,15 +30,16 @@ const printLogo = (enchance = chalk.blue) => {
  * with actul emoji. All supported emojis are listed here:
  * https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json
  */
-const loggerFactory = (enchance, prefix) =>
-  (...args) => {
+const loggerFactory = (enchance: Function, prefix: string) =>
+  (...args: any[]) => {
     console.log(
       `${enchance(prefix)}`,
       ...args.map(arg => typeof arg === "string" ? emoji.emojify(arg) : arg)
     );
   };
 
-module.exports = devMode => ({
+
+module.exports = (devMode: boolean = false): Logger => ({
   clear,
   printLogo,
   info: loggerFactory(chalk.cyan, "info", devMode),
