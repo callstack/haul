@@ -5,29 +5,31 @@
  * types.js
  */
 
+export type CommandArgs = Array<string>;
+
+export type CommandOpts = Object;
+
 export type Command = {
   name: string,
   description?: string,
-  action: (ctx: Context, argv: Array<string>, args: Object) => void,
+  action: (argv: CommandArgs, args: CommandOpts) => void,
   options?: Array<{
     name: string,
     description?: string,
     parse?: (val: string) => any,
-    default?: ((ctx: Context) => any) | any
+    default?: (() => any) | any
   }>
 };
 
 export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
+
 type LoggerPrint = (...args: any[]) => void;
+
 export type Logger = {
   clear: () => void,
   printLogo: LoggerPrintLogo,
   info: LoggerPrint,
   warn: LoggerPrint,
   error: LoggerPrint,
-  success: LoggerPrint,
-}
-
-export type Context = {
-  console: Logger
+  success: LoggerPrint
 };

@@ -12,10 +12,6 @@ import type { Command, Context } from "../types";
 
 const commands: Array<Command> = [require("./start")];
 
-const ctx: Context = {
-  console: console,
-};
-
 commands.forEach((command: Command) => {
   const options = command.options || [];
 
@@ -29,22 +25,22 @@ commands.forEach((command: Command) => {
       const options = this.opts();
       const argv: Array<string> = Array.from(arguments).slice(0, -1);
 
-      try { 
-        command.action(ctx, argv, options);
+      try {
+        command.action(argv, options);
       } catch (error) {
         logger.error(error);
         process.exit(1);
       }
     });
 
-  options
-    .forEach(opt => cmd.option(
+  options.forEach(opt =>
+    cmd.option(
       opt.name,
       opt.description,
-      opt.parse || ((val) => val),
-      typeof opt.default === 'function' ? opt.default(ctx) : opt.default,
+      opt.parse || (val => val),
+      typeof opt.default === "function" ? opt.default() : opt.default
     ));
-  
+
   cmd._helpInformation = cmd.helpInformation.bind(cmd);
   cmd.helpInformation = function() {
     logger.clear();
@@ -53,13 +49,11 @@ commands.forEach((command: Command) => {
   };
 });
 
-program
-  .command('*', null, { noHelp: true })
-  .action((cmd) => {
-    logger.clear();
-    logger.printLogo();
-    logger.error(`:x:  Command '${cmd}' not recognized`);
-    program.help();
-  });
+program.command("*", null, { noHelp: true }).action(cmd => {
+  logger.clear();
+  logger.printLogo();
+  logger.error(`:x:  Command '${cmd}' not recognized`);
+  program.help();
+});
 
 program.version(pjson.version).parse(process.argv);
