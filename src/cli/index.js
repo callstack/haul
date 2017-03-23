@@ -2,12 +2,15 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  */
-const program = require("commander");
-const pjson = require("../../package.json");
 
-program
-  .command("start")
-  .description("Starts a new webpack server")
-  .action(require("./start"));
+// @todo transpile on build
+require("babel-register")({
+  plugins: [
+    'transform-flow-strip-types',
+  ],
+  retainLines: true,
+  sourceMaps: 'inline',
+  babelrc: false,
+});
 
-program.version(pjson.version).parse(process.argv);
+require("./cli");
