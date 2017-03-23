@@ -18,6 +18,7 @@ function start() {
     {
       port: 8081,
       dev: true,
+      platform: "ios",
     }
   );
 

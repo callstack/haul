@@ -5,6 +5,7 @@
  * makeReactNativeConfig.js
  */
 const webpack = require("webpack");
+const HappyPack = require("happypack");
 const path = require("path");
 const findProvidesModule = require("./findProvidesModule");
 
@@ -20,10 +21,10 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   platform: platform,
   // Built-in loaders
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.js?$/,
-        loader: "babel-loader?cacheDirectory=true",
+        test: /\.jsx?$/,
+        loader: "happypack/loader?id=babel"
       },
       { test: /\.json$/, loader: "json-loader" }
     ]
@@ -36,6 +37,14 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   plugins: [
     new webpack.DefinePlugin({
       __DEV__: dev
+    }),
+    // Use HappyPack to speed up Babel build times
+    // significantly
+    new HappyPack({
+      id: "babel",
+      loaders: [
+        `babel-loader?presets[]=react-native&plugins[]=${require.resolve("./fixRequireIssues")}`
+      ]
     })
   ],
   // Default resolve
@@ -43,7 +52,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
     alias: findProvidesModule([
       path.resolve(process.cwd(), "node_modules/react-native")
     ]),
-    extensions: ["", `.${platform}.js`, ".js"]
+    extensions: [`.${platform}.js`, ".js"]
   },
   // Default devServer settings
   devServer: {
@@ -66,7 +75,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
  * platform and returns
  */
 function makeReactNativeConfig(userWebpackConfig, options) {
-  return PLATFORMS.map(platform => {
+  const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultConfig = getDefaultConfig(env);
 
@@ -77,11 +86,16 @@ function makeReactNativeConfig(userWebpackConfig, options) {
         ? userWebpackConfig(defaultConfig)
         : userWebpackConfig
     );
-    
+
     config.entry = [PATH_TO_POLYFILLS, config.entry];
+
+    delete config.platform;
 
     return config;
   });
+
+  // @todo solve performance when returning many
+  return configs[PLATFORMS.indexOf(options.platform)];
 }
 
 module.exports = makeReactNativeConfig;

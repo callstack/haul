@@ -9,8 +9,9 @@
     "babel-preset-react-native": "^1.9.1",
     "commander": "^2.9.0",
     "express": "^4.15.2",
-    "webpack": "1.x",
-    "webpack-dev-middleware": "^1.10.1"
+    "happypack": "^3.0.3",
+    "webpack": "2.x",
+    "webpack-dev-middleware": "2.x"
   },
   "peerDependencies": {
     "react-native": "^0.42.3"
