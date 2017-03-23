@@ -21,7 +21,8 @@ function start() {
     {
       port: 8081,
       dev: true,
-      platform: "ios"
+      platform: "ios",
+      cwd: process.cwd(),
     }
   );
 

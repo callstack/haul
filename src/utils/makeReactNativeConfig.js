@@ -16,6 +16,7 @@ const PLATFORMS = ["ios", "android"];
 type ConfigOptions = {
   port: number,
   platform: "ios" | "android",
+  cwd: string,
   dev: boolean
 };
 
@@ -31,7 +32,7 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment 
  */
-const getDefaultConfig = ({ platform, dev, port }): WebpackConfig => ({
+const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
   // Default polyfills and entry-point setup
   entry: [require.resolve("./polyfillEnvironment.js")],
   // Built-in loaders
@@ -65,7 +66,7 @@ const getDefaultConfig = ({ platform, dev, port }): WebpackConfig => ({
   // Default resolve
   resolve: {
     alias: findProvidesModule([
-      path.resolve(process.cwd(), "node_modules/react-native")
+      path.resolve(cwd, "node_modules/react-native")
     ]),
     extensions: [`.${platform}.js`, ".js"]
   },
