@@ -11,14 +11,16 @@ const findProvidesModule = require("./findProvidesModule");
 
 const PLATFORMS = ["ios", "android"];
 
-const PATH_TO_POLYFILLS = require.resolve("./polyfillEnvironment.js");
-
 /**
  * Returns default config based on environment 
  */
 const getDefaultConfig = ({ platform, dev, port }) => ({
   // Platform we are building for
   platform: platform,
+  // Default polyfills and entry-point setup
+  entry: [
+    require.resolve("./polyfillEnvironment.js"),
+  ],
   // Built-in loaders
   module: {
     rules: [
@@ -86,9 +88,14 @@ function makeReactNativeConfig(userWebpackConfig, options) {
         ? userWebpackConfig(defaultConfig)
         : userWebpackConfig
     );
-
-    config.entry = [PATH_TO_POLYFILLS, config.entry];
-
+    
+    // For simplicity, we don't require users to extend
+    // default config.entry but do it for them.
+    config.entry = defaultConfig.entry.concat(config.entry);
+    
+    // Platform is extraneous part of Webpack config that we pass to 
+    // configure variants. With Webpack 2.x, it has to be removed
+    // before setting up compiler
     delete config.platform;
 
     return config;
