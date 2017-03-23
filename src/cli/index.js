@@ -5,6 +5,7 @@
 
 // @todo transpile on build
 require("babel-register")({
+  ignore: /node_modules(?!\/haul)/,
   plugins: ["transform-flow-strip-types"],
   retainLines: true,
   sourceMaps: "inline",

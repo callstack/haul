@@ -6,6 +6,7 @@
  */
 const program = require("commander");
 const pjson = require("../../package.json");
+const logger = require("../utils/logger")(false);
 
 import type { Command, Context } from "../types";
 
@@ -17,7 +18,20 @@ commands.forEach(cmd => {
   program
     .command(cmd.name)
     .description(cmd.description)
-    .action(() => cmd.action(ctx));
+    .action(() => {
+      logger.clear();
+      logger.printLogo();
+      cmd.action(ctx);
+    });
 });
+
+program
+  .command('*', null, { noHelp: true })
+  .action((cmd) => {
+    logger.clear();
+    logger.printLogo();
+    logger.error(`Command '${cmd}' not recognized`);
+    program.help();
+  });
 
 program.version(pjson.version).parse(process.argv);
