@@ -1,6 +1,8 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ * 
+ * @flow
  */
 
 const webpack = require("webpack");
@@ -14,6 +16,7 @@ const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
  */
 function start() {
   const config = makeReactNativeConfig(
+    // $FlowFixMe: Dynamic require
     require(path.join(process.cwd(), "webpack.config.js")),
     {
       port: 8081,

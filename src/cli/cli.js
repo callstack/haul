@@ -1,6 +1,8 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ * 
+ * @flow
  */
 const program = require("commander");
 const pjson = require("../../package.json");
