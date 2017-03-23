@@ -10,14 +10,14 @@ const findProvidesModule = require("./findProvidesModule");
 
 const PLATFORMS = ["ios", "android"];
 
+const PATH_TO_POLYFILLS = require.resolve("./polyfillEnvironment.js");
+
 /**
  * Returns default config based on environment 
  */
 const getDefaultConfig = ({ platform, dev, port }) => ({
   // Platform we are building for
   platform: platform,
-  // Entry point with polyfills
-  entry: require.resolve("./polyfillEnvironment.js"),
   // Built-in loaders
   module: {
     loaders: [
@@ -33,7 +33,7 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
   },
   output: {
     path: "/",
-    filename: `${platform}.bundle`,
+    filename: `${platform}.bundle`
   },
   // Default plugins
   plugins: [
@@ -67,15 +67,17 @@ const getDefaultConfig = ({ platform, dev, port }) => ({
 /**
  * Creates an array of configs based on changing `env` for every
  * platform and returns
- * 
- * @todo that should return an array of all configs so we can handle
- * many platforms at one go
  */
 function makeReactNativeConfig(func, options) {
   return PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultConfig = getDefaultConfig(env);
-    return func(defaultConfig);
+
+    // @todo validate etc.
+    const userConfig = func(defaultConfig);
+    userConfig.entry = [PATH_TO_POLYFILLS, userConfig.entry];
+
+    return userConfig;
   });
 }
 

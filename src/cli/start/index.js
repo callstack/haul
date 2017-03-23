@@ -17,7 +17,7 @@ function start() {
     require(path.join(process.cwd(), "webpack.config.js")),
     {
       port: 8081,
-      dev: true
+      dev: true,
     }
   );
 
