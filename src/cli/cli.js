@@ -29,7 +29,12 @@ commands.forEach((command: Command) => {
       const options = this.opts();
       const argv: Array<string> = Array.from(arguments).slice(0, -1);
 
-      command.action(ctx, argv, options);
+      try { 
+        command.action(ctx, argv, options);
+      } catch (error) {
+        logger.error(error);
+        process.exit(1);
+      }
     });
 
   options
