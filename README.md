@@ -33,7 +33,7 @@ module.exports = ({ platform }, { resolve }) => {
   entry: `./index.${platform}.js`,
   resolve: {
     ...resolve,
-    moduleDirectories: ['src'],
+    modules: ['src'],
   },
 };
 ```
