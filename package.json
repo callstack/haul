@@ -6,7 +6,7 @@
   "scripts": {
     "test": "flow",
     "lint": "eslint src",
-    "prettier": "prettier --single-quotes --write src/**/*.js"
+    "prettier": "prettier --single-quote --write src/**/*.js"
   },
   "dependencies": {
     "babel": "^6.23.0",

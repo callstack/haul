@@ -1,6 +1,6 @@
-const utils = require("loader-utils");
-const size = require("image-size");
-const path = require("path");
+const utils = require('loader-utils');
+const size = require('image-size');
+const path = require('path');
 
 module.exports = function assetLoader(content) {
   if (this.cacheable) {
@@ -33,7 +33,7 @@ module.exports = function assetLoader(content) {
 
   if (config.outputPath) {
     // support functions as outputPath to generate them dynamically
-    outputPath = typeof config.outputPath === "function"
+    outputPath = typeof config.outputPath === 'function'
       ? config.outputPath(url)
       : config.outputPath + url;
   }
@@ -41,7 +41,7 @@ module.exports = function assetLoader(content) {
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
     publicPath = JSON.stringify(
-      typeof config.publicPath === "function"
+      typeof config.publicPath === 'function'
         ? config.publicPath(url)
         : config.publicPath + url
     );

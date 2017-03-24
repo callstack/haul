@@ -18,16 +18,16 @@ module.exports = {
   entry: './index.js',
 };
 ```
-Typically your mobile app will have `index.ios.js` and `index.android.js` files. In such case, you can change your `webpack.config.js` to be a function:
+By default, React Native app has two entry points: `index.ios.js` and `index.android.js`. In such case, you can change your `webpack.config.js` to be a function:
 
 ```js
-module.exports = ({ platform }) => {
+module.exports = ({ platform }) => ({
   entry: `./index.${platform}.js`,
-};
+});
 ```
-and return entry point based on platform.
+and return entry point based on platform. In this example, `platform` is either `ios` or `android`, which maps to the files we have in our project.
 
-If you are planning to override any of Webpack properties, like `module.loaders` or `resolve.moduleDirectories`, be sure to load defaults:
+If you are planning to override any of Webpack properties, like `module.loaders` or `resolve.modules`, be sure to load defaults:
 ```js
 module.exports = ({ platform }, { resolve }) => {
   entry: `./index.${platform}.js`,
