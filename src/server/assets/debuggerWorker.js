@@ -12,11 +12,11 @@
 
 'use strict';
 
-onmessage = (function () {
+onmessage = (function() {
   let visibilityState;
-  const showVisibilityWarning = (function () {
+  const showVisibilityWarning = (function() {
     let hasWarned = false;
-    return function () {
+    return function() {
       // Wait until `YellowBox` gets initialized before displaying the warning.
       if (hasWarned || console.warn.toString().includes('[native code]')) {
         return;
@@ -25,10 +25,10 @@ onmessage = (function () {
       console.warn(
         'Remote debugger is in a background tab which may cause apps to ' +
           'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
-          'a separate window).',
+          'a separate window).'
       );
     };
-  }());
+  })();
 
   const messageHandlers = {
     executeApplicationScript(message, sendReply) {
@@ -45,17 +45,17 @@ onmessage = (function () {
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;
-    },
+    }
   };
 
-  return function (message) {
+  return function(message) {
     if (visibilityState === 'hidden') {
       showVisibilityWarning();
     }
 
     const object = message.data;
 
-    const sendReply = function (result, error) {
+    const sendReply = function(result, error) {
       postMessage({ replyID: object.id, result, error });
     };
 
@@ -70,7 +70,7 @@ onmessage = (function () {
         if (typeof __fbBatchedBridge === 'object') {
           returnValue = __fbBatchedBridge[object.method].apply(
             null,
-            object.arguments,
+            object.arguments
           );
         }
       } finally {
@@ -78,4 +78,4 @@ onmessage = (function () {
       }
     }
   };
-}());
+})();

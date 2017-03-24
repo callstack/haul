@@ -25,7 +25,7 @@ export type Command = {
 
 export type WebpackStats = {
   hasWarnings: () => boolean,
-  hasErrors: () => boolean,
+  hasErrors: () => boolean
 };
 
 export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;

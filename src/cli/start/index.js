@@ -5,25 +5,25 @@
  * @flow
  */
 
-const webpack = require("webpack");
-const path = require("path");
-const fs = require("fs");
-const chalk = require("chalk");
-const dedent = require("dedent");
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+const chalk = require('chalk');
+const dedent = require('dedent');
 
-const clearConsole = require("../../utils/clearConsole");
-const createServer = require("../../server");
-const messages = require("../../messages");
+const clearConsole = require('../../utils/clearConsole');
+const createServer = require('../../server');
+const messages = require('../../messages');
 
-const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
+const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
 
-import type { CommandArgs } from "../../types";
+import type { CommandArgs } from '../../types';
 
 /**
  * Starts development server
  */
 function start(argv: CommandArgs, opts: *) {
-  const configPath = path.join(process.cwd(), "webpack.haul.js");
+  const configPath = path.join(process.cwd(), 'webpack.haul.js');
 
   if (!fs.existsSync(configPath)) {
     throw new Error(
@@ -48,22 +48,24 @@ function start(argv: CommandArgs, opts: *) {
 
   const app = createServer(
     compiler,
-    (didHaveIssues) => {
+    didHaveIssues => {
       clearConsole();
       console.log(messages.bundleCompiling(didHaveIssues));
     },
     (stats, showInfo) => {
       clearConsole();
-      console.log(messages.bundleCompiled({
-        stats,
-        showInfo,
-        platform: opts.platform,
-      }));
-    },
+      console.log(
+        messages.bundleCompiled({
+          stats,
+          showInfo,
+          platform: opts.platform
+        })
+      );
+    }
   );
 
   // $FlowFixMe Seems to have issues with `http.Server`
-  app.listen(8081, "127.0.0.1", () => {
+  app.listen(8081, '127.0.0.1', () => {
     console.log(
       messages.initialStartInformation({
         webpackConfig: config,
@@ -74,26 +76,26 @@ function start(argv: CommandArgs, opts: *) {
 }
 
 module.exports = {
-  name: "start",
-  description: "Starts a new Webpack server",
+  name: 'start',
+  description: 'Starts a new Webpack server',
   action: start,
   options: [
     {
-      name: "--port [number]",
-      description: "Port to run your webpack server",
+      name: '--port [number]',
+      description: 'Port to run your webpack server',
       default: 8081,
       parse: (val: string) => +val
     },
     {
-      name: "--dev [true|false]",
-      description: "Whether build in development mode",
+      name: '--dev [true|false]',
+      description: 'Whether build in development mode',
       default: true,
       parse: (val: string) => JSON.parse(val)
     },
     {
-      name: "--platform [ios|android]",
-      description: "Platform to bundle for",
-      default: "ios"
+      name: '--platform [ios|android]',
+      description: 'Platform to bundle for',
+      default: 'ios'
     }
   ]
 };

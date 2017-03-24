@@ -31,7 +31,7 @@ function liveReloadMiddleware(compiler) {
      */
     compiler.plugin('done', () => {
       const headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8'
       };
 
       watchers.forEach(({ res }) => {
