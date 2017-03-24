@@ -9,7 +9,7 @@
 
 module.exports = {
   webpackConfigNotFound: require('./webpackConfigNotFound'),
-  initialStartInstructions: require('./initialStartInstructions'),
   initialStartInformation: require('./initialStartInformation'),
-  bundleCompiled: require('./bundleCompiled')
+  bundleCompiled: require('./bundleCompiled'),
+  bundleCompiling: require('./bundleCompiling')
 };

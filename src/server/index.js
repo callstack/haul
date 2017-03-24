@@ -9,6 +9,11 @@ const Express = require('express');
 const http = require('http');
 const logger = require('../logger');
 
+import type { WebpackStats } from '../types';
+
+type InvalidCallback = (compilingAfterError: boolean) => void;
+type CompileCallback = (stats: WebpackStats, isFirstCompile: boolean) => void;
+
 /**
  * Custom made middlewares
  */
@@ -25,7 +30,11 @@ const WebSocketProxy = require('./util/webSocketProxy.js');
 /**
  * Packager-like Server running on top of Webpack
  */
-function createServer(compiler: any, onStart: Function, onRecompile: Function) {
+function createServer(
+  compiler: any,
+  onInvalid: InvalidCallback,
+  onCompile: CompileCallback
+) {
   const appHandler = new Express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
@@ -49,14 +58,23 @@ function createServer(compiler: any, onStart: Function, onRecompile: Function) {
     .use(webpackMiddleware);
 
   // Handle callbacks
-  let firstCompile = true;
-  compiler.plugin('done', stats => {
-    if (firstCompile) {
-      onStart(stats);
+  let didHaveIssues = false;
+  let firstSuccessfulCompile = false;
+  compiler.plugin('done', (stats: WebpackStats) => {
+    const hasIssues = stats.hasErrors() || stats.hasWarnings();
+
+    if (!hasIssues) {
+      firstSuccessfulCompile = true;
+      didHaveIssues = false;
     } else {
-      onRecompile(stats);
+      didHaveIssues = true;
     }
-    firstCompile = false;
+
+    onCompile(stats, firstSuccessfulCompile);
+  });
+
+  compiler.plugin('invalid', () => {
+    onInvalid(didHaveIssues);
   });
 
   return httpServer;

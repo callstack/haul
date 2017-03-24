@@ -23,6 +23,11 @@ export type Command = {
   }>
 };
 
+export type WebpackStats = {
+  hasWarnings: () => boolean,
+  hasErrors: () => boolean,
+};
+
 export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
 
 type LoggerPrint = (...args: any[]) => void;
