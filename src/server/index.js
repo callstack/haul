@@ -23,41 +23,14 @@ const statusPageMiddleware = require("./middleware/statusPageMiddleware");
 const WebSocketProxy = require("./util/webSocketProxy.js");
 
 /**
- * Better build reporter for Webpack builds
- */
-const buildReporter = reporterOptions => {
-  const { state, stats, options } = reporterOptions;
-
-  if (!state) {
-    logger.info("Compiling...");
-  }
-
-  if (!stats.hasErrors() && !stats.hasWarnings()) {
-    const time = stats.endTime - stats.startTime;
-    logger.success(`Compiled in ${time}ms`);
-    return;
-  }
-
-  if (stats.hasWarnings()) {
-    logger.warn("Compiled with warnings");
-    return;
-  }
-
-  if (stats.hasErrors()) {
-    logger.error("Failed to compile");
-    return;
-  }
-};
-
-/**
  * Packager-like Server running on top of Webpack
  */
-function createServer(compiler: any) {
+function createServer(compiler: any, onStart: Function, onRecompile: Function) {
   const appHandler = new Express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
     noInfo: true,
-    reporter: buildReporter,
+    reporter: () => {},
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
@@ -74,6 +47,17 @@ function createServer(compiler: any) {
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
     .use(webpackMiddleware);
+
+  // Handle callbacks
+  let firstCompile = true;
+  compiler.plugin("done", stats => {
+    if (firstCompile) {
+      onStart(stats);
+    } else {
+      onRecompile(stats);
+    }
+    firstCompile = false;
+  });
 
   return httpServer;
 }

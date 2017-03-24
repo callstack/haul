@@ -6,12 +6,14 @@
  */
 
 const webpack = require("webpack");
-const createServer = require("../../server");
 const path = require("path");
 const fs = require("fs");
+const chalk = require("chalk");
+const dedent = require("dedent");
 
-const logger = require("../../logger");
-const messages = require('../../messages');
+const clearConsole = require("../../utils/clearConsole");
+const createServer = require("../../server");
+const messages = require("../../messages");
 
 const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
 
@@ -24,9 +26,11 @@ function start(argv: CommandArgs, opts: *) {
   const configPath = path.join(process.cwd(), "webpack.config.js");
 
   if (!fs.existsSync(configPath)) {
-    throw new Error(messages.webpackConfigNotFound({
-      path: configPath,
-    }));
+    throw new Error(
+      messages.webpackConfigNotFound({
+        path: configPath
+      })
+    );
   }
 
   const config = makeReactNativeConfig(
@@ -42,11 +46,26 @@ function start(argv: CommandArgs, opts: *) {
 
   const compiler = new webpack(config);
 
-  const app = createServer(compiler);
+  const app = createServer(
+    compiler,
+    () => {
+      clearConsole();
+      console.log(messages.initialStartInstructions(opts));
+    },
+    stats => {
+      clearConsole();
+      console.log(messages.bundleCompiled(stats));
+    }
+  );
 
   // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(8081, "127.0.0.1", () => {
-    logger.info("Starting server on http://localhost:8081");
+    console.log(
+      messages.initialStartInformation({
+        webpackConfig: config,
+        port: opts.port
+      })
+    );
   });
 }
 
