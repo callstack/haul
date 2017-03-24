@@ -45,11 +45,7 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
       },
       {
         test: /\.(bmp|gif|jpg|jpeg|png)$/,
-        loader: require.resolve('../loaders/asset-loader')
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
+        loader: require.resolve('../loaders/assetLoader')
       }
     ]
   },
