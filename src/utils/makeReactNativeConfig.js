@@ -1,9 +1,9 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * makeReactNativeConfig.js
- * 
+ *
  * @flow
  */
 const webpack = require("webpack");
@@ -30,7 +30,7 @@ type WebpackConfigFactory =
   | WebpackConfig;
 
 /**
- * Returns default config based on environment 
+ * Returns default config based on environment
  */
 const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
   // Default polyfills and entry-point setup
@@ -42,6 +42,10 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
         test: /\.jsx?$/,
         loader: "happypack/loader?id=babel",
         exclude: /node_modules\/(?!react)/,
+      },
+      {
+        test: /\.(bmp|gif|jpg|jpeg|png)$/,
+        loader: require.resolve('../loaders/asset-loader'),
       },
       {
         test: /\.json$/,
