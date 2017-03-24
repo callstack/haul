@@ -1,5 +1,6 @@
 const utils = require('loader-utils');
 const size = require('image-size');
+const path = require('path');
 
 module.exports = function assetLoader(content) {
   if (this.cacheable) {
@@ -11,7 +12,7 @@ module.exports = function assetLoader(content) {
 
   const config = {
     publicPath: false,
-    name: '[hash].[ext]',
+    name: path.relative(process.cwd(), this.resourcePath),
   };
 
   // options takes precedence over config
@@ -25,8 +26,12 @@ module.exports = function assetLoader(content) {
     content,
   });
 
+  const info = size(this.resourcePath);
+
   let outputPath = url;
-  let publicPath = `__webpack_public_path__ + ${JSON.stringify(url)}`;
+  let publicPath = `__webpack_public_path__ + ${
+    JSON.stringify(path.join(path.dirname(url), path.basename(url, `.${info.type}`)))
+  }`;
 
   if (config.outputPath) {
      // support functions as outputPath to generate them dynamically
@@ -46,14 +51,18 @@ module.exports = function assetLoader(content) {
 
   this.emitFile(outputPath, content);
 
-  const info = size(this.resourcePath);
-  const asset = `{
-    uri: 'http://localhost:8081/' + ${publicPath},
+  return `
+  var AssetRegistry = require('AssetRegistry');
+  module.exports = AssetRegistry.registerAsset({
+    __packager_asset: true,
+    httpServerLocation: '/',
+    name: ${publicPath},
     width: ${info.width},
     height: ${info.height},
-  }`;
-
-  return `module.exports = ${asset};`;
+    type: '${info.type}',
+    scales: [1],
+  });
+  `;
 };
 
 module.exports.raw = true;
