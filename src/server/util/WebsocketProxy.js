@@ -2,7 +2,7 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  */
-const WebSocketServer = require("ws").Server;
+const WebSocketServer = require('ws').Server;
 
 /**
  * Sends message to a given socket
@@ -16,7 +16,7 @@ const send = (socket, message) => {
 };
 
 /**
- * Websocket proxy between debugger and React Native client 
+ * Websocket proxy between debugger and React Native client
  */
 class WebSocketProxy {
   constructor(server, path) {
@@ -25,7 +25,7 @@ class WebSocketProxy {
     this.debuggerSocket;
     this.clientSocket;
 
-    this.wss.on("connection", this.onConnection.bind(this));
+    this.wss.on('connection', this.onConnection.bind(this));
   }
 
   /**
@@ -35,24 +35,24 @@ class WebSocketProxy {
   onConnection(socket) {
     const { url } = socket.upgradeReq;
 
-    if (url.indexOf("role=debugger") >= 0) {
+    if (url.indexOf('role=debugger') >= 0) {
       this.handleDebuggerSocket(socket);
-    } else if (url.indexOf("role=client") >= 0) {
+    } else if (url.indexOf('role=client') >= 0) {
       this.handleClientSocket(socket);
     } else {
-      socket.close(1011, "Missing role param");
+      socket.close(1011, 'Missing role param');
     }
   }
 
   /**
    * Debugger socket handler
-   * 
+   *
    * Note: When debugger is already connected, new connection gets
    * closed automatically
    */
   handleDebuggerSocket(socket) {
     if (this.debuggerSocket) {
-      socket.close(1011, "Another debugger is already connected");
+      socket.close(1011, 'Another debugger is already connected');
       return;
     }
 
@@ -61,7 +61,7 @@ class WebSocketProxy {
     socket.onerror = (socket.onclose = () => {
       this.debuggerSocket = null;
       if (this.clientSocket) {
-        this.clientSocket.close(1011, "Debugger was disconnected");
+        this.clientSocket.close(1011, 'Debugger was disconnected');
       }
     });
 
@@ -74,13 +74,13 @@ class WebSocketProxy {
 
   /**
    * Client socket handler
-   * 
+   *
    * Note: New client automatically closes previous client connection
    */
   handleClientSocket(socket) {
     if (this.clientSocket) {
       this.clientSocket.onerror = (this.clientSocket.onclose = (this.clientSocket.onmessage = null));
-      this.clientSocket.close(1011, "Another client is connected");
+      this.clientSocket.close(1011, 'Another client is connected');
     }
 
     this.clientSocket = socket;
@@ -88,7 +88,7 @@ class WebSocketProxy {
     this.clientSocket.onerror = (this.clientSocket.onclose = () => {
       this.clientSocket = null;
       if (this.debuggerSocket) {
-        send(this.debuggerSocket, JSON.stringify({ method: "$disconnected" }));
+        send(this.debuggerSocket, JSON.stringify({ method: '$disconnected' }));
       }
     });
 

@@ -1,13 +1,13 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * webpackConfigNotFound.js
- * 
+ *
  * @flow
  */
-const dedent = require("dedent");
-const chalk = require("chalk");
+const dedent = require('dedent');
+const chalk = require('chalk');
 
 module.exports = ({ path }: { path: string }) => dedent`
    Webpack config wasn't found at ${path}.
