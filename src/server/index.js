@@ -23,32 +23,6 @@ const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const WebSocketProxy = require('./util/webSocketProxy.js');
 
 /**
- * Better build reporter for Webpack builds
- */
-const buildReporter = reporterOptions => {
-  const { state, stats, options } = reporterOptions;
-
-  if (!state) {
-    logger.info('Compiling...');
-  }
-
-  if (!stats.hasErrors() && !stats.hasWarnings()) {
-    const time = stats.endTime - stats.startTime;
-    logger.success(`Compiled in ${time}ms`);
-    return;
-  }
-
-  if (stats.hasWarnings()) {
-    logger.warn('Compiled with warnings');
-    return;
-  }
-
-  if (stats.hasErrors()) {
-    logger.error('Failed to compile');
-  }
-};
-
-/**
  * Packager-like Server running on top of Webpack
  */
 function createServer(compiler: any, onStart: Function, onRecompile: Function) {
