@@ -12,9 +12,7 @@ const chalk = require('chalk');
 module.exports = (
   { port, platform }: { port: string, platform: string }
 ) => dedent`
-  Bundle is now available at:
-                 
-    ${chalk.cyan(`http://localhost:${port}/index.${platform}.bundle`)}
+  ${chalk.green('Compiled successfully!')}
   
-  You can now go to your ${platform} device and run the app.
+  You can now go to your ${platform} device to run the app.
 `;

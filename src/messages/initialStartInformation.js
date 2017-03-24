@@ -8,6 +8,7 @@
  */
 const dedent = require('dedent');
 const chalk = require('chalk');
+const path = require('path');
 
 type Params = {
   webpackConfig: {
@@ -17,7 +18,7 @@ type Params = {
 };
 
 const getEntryFile = (entries: Array<string>) => {
-  return entries[entries.length - 1];
+  return path.resolve(process.cwd(), entries[entries.length - 1]);
 };
 
 module.exports = (config: Params) => dedent`
@@ -25,7 +26,7 @@ module.exports = (config: Params) => dedent`
    
   Webpack is now bundling your React Native app, starting from:
 
-    ${chalk.cyan(getEntryFile(config.webpackConfig.entry))}
+    ${chalk.grey(getEntryFile(config.webpackConfig.entry))}
 
   Note that fresh start may take longer than usually.
 `;

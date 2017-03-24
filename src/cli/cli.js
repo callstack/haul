@@ -19,13 +19,11 @@ commands.forEach((command: Command) => {
     .command(command.name)
     .description(command.description)
     .action(function run() {
-      logger.clear();
-      logger.printLogo();
-
       const options = this.opts();
       const argv: Array<string> = Array.from(arguments).slice(0, -1);
 
       try {
+        logger.clear();
         command.action(argv, options);
       } catch (error) {
         logger.error(error);
