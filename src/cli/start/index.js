@@ -31,7 +31,7 @@ function start(argv: CommandArgs, opts: *) {
   const compiler = new webpack(config);
 
   const app = createServer(compiler);
-  
+
   // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(8081, "127.0.0.1", () => {
     console.log("Starting server on http://localhost:8081");

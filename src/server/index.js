@@ -7,6 +7,7 @@
 
 const Express = require("express");
 const http = require("http");
+const logger = require("../utils/logger");
 
 /**
  * Custom made middlewares
@@ -24,60 +25,57 @@ const WebSocketProxy = require("./util/webSocketProxy.js");
 /**
  * Better build reporter for Webpack builds
  */
-const buildReporter = (reporterOptions) => {
+const buildReporter = reporterOptions => {
   const { state, stats, options } = reporterOptions;
-  
+
   if (!state) {
-    console.log('Compiling...');
+    logger.info("Compiling...");
   }
 
   if (!stats.hasErrors() && !stats.hasWarnings()) {
     const time = stats.endTime - stats.startTime;
-    console.log(`Compiled in ${time}ms`);
+    logger.success(`Compiled in ${time}ms`);
     return;
   }
-   
+
   if (stats.hasWarnings()) {
-    console.log('Compiled with warnings');
+    logger.warn("Compiled with warnings");
     return;
   }
 
   if (stats.hasErrors()) {
-    console.log('Failed to compile');
+    logger.error("Failed to compile");
     return;
   }
-}
+};
 
 /**
  * Packager-like Server running on top of Webpack
  */
 function createServer(compiler: any) {
   const appHandler = new Express();
-    const webpackMiddleware = webpackDevMiddleware(compiler, {
-      lazy: false,
-      noInfo: true,
-      reporter: buildReporter,
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000
-      }
-    });
+  const webpackMiddleware = webpackDevMiddleware(compiler, {
+    lazy: false,
+    noInfo: true,
+    reporter: buildReporter,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    }
+  });
 
-    const httpServer = http.createServer(appHandler);
+  const httpServer = http.createServer(appHandler);
 
-    const debuggerProxy = new WebSocketProxy(
-      httpServer,
-      "/debugger-proxy"
-    );
+  const debuggerProxy = new WebSocketProxy(httpServer, "/debugger-proxy");
 
-    // Middlewares
-    appHandler
-      .use(devToolsMiddleware(debuggerProxy))
-      .use(liveReloadMiddleware(compiler))
-      .use(statusPageMiddleware)
-      .use(webpackMiddleware);
-    
-    return httpServer;
+  // Middlewares
+  appHandler
+    .use(devToolsMiddleware(debuggerProxy))
+    .use(liveReloadMiddleware(compiler))
+    .use(statusPageMiddleware)
+    .use(webpackMiddleware);
+
+  return httpServer;
 }
 
 module.exports = createServer;
