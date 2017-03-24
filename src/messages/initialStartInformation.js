@@ -6,8 +6,8 @@
  * 
  * @flow
  */
-const dedent = require("dedent");
-const chalk = require("chalk");
+const dedent = require('dedent');
+const chalk = require('chalk');
 
 type Params = {
   webpackConfig: {

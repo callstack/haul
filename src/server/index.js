@@ -1,26 +1,52 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
-const Express = require("express");
-const http = require("http");
-const logger = require("../logger");
+const Express = require('express');
+const http = require('http');
+const logger = require('../logger');
 
 /**
  * Custom made middlewares
  */
-const webpackDevMiddleware = require("webpack-dev-middleware");
-const devToolsMiddleware = require("./middleware/devToolsMiddleware");
-const liveReloadMiddleware = require("./middleware/liveReloadMiddleware");
-const statusPageMiddleware = require("./middleware/statusPageMiddleware");
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const devToolsMiddleware = require('./middleware/devToolsMiddleware');
+const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
+const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
-const WebSocketProxy = require("./util/webSocketProxy.js");
+const WebSocketProxy = require('./util/webSocketProxy.js');
+
+/**
+ * Better build reporter for Webpack builds
+ */
+const buildReporter = reporterOptions => {
+  const { state, stats, options } = reporterOptions;
+
+  if (!state) {
+    logger.info('Compiling...');
+  }
+
+  if (!stats.hasErrors() && !stats.hasWarnings()) {
+    const time = stats.endTime - stats.startTime;
+    logger.success(`Compiled in ${time}ms`);
+    return;
+  }
+
+  if (stats.hasWarnings()) {
+    logger.warn('Compiled with warnings');
+    return;
+  }
+
+  if (stats.hasErrors()) {
+    logger.error('Failed to compile');
+  }
+};
 
 /**
  * Packager-like Server running on top of Webpack
@@ -39,7 +65,7 @@ function createServer(compiler: any, onStart: Function, onRecompile: Function) {
 
   const httpServer = http.createServer(appHandler);
 
-  const debuggerProxy = new WebSocketProxy(httpServer, "/debugger-proxy");
+  const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
 
   // Middlewares
   appHandler
@@ -50,7 +76,7 @@ function createServer(compiler: any, onStart: Function, onRecompile: Function) {
 
   // Handle callbacks
   let firstCompile = true;
-  compiler.plugin("done", stats => {
+  compiler.plugin('done', stats => {
     if (firstCompile) {
       onStart(stats);
     } else {

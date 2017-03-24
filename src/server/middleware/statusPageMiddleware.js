@@ -9,10 +9,10 @@
  * loading can begin
  */
 function statusPageMiddleware(req, res, next) {
-  if (req.url === "/onchange") {
-    res.end("packager-status:running");
+  if (req.url === '/onchange') {
+    res.end('packager-status:running');
     return;
-  } 
+  }
   next();
 }
 
