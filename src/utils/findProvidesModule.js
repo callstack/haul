@@ -1,26 +1,26 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * findProvidesModule.js
  */
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 const defaultOpts = {
   // An array of folders to ignore when building map of modules
   // within given directory
   blacklist: [
-    "node_modules",
-    "__tests__",
-    "__mocks__",
-    "__fixtures__",
-    "react-packager",
-    "androidTest"
+    'node_modules',
+    '__tests__',
+    '__mocks__',
+    '__fixtures__',
+    'react-packager',
+    'androidTest',
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ["ios", "android", "native", "web"]
+  platforms: ['ios', 'android', 'native', 'web'],
 };
 
 /**
@@ -42,18 +42,18 @@ const getPlatformFileName = (fileName, platforms) => {
  * Returns name of the module provided by given file (if present)
  */
 const getProvidedModuleName = fileName => {
-  const content = fs.readFileSync(fileName, "utf-8");
+  const content = fs.readFileSync(fileName, 'utf-8');
   return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
 };
 
 /**
  * Recursively loops over given directories and returns a map of all
- * haste modules 
+ * haste modules
  */
 function findProvidesModule(directories, opts = {}) {
   const options = Object.assign({}, defaultOpts, opts);
 
-  let modulesMap = {};
+  const modulesMap = {};
 
   const walk = dir => {
     const stat = fs.statSync(dir);
@@ -84,7 +84,7 @@ function findProvidesModule(directories, opts = {}) {
       // Throw when duplicated modules are provided from a different
       // fileName
       if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
-        throw new Error("Duplicate haste module found");
+        throw new Error('Duplicate haste module found');
       }
       modulesMap[moduleName] = fileName;
     }

@@ -6,12 +6,12 @@
  *
  * @flow
  */
-const webpack = require("webpack");
-const HappyPack = require("happypack");
-const path = require("path");
-const findProvidesModule = require("./findProvidesModule");
+const webpack = require('webpack');
+const HappyPack = require('happypack');
+const path = require('path');
+const findProvidesModule = require('./findProvidesModule');
 
-const PLATFORMS = ["ios", "android"];
+const PLATFORMS = ['ios', 'android'];
 
 type ConfigOptions = {
   port: number,
@@ -34,13 +34,13 @@ type WebpackConfigFactory =
  */
 const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
   // Default polyfills and entry-point setup
-  entry: [require.resolve("./polyfillEnvironment.js")],
+  entry: [require.resolve('./polyfillEnvironment.js')],
   // Built-in loaders
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: "happypack/loader?id=babel",
+        loader: 'happypack/loader?id=babel',
         exclude: /node_modules\/(?!react)/,
       },
       {
@@ -49,33 +49,33 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
       },
       {
         test: /\.json$/,
-        loader: "json-loader"
-      }
-    ]
+        loader: 'json-loader',
+      },
+    ],
   },
   output: {
-    path: "/",
-    filename: `index.${platform}.bundle`
+    path: '/',
+    filename: `index.${platform}.bundle`,
   },
   // Default plugins
   plugins: [
     new webpack.DefinePlugin({
-      __DEV__: dev
+      __DEV__: dev,
     }),
     // Use HappyPack to speed up Babel build times
     // significantly
     new HappyPack({
-      id: "babel",
+      id: 'babel',
       loaders: [
-        `babel-loader?presets[]=react-native&plugins[]=${require.resolve("./fixRequireIssues")}`
+        `babel-loader?presets[]=react-native&plugins[]=${require.resolve('./fixRequireIssues')}`,
       ],
       verbose: false,
-    })
+    }),
   ],
   // Default resolve
   resolve: {
-    alias: findProvidesModule([path.resolve(cwd, "node_modules/react-native")]),
-    extensions: [`.${platform}.js`, ".js"]
+    alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
+    extensions: [`.${platform}.js`, '.js'],
   },
 });
 
@@ -85,7 +85,7 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
  */
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
-  options: ConfigOptions
+  options: ConfigOptions,
 ): WebpackConfig {
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
@@ -94,9 +94,9 @@ function makeReactNativeConfig(
     const config = Object.assign(
       {},
       defaultWebpackConfig,
-      typeof userWebpackConfig === "function"
+      typeof userWebpackConfig === 'function'
         ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig
+        : userWebpackConfig,
     );
 
     // For simplicity, we don't require users to extend
@@ -107,7 +107,7 @@ function makeReactNativeConfig(
     return config;
   });
 
-  return configs[PLATFORMS.indexOf(options.platform)]
+  return configs[PLATFORMS.indexOf(options.platform)];
 }
 
 module.exports = makeReactNativeConfig;
