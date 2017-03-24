@@ -7,7 +7,7 @@
 
 const Express = require("express");
 const http = require("http");
-const logger = require("../utils/logger");
+const logger = require("../logger");
 
 /**
  * Custom made middlewares

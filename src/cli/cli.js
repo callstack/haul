@@ -6,7 +6,7 @@
  */
 const program = require("commander");
 const pjson = require("../../package.json");
-const logger = require("../utils/logger");
+const logger = require("../logger");
 
 import type { Command, Context } from "../types";
 
