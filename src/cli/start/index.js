@@ -23,7 +23,7 @@ import type { CommandArgs } from '../../types';
  * Starts development server
  */
 function start(argv: CommandArgs, opts: *) {
-  const configPath = path.join(process.cwd(), 'webpack.config.js');
+  const configPath = path.join(process.cwd(), 'webpack.haul.js');
 
   if (!fs.existsSync(configPath)) {
     throw new Error(

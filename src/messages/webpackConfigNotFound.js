@@ -12,7 +12,7 @@ const chalk = require('chalk');
 module.exports = ({ path }: { path: string }) => dedent`
    Webpack config wasn't found at ${path}.
 
-   Make sure you have appropriate webpack.config.js. 
+   Make sure you have appropriate webpack.haul.js. 
    
    You can copy the following simplified version to set it up now:
    ${chalk.gray(`

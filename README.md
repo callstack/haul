@@ -11,14 +11,14 @@
 npm install --save-dev haul-cli
 ```
 
-then, create `webpack.config.js` in your root and specify an entry point of your app:
+then, create `webpack.haul.js` in your root and specify an entry point of your app:
 
 ```js
 module.exports = {
   entry: './index.js',
 };
 ```
-By default, React Native app has two entry points: `index.ios.js` and `index.android.js`. In such case, you can change your `webpack.config.js` to be a function:
+By default, React Native app has two entry points: `index.ios.js` and `index.android.js`. In such case, you can change your `webpack.haul.js` to be a function:
 
 ```js
 module.exports = ({ platform }) => ({
