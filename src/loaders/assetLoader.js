@@ -9,6 +9,7 @@ const utils = require('loader-utils');
 const size = require('image-size');
 const path = require('path');
 const hasha = require('hasha');
+const escapeStringRegexp = require('escape-string-regexp');
 
 module.exports = async function assetLoader(content: Buffer) {
   this.cacheable();
@@ -47,10 +48,10 @@ module.exports = async function assetLoader(content: Buffer) {
     }));
 
   const scales = [1];
-  const regex = new RegExp('^' + filename + '@(\\d+)x\\.' + info.type);
+  const regex = new RegExp('^' + escapeStringRegexp(filename) + '@(\\d+)x\\.' + info.type);
 
   let files = await Promise.all(
-    result.map().map(name => {
+    result.map(name => {
       const match = name.match(regex);
 
       if (match) {
