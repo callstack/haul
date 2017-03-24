@@ -4,13 +4,13 @@
  * 
  * @flow
  */
-const program = require("commander");
-const pjson = require("../../package.json");
-const logger = require("../logger");
+const program = require('commander');
+const pjson = require('../../package.json');
+const logger = require('../logger');
 
-import type { Command } from "../types";
+import type { Command } from '../types';
 
-const commands: Array<Command> = [require("./start")];
+const commands: Array<Command> = [require('./start')];
 
 commands.forEach((command: Command) => {
   const options = command.options || [];
@@ -38,7 +38,7 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === "function" ? opt.default() : opt.default
+      typeof opt.default === 'function' ? opt.default() : opt.default
     ));
 
   cmd._helpInformation = cmd.helpInformation.bind(cmd);
@@ -49,7 +49,7 @@ commands.forEach((command: Command) => {
   };
 });
 
-program.command("*", null, { noHelp: true }).action(cmd => {
+program.command('*', null, { noHelp: true }).action(cmd => {
   logger.clear();
   logger.printLogo();
   logger.error(`:x:  Command '${cmd}' not recognized`);

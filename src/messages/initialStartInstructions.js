@@ -6,8 +6,8 @@
  * 
  * @flow
  */
-const dedent = require("dedent");
-const chalk = require("chalk");
+const dedent = require('dedent');
+const chalk = require('chalk');
 
 module.exports = (
   { port, platform }: { port: string, platform: string }

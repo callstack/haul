@@ -8,8 +8,8 @@
  */
 
 module.exports = {
-  webpackConfigNotFound: require("./webpackConfigNotFound"),
-  initialStartInstructions: require("./initialStartInstructions"),
-  initialStartInformation: require("./initialStartInformation"),
-  bundleCompiled: require("./bundleCompiled")
+  webpackConfigNotFound: require('./webpackConfigNotFound'),
+  initialStartInstructions: require('./initialStartInstructions'),
+  initialStartInformation: require('./initialStartInformation'),
+  bundleCompiled: require('./bundleCompiled')
 };

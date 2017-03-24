@@ -5,22 +5,22 @@
  * @flow
  */
 
-const Express = require("express");
-const http = require("http");
-const logger = require("../logger");
+const Express = require('express');
+const http = require('http');
+const logger = require('../logger');
 
 /**
  * Custom made middlewares
  */
-const webpackDevMiddleware = require("webpack-dev-middleware");
-const devToolsMiddleware = require("./middleware/devToolsMiddleware");
-const liveReloadMiddleware = require("./middleware/liveReloadMiddleware");
-const statusPageMiddleware = require("./middleware/statusPageMiddleware");
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const devToolsMiddleware = require('./middleware/devToolsMiddleware');
+const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
+const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
-const WebSocketProxy = require("./util/webSocketProxy.js");
+const WebSocketProxy = require('./util/webSocketProxy.js');
 
 /**
  * Packager-like Server running on top of Webpack
@@ -39,7 +39,7 @@ function createServer(compiler: any, onStart: Function, onRecompile: Function) {
 
   const httpServer = http.createServer(appHandler);
 
-  const debuggerProxy = new WebSocketProxy(httpServer, "/debugger-proxy");
+  const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
 
   // Middlewares
   appHandler
@@ -50,7 +50,7 @@ function createServer(compiler: any, onStart: Function, onRecompile: Function) {
 
   // Handle callbacks
   let firstCompile = true;
-  compiler.plugin("done", stats => {
+  compiler.plugin('done', stats => {
     if (firstCompile) {
       onStart(stats);
     } else {

@@ -9,10 +9,10 @@ function fixRequireIssue() {
   return {
     visitor: {
       AssignmentExpression(path) {
-        if (path.node.operator === "=") {
+        if (path.node.operator === '=') {
           const { left } = path.node;
 
-          if (left.type !== "MemberExpression") {
+          if (left.type !== 'MemberExpression') {
             return;
           }
 
@@ -20,10 +20,10 @@ function fixRequireIssue() {
 
           if (
             // require.xxx
-            (object.type === "Identifier" && object.name === "require") ||
+            (object.type === 'Identifier' && object.name === 'require') ||
             // (require: any).xxx
-            (object.type === "TypeCastExpression" &&
-              object.expression.name === "require")
+            (object.type === 'TypeCastExpression' &&
+              object.expression.name === 'require')
           ) {
             path.remove();
           }
