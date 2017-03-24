@@ -13,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 const { inspect } = require("util");
 
-import type { LoggerPrintLogo, Logger } from "../types";
+import type { LoggerPrintLogo, Logger } from "./types";
 
 const clear = (): void => {
   process.stdout.write("\u001B[2J\u001B[0;0f");

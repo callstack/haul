@@ -11,7 +11,7 @@ const path = require("path");
 const fs = require("fs");
 
 const logger = require("../../logger");
-const { MessageError } = require("../../errors");
+const messages = require('../../messages');
 
 const makeReactNativeConfig = require("../../utils/makeReactNativeConfig");
 
@@ -24,10 +24,9 @@ function start(argv: CommandArgs, opts: *) {
   const configPath = path.join(process.cwd(), "webpack.config.js");
 
   if (!fs.existsSync(configPath)) {
-    throw new MessageError(
-      `Config file couldn't be located at ${configPath}.
-       Please make sure it exists.`
-    );
+    throw new Error(messages.webpackConfigNotFound({
+      path: configPath,
+    }));
   }
 
   const config = makeReactNativeConfig(

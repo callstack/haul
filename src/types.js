@@ -3,6 +3,8 @@
  * All rights reserved.
  * 
  * types.js
+ * 
+ * @flow
  */
 
 export type CommandArgs = Array<string>;

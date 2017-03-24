@@ -8,7 +8,7 @@ const program = require("commander");
 const pjson = require("../../package.json");
 const logger = require("../logger");
 
-import type { Command, Context } from "../types";
+import type { Command } from "../types";
 
 const commands: Array<Command> = [require("./start")];
 
