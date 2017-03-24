@@ -7,6 +7,7 @@
 
 const Express = require('express');
 const http = require('http');
+const morgan = require('morgan');
 const logger = require('../logger');
 
 import type { WebpackStats } from '../types';
@@ -52,6 +53,7 @@ function createServer(
 
   // Middlewares
   appHandler
+    .use(morgan('tiny'))
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)

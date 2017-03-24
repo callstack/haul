@@ -5,11 +5,9 @@
  * @flow
  */
 
-const webpack = require('webpack');
-const path = require('path');
-const fs = require('fs');
-const chalk = require('chalk');
-const dedent = require('dedent');
+const webpack = require("webpack");
+const path = require("path");
+const fs = require("fs");
 
 const clearConsole = require('../../utils/clearConsole');
 const createServer = require('../../server');
@@ -32,7 +30,7 @@ function start(argv: CommandArgs, opts: *) {
       })
     );
   }
-
+  
   const config = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
