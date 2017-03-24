@@ -5,7 +5,8 @@
   "bin": "./src/cli",
   "scripts": {
     "test": "flow",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prettier": "prettier --single-quotes --write src/**/*.js"
   },
   "dependencies": {
     "babel": "^6.23.0",

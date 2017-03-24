@@ -8,5 +8,5 @@
  */
 
 module.exports = {
-  webpackConfigNotFound: require('./webpackConfigNotFound'),
+  webpackConfigNotFound: require("./webpackConfigNotFound")
 };

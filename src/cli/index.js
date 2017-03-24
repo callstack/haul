@@ -4,12 +4,12 @@
  */
 
 // @todo transpile on build
-require('babel-register')({
+require("babel-register")({
   ignore: /node_modules(?!\/haul)/,
-  plugins: ['transform-flow-strip-types'],
+  plugins: ["transform-flow-strip-types"],
   retainLines: true,
-  sourceMaps: 'inline',
-  babelrc: false,
+  sourceMaps: "inline",
+  babelrc: false
 });
 
-require('./cli');
+require("./cli");

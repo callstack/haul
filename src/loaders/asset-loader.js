@@ -1,6 +1,6 @@
-const utils = require('loader-utils');
-const size = require('image-size');
-const path = require('path');
+const utils = require("loader-utils");
+const size = require("image-size");
+const path = require("path");
 
 module.exports = function assetLoader(content) {
   if (this.cacheable) {
@@ -12,7 +12,7 @@ module.exports = function assetLoader(content) {
 
   const config = {
     publicPath: false,
-    name: path.relative(process.cwd(), this.resourcePath),
+    name: path.relative(process.cwd(), this.resourcePath)
   };
 
   // options takes precedence over config
@@ -23,29 +23,27 @@ module.exports = function assetLoader(content) {
 
   const url = utils.interpolateName(this, config.name, {
     context: config.context || this.options.context,
-    content,
+    content
   });
 
   const info = size(this.resourcePath);
 
   let outputPath = url;
-  let publicPath = `__webpack_public_path__ + ${
-    JSON.stringify(path.join(path.dirname(url), path.basename(url, `.${info.type}`)))
-  }`;
+  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join(path.dirname(url), path.basename(url, `.${info.type}`)))}`;
 
   if (config.outputPath) {
-     // support functions as outputPath to generate them dynamically
-    outputPath = typeof config.outputPath === 'function'
-     ? config.outputPath(url)
-     : config.outputPath + url;
+    // support functions as outputPath to generate them dynamically
+    outputPath = typeof config.outputPath === "function"
+      ? config.outputPath(url)
+      : config.outputPath + url;
   }
 
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
     publicPath = JSON.stringify(
-        typeof config.publicPath === 'function'
-         ? config.publicPath(url)
-         : config.publicPath + url,
+      typeof config.publicPath === "function"
+        ? config.publicPath(url)
+        : config.publicPath + url
     );
   }
 
