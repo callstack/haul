@@ -1,9 +1,9 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * initialStartInstructions.js
- * 
+ *
  * @flow
  */
 const dedent = require('dedent');
@@ -16,5 +16,5 @@ module.exports = (
                  
     ${chalk.cyan(`http://localhost:${port}/index.${platform}.bundle`)}
   
-  Note that this is development build
+  You can now go to your ${platform} device and run the app.
 `;
