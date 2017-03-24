@@ -12,7 +12,7 @@ const logger = require('../logger');
 import type { WebpackStats } from '../types';
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
-type CompileCallback = (stats: WebpackStats, isFirstCompile: boolean) => void;
+type CompileCallback = (stats: WebpackStats) => void;
 
 /**
  * Custom made middlewares
@@ -59,18 +59,16 @@ function createServer(
 
   // Handle callbacks
   let didHaveIssues = false;
-  let firstSuccessfulCompile = false;
   compiler.plugin('done', (stats: WebpackStats) => {
     const hasIssues = stats.hasErrors() || stats.hasWarnings();
 
-    if (!hasIssues) {
-      firstSuccessfulCompile = true;
-      didHaveIssues = false;
-    } else {
+    if (hasIssues) {
       didHaveIssues = true;
+    } else {
+      didHaveIssues = false;
     }
 
-    onCompile(stats, firstSuccessfulCompile);
+    onCompile(stats);
   });
 
   compiler.plugin('invalid', () => {

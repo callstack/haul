@@ -14,9 +14,8 @@ import type { WebpackStats } from '../types';
 module.exports = (
   {
     stats,
-    showInfo,
     platform
-  }: { stats: WebpackStats, showInfo: boolean, platform: string }
+  }: { stats: WebpackStats, platform: string }
 ) => {
   if (stats.hasErrors()) {
     return chalk.red('Failed to compile');
@@ -26,13 +25,9 @@ module.exports = (
     return chalk.yellow('Compiled with warnings');
   }
 
-  if (showInfo) {
-    return dedent`
-      ${chalk.green('Compiled successfully!')}
+  return dedent`
+    ${chalk.green('Compiled successfully!')}
 
-      You can now go to your ${platform} device to run the app.
-    `;
-  }
-
-  return chalk.green('Compiled successfully!');
+    You can now go to your ${platform} device to run the app.
+  `;
 };

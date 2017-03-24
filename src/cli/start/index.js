@@ -52,12 +52,11 @@ function start(argv: CommandArgs, opts: *) {
       clearConsole();
       console.log(messages.bundleCompiling(didHaveIssues));
     },
-    (stats, showInfo) => {
+    stats => {
       clearConsole();
       console.log(
         messages.bundleCompiled({
           stats,
-          showInfo,
           platform: opts.platform
         })
       );
