@@ -8,7 +8,8 @@
  */
 
 /* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */
-/* eslint no-unused-vars: 0 */
+
+/* eslint-disable */
 
 'use strict';
 
@@ -67,7 +68,6 @@ onmessage = (function() {
       let returnValue = [[], [], [], 0];
       try {
         if (typeof __fbBatchedBridge === 'object') {
-          // prettier-ignore-next
           returnValue = __fbBatchedBridge[object.method].apply(
             null,
             object.arguments
