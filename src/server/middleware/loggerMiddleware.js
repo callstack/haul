@@ -7,8 +7,6 @@
 const morgan = require('morgan');
 const chalk = require('chalk');
 
-morgan.token('path', req => req.path);
-
 module.exports = morgan((tokens, req, res) => {
   return [
     chalk.cyan(tokens.method(req, res)),
