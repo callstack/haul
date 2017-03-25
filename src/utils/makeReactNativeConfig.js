@@ -71,7 +71,7 @@ const getDefaultConfig = ({ platform, cwd, dev, port }): WebpackConfig => ({
   // Default resolve
   resolve: {
     alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
-    extensions: [`.${platform}.js`, '.js']
+    extensions: [`.${platform}.js`, '.native.js', '.js']
   }
 });
 
