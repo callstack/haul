@@ -34,6 +34,7 @@ const getJSFileName = fileName => {
  * Returns file name without platform extension (if present)
  */
 const getPlatformFileName = (fileName, platforms) => {
+  // eslint-disable-next-line no-unused-vars
   const [_, realName, extension] = /^(.*)\.(\w+)$/.exec(fileName) || [];
   return platforms.indexOf(extension) >= 0 ? realName : fileName;
 };
