@@ -91,6 +91,7 @@
       "no-underscore-dangle": 0,
       "no-use-before-define": 0,
       "import/no-duplicates": 0,
+      "import/extensions": 0,
       "import/no-unresolved": 0,
       "import/no-dynamic-require": 0
     }
