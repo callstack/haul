@@ -14,8 +14,8 @@ const dedent = require('dedent');
 module.exports = (
   {
     stats,
-    platform,
-  }: { stats: WebpackStats, platform: string },
+    platform
+  }: { stats: WebpackStats, platform: string }
 ) => {
   if (stats.hasErrors()) {
     return chalk.red('Failed to compile');
@@ -28,6 +28,6 @@ module.exports = (
   return dedent`
     ${chalk.green('Compiled successfully!')}
 
-    You can now go to your ${platform} device to run the app.
+    You can now go to your ${platform} device to run the app. \n
   `;
 };
