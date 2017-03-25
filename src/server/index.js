@@ -4,11 +4,10 @@
  *
  * @flow
  */
-import type { WebpackStats } from "../types";
+import type { WebpackStats } from '../types';
 
-const Express = require("express");
-const http = require("http");
-const morgan = require("morgan");
+const Express = require('express');
+const http = require('http');
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -16,17 +15,16 @@ type CompileCallback = (stats: WebpackStats) => void;
 /**
  * Custom made middlewares
  */
-const webpackDevMiddleware = require("webpack-dev-middleware");
-const devToolsMiddleware = require("./middleware/devToolsMiddleware");
-const liveReloadMiddleware = require("./middleware/liveReloadMiddleware");
-const statusPageMiddleware = require("./middleware/statusPageMiddleware");
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const devToolsMiddleware = require('./middleware/devToolsMiddleware');
+const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
+const statusPageMiddleware = require('./middleware/statusPageMiddleware');
+const loggerMiddleware = require('./middleware/loggerMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
-const WebSocketProxy = require("./util/webSocketProxy.js");
-
-morgan.token("path", req => req.path);
+const WebSocketProxy = require('./util/webSocketProxy.js');
 
 /**
  * Packager-like Server running on top of Webpack
@@ -49,21 +47,19 @@ function createServer(
 
   const httpServer = http.createServer(appHandler);
 
-  const debuggerProxy = new WebSocketProxy(httpServer, "/debugger-proxy");
+  const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
 
   // Middlewares
   appHandler
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
-    .use(
-      morgan(":method :path :status :res[content-length] - :response-time ms")
-    )
+    .use(loggerMiddleware)
     .use(webpackMiddleware);
 
   // Handle callbacks
   let didHaveIssues = false;
-  compiler.plugin("done", (stats: WebpackStats) => {
+  compiler.plugin('done', (stats: WebpackStats) => {
     const hasIssues = stats.hasErrors() || stats.hasWarnings();
 
     if (hasIssues) {
@@ -75,7 +71,7 @@ function createServer(
     onCompile(stats);
   });
 
-  compiler.plugin("invalid", () => {
+  compiler.plugin('invalid', () => {
     onInvalid(didHaveIssues);
   });
 
