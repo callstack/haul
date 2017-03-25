@@ -39,16 +39,18 @@ module.exports = async function assetLoader(content: Buffer) {
   const filename = path.basename(filepath, `.${info.type}`);
 
   const result = await new Promise((resolve, reject) =>
-    this.fs.readdir(dirname, (err, result) => {
+    this.fs.readdir(dirname, (err, res) => {
       if (err) {
         reject(err);
       } else {
-        resolve(result);
+        resolve(res);
       }
     }));
 
   const scales = [1];
-  const regex = new RegExp('^' + escapeStringRegexp(filename) + '@(\\d+)x\\.' + info.type);
+  const regex = new RegExp(
+    `^${escapeStringRegexp(filename)}@(\\d+)x\\.${info.type}`,
+  );
 
   let files = await Promise.all(
     result.map(name => {
@@ -59,24 +61,24 @@ module.exports = async function assetLoader(content: Buffer) {
         this.addDependency(path.join(dirname, name));
 
         return new Promise((resolve, reject) =>
-          this.fs.readFile(path.join(dirname, name), (err, result) => {
+          this.fs.readFile(path.join(dirname, name), (err, res) => {
             if (err) {
               reject(err);
             } else {
-              resolve(result);
+              resolve(res);
             }
           }));
       }
 
       return Promise.resolve();
-    })
+    }),
   );
 
   files = files.filter(f => f);
   files.unshift(content);
 
   let outputPath = url;
-  let publicPath = `__webpack_public_path__`;
+  let publicPath = '__webpack_public_path__';
 
   if (config.outputPath) {
     // support functions as outputPath to generate them dynamically
@@ -121,10 +123,10 @@ module.exports = async function assetLoader(content: Buffer) {
       width: ${info.width},
       height: ${info.height},
       type: ${JSON.stringify(info.type)},
-      hash: ${JSON.stringify(hasha(Buffer.concat(files)) + '3')},
+      hash: ${JSON.stringify(`${hasha(Buffer.concat(files))}3`)},
       scales: ${JSON.stringify(scales)},
     });
-  `
+  `,
   );
 };
 

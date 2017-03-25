@@ -6,9 +6,9 @@
  */
 import type { CommandArgs } from '../../types';
 
-const webpack = require("webpack");
-const path = require("path");
-const fs = require("fs");
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
 
 const clearConsole = require('../../utils/clearConsole');
 const createServer = require('../../server');
@@ -29,7 +29,7 @@ function start(argv: CommandArgs, opts: *) {
       }),
     );
   }
-  
+
   const config = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),

@@ -77,7 +77,7 @@ const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
     }
   };
 
-const createLogger = (devMode: boolean = false): Logger => ({
+const createLogger = (): Logger => ({
   clear,
   printLogo,
   info: loggerFactory(chalk.cyan, 'info', true),

@@ -34,8 +34,6 @@ const launchChrome = url => {
  */
 function devToolsMiddleware(debuggerProxy) {
   return (req, res, next) => {
-    const port = req.app.get('port');
-
     switch (req.url) {
       /**
        * Request for the debugger frontend
@@ -66,7 +64,7 @@ function devToolsMiddleware(debuggerProxy) {
        */
       case '/launch-js-devtools': {
         if (!debuggerProxy.isDebuggerConnected()) {
-          launchChrome('http://localhost:8081/debugger-ui');
+          launchChrome(`http://${req.get('host')}/debugger-ui`);
         }
         res.end('OK');
         break;

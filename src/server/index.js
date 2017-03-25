@@ -8,8 +8,6 @@ import type { WebpackStats } from '../types';
 
 const Express = require('express');
 const http = require('http');
-const morgan = require('morgan');
-const logger = require('../logger');
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -52,7 +50,6 @@ function createServer(
 
   // Middlewares
   appHandler
-    .use(morgan('tiny'))
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)

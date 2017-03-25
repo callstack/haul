@@ -4,7 +4,8 @@
   "description": "Haul is a new command line tools for React Native",
   "bin": "./src/cli",
   "scripts": {
-    "test": "flow",
+    "test": "npm run flow && npm run lint",
+    "flow": "flow",
     "lint": "eslint src",
     "prettier": "prettier --single-quote --trailing-comma all --write \"src/**/*.js\""
   },
@@ -24,7 +25,6 @@
     "hasha": "^2.2.0",
     "image-size": "^0.5.1",
     "loader-utils": "^1.1.0",
-    "morgan": "^1.8.1",
     "node-emoji": "^1.5.1",
     "opn": "^4.0.2",
     "pre-commit": "^1.2.2",
