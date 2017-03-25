@@ -5,8 +5,9 @@
   "bin": "./src/cli",
   "scripts": {
     "precommit": "lint-staged",
-    "test": "flow && npm run lint",
-    "lint": "eslint src"
+    "flow": "flow",
+    "lint": "eslint src",
+    "test": "npm run flow && npm run lint"
   },
   "dependencies": {
     "babel": "^6.23.0",
