@@ -4,6 +4,7 @@
   "description": "Haul is a new command line tools for React Native",
   "bin": "./src/cli",
   "scripts": {
+    "precommit": "lint-staged",
     "test": "flow && npm run lint",
     "lint": "eslint src"
   },
