@@ -16,11 +16,11 @@ const defaultOpts = {
     '__mocks__',
     '__fixtures__',
     'react-packager',
-    'androidTest'
+    'androidTest',
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ['ios', 'android', 'native', 'web']
+  platforms: ['ios', 'android', 'native', 'web'],
 };
 
 /**
@@ -34,6 +34,7 @@ const getJSFileName = fileName => {
  * Returns file name without platform extension (if present)
  */
 const getPlatformFileName = (fileName, platforms) => {
+  // eslint-disable-next-line no-unused-vars
   const [_, realName, extension] = /^(.*)\.(\w+)$/.exec(fileName) || [];
   return platforms.indexOf(extension) >= 0 ? realName : fileName;
 };
@@ -43,7 +44,7 @@ const getPlatformFileName = (fileName, platforms) => {
  */
 const getProvidedModuleName = fileName => {
   const content = fs.readFileSync(fileName, 'utf-8');
-  return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
+  return (/\* @providesModule ([\w.]+)/.exec(content) || [])[1];
 };
 
 /**

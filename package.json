@@ -4,9 +4,10 @@
   "description": "Haul is a new command line tools for React Native",
   "bin": "./src/cli",
   "scripts": {
-    "test": "flow",
+    "precommit": "lint-staged",
+    "flow": "flow",
     "lint": "eslint src",
-    "prettier": "prettier --single-quote --write src/**/*.js"
+    "test": "npm run flow && npm run lint"
   },
   "dependencies": {
     "babel": "^6.23.0",
@@ -19,17 +20,18 @@
     "commander": "^2.9.0",
     "dedent": "^0.7.0",
     "escape-string-regexp": "^1.0.5",
+    "eslint-plugin-prettier": "^2.0.1",
     "express": "^4.15.2",
-    "flow-bin": "^0.42.0",
     "happypack": "^3.0.3",
     "hasha": "^2.2.0",
     "image-size": "^0.5.1",
     "loader-utils": "^1.1.0",
     "morgan": "^1.8.1",
     "node-emoji": "^1.5.1",
-    "pre-commit": "^1.2.2",
+    "opn": "^4.0.2",
     "webpack": "^2.3.1",
-    "webpack-dev-middleware": "^1.10.1"
+    "webpack-dev-middleware": "^1.10.1",
+    "ws": "^2.2.2"
   },
   "peerDependencies": {
     "react-native": "^0.42.3"
@@ -38,11 +40,61 @@
     "babel-eslint": "^7.2.1",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-config-prettier": "^1.5.0",
     "eslint-plugin-flowtype": "^2.30.4",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "flow-bin": "^0.42.0",
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.0",
     "prettier": "^0.22.0",
     "react-native": "^0.42.3"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --single-quote --trailingCommas all --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": [
+      "airbnb",
+      "prettier",
+      "prettier/flowtype",
+      "prettier/react"
+    ],
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "strict": 0,
+      "arrow-body-style": 0,
+      "arrow-parens": 0,
+      "class-methods-use-this": 0,
+      "default-case": 0,
+      "generator-star-spacing": 0,
+      "global-require": 0,
+      "new-cap": 0,
+      "no-alert": 0,
+      "no-confusing-arrow": 0,
+      "no-console": 0,
+      "no-constant-condition": 0,
+      "no-duplicate-imports": 0,
+      "no-plusplus": 0,
+      "no-restricted-syntax": 0,
+      "no-underscore-dangle": 0,
+      "no-use-before-define": 0,
+      "import/no-duplicates": 0,
+      "import/extensions": 0,
+      "import/no-unresolved": 0,
+      "import/no-dynamic-require": 0
+    }
   }
 }

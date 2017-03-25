@@ -28,8 +28,8 @@ function fixRequireIssue() {
             path.remove();
           }
         }
-      }
-    }
+      },
+    },
   };
 }
 

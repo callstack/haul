@@ -34,15 +34,13 @@ const launchChrome = url => {
  */
 function devToolsMiddleware(debuggerProxy) {
   return (req, res, next) => {
-    const port = req.app.get('port');
-
     switch (req.url) {
       /**
        * Request for the debugger frontend
        */
       case '/debugger-ui': {
         const readStream = fs.createReadStream(
-          path.join(__dirname, '../assets/debugger.html')
+          path.join(__dirname, '../assets/debugger.html'),
         );
         res.writeHead(200, { 'Content-Type': 'text/html' });
         readStream.pipe(res);
@@ -54,7 +52,7 @@ function devToolsMiddleware(debuggerProxy) {
        */
       case '/debuggerWorker.js': {
         const readStream = fs.createReadStream(
-          path.join(__dirname, '../assets/debuggerWorker.js')
+          path.join(__dirname, '../assets/debuggerWorker.js'),
         );
         res.writeHead(200, { 'Content-Type': 'application/javascript' });
         readStream.pipe(res);
@@ -66,7 +64,7 @@ function devToolsMiddleware(debuggerProxy) {
        */
       case '/launch-js-devtools': {
         if (!debuggerProxy.isDebuggerConnected()) {
-          launchChrome('http://localhost:8081/debugger-ui');
+          launchChrome(`http://${req.get('host')}/debugger-ui`);
         }
         res.end('OK');
         break;

@@ -11,5 +11,5 @@ module.exports = {
   webpackConfigNotFound: require('./webpackConfigNotFound'),
   initialStartInformation: require('./initialStartInformation'),
   bundleCompiled: require('./bundleCompiled'),
-  bundleCompiling: require('./bundleCompiling')
+  bundleCompiling: require('./bundleCompiling'),
 };

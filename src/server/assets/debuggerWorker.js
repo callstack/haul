@@ -8,7 +8,8 @@
  */
 
 /* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */
-/* eslint no-unused-vars: 0 */
+
+/* eslint-disable */
 
 'use strict';
 
@@ -22,11 +23,10 @@ onmessage = (function() {
         return;
       }
       hasWarned = true;
-      console.warn(
-        'Remote debugger is in a background tab which may cause apps to ' +
-          'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
-          'a separate window).'
-      );
+      const warning = 'Remote debugger is in a background tab which may cause apps to ' +
+        'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
+        'a separate window).';
+      console.warn(warning);
     };
   })();
 
@@ -45,7 +45,7 @@ onmessage = (function() {
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;
-    }
+    },
   };
 
   return function(message) {
@@ -53,29 +53,28 @@ onmessage = (function() {
       showVisibilityWarning();
     }
 
-    const object = message.data;
+    const obj = message.data;
 
     const sendReply = function(result, error) {
       postMessage({ replyID: object.id, result, error });
     };
 
     const handler = messageHandlers[object.method];
+
+    // Special cased handlers
     if (handler) {
-      // Special cased handlers
-      handler(object, sendReply);
-    } else {
-      // Other methods get called on the bridge
-      let returnValue = [[], [], [], 0];
-      try {
-        if (typeof __fbBatchedBridge === 'object') {
-          returnValue = __fbBatchedBridge[object.method].apply(
-            null,
-            object.arguments
-          );
-        }
-      } finally {
-        sendReply(JSON.stringify(returnValue));
+      handler(obj, sendReply);
+      return;
+    }
+
+    // Other methods get called on the bridge
+    let returnValue = [[], [], [], 0];
+    try {
+      if (typeof __fbBatchedBridge === 'object') {
+        returnValue = __fbBatchedBridge[obj.method].apply(null, obj.arguments);
       }
+    } finally {
+      sendReply(JSON.stringify(returnValue));
     }
   };
 })();

@@ -28,6 +28,6 @@ module.exports = (
   return dedent`
     ${chalk.green('Compiled successfully!')}
 
-    You can now go to your ${platform} device to run the app. \n
+    You can now go to your ${platform} device to run the app.
   `;
 };

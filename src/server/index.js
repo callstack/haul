@@ -4,13 +4,10 @@
  *
  * @flow
  */
+import type { WebpackStats } from '../types';
 
 const Express = require('express');
 const http = require('http');
-const morgan = require('morgan');
-const logger = require('../logger');
-
-import type { WebpackStats } from '../types';
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -22,6 +19,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
+const loggerMiddleware = require('./middleware/loggerMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
@@ -53,10 +51,10 @@ function createServer(
 
   // Middlewares
   appHandler
-    .use(morgan('tiny'))
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
+    .use(loggerMiddleware)
     .use(webpackMiddleware);
 
   // Handle callbacks
