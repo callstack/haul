@@ -22,11 +22,10 @@ onmessage = (function() {
         return;
       }
       hasWarned = true;
-      console.warn(
-        'Remote debugger is in a background tab which may cause apps to ' +
-          'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
-          'a separate window).'
-      );
+      const warning = 'Remote debugger is in a background tab which may cause apps to ' +
+        'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
+        'a separate window).';
+      console.warn(warning);
     };
   })();
 
@@ -45,7 +44,7 @@ onmessage = (function() {
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;
-    }
+    },
   };
 
   return function(message) {
@@ -68,6 +67,7 @@ onmessage = (function() {
       let returnValue = [[], [], [], 0];
       try {
         if (typeof __fbBatchedBridge === 'object') {
+          // prettier-ignore-next
           returnValue = __fbBatchedBridge[object.method].apply(
             null,
             object.arguments

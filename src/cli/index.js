@@ -9,7 +9,7 @@ require('babel-register')({
   plugins: ['transform-flow-strip-types'],
   retainLines: true,
   sourceMaps: 'inline',
-  babelrc: false
+  babelrc: false,
 });
 
 require('./cli');

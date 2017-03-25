@@ -31,12 +31,12 @@ function liveReloadMiddleware(compiler) {
      */
     compiler.plugin('done', () => {
       const headers = {
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
       };
 
-      watchers.forEach(({ res }) => {
-        res.writeHead(205, headers);
-        res.end(JSON.stringify({ changed: true }));
+      watchers.forEach(watcher => {
+        watcher.res.writeHead(205, headers);
+        watcher.res.end(JSON.stringify({ changed: true }));
       });
 
       watchers = [];

@@ -12,9 +12,9 @@ const path = require('path');
 
 type Params = {
   webpackConfig: {
-    entry: Array<string>
+    entry: Array<string>,
   },
-  port: number
+  port: number,
 };
 
 const getEntryFile = (entries: Array<string>) => {

@@ -4,11 +4,11 @@
  *
  * @flow
  */
+import type { Command } from '../types';
+
 const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
-
-import type { Command } from '../types';
 
 const commands: Array<Command> = [require('./start')];
 
@@ -18,13 +18,13 @@ commands.forEach((command: Command) => {
   const cmd = program
     .command(command.name)
     .description(command.description)
-    .action(function run() {
-      const options = this.opts();
-      const argv: Array<string> = Array.from(arguments).slice(0, -1);
+    .action(function run(...args) {
+      const opts = this.opts();
+      const argv: Array<string> = args.slice(0, -1);
 
       try {
         logger.clear();
-        command.action(argv, options);
+        command.action(argv, opts);
       } catch (error) {
         logger.error(error);
         process.exit(1);
@@ -36,11 +36,11 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default
+      typeof opt.default === 'function' ? opt.default() : opt.default,
     ));
 
   cmd._helpInformation = cmd.helpInformation.bind(cmd);
-  cmd.helpInformation = function() {
+  cmd.helpInformation = function printHelp() {
     logger.clear();
     logger.printLogo(2);
     return this._helpInformation();

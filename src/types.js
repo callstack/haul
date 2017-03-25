@@ -19,13 +19,13 @@ export type Command = {
     name: string,
     description?: string,
     parse?: (val: string) => any,
-    default?: (() => any) | any
-  }>
+    default?: (() => any) | any,
+  }>,
 };
 
 export type WebpackStats = {
   hasWarnings: () => boolean,
-  hasErrors: () => boolean
+  hasErrors: () => boolean,
 };
 
 export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
@@ -38,5 +38,5 @@ export type Logger = {
   info: LoggerPrint,
   warn: LoggerPrint,
   error: LoggerPrint,
-  success: LoggerPrint
+  success: LoggerPrint,
 };

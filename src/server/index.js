@@ -4,13 +4,12 @@
  *
  * @flow
  */
+import type { WebpackStats } from '../types';
 
 const Express = require('express');
 const http = require('http');
 const morgan = require('morgan');
 const logger = require('../logger');
-
-import type { WebpackStats } from '../types';
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -34,7 +33,7 @@ const WebSocketProxy = require('./util/webSocketProxy.js');
 function createServer(
   compiler: any,
   onInvalid: InvalidCallback,
-  onCompile: CompileCallback
+  onCompile: CompileCallback,
 ) {
   const appHandler = new Express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
@@ -43,8 +42,8 @@ function createServer(
     reporter: () => {},
     watchOptions: {
       aggregateTimeout: 300,
-      poll: 1000
-    }
+      poll: 1000,
+    },
   });
 
   const httpServer = http.createServer(appHandler);

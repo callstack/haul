@@ -22,9 +22,6 @@ class WebSocketProxy {
   constructor(server, path) {
     this.wss = new WebSocketServer({ server, path });
 
-    this.debuggerSocket;
-    this.clientSocket;
-
     this.wss.on('connection', this.onConnection.bind(this));
   }
 
@@ -58,14 +55,17 @@ class WebSocketProxy {
 
     this.debuggerSocket = socket;
 
-    socket.onerror = (socket.onclose = () => {
+    const onCloseHandler = () => {
       this.debuggerSocket = null;
       if (this.clientSocket) {
         this.clientSocket.close(1011, 'Debugger was disconnected');
       }
-    });
+    };
 
-    socket.onmessage = ({ data }) => {
+    this.debuggerSocket.onerror = onCloseHandler;
+    this.debuggerSocket.onclose = onCloseHandler;
+
+    this.debuggerSocket.onmessage = ({ data }) => {
       if (this.clientSocket) {
         send(this.clientSocket, data);
       }
@@ -79,18 +79,22 @@ class WebSocketProxy {
    */
   handleClientSocket(socket) {
     if (this.clientSocket) {
-      this.clientSocket.onerror = (this.clientSocket.onclose = (this.clientSocket.onmessage = null));
+      this.clientSocket.onerror = null;
+      this.clientSocket.onclose = null;
+      this.clientSocket.onmessage = null;
       this.clientSocket.close(1011, 'Another client is connected');
     }
 
-    this.clientSocket = socket;
-
-    this.clientSocket.onerror = (this.clientSocket.onclose = () => {
+    const onCloseHandler = () => {
       this.clientSocket = null;
       if (this.debuggerSocket) {
         send(this.debuggerSocket, JSON.stringify({ method: '$disconnected' }));
       }
-    });
+    };
+
+    this.clientSocket = socket;
+    this.clientSocket.onerror = onCloseHandler;
+    this.clientSocket.onclose = onCloseHandler;
 
     this.clientSocket.onmessage = ({ data }) => {
       if (this.debuggerSocket) {

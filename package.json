@@ -6,7 +6,7 @@
   "scripts": {
     "test": "flow",
     "lint": "eslint src",
-    "prettier": "prettier --single-quote --write src/**/*.js"
+    "prettier": "prettier --single-quote --trailing-comma all --write \"src/**/*.js\""
   },
   "dependencies": {
     "babel": "^6.23.0",
@@ -20,16 +20,17 @@
     "dedent": "^0.7.0",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.15.2",
-    "flow-bin": "^0.42.0",
     "happypack": "^3.0.3",
     "hasha": "^2.2.0",
     "image-size": "^0.5.1",
     "loader-utils": "^1.1.0",
     "morgan": "^1.8.1",
     "node-emoji": "^1.5.1",
+    "opn": "^4.0.2",
     "pre-commit": "^1.2.2",
     "webpack": "^2.3.1",
-    "webpack-dev-middleware": "^1.10.1"
+    "webpack-dev-middleware": "^1.10.1",
+    "ws": "^2.2.2"
   },
   "peerDependencies": {
     "react-native": "^0.42.3"
@@ -42,6 +43,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "flow-bin": "^0.42.0",
     "prettier": "^0.22.0",
     "react-native": "^0.42.3"
   }

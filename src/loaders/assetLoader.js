@@ -22,15 +22,15 @@ module.exports = async function assetLoader(content: Buffer) {
   const config = Object.assign(
     {
       publicPath: false,
-      name: '[name].[hash]'
+      name: '[name].[hash]',
     },
     options,
-    query
+    query,
   );
 
   const url = utils.interpolateName(this, config.name, {
     context: config.context || this.options.context,
-    content
+    content,
   });
 
   const filepath = this.resourcePath;
@@ -90,7 +90,7 @@ module.exports = async function assetLoader(content: Buffer) {
     publicPath = JSON.stringify(
       typeof config.publicPath === 'function'
         ? config.publicPath(url)
-        : config.publicPath + url
+        : config.publicPath + url,
     );
   }
 

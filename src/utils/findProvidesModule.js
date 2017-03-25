@@ -16,11 +16,11 @@ const defaultOpts = {
     '__mocks__',
     '__fixtures__',
     'react-packager',
-    'androidTest'
+    'androidTest',
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ['ios', 'android', 'native', 'web']
+  platforms: ['ios', 'android', 'native', 'web'],
 };
 
 /**
@@ -43,7 +43,7 @@ const getPlatformFileName = (fileName, platforms) => {
  */
 const getProvidedModuleName = fileName => {
   const content = fs.readFileSync(fileName, 'utf-8');
-  return (/\* @providesModule ([\w\.]+)/.exec(content) || [])[1];
+  return (/\* @providesModule ([\w.]+)/.exec(content) || [])[1];
 };
 
 /**

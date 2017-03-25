@@ -20,6 +20,7 @@
     "generator-star-spacing": 0,
     "global-require": 0,
     "new-cap": 0,
+    "no-unused-vars": 0,
     "no-alert": 0,
     "no-confusing-arrow": 0,
     "no-console": 0,
@@ -32,6 +33,7 @@
 
     "import/no-duplicates": 0,
     "import/no-unresolved": 0,
+    "import/no-dynamic-require": 0
   }
 }
 

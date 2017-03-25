@@ -6,16 +6,16 @@
  *
  * @flow
  */
+import type { WebpackStats } from '../types';
+
 const chalk = require('chalk');
 const dedent = require('dedent');
-
-import type { WebpackStats } from '../types';
 
 module.exports = (
   {
     stats,
-    platform
-  }: { stats: WebpackStats, platform: string }
+    platform,
+  }: { stats: WebpackStats, platform: string },
 ) => {
   if (stats.hasErrors()) {
     return chalk.red('Failed to compile');
