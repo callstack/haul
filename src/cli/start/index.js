@@ -20,12 +20,13 @@ const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
  * Starts development server
  */
 function start(argv: CommandArgs, opts: *) {
-  const configPath = path.join(process.cwd(), 'webpack.haul.js');
+  const directory = process.cwd();
+  const configPath = path.join(directory, 'webpack.haul.js');
 
   if (!fs.existsSync(configPath)) {
     throw new Error(
       messages.webpackConfigNotFound({
-        path: configPath,
+        directory,
       }),
     );
   }
