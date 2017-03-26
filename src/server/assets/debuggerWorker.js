@@ -56,10 +56,10 @@ onmessage = (function() {
     const obj = message.data;
 
     const sendReply = function(result, error) {
-      postMessage({ replyID: object.id, result, error });
+      postMessage({ replyID: obj.id, result, error });
     };
 
-    const handler = messageHandlers[object.method];
+    const handler = messageHandlers[obj.method];
 
     // Special cased handlers
     if (handler) {
