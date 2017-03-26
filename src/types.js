@@ -38,5 +38,5 @@ export type Logger = {
   info: LoggerPrint,
   warn: LoggerPrint,
   error: LoggerPrint,
-  success: LoggerPrint,
+  done: LoggerPrint,
 };
