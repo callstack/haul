@@ -69,7 +69,7 @@ program.command('*', null, { noHelp: true }).action(cmd => {
   logger.printLogo();
 
   if (RNCommands.includes(cmd)) {
-    logger.warn(messages.notImplementedCommand(cmd));
+    logger.error(messages.notImplementedCommand(cmd));
   } else {
     logger.error(`:x:  Command '${cmd}' not recognized`);
   }
