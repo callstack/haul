@@ -12,6 +12,7 @@ const logger = require('../logger');
 const messages = require('../messages');
 
 const commands: Array<Command> = [require('./start')];
+
 const RNCommands: Array<string> = [
   'run-ios',
   'run-android',
@@ -25,7 +26,7 @@ const RNCommands: Array<string> = [
   'upgrade',
   'log-android',
   'log-ios',
-  'dependencies',
+  'dependencies'
 ];
 
 commands.forEach((command: Command) => {
@@ -52,7 +53,7 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default,
+      typeof opt.default === 'function' ? opt.default() : opt.default
     ));
 
   cmd._helpInformation = cmd.helpInformation.bind(cmd);
