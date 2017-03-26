@@ -9,6 +9,7 @@
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const path = require('path');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const findProvidesModule = require('./findProvidesModule');
 
 const PLATFORMS = ['ios', 'android'];
@@ -55,6 +56,10 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   },
   // Default plugins
   plugins: [
+    new ProgressBarPlugin({
+      format: `[:bar] :percent`,
+      summary: false,
+    }),
     new webpack.DefinePlugin({
       __DEV__: dev,
     }),

@@ -9,8 +9,9 @@ import type { CommandArgs } from '../../types';
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const clear = require('clear');
 
-const clearConsole = require('../../utils/clearConsole');
+const logger = require('../../logger');
 const createServer = require('../../server');
 const messages = require('../../messages');
 
@@ -20,12 +21,13 @@ const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
  * Starts development server
  */
 function start(argv: CommandArgs, opts: *) {
-  const configPath = path.join(process.cwd(), 'webpack.haul.js');
+  const directory = process.cwd();
+  const configPath = path.join(directory, 'webpack.haul.js');
 
   if (!fs.existsSync(configPath)) {
     throw new Error(
       messages.webpackConfigNotFound({
-        path: configPath,
+        directory,
       }),
     );
   }
@@ -41,28 +43,36 @@ function start(argv: CommandArgs, opts: *) {
     },
   );
 
-  const compiler = new webpack(config);
+  const compiler = webpack(config);
 
   const app = createServer(
     compiler,
     didHaveIssues => {
-      clearConsole();
-      console.log(messages.bundleCompiling(didHaveIssues));
+      clear();
+      if (didHaveIssues) {
+        logger.warn(messages.bundleCompiling(didHaveIssues));
+      } else {
+        logger.info(messages.bundleCompiling(didHaveIssues));
+      }
     },
     stats => {
-      clearConsole();
-      console.log(
-        messages.bundleCompiled({
-          stats,
-          platform: opts.platform,
-        }),
-      );
+      clear();
+      if (stats.hasErrors()) {
+        logger.error(messages.bundleFailed());
+      } else {
+        logger.done(
+          messages.bundleCompiled({
+            stats,
+            platform: opts.platform,
+          }),
+        );
+      }
     },
   );
 
   // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(8081, '127.0.0.1', () => {
-    console.log(
+    logger.info(
       messages.initialStartInformation({
         webpackConfig: config,
         port: opts.port,
@@ -73,7 +83,7 @@ function start(argv: CommandArgs, opts: *) {
 
 module.exports = {
   name: 'start',
-  description: 'Starts a new Webpack server',
+  description: 'Starts a new webpack server',
   action: start,
   options: [
     {
@@ -84,7 +94,7 @@ module.exports = {
     },
     {
       name: '--dev [true|false]',
-      description: 'Whether build in development mode',
+      description: 'Whether to build in development mode',
       default: true,
       parse: (val: string) => JSON.parse(val),
     },
