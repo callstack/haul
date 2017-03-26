@@ -73,7 +73,7 @@ function start(argv: CommandArgs, opts: *) {
 
 module.exports = {
   name: 'start',
-  description: 'Starts a new Webpack server',
+  description: 'Starts a new webpack server',
   action: start,
   options: [
     {
@@ -84,7 +84,7 @@ module.exports = {
     },
     {
       name: '--dev [true|false]',
-      description: 'Whether build in development mode',
+      description: 'Whether to build in development mode',
       default: true,
       parse: (val: string) => JSON.parse(val),
     },

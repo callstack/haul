@@ -23,10 +23,10 @@ const getEntryFile = (entries: Array<string>) => {
 
 module.exports = (config: Params) => dedent`
   Ready at ${chalk.cyan(`http://localhost:${config.port}`)}
-   
-  Webpack is now bundling your React Native app, starting from:
+
+  Haul is now bundling your React Native app, starting from:
 
     ${chalk.grey(getEntryFile(config.webpackConfig.entry))}
 
-  Note that fresh start may take longer than usually.
+  A fresh build may take longer than usual.
 `;
