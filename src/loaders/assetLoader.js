@@ -77,7 +77,7 @@ module.exports = async function assetLoader(content: Buffer) {
   files = files.filter(f => f);
   files.unshift(content);
 
-  let outputPath = url;
+  let outputPath = `${url}.${info.type}`;
   let publicPath = '__webpack_public_path__';
 
   if (config.outputPath) {
@@ -119,7 +119,7 @@ module.exports = async function assetLoader(content: Buffer) {
       __packager_asset: true,
       fileSystemLocation: ${JSON.stringify(this.resourcePath)},
       httpServerLocation: ${publicPath},
-      name: ${JSON.stringify(outputPath)},
+      name: ${JSON.stringify(outputPath.replace(/\.[^.]+$/, ''))},
       width: ${info.width},
       height: ${info.height},
       type: ${JSON.stringify(info.type)},
