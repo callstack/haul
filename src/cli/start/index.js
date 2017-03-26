@@ -9,9 +9,9 @@ import type { CommandArgs } from '../../types';
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const clear = require('clear');
 
 const logger = require('../../logger');
-const clearConsole = require('../../utils/clearConsole');
 const createServer = require('../../server');
 const messages = require('../../messages');
 
@@ -48,11 +48,11 @@ function start(argv: CommandArgs, opts: *) {
   const app = createServer(
     compiler,
     didHaveIssues => {
-      clearConsole();
+      clear();
       logger.info(messages.bundleCompiling(didHaveIssues));
     },
     stats => {
-      clearConsole();
+      clear();
       if (stats.hasErrors()) {
         logger.error(messages.bundleFailed());
       } else {
