@@ -10,6 +10,7 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 
+const logger = require('../../logger');
 const clearConsole = require('../../utils/clearConsole');
 const createServer = require('../../server');
 const messages = require('../../messages');
@@ -48,22 +49,26 @@ function start(argv: CommandArgs, opts: *) {
     compiler,
     didHaveIssues => {
       clearConsole();
-      console.log(messages.bundleCompiling(didHaveIssues));
+      logger.info(messages.bundleCompiling(didHaveIssues));
     },
     stats => {
       clearConsole();
-      console.log(
-        messages.bundleCompiled({
-          stats,
-          platform: opts.platform,
-        }),
-      );
+      if (stats.hasErrors()) {
+        logger.error(messages.bundleFailed());
+      } else {
+        logger.done(
+          messages.bundleCompiled({
+            stats,
+            platform: opts.platform,
+          }),
+        );
+      }
     },
   );
 
   // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(8081, '127.0.0.1', () => {
-    console.log(
+    logger.info(
       messages.initialStartInformation({
         webpackConfig: config,
         port: opts.port,

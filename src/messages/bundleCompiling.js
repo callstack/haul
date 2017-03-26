@@ -2,8 +2,6 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  *
- * bundleCompiling.js
- *
  * @flow
  */
 const chalk = require('chalk');

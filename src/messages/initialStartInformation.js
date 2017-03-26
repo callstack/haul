@@ -2,8 +2,6 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  *
- * initialStartInformation.js
- *
  * @flow
  */
 const dedent = require('dedent');
