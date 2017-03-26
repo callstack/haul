@@ -41,12 +41,12 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
     rules: [
       {
         test: /\.js$/,
-        loader: 'happypack/loader?id=babel',
         exclude: /node_modules\/(?!react)/,
+        use: `${require.resolve('happypack/loader')}?id=babel`,
       },
       {
         test: /\.(bmp|gif|jpg|jpeg|png)$/,
-        loader: require.resolve('../loaders/assetLoader'),
+        use: require.resolve('../loaders/assetLoader'),
       },
     ],
   },
@@ -68,7 +68,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
     new HappyPack({
       id: 'babel',
       loaders: [
-        `babel-loader?presets[]=react-native&plugins[]=${require.resolve('./fixRequireIssues')}`,
+        `${require.resolve('babel-loader')}?presets[]=react-native&plugins[]=${require.resolve('./fixRequireIssues')}`,
       ],
       verbose: false,
     }),
@@ -76,6 +76,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   // Default resolve
   resolve: {
     alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
+    mainFields: ['browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
 });
