@@ -49,7 +49,11 @@ function start(argv: CommandArgs, opts: *) {
     compiler,
     didHaveIssues => {
       clear();
-      logger.info(messages.bundleCompiling(didHaveIssues));
+      if (didHaveIssues) {
+        logger.warn(messages.bundleCompiling(didHaveIssues));
+      } else {
+        logger.info(messages.bundleCompiling(didHaveIssues));
+      }
     },
     stats => {
       clear();

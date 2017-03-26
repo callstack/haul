@@ -4,17 +4,16 @@
  *
  * @flow
  */
-const chalk = require('chalk');
 const dedent = require('dedent');
 
 module.exports = (didHaveIssues: boolean) => {
   if (didHaveIssues) {
     return dedent`
-      ${chalk.yellow('Compiling after issues...')}
+      Compiling after issues...
 
-      Note this may take longer than usual
+      This may take longer than usual
     `;
   }
 
-  return chalk.cyan('Compiling...');
+  return 'Compiling...';
 };
