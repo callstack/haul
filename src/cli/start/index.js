@@ -42,7 +42,7 @@ function start(argv: CommandArgs, opts: *) {
     },
   );
 
-  const compiler = new webpack(config);
+  const compiler = webpack(config);
 
   const app = createServer(
     compiler,

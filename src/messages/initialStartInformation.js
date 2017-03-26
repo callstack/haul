@@ -28,5 +28,5 @@ module.exports = (config: Params) => dedent`
 
     ${chalk.grey(getEntryFile(config.webpackConfig.entry))}
 
-  A fresh build may take longer than usual.
+  A fresh build may take longer than usual\n
 `;

@@ -38,7 +38,8 @@ function createServer(
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
     noInfo: true,
-    reporter: () => {},
+    reporter: null,
+    stats: 'errors-only',
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
