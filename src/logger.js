@@ -64,7 +64,7 @@ const createDebugLog = (prefix: string, args: any[]): void => {
 const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
   (...args: any[]) => {
     console.log(
-      `${enchance(prefix)}`,
+      `${enchance(` ${prefix.toUpperCase()} `)}`,
       ...args.map(arg => {
         if (typeof arg === 'string') {
           return arg;
@@ -80,10 +80,10 @@ const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
 const createLogger = (): Logger => ({
   clear,
   printLogo,
-  info: loggerFactory(chalk.cyan, 'info', true),
-  warn: loggerFactory(chalk.yellow, 'warning', true),
-  error: loggerFactory(chalk.red, 'error', true),
-  success: loggerFactory(chalk.green, 'success', true),
+  info: loggerFactory(chalk.black.bgCyan, 'info', true),
+  warn: loggerFactory(chalk.black.bgYellow, 'warn', true),
+  error: loggerFactory(chalk.black.bgRed, 'error', true),
+  done: loggerFactory(chalk.black.bgGreen, 'done', true),
 });
 
-module.exports = createLogger(false);
+module.exports = createLogger();
