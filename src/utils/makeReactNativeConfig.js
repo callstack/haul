@@ -10,6 +10,7 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const assetResolver = require('../resolvers/AssetResolver');
 const findProvidesModule = require('./findProvidesModule');
 
 const PLATFORMS = ['ios', 'android'];
@@ -47,11 +48,17 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
       {
         test: /\.js$/,
         exclude: /node_modules\/(?!react)/,
-        use: `${require.resolve('happypack/loader')}?id=babel`,
+        use: {
+          loader: require.resolve('happypack/loader'),
+          query: { id: 'babel' },
+        },
       },
       {
-        test: /\.(bmp|gif|jpg|jpeg|png)$/,
-        use: require.resolve('../loaders/assetLoader'),
+        test: assetResolver.test,
+        use: {
+          loader: require.resolve('../loaders/assetLoader'),
+          query: { platform },
+        },
       },
     ],
   },
@@ -85,10 +92,11 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   ],
   // Default resolve
   resolve: {
+    plugins: [assetResolver({ platform })],
     alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
     mainFields: ['browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
-  },
+    },
 });
 
 /**
