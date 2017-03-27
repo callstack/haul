@@ -14,6 +14,7 @@
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.2.2",
     "babel-preset-react-native": "^1.9.1",
     "babel-register": "^6.24.0",
     "chalk": "1.1.3",
@@ -56,8 +57,20 @@
   "lint-staged": {
     "*.js": [
       "eslint --fix",
-      "prettier --single-quote --trailingCommas all --write",
+      "prettier --single-quote --trailing-comma all --write",
       "git add"
+    ]
+  },
+  "babel": {
+    "presets": [
+      ["env", {
+        "targets": {
+          "node": "current"
+        }
+      }]
+    ],
+    "plugins": [
+      "transform-flow-strip-types"
     ]
   },
   "eslintConfig": {

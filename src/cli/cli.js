@@ -10,6 +10,7 @@ const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
 const messages = require('../messages');
+const { MessageError } = require('../errors');
 
 const commands: Array<Command> = [require('./start')];
 
@@ -26,7 +27,7 @@ const RNCommands: Array<string> = [
   'upgrade',
   'log-android',
   'log-ios',
-  'dependencies'
+  'dependencies',
 ];
 
 commands.forEach((command: Command) => {
@@ -43,7 +44,16 @@ commands.forEach((command: Command) => {
         logger.clear();
         command.action(argv, opts);
       } catch (error) {
-        logger.error(error);
+        if (error instanceof MessageError) {
+          logger.error(error.message);
+        } else {
+          logger.error(
+            messages.commandFailed({
+              command: `haul ${command.name}`,
+              error,
+            }),
+          );
+        }
         process.exit(1);
       }
     });
@@ -53,7 +63,7 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default
+      typeof opt.default === 'function' ? opt.default() : opt.default,
     ));
 
   const defaultHelpPrinter = cmd.helpInformation.bind(cmd);

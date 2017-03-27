@@ -12,5 +12,6 @@ module.exports = {
   bundleCompiling: require('./bundleCompiling'),
   bundleFailed: require('./bundleFailed'),
   commandNotImplemented: require('./commandNotImplemented'),
-  commandNotFound: require('./commandNotFound')
+  commandNotFound: require('./commandNotFound'),
+  commandFailed: require('./commandFailed'),
 };
