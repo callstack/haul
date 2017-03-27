@@ -10,6 +10,7 @@ const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
 const messages = require('../messages');
+const { MessageError } = require('../errors');
 
 const commands: Array<Command> = [require('./start')];
 
@@ -43,7 +44,16 @@ commands.forEach((command: Command) => {
         logger.clear();
         command.action(argv, opts);
       } catch (error) {
-        logger.error(error);
+        if (error instanceof MessageError) {
+          logger.error(error.message);
+        } else {
+          logger.error(
+            messages.commandFailed({
+              command: `haul ${command.name}`,
+              error
+            })
+          );
+        }
         process.exit(1);
       }
     });

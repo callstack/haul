@@ -14,6 +14,7 @@ const clear = require('clear');
 const logger = require('../../logger');
 const createServer = require('../../server');
 const messages = require('../../messages');
+const { MessageError } = require('../../errors');
 
 const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
 
@@ -25,10 +26,10 @@ function start(argv: CommandArgs, opts: *) {
   const configPath = path.join(directory, 'webpack.haul.js');
 
   if (!fs.existsSync(configPath)) {
-    throw new Error(
+    throw new MessageError(
       messages.webpackConfigNotFound({
-        directory,
-      }),
+        directory
+      })
     );
   }
 
@@ -39,8 +40,8 @@ function start(argv: CommandArgs, opts: *) {
       port: opts.port,
       dev: opts.dev,
       platform: opts.platform,
-      cwd: process.cwd(),
-    },
+      cwd: process.cwd()
+    }
   );
 
   const compiler = webpack(config);
@@ -63,11 +64,11 @@ function start(argv: CommandArgs, opts: *) {
         logger.done(
           messages.bundleCompiled({
             stats,
-            platform: opts.platform,
-          }),
+            platform: opts.platform
+          })
         );
       }
-    },
+    }
   );
 
   // $FlowFixMe Seems to have issues with `http.Server`
@@ -75,8 +76,8 @@ function start(argv: CommandArgs, opts: *) {
     logger.info(
       messages.initialStartInformation({
         webpackConfig: config,
-        port: opts.port,
-      }),
+        port: opts.port
+      })
     );
   });
 }
@@ -90,18 +91,18 @@ module.exports = {
       name: '--port [number]',
       description: 'Port to run your webpack server',
       default: 8081,
-      parse: (val: string) => +val,
+      parse: (val: string) => +val
     },
     {
       name: '--dev [true|false]',
       description: 'Whether to build in development mode',
       default: true,
-      parse: (val: string) => JSON.parse(val),
+      parse: (val: string) => JSON.parse(val)
     },
     {
       name: '--platform [ios|android]',
       description: 'Platform to bundle for',
-      default: 'ios',
-    },
-  ],
+      default: 'ios'
+    }
+  ]
 };
