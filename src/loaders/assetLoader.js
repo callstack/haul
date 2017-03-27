@@ -46,7 +46,7 @@ module.exports = async function assetLoader(content: Buffer) {
       }
     }));
 
-  const map = result.filter(name => regex.test(name)).reduce((acc, name) => {
+  const map = result.reduce((acc, name) => {
     const match = name.match(regex);
 
     if (match) {
