@@ -15,13 +15,18 @@ Haul is a command line interface for developing React Native applications.
 Install `haul-cli` on your machine:
 
 ```bash
-yarn add haul-cli
+yarn add haul-cli --dev
 ```
 
 then, enter your React Native project and run the following:
 
 ```bash
-haul init
+./node_modules/.bin/haul init
+```
+alternatively, you can use `yarn run`:
+
+```bash
+yarn run haul init
 ```
 
 This will automatically add the configuration needed to make Haul work with your app, e.g. add `webpack.haul.js` to your project, which you can customise to add more functionality.
@@ -29,7 +34,7 @@ This will automatically add the configuration needed to make Haul work with your
 Now you can start the development server by running:
 
 ```bash
-haul start --platform ios
+yarn run haul start --platform ios
 ```
 
 ## Using Haul
