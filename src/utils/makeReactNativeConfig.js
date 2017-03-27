@@ -17,7 +17,6 @@ const PLATFORMS = ['ios', 'android'];
 
 type ConfigOptions = {
   port: number,
-  platform: 'ios' | 'android',
   cwd: string,
   dev: boolean,
 };
@@ -106,7 +105,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
-): WebpackConfig {
+): [Array<WebpackConfig>, typeof PLATFORMS] {
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultWebpackConfig = getDefaultConfig(env);
@@ -126,7 +125,7 @@ function makeReactNativeConfig(
     return config;
   });
 
-  return configs[PLATFORMS.indexOf(options.platform)];
+  return [configs, PLATFORMS];
 }
 
 module.exports = makeReactNativeConfig;

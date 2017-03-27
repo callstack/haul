@@ -14,4 +14,5 @@ module.exports = {
   commandNotImplemented: require('./commandNotImplemented'),
   commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
+  optionPlatformMissing: require('./optionPlatformMissing'),
 };
