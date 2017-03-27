@@ -1,40 +1,39 @@
-<div align="center">
- <h1>haul</h1>
-  <p>
-    haul is a command line interface to React Native built on Webpack, rnpm and open tooling.
-  </p>
-</div>
+# Haul
 
-<h2 align="center">Install</h2>
+Haul is a command line interface for developing React Native applications.
+
+**Open:** Haul uses Webpack 2 to bundle your application code and Express.js to serve it to your devices. It is a drop-in replacement for `react-packager` built on open tools.
+
+**Hackable:** Haul laverages existing Webpack ecosystem and can be configured just like any other Webpack project. Adding Hot Module Replacement is just a matter of few lines.
+
+**Just works:** Built on top of battle tested open source projects, it makes sure you never hit annoying issues (like symlink support) again. 
+
+**Simply beautiful:** Redesigned from the ground up with self-explanatory error messages to increase your productivity and minimize time spent on debugging issues
+
+## Installing Haul
+
+Install `haul-cli` on your machine:
 
 ```bash
-npm install --save-dev haul-cli
+npm install -g haul-cli
 ```
 
-then, create `webpack.haul.js` in your root and specify an entry point of your app:
+then, enter your React Native project and run the following:
 
-```js
-module.exports = {
-  entry: './index.js',
-};
+```bash
+haul init
 ```
-By default, React Native app has two entry points: `index.ios.js` and `index.android.js`. In such case, you can change your `webpack.haul.js` to be a function:
 
-```js
-module.exports = ({ platform }) => ({
-  entry: `./index.${platform}.js`,
-});
-```
-and return entry point based on platform. In this example, `platform` is either `ios` or `android`, which maps to the files we have in our project.
+This will automatically integrate Haul with your app by creating `webpack.haul.js` config in the root folder of your project. You can customise it later to add some features.
 
-If you are planning to override any of Webpack properties, like `module.loaders` or `resolve.modules`, be sure to load defaults:
-```js
-module.exports = ({ platform }, { resolve }) => ({
-  entry: `./index.${platform}.js`,
-  resolve: {
-    ...resolve,
-    modules: ['src'],
-  },
-});
+When it finishes, you can start the development server by running:
+
+```bash
+haul start --platform ios
 ```
-They are passed to function as a 2nd parameter.
+
+## Using Haul
+
+## Contributing to Haul
+
+## Credits
