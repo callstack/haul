@@ -13,6 +13,6 @@ module.exports = morgan((tokens, req, res) => {
     chalk.grey(req.path),
     chalk.grey(tokens.status(req, res)),
     chalk.grey(tokens.res(req, res, 'content-length'), '-'),
-    chalk.grey(tokens['response-time'](req, res), 'ms')
+    chalk.grey(tokens['response-time'](req, res), 'ms'),
   ].join(' ');
 });

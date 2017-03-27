@@ -14,8 +14,8 @@ const dedent = require('dedent');
 module.exports = (
   {
     stats,
-    platform
-  }: { stats: WebpackStats, platform: string }
+    platform,
+  }: { stats: WebpackStats, platform: string },
 ) => {
   if (stats.hasErrors()) {
     return chalk.red('Failed to compile');

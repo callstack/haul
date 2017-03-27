@@ -32,7 +32,7 @@ const WebSocketProxy = require('./util/webSocketProxy.js');
 function createServer(
   compiler: any,
   onInvalid: InvalidCallback,
-  onCompile: CompileCallback
+  onCompile: CompileCallback,
 ) {
   const appHandler = new Express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
@@ -42,8 +42,8 @@ function createServer(
     stats: 'errors-only',
     watchOptions: {
       aggregateTimeout: 300,
-      poll: 1000
-    }
+      poll: 1000,
+    },
   });
 
   const httpServer = http.createServer(appHandler);

@@ -7,22 +7,23 @@
 
 type Request = {
   path: string,
-}
+};
 
 type Options = {
   test?: RegExp,
   platform: 'ios' | 'android',
-}
+};
 
-const exists = (fs, file) => new Promise(resolve => {
-  fs.stat(file, err => {
-    if (err) {
-      resolve(false);
-    } else {
-      resolve(true);
-    }
-  })
-});
+const exists = (fs, file) =>
+  new Promise(resolve => {
+    fs.stat(file, err => {
+      if (err) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
 
 function AssetResolver(options: Options) {
   const test = options.test || AssetResolver.test;
@@ -47,11 +48,15 @@ function AssetResolver(options: Options) {
           const result = await exists(this.fileSystem, file);
 
           if (result) {
-            callback(null, Object.assign({}, request, {
-              path: file,
-              relativePath: request.relativePath && this.join(request.relativePath, file),
-              file: true,
-            }));
+            callback(
+              null,
+              Object.assign({}, request, {
+                path: file,
+                relativePath: request.relativePath &&
+                  this.join(request.relativePath, file),
+                file: true,
+              }),
+            );
             return;
           }
         }

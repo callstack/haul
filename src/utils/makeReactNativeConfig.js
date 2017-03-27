@@ -78,7 +78,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
     new webpack.NamedModulesPlugin(),
     // The default configuration only generates sourcemap with *.js
     new webpack.SourceMapDevToolPlugin({
-        test: /\.(js|css|bundle)($|\?)/i,
+      test: /\.(js|css|bundle)($|\?)/i,
     }),
     // Use HappyPack to speed up Babel build times
     // significantly
@@ -96,7 +96,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
     alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
     mainFields: ['browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
-    },
+  },
 });
 
 /**

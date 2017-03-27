@@ -12,8 +12,8 @@ const dedent = require('dedent');
 module.exports = (
   {
     stats,
-    platform
-  }: { stats: WebpackStats, platform: string }
+    platform,
+  }: { stats: WebpackStats, platform: string },
 ) => {
   if (stats.hasWarnings()) {
     return chalk.yellow('Compiled with warnings');
