@@ -22,6 +22,6 @@ module.exports = (
   return dedent`
     Compiled successfully!
 
-    You can now run the app on your ${platform === 'all' ? 'any' : platform} device\n
+    You can now run the app on your ${platform === 'all' ? '' : platform} device\n
   `;
 };
