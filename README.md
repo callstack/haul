@@ -2,7 +2,7 @@
 
 Haul is a command line interface for developing React Native applications.
 
-**Open:** Haul uses Webpack 2 to bundle your application code and Express.js to serve it to your devices. It is a drop-in replacement for `react-native` CLI built on open tools.
+**Open:** Haul uses Webpack 2 to bundle your application code and Express.js to serve it to your devices. It is a drop-in replacement for [`react-native`](https://github.com/facebook/react-native/tree/master/local-cli) CLI built on open tools.
 
 **Hackable:** Haul laverages existing Webpack ecosystem and can be configured just like any other Webpack project. Adding Hot Module Replacement is just a matter of few lines.
 
@@ -23,7 +23,7 @@ then, enter your React Native project and run the following:
 ```bash
 ./node_modules/.bin/haul init
 ```
-alternatively, you can use `yarn run`:
+alternatively, you can use [`yarn run`](https://yarnpkg.com/en/docs/cli/link):
 
 ```bash
 yarn run haul init
