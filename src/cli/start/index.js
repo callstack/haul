@@ -26,6 +26,10 @@ async function start(argv: CommandArgs, opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
 
+  if (!opts.platform) {
+    throw new MessageError(messages.optionPlatformMissing());
+  }
+
   if (!fs.existsSync(configPath)) {
     throw new MessageError(
       messages.webpackConfigNotFound({
@@ -34,16 +38,20 @@ async function start(argv: CommandArgs, opts: *) {
     );
   }
 
-  const config = makeReactNativeConfig(
+  // eslint-disable-next-line prefer-const
+  let [config, platforms] = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
       port: opts.port,
       dev: opts.dev,
-      platform: opts.platform,
       cwd: process.cwd(),
     },
   );
+
+  if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
+    config = config[platforms.indexOf(opts.platform)];
+  }
 
   const compiler = webpack(config);
 
@@ -95,7 +103,9 @@ async function start(argv: CommandArgs, opts: *) {
   app.listen(8081, '127.0.0.1', () => {
     logger.info(
       messages.initialStartInformation({
-        webpackConfig: config,
+        entries: Array.isArray(config)
+          ? config.map(c => c.entry)
+          : [config.entry],
         port: opts.port,
       }),
     );
@@ -122,7 +132,6 @@ module.exports = {
     {
       name: '--platform [ios|android]',
       description: 'Platform to bundle for',
-      default: 'ios',
     },
   ],
 };

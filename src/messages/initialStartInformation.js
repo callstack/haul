@@ -9,9 +9,7 @@ const chalk = require('chalk');
 const path = require('path');
 
 type Params = {
-  webpackConfig: {
-    entry: Array<string>,
-  },
+  entries: Array<Array<string>>,
   port: number,
 };
 
@@ -24,7 +22,7 @@ module.exports = (config: Params) => dedent`
 
   Haul is now bundling your React Native app, starting from:
 
-    ${chalk.grey(getEntryFile(config.webpackConfig.entry))}
+  ${config.entries.map(e => chalk.grey(getEntryFile(e))).join('\n')}
 
   A fresh build may take longer than usual\n
 `;

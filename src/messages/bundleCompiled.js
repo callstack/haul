@@ -19,9 +19,11 @@ module.exports = (
     return chalk.yellow('Compiled with warnings');
   }
 
+  const device = platform === 'all' ? 'your device' : `your ${platform} device`;
+
   return dedent`
     Compiled successfully!
 
-    You can now run the app on your ${platform} device\n
+    You can now run the app on ${device}\n
   `;
 };
