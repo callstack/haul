@@ -9,8 +9,25 @@ import type { Command } from '../types';
 const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
+const messages = require('../messages');
 
 const commands: Array<Command> = [require('./start')];
+
+const RNCommands: Array<string> = [
+  'run-ios',
+  'run-android',
+  'library',
+  'bundle',
+  'unbundle',
+  'link',
+  'unlink',
+  'install',
+  'uninstall',
+  'upgrade',
+  'log-android',
+  'log-ios',
+  'dependencies'
+];
 
 commands.forEach((command: Command) => {
   const options = command.options || [];
@@ -36,7 +53,7 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default,
+      typeof opt.default === 'function' ? opt.default() : opt.default
     ));
 
   cmd._helpInformation = cmd.helpInformation.bind(cmd);
@@ -50,7 +67,13 @@ commands.forEach((command: Command) => {
 program.command('*', null, { noHelp: true }).action(cmd => {
   logger.clear();
   logger.printLogo();
-  logger.error(`:x:  Command '${cmd}' not recognized`);
+
+  if (RNCommands.includes(cmd)) {
+    logger.error(messages.notImplementedCommand(cmd));
+  } else {
+    logger.error(`:x:  Command '${cmd}' not recognized`);
+  }
+
   program.help();
 });
 
