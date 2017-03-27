@@ -1,6 +1,8 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ * 
+ * @flow
  */
 import type { Command } from '../types';
 

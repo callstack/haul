@@ -1,8 +1,6 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- *
- * @flow
  */
 
 // @todo transpile on build
