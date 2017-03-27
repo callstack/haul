@@ -26,7 +26,7 @@ const RNCommands: Array<string> = [
   'upgrade',
   'log-android',
   'log-ios',
-  'dependencies',
+  'dependencies'
 ];
 
 commands.forEach((command: Command) => {
@@ -53,14 +53,13 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default,
+      typeof opt.default === 'function' ? opt.default() : opt.default
     ));
 
-  cmd._helpInformation = cmd.helpInformation.bind(cmd);
-  cmd.helpInformation = function printHelp() {
+  const defaultHelpPrinter = cmd.helpInformation.bind(cmd);
+  cmd.helpInformation = () => {
     logger.clear();
-    logger.printLogo(2);
-    return this._helpInformation();
+    return defaultHelpPrinter();
   };
 });
 
@@ -68,12 +67,11 @@ program.command('*', null, { noHelp: true }).action(cmd => {
   logger.clear();
 
   if (RNCommands.includes(cmd)) {
-    logger.error(messages.notImplementedCommand(cmd));
+    logger.error(messages.commandNotImplemented(cmd));
     return;
   }
 
-  logger.error(`:x:  Command '${cmd}' not recognized`);
-  program.help();
+  logger.error(messages.commandNotFound(cmd));
 });
 
 program.version(pjson.version).parse(process.argv);
