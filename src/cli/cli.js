@@ -66,14 +66,13 @@ commands.forEach((command: Command) => {
 
 program.command('*', null, { noHelp: true }).action(cmd => {
   logger.clear();
-  logger.printLogo();
 
   if (RNCommands.includes(cmd)) {
     logger.error(messages.notImplementedCommand(cmd));
-  } else {
-    logger.error(`:x:  Command '${cmd}' not recognized`);
+    return;
   }
 
+  logger.error(`:x:  Command '${cmd}' not recognized`);
   program.help();
 });
 
