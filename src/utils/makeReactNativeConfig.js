@@ -36,6 +36,11 @@ type WebpackConfigFactory =
 const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   // Default polyfills and entry-point setup
   entry: [require.resolve('./polyfillEnvironment.js')],
+  devtool: 'source-map',
+  output: {
+    path: '/',
+    filename: `index.${platform}.bundle`,
+  },
   // Built-in loaders
   module: {
     rules: [
@@ -50,10 +55,6 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
       },
     ],
   },
-  output: {
-    path: '/',
-    filename: `index.${platform}.bundle`,
-  },
   // Default plugins
   plugins: [
     new ProgressBarPlugin({
@@ -62,6 +63,15 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
     }),
     new webpack.DefinePlugin({
       __DEV__: dev,
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: !dev,
+      debug: dev,
+    }),
+    new webpack.NamedModulesPlugin(),
+    // The default configuration only generates sourcemap with *.js
+    new webpack.SourceMapDevToolPlugin({
+        test: /\.(js|css|bundle)($|\?)/i,
     }),
     // Use HappyPack to speed up Babel build times
     // significantly
