@@ -46,33 +46,36 @@ module.exports = async function assetLoader(content: Buffer) {
       }
     }));
 
-  const map = result.reduce((acc, name) => {
-    const match = name.match(regex);
+  const map = result.reduce(
+    (acc, name) => {
+      const match = name.match(regex);
 
-    if (match) {
-      let [x, scale, y, platform] = match; // eslint-disable-line
+      if (match) {
+        let [x, scale, y, platform] = match; // eslint-disable-line
 
-      scale = scale || '@1x';
+        scale = scale || '@1x';
 
-      if (acc[scale]) {
-        // platform takes highest prio, so if it exists, don't do anything
-        if (acc[scale].platform === query.platform) {
-          return acc;
+        if (acc[scale]) {
+          // platform takes highest prio, so if it exists, don't do anything
+          if (acc[scale].platform === query.platform) {
+            return acc;
+          }
+
+          // native takes second prio, so if it exists and platform doesn't, don't do anything
+          if (acc[scale].platform === 'native' && !platform) {
+            return acc;
+          }
         }
 
-        // native takes second prio, so if it exists and platform doesn't, don't do anything
-        if (acc[scale].platform === 'native' && !platform) {
-          return acc;
-        }
+        return Object.assign({}, acc, {
+          [scale]: { platform, name },
+        });
       }
 
-      return Object.assign({}, acc, {
-        [scale]: { platform, name },
-      });
-    }
-
-    return acc;
-  }, {});
+      return acc;
+    },
+    {},
+  );
 
   const scales = Object.keys(map).map(s => parseInt(s.replace(/^@/, ''), 10));
 

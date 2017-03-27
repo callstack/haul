@@ -8,11 +8,11 @@ require('babel-register')({
   ignore: /node_modules(?!\/haul)/,
   plugins: [
     'transform-flow-strip-types',
-    'babel-plugin-transform-async-to-generator'
+    'babel-plugin-transform-async-to-generator',
   ],
   retainLines: true,
   sourceMaps: 'inline',
-  babelrc: false
+  babelrc: false,
 });
 
 require('./cli');

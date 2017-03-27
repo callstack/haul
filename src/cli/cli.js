@@ -27,7 +27,7 @@ const RNCommands: Array<string> = [
   'upgrade',
   'log-android',
   'log-ios',
-  'dependencies'
+  'dependencies',
 ];
 
 commands.forEach((command: Command) => {
@@ -50,8 +50,8 @@ commands.forEach((command: Command) => {
           logger.error(
             messages.commandFailed({
               command: `haul ${command.name}`,
-              error
-            })
+              error,
+            }),
           );
         }
         process.exit(1);
@@ -63,7 +63,7 @@ commands.forEach((command: Command) => {
       opt.name,
       opt.description,
       opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default
+      typeof opt.default === 'function' ? opt.default() : opt.default,
     ));
 
   const defaultHelpPrinter = cmd.helpInformation.bind(cmd);
