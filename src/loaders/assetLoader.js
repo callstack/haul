@@ -114,7 +114,7 @@ module.exports = async function assetLoader(content: Buffer) {
   callback(
     null,
     `
-    var AssetRegistry = require('AssetRegistry');
+    var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,
       fileSystemLocation: ${JSON.stringify(this.resourcePath)},
@@ -123,7 +123,7 @@ module.exports = async function assetLoader(content: Buffer) {
       width: ${info.width},
       height: ${info.height},
       type: ${JSON.stringify(info.type)},
-      hash: ${JSON.stringify(`${hasha(Buffer.concat(files))}3`)},
+      hash: ${JSON.stringify(`${hasha(Buffer.concat(files))}`)},
       scales: ${JSON.stringify(scales)},
     });
   `,
