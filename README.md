@@ -6,7 +6,7 @@ Haul is a command line interface for developing React Native applications.
 
 **Hackable:** Haul laverages existing Webpack ecosystem and can be configured just like any other Webpack project. Adding Hot Module Replacement is just a matter of few lines.
 
-**Just works:** Built on top of battle tested open source projects, it makes sure you never hit annoying issues (like symlink support) again. 
+**Just works:** Built on top of battle tested open source projects, which makes sure you never hit annoying issues (like symlink support) again. 
 
 **Helpful:** Redesigned from the ground up with self-explanatory error messages to increase your productivity and minimize time spent on debugging issues
 
@@ -15,7 +15,7 @@ Haul is a command line interface for developing React Native applications.
 Install `haul-cli` on your machine:
 
 ```bash
-npm install -g haul-cli
+yarn add haul-cli
 ```
 
 then, enter your React Native project and run the following:
@@ -24,9 +24,9 @@ then, enter your React Native project and run the following:
 haul init
 ```
 
-This will automatically integrate Haul with your app by creating `webpack.haul.js` config in the root folder of your project. You can customise it later to add some features.
+This will automatically add the configuration needed to make Haul work with your app, e.g. add `webpack.haul.js` to your project, which you can customise to add more functionality.
 
-When it finishes, you can start the development server by running:
+Now you can start the development server by running:
 
 ```bash
 haul start --platform ios
