@@ -14,6 +14,7 @@ const clear = require('clear');
 const logger = require('../../logger');
 const createServer = require('../../server');
 const messages = require('../../messages');
+const exec = require('../../utils/exec');
 const { MessageError } = require('../../errors');
 
 const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
@@ -21,7 +22,7 @@ const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
 /**
  * Starts development server
  */
-function start(argv: CommandArgs, opts: *) {
+async function start(argv: CommandArgs, opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
 
@@ -70,6 +71,25 @@ function start(argv: CommandArgs, opts: *) {
       }
     }
   );
+
+  // Run `adb reverse` on Android
+  if (opts.platform === 'android') {
+    const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
+    const adb = process.env.ANDROID_HOME
+      ? `${process.env.ANDROID_HOME}/platform-tools/adb`
+      : 'adb';
+
+    try {
+      await exec(`${adb} ${args}`);
+    } catch (error) {
+      logger.warn(
+        messages.commandFailed({
+          command: `${path.basename(adb)} ${args}`,
+          error
+        })
+      );
+    }
+  }
 
   // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(8081, '127.0.0.1', () => {
