@@ -36,13 +36,13 @@ commands.forEach((command: Command) => {
   const cmd = program
     .command(command.name)
     .description(command.description)
-    .action(function run(...args) {
+    .action(async function run(...args) {
       const opts = this.opts();
       const argv: Array<string> = args.slice(0, -1);
 
       try {
         logger.clear();
-        command.action(argv, opts);
+        await command.action(argv, opts);
       } catch (error) {
         if (error instanceof MessageError) {
           logger.error(error.message);
@@ -51,6 +51,7 @@ commands.forEach((command: Command) => {
             messages.commandFailed({
               command: `haul ${command.name}`,
               error,
+              stack: error.stack,
             }),
           );
         }
