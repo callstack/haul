@@ -9,6 +9,14 @@
     "lint": "eslint src",
     "test": "npm run flow && npm run lint"
   },
+  "author": "Mike Grabowski <mike@callstack.io>",
+  "contributors": [
+    "Satyajit Sahoo <satyajit.sahoo@callstack.io>",
+    "Piotr Drapich <piotr.drapich@callstack.io>",
+    "Pawel Trysla <pawel.trysla@callstack.io>"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/callstack-io/haul/issues",
   "dependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.24.0",
