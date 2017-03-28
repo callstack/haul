@@ -1,6 +1,6 @@
-# Haul
+***Haul** - Haul is a command line interface for developing React Native applications.*
 
-Haul is a command line interface for developing React Native applications.
+## Features
 
 **Open:** Haul uses Webpack 2 to bundle your application code and Express.js to serve it to your devices. It is a drop-in replacement for `react-native` CLI built on open tools.
 
@@ -34,4 +34,4 @@ yarn run haul start -- --platform ios
 
 and follow the instructions!
 
-<img src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
+<img width="500" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
