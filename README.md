@@ -11,23 +11,23 @@
 
 ## Features
 
-**Open:** Haul uses Webpack 2 to bundle your application code and Express.js to serve it to your devices. It is a drop-in replacement for `react-native` CLI built on open tools.
+**Open:** Haul is a drop-in replacement for `react-native` CLI built on open tools like Webpack.
 
-**Hackable:** Haul laverages existing Webpack ecosystem and can be configured just like any other Webpack project. Adding Hot Module Replacement is just a matter of few lines.
+**Hackable:** Provides a familiar environment by leveraging the Webpack ecosystem.
 
-**Just works:** Built on top of battle tested open source projects, which makes sure you never hit annoying issues (like symlink support) again. 
+**Just works:** Built on top of battle tested open source projects, so you never hit annoying issues like symlink support. 
 
-**Helpful:** Redesigned from the ground up with self-explanatory error messages to increase your productivity and minimize time spent on debugging issues.
+**Helpful:** Designed from the ground up with helpful error messages to increase your productivity.
 
 ## Getting started
 
 Start by adding Haul as a dependency to your project:
 
 ```bash
-yarn add haul-cli
+yarn add --dev haul-cli
 ```
 
-then, run the following:
+To configure your project to use haul, run the following:
 
 ```bash
 yarn run haul init
@@ -41,27 +41,28 @@ Finally, start the development server:
 yarn run haul start -- --platform ios
 ```
 
-and follow the instructions!
+Now you are ready to start!
 
 <img width="650" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
 
 ## Next steps
 
-Check out [documentation](./docs/Readme.md) to learn more about customising your project with Webpack and other available commands. 
+Check out [documentation](./docs/README.md) to learn more about available commands and tips on customizing the webpack configuration.
 
 ## Limitations
 
-Haul has been designed with developer efficiency in mind. It is a complete rewrite of existing `react-native` command line tools that laverages Webpack ecosystem.
+Haul uses a completely different architecture from React Native packager, which means there are some things which don't work quite the same.
 
 We are actively working on adding support for the following:
 
   - Existing `react-native` commands 
   - React DevTools
   - Developer menu -> Start systrace
-  
-Given differences between `Webpack` and `react-packager` (used by React Native to serve your bundle), the following are **unlikely to be supported** in the future:
+
+The following features are **unlikely to be supported** in the future:
 
   - Developer menu -> Enable Hot Reloading: use `webpack.haul.js` config instead
+  - Haste module system: use something like [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) instead
 
 ## License
 
