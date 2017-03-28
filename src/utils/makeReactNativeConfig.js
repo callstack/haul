@@ -45,7 +45,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
   output: {
-    path: `${cwd}/dist`,
+    path: path.join(cwd, 'dist'),
     filename: `index.${platform}.bundle`,
   },
   // Built-in loaders
