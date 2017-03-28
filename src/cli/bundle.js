@@ -95,7 +95,7 @@ async function bundle(argv: Array<string>, opts: *) {
 
 module.exports = {
   name: 'bundle',
-  description: '',
+  description: 'Builds your application bundle for offline use',
   action: bundle,
   // Allow unknown flags for interoperability with 'react-native bundle'
   unknownOptions: true,
