@@ -13,16 +13,6 @@ BEFORE YOU SUBMIT please search open/closed issues since someone might have aske
 ### Haul Configuration (webpack.haul.js)
 <!--- If describing a bug, tell us what your Haul configuration looks like -->
 
-```js
-module.exports = {
-  // your config here
-};
-```
-
-### Possible Solution
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
-<!--- or ideas how to implement the addition or change -->
-
 ### Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
