@@ -52,12 +52,12 @@ async function bundle(argv: Array<string>, opts: *) {
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
 
-  // if (opts.bundleOutput) {
-  //   config.output = Object.assign({}, config.output, {
-  //     path: path.basename(opts.bundleOutput),
-  //     filename: path.dirname(opts.bundleOutput),
-  //   });
-  // }
+  if (opts.bundleOutput) {
+    config.output = Object.assign({}, config.output, {
+      path: path.dirname(opts.bundleOutput),
+      filename: path.basename(opts.bundleOutput),
+    });
+  }
 
   const compiler = webpack(config);
 
@@ -102,12 +102,14 @@ module.exports = {
     {
       name: '--platform <ios|android>',
       description: 'Platform to bundle for',
-      // }, {
-      //   name: '--bundle-output [string]',
-      //   description: 'File name where to store the bundle, eg. /tmp/index.ios.bundle',
-      // }, {
-      //   name: '--assets-dest [string]',
-      //   description: 'Directory name where to store assets, eg. /tmp/assets',
+    },
+    {
+      name: '--bundle-output [string]',
+      description: 'File name where to store the bundle, eg. /tmp/index.ios.bundle',
+    },
+    {
+      name: '--assets-dest [string]',
+      description: 'Directory name where to store assets, eg. /tmp/assets',
     },
   ],
 };
