@@ -13,7 +13,6 @@ const { MessageError } = require('../errors');
 const messages = require('../messages');
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 const logger = require('../logger');
-const CopyAssetsPlugin = require('../utils/CopyAssetsPlugin');
 
 /**
  * Bundles your application code
@@ -53,19 +52,12 @@ async function bundle(argv: Array<string>, opts: *) {
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
 
-  if (opts.bundleOutput) {
-    config.output = Object.assign({}, config.output, {
-      path: path.dirname(opts.bundleOutput),
-      filename: path.basename(opts.bundleOutput),
-    });
+  if (opts.buildDirectory) {
+    config.output.path = opts.buildDirectory;
   }
 
-  if (opts.assetsDest) {
-    config.plugins.push(
-      new CopyAssetsPlugin({
-        destination: opts.assetsDest,
-      }),
-    );
+  if (opts.bundleName) {
+    config.output.filename = opts.bundleName;
   }
 
   const compiler = webpack(config);
@@ -113,12 +105,12 @@ module.exports = {
       description: 'Platform to bundle for',
     },
     {
-      name: '--bundle-output [string]',
-      description: 'File name where to store the bundle, eg. /tmp/index.ios.bundle',
+      name: '--bundle-name [string]',
+      description: 'File name where to store the bundle, eg. index.ios.bundle',
     },
     {
-      name: '--assets-dest [string]',
-      description: 'Directory name where to store assets, eg. /tmp/assets',
+      name: '--build-directory [string]',
+      description: 'Directory where to store assets, eg. /tmp/dist',
     },
   ],
 };
