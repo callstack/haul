@@ -10,6 +10,7 @@
     "test": "npm run flow && npm run lint"
   },
   "author": "Mike Grabowski <mike@callstack.io>",
+  "repository": "github:callstack-io/haul",
   "contributors": [
     "Satyajit Sahoo <satyajit.sahoo@callstack.io>",
     "Piotr Drapich <piotr.drapich@callstack.io>",
