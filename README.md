@@ -31,18 +31,14 @@ yarn run haul init
 
 This will automatically add the configuration needed to make Haul work with your app, e.g. add `webpack.haul.js` to your project, which you can customise to add more functionality.
 
-Now you can start the development server by running:
+### `haul start`
+
+Runs the development server:
 
 ```bash
 yarn run haul start -- --platform ios
 ```
 
-## Using Haul
+<img src="https://cloud.githubusercontent.com/assets/2464966/24362673/b95fbe7e-130d-11e7-89a9-da110991c968.png" />
 
-## Contributing to Haul
-
-Contributions are always welcome, no matter how large or small. Before contributing, please read the [code of conduct](./CODE_OF_CONDUCT.md).
-
-See [Contributing](./CONTRIBUTING.md).
-
-## Credits
+You will see the build errors and warnings in the console.
