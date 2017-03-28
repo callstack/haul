@@ -97,6 +97,8 @@ module.exports = {
   name: 'bundle',
   description: '',
   action: bundle,
+  // Allow unknown flags for interoperability with 'react-native bundle'
+  unknownOptions: true,
   options: [
     {
       name: '--dev [true|false]',

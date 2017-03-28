@@ -14,6 +14,7 @@ export type CommandOpts = Object;
 export type Command = {
   name: string,
   description?: string,
+  allowUnknownOptions?: boolean,
   action: (argv: CommandArgs, args: CommandOpts) => void,
   options?: Array<{
     name: string,

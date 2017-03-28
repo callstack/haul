@@ -36,6 +36,7 @@ commands.forEach((command: Command) => {
 
   const cmd = program
     .command(command.name)
+    .allowUnknownOption(command.allowUnknownOptions)
     .description(command.description)
     .action(async function run(...args) {
       const opts = this.opts();
