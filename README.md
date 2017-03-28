@@ -1,4 +1,4 @@
-***Haul** - Haul is a command line interface for developing React Native applications.*
+<i><b>Haul</b> - Haul is a command line interface for developing React Native applications.</i>
 
 ## Features
 
