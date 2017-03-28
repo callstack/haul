@@ -44,7 +44,7 @@ async function start(argv: CommandArgs, opts: *) {
     require(configPath),
     {
       dev: opts.dev,
-      cwd: process.cwd(),
+      cwd: directory,
     },
   );
 

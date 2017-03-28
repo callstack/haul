@@ -8,25 +8,31 @@ import type { WebpackStats } from '../types';
 
 const chalk = require('chalk');
 const dedent = require('dedent');
+const path = require('path');
 
 module.exports = (
   {
     stats,
     platform,
-    output,
-  }: { stats: WebpackStats, platform: string, output?: string },
+    assetsPath,
+    bundlePath,
+  }: {
+    stats: WebpackStats,
+    platform: string,
+    assetsPath?: string,
+    bundlePath?: string,
+  },
 ) => {
   const heading = stats.hasWarnings()
     ? chalk.yellow('Compiled with warnings')
     : 'Compiled successfully!';
 
-  if (output) {
+  if (assetsPath && bundlePath) {
     return dedent`
       ${heading}
 
-      Bundle location:
-
-        ${chalk.grey(output)}
+      Assets location: ${chalk.grey(assetsPath)}
+      Bundle location: ${chalk.grey(path.join(assetsPath, bundlePath))}      
     `;
   }
 

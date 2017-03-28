@@ -42,7 +42,7 @@ async function bundle(argv: Array<string>, opts: *) {
     require(configPath),
     {
       dev: opts.dev,
-      cwd: process.cwd(),
+      cwd: directory,
     },
   );
 
@@ -87,7 +87,8 @@ async function bundle(argv: Array<string>, opts: *) {
     messages.bundleCompiled({
       stats,
       platform: opts.platform,
-      output: config.output.path,
+      assetsPath: config.output.path,
+      bundlePath: config.output.filename,
     }),
   );
 }
