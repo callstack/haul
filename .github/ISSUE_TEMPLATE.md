@@ -13,22 +13,6 @@ StackOverflow: http://stackoverflow.com/questions/tagged/react-native using the 
 
 <!--- Provide a general summary of the issue in the title above -->
 
-### Input Code
-<!--- If you're describing a bug, please let us know which sample code reproduces your problem -->
-
-```js
-var your => (code) => here;
-```
-
-### Haul Configuration (webpack.haul.js)
-<!--- If describing a bug, tell us what your Haul configuration looks like -->
-
-```js
-{
-  "your": { "config": "here" }
-}
-```
-
 ### Expected Behavior
 <!--- If you're describing a bug, tell us what should happen -->
 <!--- If you're suggesting a change/improvement, tell us how it should work -->
@@ -36,6 +20,22 @@ var your => (code) => here;
 ### Current Behavior
 <!--- If describing a bug, tell us what happens instead of the expected behavior -->
 <!--- If suggesting a change/improvement, explain the difference from current behavior -->
+
+### Haul Configuration (webpack.haul.js)
+<!--- If describing a bug, tell us what your Haul configuration looks like -->
+
+```js
+module.exports = {
+  // your config here
+};
+```
+
+### Reproduction
+<!--- If you're describing a bug, please let us know which sample code / steps reproduce your problem -->
+
+```js
+var your => (code) => here;
+```
 
 ### Possible Solution
 <!--- Not obligatory, but suggest a fix/reason for the bug, -->
@@ -56,5 +56,5 @@ var your => (code) => here;
 | npm or yarn      | 
 | Operating System |
 
-<!-- CREDITS: This issue template has been copied from https://github.com/babel/babel/edit/7.0/.github/ISSUE_TEMPLATE.md -->
-<!-- and adapted for purposes of Haul project -->
+<!--- CREDITS: This issue template has been copied from https://github.com/babel/babel/edit/7.0/.github/ISSUE_TEMPLATE.md -->
+<!--- and adapted for purposes of Haul project -->
