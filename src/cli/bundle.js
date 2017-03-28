@@ -52,12 +52,15 @@ async function bundle(argv: Array<string>, opts: *) {
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
 
-  if (opts.buildDirectory) {
-    config.output.path = opts.buildDirectory;
+  if (opts.assetsDest && path.isAbsolute(opts.assetsDest)) {
+    config.output.path = opts.assetsDest;
   }
 
-  if (opts.bundleName) {
-    config.output.filename = opts.bundleName;
+  if (opts.bundleOutput && path.isAbsolute(opts.bundleOutput)) {
+    config.output.filename = path.relative(
+      config.output.path,
+      opts.bundleOutput,
+    );
   }
 
   const compiler = webpack(config);
@@ -105,12 +108,12 @@ module.exports = {
       description: 'Platform to bundle for',
     },
     {
-      name: '--bundle-name [string]',
-      description: 'File name where to store the bundle, eg. index.ios.bundle',
+      name: '--bundle-output [string]',
+      description: 'Absolute path to directory where to store the bundle, eg. index.ios.bundle',
     },
     {
-      name: '--build-directory [string]',
-      description: 'Directory where to store assets, eg. /tmp/dist',
+      name: '--assets-dest [string]',
+      description: 'Absolute path to directory where to store assets, eg. /tmp/dist',
     },
   ],
 };
