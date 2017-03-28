@@ -12,7 +12,7 @@ const logger = require('../logger');
 const messages = require('../messages');
 const { MessageError } = require('../errors');
 
-const commands: Array<Command> = [require('./start')];
+const commands: Array<Command> = [require('./start'), require('./bundle')];
 
 const RNCommands: Array<string> = [
   'run-ios',

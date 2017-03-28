@@ -4,20 +4,20 @@
  *
  * @flow
  */
-import type { CommandArgs } from '../../types';
+import type { CommandArgs } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const clear = require('clear');
 
-const logger = require('../../logger');
-const createServer = require('../../server');
-const messages = require('../../messages');
-const exec = require('../../utils/exec');
-const { MessageError } = require('../../errors');
+const logger = require('../logger');
+const createServer = require('../server');
+const messages = require('../messages');
+const exec = require('../utils/exec');
+const { MessageError } = require('../errors');
 
-const makeReactNativeConfig = require('../../utils/makeReactNativeConfig');
+const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 
 /**
  * Starts development server
@@ -43,7 +43,6 @@ async function start(argv: CommandArgs, opts: *) {
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
-      port: opts.port,
       dev: opts.dev,
       cwd: process.cwd(),
     },
@@ -130,7 +129,7 @@ module.exports = {
       parse: (val: string) => JSON.parse(val),
     },
     {
-      name: '--platform [ios|android]',
+      name: '--platform <ios|android|all>',
       description: 'Platform to bundle for',
     },
   ],
