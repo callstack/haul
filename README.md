@@ -39,6 +39,6 @@ Runs the development server:
 yarn run haul start -- --platform ios
 ```
 
-<img src="https://cloud.githubusercontent.com/assets/2464966/24362673/b95fbe7e-130d-11e7-89a9-da110991c968.png" />
+<img src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
 
 You will see the build errors and warnings in the console.
