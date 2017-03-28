@@ -14,6 +14,7 @@ module.exports = {
   commandNotImplemented: require('./commandNotImplemented'),
   commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
+  commandSuccess: require('./commandSuccess'),
   optionPlatformMissing: require('./optionPlatformMissing'),
   bundleOptionPlatformMissing: require('./bundleOptionPlatformMissing'),
   bundleOptionPlatformInvalid: require('./bundleOptionPlatformInvalid'),
