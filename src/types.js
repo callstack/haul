@@ -14,7 +14,7 @@ export type CommandOpts = Object;
 export type Command = {
   name: string,
   description?: string,
-  action: (argv: CommandArgs, args: CommandOpts) => void,
+  action: (argv: CommandArgs, args: CommandOpts) => void | Promise<*>,
   options?: Array<{
     name: string,
     description?: string,
