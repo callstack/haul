@@ -44,7 +44,7 @@ const getPlatformFileName = (fileName, platforms) => {
  */
 const getProvidedModuleName = fileName => {
   const content = fs.readFileSync(fileName, 'utf-8');
-  return (/\* @providesModule ([\w.]+)/.exec(content) || [])[1];
+  return (/\* @providesModule ([\w.-]+)/.exec(content) || [])[1];
 };
 
 /**
