@@ -42,17 +42,17 @@ Check out [documentation](./docs/Readme.md) to learn more about customising your
 
 ## Limitations
 
-Haul has been designed with developer efficiency in mind. It is a complete rewrite of existing `react-native` command line tools. It laverages Webpcak to make your workflow better.
+Haul has been designed with developer efficiency in mind. It is a complete rewrite of existing `react-native` command line tools that laverages Webpack ecosystem.
 
-Some features are currently **not supported**:
+We are actively working on adding support for the following:
 
-  - All `react-native` commands but `bundle` and `start` 
-  - Support for React DevTools
-  - Developer menu: Start systrace
+  - Existing `react-native` commands 
+  - React DevTools
+  - Developer menu -> Start systrace
   
 Given differences between `Webpack` and `react-packager` (used by React Native to serve your bundle), the following are **unlikely to be supported** in the future:
 
-  - Developer menu: Enable Hot Reloading - use `webpack.haul.js` config instead
+  - Developer menu -> Enable Hot Reloading: use `webpack.haul.js` config instead
 
 ## License
 
