@@ -20,13 +20,17 @@ type ConfigOptions = {
   dev: boolean,
 };
 
-// @todo type this
+type WebpackPlugin = {
+  apply: (typeof webpack) => void,
+};
+
 type WebpackConfig = {
   entry: Array<string>,
   output: {
     path: string,
     filename: string,
   },
+  plugins: Array<WebpackPlugin>,
 };
 
 type WebpackConfigFactory =

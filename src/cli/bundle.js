@@ -13,6 +13,7 @@ const { MessageError } = require('../errors');
 const messages = require('../messages');
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 const logger = require('../logger');
+const CopyAssetsPlugin = require('../utils/CopyAssetsPlugin');
 
 /**
  * Bundles your application code
@@ -57,6 +58,14 @@ async function bundle(argv: Array<string>, opts: *) {
       path: path.dirname(opts.bundleOutput),
       filename: path.basename(opts.bundleOutput),
     });
+  }
+
+  if (opts.assetsDest) {
+    config.plugins.push(
+      new CopyAssetsPlugin({
+        destination: opts.assetsDest,
+      }),
+    );
   }
 
   const compiler = webpack(config);
