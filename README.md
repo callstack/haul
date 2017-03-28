@@ -8,7 +8,7 @@
 
 **Just works:** Built on top of battle tested open source projects, which makes sure you never hit annoying issues (like symlink support) again. 
 
-**Helpful:** Redesigned from the ground up with self-explanatory error messages to increase your productivity and minimize time spent on debugging issues
+**Helpful:** Redesigned from the ground up with self-explanatory error messages to increase your productivity and minimize time spent on debugging issues.
 
 ## Installing Haul
 
