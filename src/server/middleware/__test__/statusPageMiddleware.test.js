@@ -1,3 +1,9 @@
+/**
+ * Copyright 2017-present, Callstack.
+ * All rights reserved.
+ *
+ * statusPageMiddleware.test.js
+ */
 const statusPageMiddleware = require('../statusPageMiddleware');
 
 describe('status page middleware', () => {
@@ -9,6 +15,7 @@ describe('status page middleware', () => {
     expect(end).toHaveBeenCalledWith('packager-status:running');
     expect(next).not.toHaveBeenCalled();
   });
+
   it('should skip to next', () => {
     const url = '/';
     const end = jest.fn();
