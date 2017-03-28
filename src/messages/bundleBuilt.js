@@ -24,8 +24,8 @@ module.exports = (
   },
 ) => {
   const heading = stats.hasWarnings()
-    ? chalk.yellow('Compiled with warnings')
-    : 'Compiled successfully!';
+    ? chalk.yellow('Built with warnings')
+    : 'Built successfully!';
 
   if (assetsPath && bundlePath) {
     return dedent`

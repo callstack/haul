@@ -83,7 +83,7 @@ async function bundle(argv: Array<string>, opts: *) {
   clear();
 
   logger.done(
-    messages.bundleCompiled({
+    messages.bundleBuilt({
       stats,
       platform: opts.platform,
       assetsPath: config.output.path,

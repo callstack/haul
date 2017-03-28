@@ -59,9 +59,9 @@ async function start(argv: CommandArgs, opts: *) {
     didHaveIssues => {
       clear();
       if (didHaveIssues) {
-        logger.warn(messages.bundleCompiling(didHaveIssues));
+        logger.warn(messages.bundleBuilding(didHaveIssues));
       } else {
-        logger.info(messages.bundleCompiling(didHaveIssues));
+        logger.info(messages.bundleBuilding(didHaveIssues));
       }
     },
     stats => {
@@ -70,7 +70,7 @@ async function start(argv: CommandArgs, opts: *) {
         logger.error(messages.bundleFailed());
       } else {
         logger.done(
-          messages.bundleCompiled({
+          messages.bundleBuilt({
             stats,
             platform: opts.platform,
           }),
