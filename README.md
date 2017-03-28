@@ -34,11 +34,15 @@ This will automatically add the configuration needed to make Haul work with your
 Now you can start the development server by running:
 
 ```bash
-yarn run haul start --platform ios
+yarn run haul start -- --platform ios
 ```
 
 ## Using Haul
 
 ## Contributing to Haul
+
+Contributions are always welcome, no matter how large or small. Before contributing, please read the [code of conduct](./CODE_OF_CONDUCT.md).
+
+See [Contributing](./CONTRIBUTING.md).
 
 ## Credits
