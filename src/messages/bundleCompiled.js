@@ -13,16 +13,27 @@ module.exports = (
   {
     stats,
     platform,
-  }: { stats: WebpackStats, platform: string },
+    output,
+  }: { stats: WebpackStats, platform: string, output?: string },
 ) => {
-  if (stats.hasWarnings()) {
-    return chalk.yellow('Compiled with warnings');
+  const heading = stats.hasWarnings()
+    ? chalk.yellow('Compiled with warnings')
+    : 'Compiled successfully!';
+
+  if (output) {
+    return dedent`
+      ${heading}
+
+      Bundle location:
+
+        ${chalk.grey(output)}
+    `;
   }
 
   const device = platform === 'all' ? 'your device' : `your ${platform} device`;
 
   return dedent`
-    Compiled successfully!
+    ${heading}
 
     You can now run the app on ${device}\n
   `;

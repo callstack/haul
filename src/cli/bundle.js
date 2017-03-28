@@ -6,16 +6,18 @@
  */
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
+const clear = require('clear');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
-const webpack = require('webpack');
+const logger = require('../logger');
 
 /**
  * Bundles your application code
  */
-function bundle(argv: Array<string>, opts: *) {
+async function bundle(argv: Array<string>, opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
 
@@ -32,7 +34,10 @@ function bundle(argv: Array<string>, opts: *) {
   }
 
   // eslint-disable-next-line prefer-const
-  let [config, platforms] = makeReactNativeConfig(
+  const [
+    configs,
+    availablePlatforms,
+  ] = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
@@ -41,11 +46,11 @@ function bundle(argv: Array<string>, opts: *) {
     },
   );
 
-  if (!platforms.includes(opts.platform)) {
+  if (!availablePlatforms.includes(opts.platform)) {
     throw new MessageError(messages.bundleOptionPlatformInvalid());
   }
 
-  config = config[platforms.indexOf(opts.platform)];
+  const config = configs[availablePlatforms.indexOf(opts.platform)];
 
   // if (opts.bundleOutput) {
   //   config.output = Object.assign({}, config.output, {
@@ -54,11 +59,33 @@ function bundle(argv: Array<string>, opts: *) {
   //   });
   // }
 
-  const compiler = webpack(config[platforms.indexOf(opts.platform)]);
+  const compiler = webpack(config);
 
-  compiler.run(() => {
-    console.log('Compiled');
-  });
+  logger.info(
+    messages.initialBundleInformation({
+      entry: config.entry,
+      dev: opts.dev,
+    }),
+  );
+
+  const stats = await new Promise((resolve, reject) =>
+    compiler.run((err, info) => {
+      if (err || info.hasErrors()) {
+        reject(new MessageError(messages.bundleFailed()));
+      } else {
+        resolve(info);
+      }
+    }));
+
+  clear();
+
+  logger.done(
+    messages.bundleCompiled({
+      stats,
+      platform: opts.platform,
+      output: config.output.path,
+    }),
+  );
 }
 
 module.exports = {
@@ -78,9 +105,6 @@ module.exports = {
       // }, {
       //   name: '--bundle-output [string]',
       //   description: 'File name where to store the bundle, eg. /tmp/index.ios.bundle',
-      // }, {
-      //   name: '--sourcemap-output [string]',
-      //   description: 'File name where to store the sourcemaps, eg. /tmp/groups.map',
       // }, {
       //   name: '--assets-dest [string]',
       //   description: 'Directory name where to store assets, eg. /tmp/assets',

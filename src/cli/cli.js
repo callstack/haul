@@ -9,6 +9,7 @@ import type { Command } from '../types';
 const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
+const clear = require('clear');
 const messages = require('../messages');
 const { MessageError } = require('../errors');
 
@@ -41,9 +42,10 @@ commands.forEach((command: Command) => {
       const argv: Array<string> = args.slice(0, -1);
 
       try {
-        logger.clear();
+        clear();
         await command.action(argv, opts);
       } catch (error) {
+        clear();
         if (error instanceof MessageError) {
           logger.error(error.message);
         } else {

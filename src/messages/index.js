@@ -17,4 +17,5 @@ module.exports = {
   optionPlatformMissing: require('./optionPlatformMissing'),
   bundleOptionPlatformMissing: require('./bundleOptionPlatformMissing'),
   bundleOptionPlatformInvalid: require('./bundleOptionPlatformInvalid'),
+  initialBundleInformation: require('./initialBundleInformation'),
 };
