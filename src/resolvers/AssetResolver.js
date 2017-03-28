@@ -20,10 +20,10 @@ function AssetResolver(options: Options) {
   const test = options.test || AssetResolver.test;
   const platform = options.platform;
 
-  return function resolver() {
-    this.plugin('file', (request: Request, callback: Function) => {
+  this.apply = function apply(resolver) {
+    resolver.plugin('file', (request: Request, callback: Function) => {
       if (test.test(request.path)) {
-        this.fileSystem.readdir(path.dirname(request.path), (error, result) => {
+        resolver.fileSystem.readdir(path.dirname(request.path), (error, result) => {
           if (error) {
             callback();
             return;
@@ -47,7 +47,7 @@ function AssetResolver(options: Options) {
                 Object.assign({}, request, {
                   path: file,
                   relativePath: request.relativePath &&
-                    this.join(request.relativePath, file),
+                    resolver.join(request.relativePath, file),
                   file: true,
                 }),
               );

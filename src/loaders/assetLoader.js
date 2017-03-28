@@ -29,13 +29,10 @@ module.exports = async function assetLoader(content: Buffer) {
   const filepath = this.resourcePath;
   const info = size(filepath);
   const dirname = path.dirname(filepath);
-  const filename = path
-    .basename(filepath, `.${info.type}`)
-    .replace(/(@\\d+x)?$/, '');
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
+  const filename = path.basename(filepath).replace(new RegExp(suffix), '');
 
-  const regex = new RegExp(
-    `^${escapeStringRegexp(filename)}(@\\d+x)?(\\.(${query.platform}|native))?\\.${info.type}`,
-  );
+  const regex = new RegExp(`^${escapeStringRegexp(filename)}${suffix}`);
 
   const result = await new Promise((resolve, reject) =>
     this.fs.readdir(dirname, (err, res) => {
@@ -51,7 +48,7 @@ module.exports = async function assetLoader(content: Buffer) {
       const match = name.match(regex);
 
       if (match) {
-        let [x, scale, y, platform] = match; // eslint-disable-line
+        let [x, scale, y, z, platform] = match; // eslint-disable-line
 
         scale = scale || '@1x';
 
@@ -77,7 +74,7 @@ module.exports = async function assetLoader(content: Buffer) {
     {},
   );
 
-  const scales = Object.keys(map).map(s => parseInt(s.replace(/^@/, ''), 10));
+  const scales = Object.keys(map).map(s => Number(s.replace(/[^\d.]/g, ''))).sort();
 
   const files = await Promise.all(
     Object.keys(map).map(scale => {
