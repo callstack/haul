@@ -20,7 +20,7 @@ StackOverflow: http://stackoverflow.com/questions/tagged/react-native using the 
 var your => (code) => here;
 ```
 
-### Haul Configuration (webpack.haul.js, package.json, cli command)
+### Haul Configuration (webpack.haul.js)
 <!--- If describing a bug, tell us what your Haul configuration looks like -->
 
 ```js
@@ -50,9 +50,10 @@ var your => (code) => here;
 
 | software         | version
 | ---------------- | -------
-| Babel            |  
+| Haul             |  
+| react-native     |  
 | node             | 
-| npm              | 
+| npm or yarn      | 
 | Operating System |
 
 <!-- CREDITS: This issue template has been copied from https://github.com/babel/babel/edit/7.0/.github/ISSUE_TEMPLATE.md -->
