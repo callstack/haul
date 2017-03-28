@@ -33,7 +33,6 @@ async function bundle(argv: Array<string>, opts: *) {
     );
   }
 
-  // eslint-disable-next-line prefer-const
   const [
     configs,
     availablePlatforms,
