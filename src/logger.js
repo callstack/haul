@@ -8,7 +8,6 @@
  */
 import type { LoggerPrintLogo, Logger } from './types';
 
-const clear = require('clear');
 const chalk = require('chalk');
 const emoji = require('node-emoji');
 const fs = require('fs');
@@ -60,7 +59,6 @@ const createDebugLog = (prefix: string, args: any[]): void => {
  */
 const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
   (...args: any[]) => {
-    clear();
     console.log(
       `${enchance(` ${prefix.toUpperCase()} `)}`,
       ...args.map(arg => {
@@ -76,7 +74,6 @@ const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
   };
 
 const createLogger = (): Logger => ({
-  clear,
   printLogo,
   info: loggerFactory(chalk.black.bgCyan, 'info', true),
   warn: loggerFactory(chalk.black.bgYellow, 'warn', true),

@@ -8,6 +8,7 @@ import type { Command } from '../types';
 
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
+const clear = require('clear');
 
 const pjson = require('../../package.json');
 const logger = require('../logger');
@@ -70,6 +71,8 @@ function validateOptions(options, flags, command) {
 }
 
 function run(args) {
+  clear();
+
   if (['version', '--version'].includes(args[0])) {
     console.log(pjson.version);
     return;
@@ -104,6 +107,7 @@ function run(args) {
   try {
     command.action(validateOptions(opts, flags, displayName));
   } catch (error) {
+    clear();
     if (error instanceof MessageError) {
       logger.error(error.message);
     } else {
