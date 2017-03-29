@@ -17,7 +17,7 @@ export type CommandOption = {
   example?: string,
   note?: string,
   choices?: Array<{
-    value: string | number,
+    value: string,
     description: string,
   }>,
 };

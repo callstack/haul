@@ -76,7 +76,7 @@ function validateOptions(options, flags, command) {
   );
 }
 
-function run(args) {
+function run(args: Array<string>) {
   clear();
 
   if (
