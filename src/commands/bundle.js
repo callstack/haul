@@ -17,13 +17,9 @@ const logger = require('../logger');
 /**
  * Bundles your application code
  */
-async function bundle(argv: Array<string>, opts: *) {
+async function bundle(opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
-
-  if (!opts.platform) {
-    throw new MessageError(messages.bundleOptionPlatformMissing());
-  }
 
   if (!fs.existsSync(configPath)) {
     throw new MessageError(
@@ -45,10 +41,6 @@ async function bundle(argv: Array<string>, opts: *) {
       bundle: true,
     },
   );
-
-  if (!availablePlatforms.includes(opts.platform)) {
-    throw new MessageError(messages.bundleOptionPlatformInvalid());
-  }
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
 
@@ -99,28 +91,48 @@ async function bundle(argv: Array<string>, opts: *) {
 
 module.exports = {
   name: 'bundle',
-  description: 'Builds your application bundle for offline use',
+  description: 'Builds the app bundle for packaging',
   action: bundle,
-  // Allow unknown flags for interoperability with 'react-native bundle'
-  unknownOptions: true,
   options: [
     {
-      name: '--dev [true|false]',
+      name: 'dev',
       description: 'Whether to build in development mode',
-      default: true,
+      default: 'true',
       parse: (val: string) => JSON.parse(val),
+      choices: [
+        {
+          value: 'true',
+          description: 'Builds in development mode',
+        },
+        {
+          value: 'false',
+          description: 'Builds in production mode',
+        },
+      ],
     },
     {
-      name: '--platform <ios|android>',
+      name: 'platform',
       description: 'Platform to bundle for',
+      required: true,
+      choices: [
+        {
+          value: 'ios',
+          description: 'Builds iOS bundle',
+        },
+        {
+          value: 'android',
+          description: 'Builds Android bundle',
+        },
+      ],
+      example: 'haul bundle --platform ios',
     },
     {
-      name: '--bundle-output [string]',
-      description: 'Absolute path to directory where to store the bundle, eg. index.ios.bundle',
+      name: 'bundleOutput',
+      description: 'Path to directory where to store the bundle, eg. index.ios.bundle',
     },
     {
-      name: '--assets-dest [string]',
-      description: 'Absolute path to directory where to store assets, eg. /tmp/dist',
+      name: 'assetsDest',
+      description: 'Path to directory where to store assets, eg. /tmp/dist',
     },
   ],
 };

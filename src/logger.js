@@ -14,10 +14,6 @@ const fs = require('fs');
 const path = require('path');
 const { inspect } = require('util');
 
-const clear = (): void => {
-  process.stdout.write('\u001B[2J\u001B[0;0f');
-};
-
 const printLogo: LoggerPrintLogo = (offset = 0, enchance = chalk.blue) => {
   const logoLines: string[] = [
     ' _                 _',
@@ -78,7 +74,6 @@ const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
   };
 
 const createLogger = (): Logger => ({
-  clear,
   printLogo,
   info: loggerFactory(chalk.black.bgCyan, 'info', true),
   warn: loggerFactory(chalk.black.bgYellow, 'warn', true),

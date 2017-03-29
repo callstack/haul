@@ -4,12 +4,11 @@
  *
  * @flow
  */
-import type { CommandArgs } from '../types';
-
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const clear = require('clear');
+const chalk = require('chalk');
 
 const logger = require('../logger');
 const createServer = require('../server');
@@ -22,13 +21,9 @@ const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 /**
  * Starts development server
  */
-async function start(argv: CommandArgs, opts: *) {
+async function start(opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
-
-  if (!opts.platform) {
-    throw new MessageError(messages.optionPlatformMissing());
-  }
 
   if (!fs.existsSync(configPath)) {
     throw new MessageError(
@@ -122,20 +117,47 @@ module.exports = {
   action: start,
   options: [
     {
-      name: '--port [number]',
+      name: 'port',
       description: 'Port to run your webpack server',
-      default: 8081,
-      parse: (val: string) => +val,
+      default: '8081',
+      parse: Number,
     },
     {
-      name: '--dev [true|false]',
+      name: 'dev',
       description: 'Whether to build in development mode',
-      default: true,
+      default: 'true',
       parse: (val: string) => JSON.parse(val),
+      choices: [
+        {
+          value: 'true',
+          description: 'Builds in development mode',
+        },
+        {
+          value: 'false',
+          description: 'Builds in production mode',
+        },
+      ],
     },
     {
-      name: '--platform <ios|android|all>',
+      name: 'platform',
       description: 'Platform to bundle for',
+      example: 'haul start --platform ios',
+      note: `${chalk.bold('--platform=all')} is similar to how React Native packager works - you can run iOS and Android versions of your app at the same time. It will become the default value in future after we fix the performance issues.`,
+      required: true,
+      choices: [
+        {
+          value: 'ios',
+          description: 'Servers iOS bundle',
+        },
+        {
+          value: 'android',
+          description: 'Serves Android bundle',
+        },
+        {
+          value: 'all',
+          description: 'Serves both platforms',
+        },
+      ],
     },
   ],
 };
