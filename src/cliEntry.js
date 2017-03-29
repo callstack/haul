@@ -67,10 +67,9 @@ function validateOptions(options, flags, command) {
         value = option.parse(value);
       }
 
-      // eslint-disable-next-line no-param-reassign
-      acc[option.name] = value;
-
-      return acc;
+      return Object.assign({}, acc, {
+        [option.name]: value,
+      });
     },
     {},
   );
