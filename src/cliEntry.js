@@ -76,7 +76,7 @@ function validateOptions(options, flags, command) {
   );
 }
 
-function run(args: Array<string>) {
+async function run(args: Array<string>) {
   clear();
 
   if (
@@ -118,7 +118,7 @@ function run(args: Array<string>) {
   const displayName = `haul ${command.name}`;
 
   try {
-    command.action(validateOptions(opts, flags, displayName));
+    await command.action(validateOptions(opts, flags, displayName));
   } catch (error) {
     clear();
     if (error instanceof MessageError) {
