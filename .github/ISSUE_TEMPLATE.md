@@ -1,0 +1,24 @@
+<!---
+BEFORE YOU SUBMIT please search open/closed issues since someone might have asked the same thing before!
+-->
+
+### Current Behavior
+<!--- If describing a bug, tell us what happens instead of the expected behavior -->
+<!--- If suggesting a change/improvement, explain the difference from current behavior -->
+
+### Expected Behavior
+<!--- If you're describing a bug, tell us what should happen -->
+<!--- If you're suggesting a change/improvement, tell us how it should work -->
+
+### Haul Configuration (webpack.haul.js)
+<!--- If describing a bug, tell us what your Haul configuration looks like -->
+
+### Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+
+| software         | version
+| ---------------- | -------
+| Haul             |  
+| react-native     |  
+| node             | 
+| npm or yarn      |
