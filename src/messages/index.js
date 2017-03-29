@@ -16,4 +16,5 @@ module.exports = {
   commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
   invalidOption: require('./invalidOption'),
+  haulHelp: require('./haulHelp'),
 };
