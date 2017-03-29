@@ -24,7 +24,6 @@ const NOT_SUPPORTED_COMMANDS = [
   'run-ios',
   'run-android',
   'library',
-  'bundle',
   'unbundle',
   'link',
   'unlink',
