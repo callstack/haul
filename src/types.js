@@ -40,7 +40,6 @@ export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
 type LoggerPrint = (...args: any[]) => void;
 
 export type Logger = {
-  clear: () => void,
   printLogo: LoggerPrintLogo,
   info: LoggerPrint,
   warn: LoggerPrint,
