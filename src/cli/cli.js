@@ -9,10 +9,11 @@ import type { Command } from '../types';
 const program = require('commander');
 const pjson = require('../../package.json');
 const logger = require('../logger');
+const clear = require('clear');
 const messages = require('../messages');
 const { MessageError } = require('../errors');
 
-const commands: Array<Command> = [require('./start')];
+const commands: Array<Command> = [require('./start'), require('./bundle')];
 
 const RNCommands: Array<string> = [
   'run-ios',
@@ -35,15 +36,17 @@ commands.forEach((command: Command) => {
 
   const cmd = program
     .command(command.name)
+    .allowUnknownOption(command.allowUnknownOptions)
     .description(command.description)
     .action(async function run(...args) {
       const opts = this.opts();
       const argv: Array<string> = args.slice(0, -1);
 
       try {
-        logger.clear();
+        clear();
         await command.action(argv, opts);
       } catch (error) {
+        clear();
         if (error instanceof MessageError) {
           logger.error(error.message);
         } else {

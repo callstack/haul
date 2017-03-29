@@ -9,11 +9,11 @@ const dedent = require('dedent');
 module.exports = (didHaveIssues: boolean) => {
   if (didHaveIssues) {
     return dedent`
-      Compiling after issues...
+      Building after issues...
 
       This may take longer than usual
     `;
   }
 
-  return 'Compiling...';
+  return 'Building...';
 };

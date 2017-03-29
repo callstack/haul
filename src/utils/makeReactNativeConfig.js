@@ -16,14 +16,21 @@ const findProvidesModule = require('./findProvidesModule');
 const PLATFORMS = ['ios', 'android'];
 
 type ConfigOptions = {
-  port: number,
   cwd: string,
   dev: boolean,
 };
 
-// @todo type this
+type WebpackPlugin = {
+  apply: (typeof webpack) => void,
+};
+
 type WebpackConfig = {
   entry: Array<string>,
+  output: {
+    path: string,
+    filename: string,
+  },
+  plugins: Array<WebpackPlugin>,
 };
 
 type WebpackConfigFactory =
@@ -38,7 +45,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
   output: {
-    path: '/',
+    path: path.join(cwd, 'dist'),
     filename: `index.${platform}.bundle`,
   },
   // Built-in loaders
