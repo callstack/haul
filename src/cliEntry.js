@@ -102,7 +102,7 @@ function run(args) {
     return;
   }
 
-  if (args.indexOf('--help') >= 0) {
+  if (args.includes('--help') || args.includes('-h')) {
     console.log(messages.haulCommandHelp(command));
     return;
   }
