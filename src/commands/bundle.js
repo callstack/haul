@@ -108,6 +108,7 @@ module.exports = {
     {
       name: 'platform',
       description: 'Platform to bundle for',
+      required: true,
       choices: [
         {
           value: 'ios',
