@@ -13,11 +13,11 @@ export type CommandOption = {
   name: string,
   description?: string,
   parse?: (val: string) => mixed,
-  default?: mixed,
+  default?: string,
   example?: string,
   note?: string,
   choices?: Array<{
-    value: mixed,
+    value: string | number,
     description: string,
   }>,
 };

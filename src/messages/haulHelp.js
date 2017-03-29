@@ -4,25 +4,32 @@
  *
  * @flow
  */
-import type { Command } from '../../types';
+import type { Command } from '../types';
 
-const dedent = require('dedent');
 const chalk = require('chalk');
+const cliui = require('cliui');
 
-module.exports = (commands: Array<Command>) => dedent`
+module.exports = (commands: Array<Command>) => {
+  const ui = cliui();
 
-  Usage: haul [command] [options]
+  ui.div(
+    `
+${chalk.bold('Usage:')} haul [command] [options]
 
-  Options:
+${chalk.bold('Options:')}
 
-    --version       output the version number
-    --help          output usage information
+  --version \t ${chalk.gray('print the version number')}
+  --help \t ${chalk.gray('print usage information')}
 
-  Commands:
+${chalk.bold('Commands:')}
 
-    ${commands
-  .map(command => `- ${command.name}       ${command.description}`)
-  .join('\n')}
+${commands
+      .map(command => `  ${command.name} \t ${chalk.gray(command.description)}`)
+      .join('\n')}
 
-  Run ${chalk.bold('haul help COMMAND')} for more information on specific commands
-`;
+Run ${chalk.bold('haul COMMAND --help')} for more information on specific commands
+`,
+  );
+
+  return ui.toString();
+};

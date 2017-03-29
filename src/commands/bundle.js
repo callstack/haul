@@ -86,14 +86,24 @@ async function bundle(opts: *) {
 
 module.exports = {
   name: 'bundle',
-  description: 'Builds your application bundle for offline use',
+  description: 'Builds the app bundle for packaging',
   action: bundle,
   options: [
     {
       name: 'dev',
       description: 'Whether to build in development mode',
-      default: true,
+      default: 'true',
       parse: (val: string) => JSON.parse(val),
+      choices: [
+        {
+          value: 'true',
+          description: 'Builds in development mode',
+        },
+        {
+          value: 'false',
+          description: 'Builds in production mode',
+        },
+      ],
     },
     {
       name: 'platform',

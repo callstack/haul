@@ -114,20 +114,31 @@ module.exports = {
     {
       name: 'port',
       description: 'Port to run your webpack server',
-      default: 8081,
-      parse: (val: string) => +val,
+      default: '8081',
+      parse: Number,
     },
     {
       name: 'dev',
       description: 'Whether to build in development mode',
-      default: true,
+      default: 'true',
       parse: (val: string) => JSON.parse(val),
+      choices: [
+        {
+          value: 'true',
+          description: 'Builds in development mode',
+        },
+        {
+          value: 'false',
+          description: 'Builds in production mode',
+        },
+      ],
     },
     {
       name: 'platform',
       description: 'Platform to bundle for',
       example: 'haul start --platform ios',
       note: `${chalk.bold('--platform=all')} is similar to how React Native packager works - you can run iOS and Android versions of your app at the same time. It will become the default value in future after we fix the performance issues.`,
+      required: true,
       choices: [
         {
           value: 'ios',

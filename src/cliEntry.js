@@ -49,8 +49,8 @@ function validateOptions(options, flags, command) {
         );
       }
 
-      if (option.parse) {
-        value = option.parse(value);
+      if (!value) {
+        return acc;
       }
 
       if (option.choices && !option.choices.find(c => c.value === value)) {
@@ -61,6 +61,10 @@ function validateOptions(options, flags, command) {
             command,
           }),
         );
+      }
+
+      if (option.parse) {
+        value = option.parse(value);
       }
 
       // eslint-disable-next-line no-param-reassign
@@ -75,12 +79,14 @@ function validateOptions(options, flags, command) {
 function run(args) {
   clear();
 
-  if (['version', '--version'].includes(args[0])) {
-    console.log(pjson.version);
+  if (
+    args[0] === 'version' || args.includes('--v') || args.includes('--version')
+  ) {
+    console.log(`v${pjson.version}`);
     return;
   }
 
-  if (['help', '--help'].includes(args[0])) {
+  if (['--help', '--h', 'help'].includes(args[0])) {
     console.log(messages.haulHelp(COMMANDS));
     return;
   }
@@ -93,6 +99,11 @@ function run(args) {
     } else {
       logger.error(messages.commandNotFound(args[0]));
     }
+    return;
+  }
+
+  if (args.indexOf('--help') >= 0) {
+    console.log(messages.haulCommandHelp(command));
     return;
   }
 
