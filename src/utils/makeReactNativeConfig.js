@@ -40,7 +40,7 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
+const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
   // Default polyfills and entry-point setup
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
@@ -63,7 +63,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
         test: AssetResolver.test,
         use: {
           loader: require.resolve('../loaders/assetLoader'),
-          query: { platform },
+          query: { platform, cwd, bundle },
         },
       },
     ],

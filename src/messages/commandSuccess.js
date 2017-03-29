@@ -6,4 +6,5 @@
  */
 const chalk = require('chalk');
 
-module.exports = ({ command }: { command: string }) => `Successfully ran ${chalk.bold(command)}\n`;
+module.exports = ({ command }: { command: string }) =>
+  `Successfully ran ${chalk.bold(command)}\n`;

@@ -11,26 +11,27 @@ const path = require('path');
 const hasha = require('hasha');
 const escapeStringRegexp = require('escape-string-regexp');
 
-module.exports = async function assetLoader(content: Buffer) {
+module.exports = async function assetLoader() {
   this.cacheable();
 
   const callback = this.async();
 
   const query = utils.getOptions(this) || {};
   const options = this.options[query.config] || {};
-
   const config = Object.assign({}, options, query);
-
-  const hash = utils.interpolateName(this, '[hash]', {
-    context: config.context || this.options.context,
-    content,
-  });
 
   const filepath = this.resourcePath;
   const info = size(filepath);
   const dirname = path.dirname(filepath);
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
+  const url = path.relative(query.cwd, dirname);
+  const longname = `${`${url
+    .toLowerCase()
+    .replace(
+      /\//g,
+      '_',
+    )}_${filename}`.replace(/[^a-z0-9_]/g, '')}.${info.type}`;
 
   const regex = new RegExp(`^${escapeStringRegexp(filename)}${suffix}`);
 
@@ -74,9 +75,11 @@ module.exports = async function assetLoader(content: Buffer) {
     {},
   );
 
-  const scales = Object.keys(map).map(s => Number(s.replace(/[^\d.]/g, ''))).sort();
+  const scales = Object.keys(map)
+    .map(s => Number(s.replace(/[^\d.]/g, '')))
+    .sort();
 
-  const files = await Promise.all(
+  const buffers = await Promise.all(
     Object.keys(map).map(scale => {
       this.addDependency(path.join(dirname, map[scale].name));
 
@@ -85,16 +88,46 @@ module.exports = async function assetLoader(content: Buffer) {
           if (err) {
             reject(err);
           } else {
-            let name = `${filename}.${hash}${scale === '@1x' ? '' : scale}.${info.type}`;
+            let dest;
+
+            if (query.bundle && query.platform === 'android') {
+              switch (scale) {
+                case '@0.75x':
+                  dest = 'drawable-ldpi';
+                  break;
+                case '@1x':
+                  dest = 'drawable-mdpi';
+                  break;
+                case '@1.5x':
+                  dest = 'drawable-hdpi';
+                  break;
+                case '@2x':
+                  dest = 'drawable-xhdpi';
+                  break;
+                case '@3x':
+                  dest = 'drawable-xxhdpi';
+                  break;
+                case '@4x':
+                  dest = 'drawable-xxxhdpi';
+                  break;
+                default:
+                  throw new Error(`Unknown scale ${scale} for ${filepath}`);
+              }
+
+              dest = path.join(dest, longname);
+            } else {
+              const name = `${filename}${scale === '@1x' ? '' : scale}.${info.type}`;
+              dest = path.join('assets', url, name);
+            }
 
             if (config.outputPath) {
               // support functions as outputPath to generate them dynamically
-              name = typeof config.outputPath === 'function'
-                ? config.outputPath(hash)
-                : config.outputPath + hash;
+              dest = typeof config.outputPath === 'function'
+                ? config.outputPath(dest)
+                : path.join(config.outputPath, dest);
             }
 
-            this.emitFile(name, res);
+            this.emitFile(dest, res);
 
             resolve(res);
           }
@@ -102,22 +135,14 @@ module.exports = async function assetLoader(content: Buffer) {
     }),
   );
 
-  let outputPath = `${filename}.${hash}.${info.type}`;
-  let publicPath = '__webpack_public_path__';
-
-  if (config.outputPath) {
-    // support functions as outputPath to generate them dynamically
-    outputPath = typeof config.outputPath === 'function'
-      ? config.outputPath(hash)
-      : config.outputPath + hash;
-  }
+  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/assets', url))}`;
 
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
     publicPath = JSON.stringify(
       typeof config.publicPath === 'function'
-        ? config.publicPath(hash)
-        : config.publicPath + hash,
+        ? config.publicPath(url)
+        : path.join(config.publicPath, url),
     );
   }
 
@@ -127,13 +152,13 @@ module.exports = async function assetLoader(content: Buffer) {
     var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,
-      fileSystemLocation: ${JSON.stringify(this.resourcePath)},
+      fileSystemLocation: ${JSON.stringify(query.bundle ? null : path.dirname(this.resourcePath))},
       httpServerLocation: ${publicPath},
-      name: ${JSON.stringify(outputPath.replace(/\.[^.]+$/, ''))},
+      name: ${JSON.stringify(filename)},
       width: ${info.width},
       height: ${info.height},
       type: ${JSON.stringify(info.type)},
-      hash: ${JSON.stringify(`${hasha(Buffer.concat(files))}`)},
+      hash: ${JSON.stringify(hasha(Buffer.concat(buffers)))},
       scales: ${JSON.stringify(scales)},
     });
   `,
