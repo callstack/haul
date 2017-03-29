@@ -10,7 +10,7 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const assetResolver = require('../resolvers/AssetResolver');
+const AssetResolver = require('../resolvers/AssetResolver');
 const findProvidesModule = require('./findProvidesModule');
 
 const PLATFORMS = ['ios', 'android'];
@@ -40,7 +40,7 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
+const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
   // Default polyfills and entry-point setup
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
@@ -60,10 +60,10 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
         },
       },
       {
-        test: assetResolver.test,
+        test: AssetResolver.test,
         use: {
           loader: require.resolve('../loaders/assetLoader'),
-          query: { platform },
+          query: { platform, cwd, bundle },
         },
       },
     ],
@@ -98,7 +98,7 @@ const getDefaultConfig = ({ platform, cwd, dev }): WebpackConfig => ({
   ],
   // Default resolve
   resolve: {
-    plugins: [assetResolver({ platform })],
+    plugins: [new AssetResolver({ platform })],
     alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
     mainFields: ['browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],

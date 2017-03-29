@@ -38,20 +38,25 @@ async function bundle(opts: *) {
     {
       dev: opts.dev,
       cwd: directory,
+      bundle: true,
     },
   );
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
 
-  if (opts.assetsDest && path.isAbsolute(opts.assetsDest)) {
-    config.output.path = opts.assetsDest;
+  if (opts.assetsDest) {
+    config.output.path = path.isAbsolute(opts.assetsDest)
+      ? opts.assetsDest
+      : path.join(directory, opts.assetsDest);
   }
 
-  if (opts.bundleOutput && path.isAbsolute(opts.bundleOutput)) {
-    config.output.filename = path.relative(
-      config.output.path,
-      opts.bundleOutput,
-    );
+  if (opts.bundleOutput) {
+    config.output.filename = path.isAbsolute(opts.bundleOutput)
+      ? path.relative(config.output.path, opts.bundleOutput)
+      : path.relative(
+          config.output.path,
+          path.join(directory, opts.bundleOutput),
+        );
   }
 
   const compiler = webpack(config);

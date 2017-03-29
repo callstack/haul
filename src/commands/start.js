@@ -83,6 +83,11 @@ async function start(opts: *) {
 
     try {
       await exec(`${adb} ${args}`);
+      logger.info(
+        messages.commandSuccess({
+          command: `${path.basename(adb)} ${args}`,
+        }),
+      );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
