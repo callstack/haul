@@ -8,7 +8,7 @@ const dedent = require('dedent');
 const chalk = require('chalk');
 
 module.exports = (command: string) => dedent`
-  Command ${command} not found
+  Command ${chalk.bold(command)} not found
 
   Run ${chalk.cyan(`haul --help`)} to see a list of available commands
 `;

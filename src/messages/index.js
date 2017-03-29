@@ -8,14 +8,12 @@
 module.exports = {
   webpackConfigNotFound: require('./webpackConfigNotFound'),
   initialStartInformation: require('./initialStartInformation'),
+  initialBundleInformation: require('./initialBundleInformation'),
   bundleBuilt: require('./bundleBuilt'),
   bundleBuilding: require('./bundleBuilding'),
   bundleFailed: require('./bundleFailed'),
   commandNotImplemented: require('./commandNotImplemented'),
   commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
-  optionPlatformMissing: require('./optionPlatformMissing'),
-  bundleOptionPlatformMissing: require('./bundleOptionPlatformMissing'),
-  bundleOptionPlatformInvalid: require('./bundleOptionPlatformInvalid'),
-  initialBundleInformation: require('./initialBundleInformation'),
+  invalidOption: require('./invalidOption'),
 };

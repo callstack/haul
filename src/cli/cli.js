@@ -6,16 +6,17 @@
  */
 import type { Command } from '../types';
 
-const program = require('commander');
+const minimist = require('minimist');
+const camelcaseKeys = require('camelcase-keys');
+
 const pjson = require('../../package.json');
 const logger = require('../logger');
-const clear = require('clear');
 const messages = require('../messages');
 const { MessageError } = require('../errors');
 
-const commands: Array<Command> = [require('./start'), require('./bundle')];
+const COMMANDS: Array<Command> = [require('./start'), require('./bundle')];
 
-const RNCommands: Array<string> = [
+const NOT_SUPPORTED_COMMANDS = [
   'run-ios',
   'run-android',
   'library',
@@ -31,61 +32,91 @@ const RNCommands: Array<string> = [
   'dependencies',
 ];
 
-commands.forEach((command: Command) => {
-  const options = command.options || [];
+function validateOptions(options, flags, command) {
+  return options.reduce(
+    (acc, option) => {
+      let value = flags[option.name] || option.default;
 
-  const cmd = program
-    .command(command.name)
-    .allowUnknownOption(command.allowUnknownOptions)
-    .description(command.description)
-    .action(async function run(...args) {
-      const opts = this.opts();
-      const argv: Array<string> = args.slice(0, -1);
-
-      try {
-        clear();
-        await command.action(argv, opts);
-      } catch (error) {
-        clear();
-        if (error instanceof MessageError) {
-          logger.error(error.message);
-        } else {
-          logger.error(
-            messages.commandFailed({
-              command: `haul ${command.name}`,
-              error,
-              stack: error.stack,
-            }),
-          );
-        }
-        process.exit(1);
+      if (option.required && !value) {
+        throw new MessageError(
+          messages.invalidOption({
+            option,
+            command,
+          }),
+        );
       }
-    });
 
-  options.forEach(opt =>
-    cmd.option(
-      opt.name,
-      opt.description,
-      opt.parse || (val => val),
-      typeof opt.default === 'function' ? opt.default() : opt.default,
-    ));
+      if (option.parse) {
+        value = option.parse(value);
+      }
 
-  const defaultHelpPrinter = cmd.helpInformation.bind(cmd);
-  cmd.helpInformation = () => {
-    logger.clear();
-    return defaultHelpPrinter();
-  };
-});
+      if (option.choices && !option.choices.find(c => c.value === value)) {
+        throw new MessageError(
+          messages.invalidOption({
+            option,
+            value,
+            command,
+          }),
+        );
+      }
 
-program.command('*', null, { noHelp: true }).action(cmd => {
-  logger.clear();
+      // eslint-disable-next-line no-param-reassign
+      acc[option.name] = value;
 
-  if (RNCommands.includes(cmd)) {
-    logger.error(messages.commandNotImplemented(cmd));
+      return acc;
+    },
+    {},
+  );
+}
+
+function run(args) {
+  if (['version', '--version'].includes(args[0])) {
+    console.log(pjson.version);
     return;
   }
 
-  logger.error(messages.commandNotFound(cmd));
-});
+  if (['help', '--help'].includes(args[0])) {
+    logger.info('Help');
+    return;
+  }
 
-program.version(pjson.version).parse(process.argv);
+  const command = COMMANDS.find(cmd => cmd.name === args[0]);
+
+  if (!command) {
+    if (NOT_SUPPORTED_COMMANDS.includes(args[0])) {
+      logger.info(messages.commandNotImplemented(args[0]));
+    } else {
+      logger.error(messages.commandNotFound(args[0]));
+    }
+    return;
+  }
+
+  const opts = command.options || [];
+
+  const flags = camelcaseKeys(
+    minimist(args, {
+      string: opts.map(opt => opt.name),
+    }),
+  );
+
+  const displayName = `haul ${command.name}`;
+
+  try {
+    command.action(validateOptions(opts, flags, displayName));
+  } catch (error) {
+    if (error instanceof MessageError) {
+      logger.error(error.message);
+    } else {
+      logger.error(
+        messages.commandFailed({
+          command: displayName,
+          error,
+          stack: error.stack,
+        }),
+      );
+    }
+    process.exit(1);
+  }
+}
+
+run(process.argv.slice(2));

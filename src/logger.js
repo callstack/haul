@@ -8,15 +8,12 @@
  */
 import type { LoggerPrintLogo, Logger } from './types';
 
+const clear = require('clear');
 const chalk = require('chalk');
 const emoji = require('node-emoji');
 const fs = require('fs');
 const path = require('path');
 const { inspect } = require('util');
-
-const clear = (): void => {
-  process.stdout.write('\u001B[2J\u001B[0;0f');
-};
 
 const printLogo: LoggerPrintLogo = (offset = 0, enchance = chalk.blue) => {
   const logoLines: string[] = [
@@ -63,6 +60,7 @@ const createDebugLog = (prefix: string, args: any[]): void => {
  */
 const loggerFactory = (enchance: Function, prefix: string, devMode: boolean) =>
   (...args: any[]) => {
+    clear();
     console.log(
       `${enchance(` ${prefix.toUpperCase()} `)}`,
       ...args.map(arg => {
