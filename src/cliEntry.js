@@ -80,13 +80,13 @@ function run(args) {
   clear();
 
   if (
-    args[0] === 'version' || args.includes('--v') || args.includes('--version')
+    args[0] === 'version' || args.includes('-v') || args.includes('--version')
   ) {
     console.log(`v${pjson.version}`);
     return;
   }
 
-  if (['--help', '--h', 'help'].includes(args[0])) {
+  if (['--help', '-h', 'help'].includes(args[0])) {
     console.log(messages.haulHelp(COMMANDS));
     return;
   }

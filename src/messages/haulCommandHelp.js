@@ -8,6 +8,7 @@ import type { Command } from '../types';
 
 const chalk = require('chalk');
 const cliui = require('cliui');
+const decamelize = require('decamelize');
 
 const printName = option => {
   const [start, end] = option.required ? ['<', '>'] : ['[', ']'];
@@ -20,17 +21,16 @@ const printName = option => {
     arg = option.choices.map(c => c.value).join('|');
   }
 
-  return `--${option.name} ${start}${arg.toLowerCase()}${end}`;
+  return `--${decamelize(option.name, '-')} ${start}${arg.toLowerCase()}${end}`;
 };
 
 const printDescription = option => {
-  let desc = option.description;
-
   if (option.default) {
-    desc = `${desc}, ${option.default} by default`;
+    const def = `${option.default} by default`;
+    return option.description ? `${option.description}, ${def}` : def;
   }
 
-  return desc;
+  return option.description;
 };
 
 module.exports = (command: Command) => {
