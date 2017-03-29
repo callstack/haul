@@ -4,18 +4,21 @@
  * 
  * @flow
  */
-import type { Command } from '../types';
+import type { Command } from './types';
 
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const clear = require('clear');
 
-const pjson = require('../../package.json');
-const logger = require('../logger');
-const messages = require('../messages');
-const { MessageError } = require('../errors');
+const pjson = require('../package.json');
+const logger = require('./logger');
+const messages = require('./messages');
+const { MessageError } = require('./errors');
 
-const COMMANDS: Array<Command> = [require('./start'), require('./bundle')];
+const COMMANDS: Array<Command> = [
+  require('./commands/start'),
+  require('./commands/bundle'),
+];
 
 const NOT_SUPPORTED_COMMANDS = [
   'run-ios',
@@ -123,4 +126,4 @@ function run(args) {
   }
 }
 
-run(process.argv.slice(2));
+module.exports = run;
