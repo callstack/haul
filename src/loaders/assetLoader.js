@@ -26,12 +26,9 @@ module.exports = async function assetLoader() {
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
   const url = path.relative(query.cwd, dirname);
-  const longname = `${`${url
+  const longname = `${`${url.replace(/\//g, '_')}_${filename}`
     .toLowerCase()
-    .replace(
-      /\//g,
-      '_',
-    )}_${filename}`.replace(/[^a-z0-9_]/g, '')}.${info.type}`;
+    .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
 
   const regex = new RegExp(`^${escapeStringRegexp(filename)}${suffix}`);
 

@@ -61,7 +61,10 @@ async function bundle(argv: Array<string>, opts: *) {
   if (opts.bundleOutput) {
     config.output.filename = path.isAbsolute(opts.bundleOutput)
       ? path.relative(config.output.path, opts.bundleOutput)
-      : opts.bundleOutput;
+      : path.relative(
+          config.output.path,
+          path.join(directory, opts.bundleOutput),
+        );
   }
 
   const compiler = webpack(config);
