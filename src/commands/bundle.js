@@ -123,11 +123,11 @@ module.exports = {
     },
     {
       name: 'bundleOutput',
-      description: 'Absolute path to directory where to store the bundle, eg. index.ios.bundle',
+      description: 'Path to directory where to store the bundle, eg. index.ios.bundle',
     },
     {
       name: 'assetsDest',
-      description: 'Absolute path to directory where to store assets, eg. /tmp/dist',
+      description: 'Path to directory where to store assets, eg. /tmp/dist',
     },
   ],
 };
