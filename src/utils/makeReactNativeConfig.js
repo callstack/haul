@@ -81,7 +81,7 @@ const getDefaultConfig = (
       summary: false,
     }),
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: dev ? 'development' : 'production' },
+      'process.env': { NODE_ENV: dev ? '"development"' : '"production"' },
       __DEV__: dev,
     }),
     new webpack.LoaderOptionsPlugin({
