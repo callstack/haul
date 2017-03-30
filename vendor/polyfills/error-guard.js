@@ -57,9 +57,9 @@ const ErrorUtils = {
   applyWithGuardIfNeeded(fun, context, args) {
     if (ErrorUtils.inGuard()) {
       return fun.apply(context, args);
+    } else {
+      ErrorUtils.applyWithGuard(fun, context, args);
     }
-    ErrorUtils.applyWithGuard(fun, context, args);
-
     return null;
   },
   inGuard() {
@@ -72,12 +72,14 @@ const ErrorUtils = {
     }
     name = name || fun.name || '<generated guard>';
     function guarded() {
-      return ErrorUtils.applyWithGuard(
-        fun,
-        context || this,
-        arguments,
-        null,
-        name,
+      return (
+        ErrorUtils.applyWithGuard(
+          fun,
+          context || this,
+          arguments,
+          null,
+          name
+        )
       );
     }
 

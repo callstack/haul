@@ -11,6 +11,7 @@
 
 (function() {
   'use strict';
+
   const hasOwnProperty = Object.prototype.hasOwnProperty;
 
   /**
@@ -54,4 +55,5 @@
       return values;
     };
   }
+
 })();

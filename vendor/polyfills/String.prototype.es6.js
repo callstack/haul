@@ -21,9 +21,10 @@ if (!String.prototype.startsWith) {
     if (this == null) {
       throw TypeError();
     }
-    const string = String(this);
-    const pos = arguments.length > 1 ? Number(arguments[1]) || 0 : 0;
-    const start = Math.min(Math.max(pos, 0), string.length);
+    var string = String(this);
+    var pos = arguments.length > 1 ?
+      (Number(arguments[1]) || 0) : 0;
+    var start = Math.min(Math.max(pos, 0), string.length);
     return string.indexOf(String(search), pos) === start;
   };
 }
@@ -34,12 +35,13 @@ if (!String.prototype.endsWith) {
     if (this == null) {
       throw TypeError();
     }
-    const string = String(this);
-    const stringLength = string.length;
-    const searchString = String(search);
-    const pos = arguments.length > 1 ? Number(arguments[1]) || 0 : stringLength;
-    const end = Math.min(Math.max(pos, 0), stringLength);
-    const start = end - searchString.length;
+    var string = String(this);
+    var stringLength = string.length;
+    var searchString = String(search);
+    var pos = arguments.length > 1 ?
+      (Number(arguments[1]) || 0) : stringLength;
+    var end = Math.min(Math.max(pos, 0), stringLength);
+    var start = end - searchString.length;
     if (start < 0) {
       return false;
     }
@@ -53,7 +55,7 @@ if (!String.prototype.repeat) {
     if (this == null) {
       throw TypeError();
     }
-    let string = String(this);
+    var string = String(this);
     count = Number(count) || 0;
     if (count < 0 || count === Infinity) {
       throw RangeError();
@@ -61,7 +63,7 @@ if (!String.prototype.repeat) {
     if (count === 1) {
       return string;
     }
-    let result = '';
+    var result = '';
     while (count) {
       if (count & 1) {
         result += string;
@@ -83,7 +85,8 @@ if (!String.prototype.includes) {
 
     if (start + search.length > this.length) {
       return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
     }
-    return this.indexOf(search, start) !== -1;
   };
 }

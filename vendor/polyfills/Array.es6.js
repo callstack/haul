@@ -38,7 +38,9 @@ if (!Array.from) {
     var value;
 
     if (usingIterator) {
-      ret = typeof C === 'function' ? new C() : [];
+      ret = typeof C === 'function'
+        ? new C()
+        : [];
       var it = items[symbolIterator]();
       var next;
 
@@ -62,7 +64,9 @@ if (!Array.from) {
       len = 0;
     }
 
-    ret = typeof C === 'function' ? new C(len) : new Array(len);
+    ret = typeof C === 'function'
+      ? new C(len)
+      : new Array(len);
 
     while (key < len) {
       value = items[key];

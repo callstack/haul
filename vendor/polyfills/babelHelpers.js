@@ -17,27 +17,16 @@
 //
 // actually, that's a lie, because babel6 omits _extends and createRawReactElement
 
-var babelHelpers = (global.babelHelpers = {});
+var babelHelpers = global.babelHelpers = {};
 
-babelHelpers.typeof = typeof Symbol === 'function' &&
-  typeof Symbol.iterator === 'symbol'
-  ? function(obj) {
-      return typeof obj;
-    }
-  : function(obj) {
-      return obj &&
-        typeof Symbol === 'function' &&
-        obj.constructor === Symbol &&
-        obj !== Symbol.prototype
-        ? 'symbol'
-        : typeof obj;
-    };
+babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
-babelHelpers.createRawReactElement = (function() {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
+babelHelpers.createRawReactElement = (function () {
+  var REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7;
   return function createRawReactElement(type, key, props) {
     return {
       $$typeof: REACT_ELEMENT_TYPE,
@@ -45,29 +34,29 @@ babelHelpers.createRawReactElement = (function() {
       key: key,
       ref: null,
       props: props,
-      _owner: null,
+      _owner: null
     };
   };
 })();
 
-babelHelpers.classCallCheck = function(instance, Constructor) {
+babelHelpers.classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
-    throw new TypeError('Cannot call a class as a function');
+    throw new TypeError("Cannot call a class as a function");
   }
 };
 
-babelHelpers.createClass = (function() {
+babelHelpers.createClass = (function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
-      if ('value' in descriptor) descriptor.writable = true;
+      if ("value" in descriptor) descriptor.writable = true;
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
 
-  return function(Constructor, protoProps, staticProps) {
+  return function (Constructor, protoProps, staticProps) {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);
     if (staticProps) defineProperties(Constructor, staticProps);
     return Constructor;
@@ -84,13 +73,13 @@ babelHelpers.defineEnumerableProperties = function(obj, descs) {
   return obj;
 };
 
-babelHelpers.defineProperty = function(obj, key, value) {
+babelHelpers.defineProperty = function (obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
       enumerable: true,
       configurable: true,
-      writable: true,
+      writable: true
     });
   } else {
     obj[key] = value;
@@ -99,20 +88,19 @@ babelHelpers.defineProperty = function(obj, key, value) {
   return obj;
 };
 
-babelHelpers._extends = (babelHelpers.extends = Object.assign ||
-  function(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+babelHelpers._extends = babelHelpers.extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
       }
     }
+  }
 
-    return target;
-  });
+  return target;
+};
 
 babelHelpers.get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
@@ -126,7 +114,7 @@ babelHelpers.get = function get(object, property, receiver) {
     } else {
       return get(parent, property, receiver);
     }
-  } else if ('value' in desc) {
+  } else if ("value" in desc) {
     return desc.value;
   } else {
     var getter = desc.get;
@@ -139,12 +127,9 @@ babelHelpers.get = function get(object, property, receiver) {
   }
 };
 
-babelHelpers.inherits = function(subClass, superClass) {
-  if (typeof superClass !== 'function' && superClass !== null) {
-    throw new TypeError(
-      'Super expression must either be null or a function, not ' +
-        typeof superClass,
-    );
+babelHelpers.inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
   }
 
   subClass.prototype = Object.create(superClass && superClass.prototype, {
@@ -152,24 +137,19 @@ babelHelpers.inherits = function(subClass, superClass) {
       value: subClass,
       enumerable: false,
       writable: true,
-      configurable: true,
-    },
+      configurable: true
+    }
   });
-  if (superClass)
-    Object.setPrototypeOf
-      ? Object.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass);
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 };
 
-babelHelpers.interopRequireDefault = function(obj) {
-  return obj && obj.__esModule
-    ? obj
-    : {
-        default: obj,
-      };
+babelHelpers.interopRequireDefault = function (obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
 };
 
-babelHelpers.interopRequireWildcard = function(obj) {
+babelHelpers.interopRequireWildcard = function (obj) {
   if (obj && obj.__esModule) {
     return obj;
   } else {
@@ -177,8 +157,7 @@ babelHelpers.interopRequireWildcard = function(obj) {
 
     if (obj != null) {
       for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key))
-          newObj[key] = obj[key];
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
       }
     }
 
@@ -187,7 +166,7 @@ babelHelpers.interopRequireWildcard = function(obj) {
   }
 };
 
-babelHelpers.objectWithoutProperties = function(obj, keys) {
+babelHelpers.objectWithoutProperties = function (obj, keys) {
   var target = {};
 
   for (var i in obj) {
@@ -199,19 +178,15 @@ babelHelpers.objectWithoutProperties = function(obj, keys) {
   return target;
 };
 
-babelHelpers.possibleConstructorReturn = function(self, call) {
+babelHelpers.possibleConstructorReturn = function (self, call) {
   if (!self) {
-    throw new ReferenceError(
-      "this hasn't been initialised - super() hasn't been called",
-    );
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
 
-  return call && (typeof call === 'object' || typeof call === 'function')
-    ? call
-    : self;
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
-babelHelpers.slicedToArray = (function() {
+babelHelpers.slicedToArray = (function () {
   function sliceIterator(arr, i) {
     var _arr = [];
     var _n = true;
@@ -219,11 +194,7 @@ babelHelpers.slicedToArray = (function() {
     var _e = undefined;
 
     try {
-      for (
-        var _i = arr[Symbol.iterator](), _s;
-        !(_n = (_s = _i.next()).done);
-        _n = true
-      ) {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
 
         if (i && _arr.length === i) break;
@@ -233,7 +204,7 @@ babelHelpers.slicedToArray = (function() {
       _e = err;
     } finally {
       try {
-        if (!_n && _i['return']) _i['return']();
+        if (!_n && _i["return"]) _i["return"]();
       } finally {
         if (_d) throw _e;
       }
@@ -242,37 +213,32 @@ babelHelpers.slicedToArray = (function() {
     return _arr;
   }
 
-  return function(arr, i) {
+  return function (arr, i) {
     if (Array.isArray(arr)) {
       return arr;
     } else if (Symbol.iterator in Object(arr)) {
       return sliceIterator(arr, i);
     } else {
-      throw new TypeError(
-        'Invalid attempt to destructure non-iterable instance',
-      );
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
     }
   };
 })();
 
-babelHelpers.taggedTemplateLiteral = function(strings, raw) {
-  return Object.freeze(
-    Object.defineProperties(strings, {
-      raw: {
-        value: Object.freeze(raw),
-      },
-    }),
-  );
+babelHelpers.taggedTemplateLiteral = function (strings, raw) {
+  return Object.freeze(Object.defineProperties(strings, {
+    raw: {
+      value: Object.freeze(raw)
+    }
+  }));
 };
 
-babelHelpers.toArray = function(arr) {
+babelHelpers.toArray = function (arr) {
   return Array.isArray(arr) ? arr : Array.from(arr);
 };
 
-babelHelpers.toConsumableArray = function(arr) {
+babelHelpers.toConsumableArray = function (arr) {
   if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++)
-      arr2[i] = arr[i];
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
 
     return arr2;
   } else {

@@ -23,22 +23,23 @@ Object.assign = function(target, sources) {
     if (typeof target !== 'object' && typeof target !== 'function') {
       throw new TypeError(
         'In this environment the target of assign MUST be an object.' +
-          'This error is a performance optimization and not spec compliant.',
+        'This error is a performance optimization and not spec compliant.'
       );
     }
   }
 
-  for (let nextIndex = 1; nextIndex < arguments.length; nextIndex++) {
-    const nextSource = arguments[nextIndex];
+  for (var nextIndex = 1; nextIndex < arguments.length; nextIndex++) {
+    var nextSource = arguments[nextIndex];
     if (nextSource == null) {
       continue;
     }
 
     if (__DEV__) {
-      if (typeof nextSource !== 'object' && typeof nextSource !== 'function') {
+      if (typeof nextSource !== 'object' &&
+          typeof nextSource !== 'function') {
         throw new TypeError(
           'In this environment the sources for assign MUST be an object.' +
-            'This error is a performance optimization and not spec compliant.',
+          'This error is a performance optimization and not spec compliant.'
         );
       }
     }
@@ -47,15 +48,15 @@ Object.assign = function(target, sources) {
     // copy cannot throw. If we ever supported this then we must handle
     // exceptions and side-effects.
 
-    for (const key in nextSource) {
+    for (var key in nextSource) {
       if (__DEV__) {
-        const hasOwnProperty = Object.prototype.hasOwnProperty;
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
         if (!hasOwnProperty.call(nextSource, key)) {
           throw new TypeError(
             'One of the sources for assign has an enumerable key on the ' +
-              'prototype chain. Are you trying to assign a prototype property? ' +
-              "We don't allow it, as this is an edge case that we do not support. " +
-              'This error is a performance optimization and not spec compliant.',
+            'prototype chain. Are you trying to assign a prototype property? ' +
+            'We don\'t allow it, as this is an edge case that we do not support. ' +
+            'This error is a performance optimization and not spec compliant.'
           );
         }
       }
