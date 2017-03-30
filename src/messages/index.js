@@ -19,4 +19,12 @@ module.exports = {
   haulHelp: require('./haulHelp'),
   haulCommandHelp: require('./haulCommandHelp'),
   commandSuccess: require('./commandSuccess'),
+  checkingProject: require('./checkingProject'),
+  verifiedProject: require('./verifiedProject'),
+  invalidProject: require('./invalidProject'),
+  generatingConfig: require('./generatingConfig'),
+  generatedConfig: require('./generatedConfig'),
+  enterEntryFileName: require('./enterEntryFileName'),
+  selectEntryFile: require('./selectEntryFile'),
+  overwriteConfig: require('./overwriteConfig'),
 };

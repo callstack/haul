@@ -47,6 +47,8 @@ async function start(opts: *) {
     config = config[platforms.indexOf(opts.platform)];
   }
 
+  clear();
+
   const compiler = webpack(config);
 
   const app = createServer(
