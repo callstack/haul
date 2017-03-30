@@ -6,6 +6,10 @@
   A command line interface for developing React Native applications.
 </p>
 
+<p align="center">
+<a href="https://circleci.com/gh/callstack-io/haul">  
+  <img src="https://circleci.com/gh/callstack-io/haul.svg?style=svg&circle-token=ac39ec56260bd185ed1b5011dab721e35d49557c" /></a>
+</p>
 ---
 
 ## Features
