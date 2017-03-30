@@ -21,7 +21,7 @@ const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 /**
  * Starts development server
  */
-async function start(: *) {
+async function start(opts: *) {
   const directory = process.cwd();
   const configPath = path.join(directory, 'webpack.haul.js');
 
