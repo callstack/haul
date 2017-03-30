@@ -24,7 +24,7 @@ const loggerMiddleware = require('./middleware/loggerMiddleware');
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
-const WebSocketProxy = require('./util/WebSocketProxy.js');
+const WebSocketProxy = require('./util/WebsocketProxy.js');
 
 /**
  * Packager-like Server running on top of Webpack
