@@ -46,7 +46,7 @@ Now you are ready to start!
 
 ## Next steps
 
-Check out [documentation](./docs/README.md) to learn more about available commands and tips on customizing the webpack configuration.
+Check out [documentation](./docs/Readme.md) to learn more about available commands and tips on customizing the webpack configuration.
 
 ## Limitations
 
