@@ -54,7 +54,7 @@ const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules\/(?!react)/,
+        exclude: /node_modules\/(?!react|@expo)/,
         use: {
           loader: require.resolve('happypack/loader'),
           query: { id: 'babel' },
