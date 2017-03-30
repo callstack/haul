@@ -1,0 +1,32 @@
+/**
+ * Copyright 2017-present, Callstack.
+ * All rights reserved.
+ *
+ * @flow
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const DEFAULT_BABELRC = {
+  presets: ['react-native'],
+};
+
+module.exports = function getBabelConfig(cwd: string) {
+  let babelrc;
+
+  const file = path.join(cwd, '.babelrc');
+
+  if (fs.existsSync(file)) {
+    babelrc = { extends: file };
+  } else {
+    babelrc = DEFAULT_BABELRC;
+  }
+
+  return Object.assign({}, babelrc, {
+    babelrc: false,
+    plugins: [require.resolve('./fixRequireIssues')].concat(
+      babelrc.plugins || [],
+    ),
+  });
+};
