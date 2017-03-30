@@ -10,8 +10,9 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
 const AssetResolver = require('../resolvers/AssetResolver');
-const findProvidesModule = require('./findProvidesModule');
+const HasteResolver = require('../resolvers/HasteResolver');
 
 const PLATFORMS = ['ios', 'android'];
 
@@ -98,8 +99,12 @@ const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
   ],
   // Default resolve
   resolve: {
-    plugins: [new AssetResolver({ platform })],
-    alias: findProvidesModule([path.resolve(cwd, 'node_modules/react-native')]),
+    plugins: [
+      new HasteResolver({
+        directories: [path.resolve(cwd, 'node_modules/react-native')],
+      }),
+      new AssetResolver({ platform }),
+    ],
     mainFields: ['browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
