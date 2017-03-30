@@ -101,7 +101,7 @@ async function start(opts: *) {
   }
 
   // $FlowFixMe Seems to have issues with `http.Server`
-  app.listen(8081, '127.0.0.1', () => {
+  app.listen(opts.port, '127.0.0.1', () => {
     logger.info(
       messages.initialStartInformation({
         entries: Array.isArray(config)
