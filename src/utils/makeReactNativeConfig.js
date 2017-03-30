@@ -14,6 +14,8 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 
+const getBabelConfig = require('./getBabelConfig');
+
 const PLATFORMS = ['ios', 'android'];
 
 type ConfigOptions = {
@@ -93,7 +95,10 @@ const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
     new HappyPack({
       id: 'babel',
       loaders: [
-        `${require.resolve('babel-loader')}?presets[]=react-native&plugins[]=${require.resolve('./fixRequireIssues')}`,
+        {
+          path: require.resolve('babel-loader'),
+          query: getBabelConfig(cwd),
+        },
       ],
       verbose: false,
     }),
