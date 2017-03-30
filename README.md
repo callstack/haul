@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Haul" src="https://cloud.githubusercontent.com/assets/1174278/24501969/62aac782-1569-11e7-91f6-e0f731354ec1.png" width="682">
+  <img alt="Haul" src="https://cloud.githubusercontent.com/assets/1174278/24502391/25619f98-156b-11e7-994c-a8495b4735d5.png" width="512">
 </p>
 
 <p align="center">
