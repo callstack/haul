@@ -19,7 +19,7 @@ const getBabelConfig = require('./getBabelConfig');
 const PLATFORMS = ['ios', 'android'];
 
 type ConfigOptions = {
-  cwd: string,
+  root: string,
   dev: boolean,
 };
 
@@ -44,14 +44,14 @@ type WebpackConfigFactory =
  * Returns default config based on environment
  */
 const getDefaultConfig = (
-  { platform, cwd, dev, minify, bundle },
+  { platform, root, dev, minify, bundle },
 ): WebpackConfig => ({
   // Default polyfills and entry-point setup
-  context: cwd,
+  context: root,
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
   output: {
-    path: path.join(cwd, 'dist'),
+    path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
   },
   // Built-in loaders
@@ -69,7 +69,7 @@ const getDefaultConfig = (
         test: AssetResolver.test,
         use: {
           loader: require.resolve('../loaders/assetLoader'),
-          query: { platform, cwd, bundle },
+          query: { platform, root, bundle },
         },
       },
     ],
@@ -100,7 +100,7 @@ const getDefaultConfig = (
       loaders: [
         {
           path: require.resolve('babel-loader'),
-          query: getBabelConfig(cwd),
+          query: getBabelConfig(root),
         },
       ],
       verbose: false,
@@ -119,7 +119,7 @@ const getDefaultConfig = (
   resolve: {
     plugins: [
       new HasteResolver({
-        directories: [path.resolve(cwd, 'node_modules/react-native')],
+        directories: [path.resolve(root, 'node_modules/react-native')],
       }),
       new AssetResolver({ platform }),
     ],
