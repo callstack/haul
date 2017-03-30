@@ -113,8 +113,8 @@ module.exports = {
     },
     {
       name: 'minify',
-      description: 'Whether to minify the bundle',
-      default: 'false',
+      description: `Whether to minify the bundle, 'true' by default when dev=false`,
+      default: ({ dev }: *) => String(!dev),
       parse: (val: string) => val !== 'false',
       choices: [
         {
