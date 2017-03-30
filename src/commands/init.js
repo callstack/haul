@@ -68,7 +68,9 @@ async function init() {
   } else if (fs.existsSync(path.join(cwd, 'index.js'))) {
     entry = 'index.js';
   } else {
-    const list = fs.readdirSync(cwd).filter(f => /\.js$/.test(f) && f !== 'webpack.haul.js');
+    const list = fs
+      .readdirSync(cwd)
+      .filter(f => /\.js$/.test(f) && f !== 'webpack.haul.js');
 
     if (list.length <= 5) {
       const result = await inquirer.prompt([

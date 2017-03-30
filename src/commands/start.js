@@ -38,8 +38,9 @@ async function start(opts: *) {
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
-      dev: opts.dev,
       cwd: directory,
+      dev: opts.dev,
+      minify: opts.minify,
     },
   );
 
@@ -100,7 +101,6 @@ async function start(opts: *) {
     }
   }
 
-  // $FlowFixMe Seems to have issues with `http.Server`
   app.listen(opts.port, '127.0.0.1', () => {
     logger.info(
       messages.initialStartInformation({
@@ -128,7 +128,7 @@ module.exports = {
       name: 'dev',
       description: 'Whether to build in development mode',
       default: 'true',
-      parse: (val: string) => JSON.parse(val),
+      parse: (val: string) => val !== 'false',
       choices: [
         {
           value: 'true',
@@ -137,6 +137,22 @@ module.exports = {
         {
           value: 'false',
           description: 'Builds in production mode',
+        },
+      ],
+    },
+    {
+      name: 'minify',
+      description: 'Whether to minify the bundle',
+      default: 'false',
+      parse: (val: string) => val !== 'false',
+      choices: [
+        {
+          value: 'true',
+          description: 'Enables minification for the bundle',
+        },
+        {
+          value: 'false',
+          description: 'Disables minification for the bundle',
         },
       ],
     },
