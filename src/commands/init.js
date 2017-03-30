@@ -100,7 +100,7 @@ async function init() {
 
   const config = dedent`
     module.exports = ({ platform }) => ({
-      entry: './${entry}',
+      entry: `./${entry}`,
     });
   `;
 
