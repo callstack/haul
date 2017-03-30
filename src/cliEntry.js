@@ -39,7 +39,11 @@ const NOT_SUPPORTED_COMMANDS = [
 function validateOptions(options, flags, command) {
   return options.reduce(
     (acc, option) => {
-      let value = flags[option.name] || option.default;
+      const defaultValue = typeof option.default === 'function'
+        ? option.default(flags)
+        : option.default;
+
+      let value = flags[option.name] || defaultValue;
 
       if (option.required && !value) {
         throw new MessageError(

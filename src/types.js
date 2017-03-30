@@ -13,7 +13,7 @@ export type CommandOption = {
   name: string,
   description?: string,
   parse?: (val: string) => mixed,
-  default?: string,
+  default?: string | ((opts: { [key: string]: string }) => string),
   example?: string,
   note?: string,
   choices?: Array<{
