@@ -14,10 +14,5 @@ module.exports = ({ directory }: { directory: string }) => dedent`
    • You are running haul from your project directory
    • You have a ${chalk.bold('webpack.haul.js')} file
 
-   You can copy this to ${chalk.bold('webpack.haul.js')} to get started:
-   ${chalk.gray(`
-     module.exports = {
-       entry: './index.js',
-     };
-   `)}
+   Run ${chalk.bold('haul init')} to automatically generate a ${chalk.bold('webpack.haul.js')} file
 `;

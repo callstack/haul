@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 import type { Command } from './types';
@@ -16,6 +16,7 @@ const messages = require('./messages');
 const { MessageError } = require('./errors');
 
 const COMMANDS: Array<Command> = [
+  require('./commands/init'),
   require('./commands/start'),
   require('./commands/bundle'),
 ];
@@ -76,8 +77,6 @@ function validateOptions(options, flags, command) {
 }
 
 async function run(args: Array<string>) {
-  clear();
-
   if (
     args[0] === 'version' || args.includes('-v') || args.includes('--version')
   ) {
