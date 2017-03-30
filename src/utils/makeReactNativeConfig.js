@@ -43,6 +43,7 @@ type WebpackConfigFactory =
  */
 const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
   // Default polyfills and entry-point setup
+  context: cwd,
   entry: [require.resolve('./polyfillEnvironment.js')],
   devtool: 'source-map',
   output: {
