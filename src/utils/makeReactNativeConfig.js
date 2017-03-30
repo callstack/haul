@@ -41,7 +41,9 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
+const getDefaultConfig = (
+  { platform, cwd, dev, minify, bundle },
+): WebpackConfig => ({
   // Default polyfills and entry-point setup
   context: cwd,
   entry: [require.resolve('./polyfillEnvironment.js')],
@@ -77,10 +79,11 @@ const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
       summary: false,
     }),
     new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: dev ? 'development' : 'production' },
       __DEV__: dev,
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: !dev,
+      minimize: !!minify,
       debug: dev,
     }),
     new webpack.NamedModulesPlugin(),
@@ -97,7 +100,16 @@ const getDefaultConfig = ({ platform, cwd, dev, bundle }): WebpackConfig => ({
       ],
       verbose: false,
     }),
-  ],
+  ].concat(
+    minify
+      ? [
+          new webpack.optimize.UglifyJsPlugin({
+            test: /\.(js|bundle)($|\?)/i,
+            sourceMap: true,
+          }),
+        ]
+      : [],
+  ),
   // Default resolve
   resolve: {
     plugins: [
