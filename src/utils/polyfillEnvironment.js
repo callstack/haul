@@ -8,14 +8,14 @@
  */
 
 /* eslint-disable import/no-extraneous-dependencies */
-require('react-native/packager/src/Resolver/polyfills/polyfills.js');
-require('react-native/packager/src/Resolver/polyfills/console.js');
-require('react-native/packager/src/Resolver/polyfills/error-guard.js');
-require('react-native/packager/src/Resolver/polyfills/Number.es6.js');
-require('react-native/packager/src/Resolver/polyfills/String.prototype.es6.js');
-require('react-native/packager/src/Resolver/polyfills/Array.prototype.es6.js');
-require('react-native/packager/src/Resolver/polyfills/Array.es6.js');
-require('react-native/packager/src/Resolver/polyfills/Object.es7.js');
-require('react-native/packager/src/Resolver/polyfills/babelHelpers.js');
+require('../../vendor/polyfills/console.js');
+require('../../vendor/polyfills/error-guard.js');
+require('../../vendor/polyfills/Number.es6.js');
+require('../../vendor/polyfills/String.prototype.es6.js');
+require('../../vendor/polyfills/Array.prototype.es6.js');
+require('../../vendor/polyfills/Array.es6.js');
+require('../../vendor/polyfills/Object.es6.js');
+require('../../vendor/polyfills/Object.es7.js');
+require('../../vendor/polyfills/babelHelpers.js');
 
 require('InitializeCore');
