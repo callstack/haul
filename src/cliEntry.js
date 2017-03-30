@@ -40,7 +40,7 @@ function validateOptions(options, flags, command) {
   return options.reduce(
     (acc, option) => {
       const defaultValue = typeof option.default === 'function'
-        ? option.default(flags)
+        ? option.default(acc)
         : option.default;
 
       let value = flags[option.name] || defaultValue;
