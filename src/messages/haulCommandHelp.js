@@ -26,7 +26,10 @@ const printName = option => {
 
 const printDescription = option => {
   if (option.default) {
-    const def = `${option.default} by default`;
+    const defValue = typeof option.default === 'function'
+      ? option.default.name
+      : option.default;
+    const def = `${defValue} by default`;
     return option.description ? `${option.description}, ${def}` : def;
   }
 
