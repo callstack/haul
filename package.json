@@ -50,7 +50,7 @@
     "ws": "^2.2.2"
   },
   "peerDependencies": {
-    "react-native": "^0.42.3"
+    "react-native": "*"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
