@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A command line interface for developing React Native applications.
+  A command line tool for developing React Native apps
 </p>
 
 ---
@@ -42,11 +42,16 @@ yarn run haul start -- --platform ios
 
 Now you are ready to start!
 
-<img width="650" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
+<p align="center">
+  <img width="650" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
+</p>
 
-## Next steps
+## Documentation
 
-Check out [documentation](./docs/Readme.md) to learn more about available commands and tips on customizing the webpack configuration.
+Check out the docs to learn more about available commands and tips on customizing the webpack configuration.
+
+1. [CLI Commands](docs/CLI%20Commands.md)
+1. [Configuration](docs/Configuration.md)
 
 ## Limitations
 
@@ -54,14 +59,15 @@ Haul uses a completely different architecture from React Native packager, which 
 
 We are actively working on adding support for the following:
 
-  - Existing `react-native` commands 
-  - React DevTools
-  - Developer menu -> Start systrace
+- Existing `react-native` commands 
+- React DevTools
+- Developer menu -> Start systrace
 
 The following features are **unlikely to be supported** in the future:
 
-  - Developer menu -> Enable Hot Reloading: use `webpack.haul.js` config instead
-  - Haste module system: use something like [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) instead
+- Developer menu -> Enable Hot Reloading: use `webpack.haul.js` config instead
+- Haste module system: use something like [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) instead
+- Transpile files under `node_modules`: transpile your modules before publishing, or configure webpack not to ignore them
 
 ## License
 

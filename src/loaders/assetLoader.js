@@ -25,7 +25,7 @@ module.exports = async function assetLoader() {
   const dirname = path.dirname(filepath);
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
-  const url = path.relative(query.cwd, dirname);
+  const url = path.relative(query.root, dirname);
   const longname = `${`${url.replace(/\//g, '_')}_${filename}`
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')}.${info.type}`;

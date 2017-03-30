@@ -38,7 +38,7 @@ async function start(opts: *) {
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
-      cwd: directory,
+      root: directory,
       dev: opts.dev,
       minify: opts.minify,
     },

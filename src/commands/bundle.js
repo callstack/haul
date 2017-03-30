@@ -36,7 +36,7 @@ async function bundle(opts: *) {
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
-      cwd: directory,
+      root: directory,
       dev: opts.dev,
       minify: opts.minify,
       bundle: true,
@@ -145,7 +145,7 @@ module.exports = {
     },
     {
       name: 'bundleOutput',
-      description: 'Path to directory where to store the bundle, eg. index.ios.bundle',
+      description: 'Path to use for the bundle file, eg. index.ios.bundle',
     },
     {
       name: 'assetsDest',
