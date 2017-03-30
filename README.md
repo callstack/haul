@@ -1,13 +1,12 @@
-<div>
-  <img
-    width="100"
-    src="https://cloud.githubusercontent.com/assets/1174278/24422023/bd2f4cdc-1415-11e7-8714-1cb62ec5051b.png"
-   />
-   
-   <br />
-   <br />
-   <i><b>Haul</b> - a command line interface for developing React Native applications.</i>
-</div>
+<p align="center">
+  <img alt="Haul" src="https://cloud.githubusercontent.com/assets/1174278/24501969/62aac782-1569-11e7-91f6-e0f731354ec1.png" width="682">
+</p>
+
+<p align="center">
+  A command line interface for developing React Native applications.
+</p>
+
+---
 
 ## Features
 
