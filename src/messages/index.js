@@ -27,4 +27,6 @@ module.exports = {
   enterEntryFileName: require('./enterEntryFileName'),
   selectEntryFile: require('./selectEntryFile'),
   overwriteConfig: require('./overwriteConfig'),
+  sourceMapFileNotFound: require('./sourceMapFileNotFound'),
+  sourceMapInvalidFormat: require('./sourceMapInvalidFormat'),
 };
