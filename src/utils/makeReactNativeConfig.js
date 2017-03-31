@@ -92,6 +92,7 @@ const getDefaultConfig = (
     // The default configuration only generates sourcemap with *.js
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js|css|bundle)($|\?)/i,
+      filename: '[file].map',
     }),
     // Use HappyPack to speed up Babel build times
     // significantly
