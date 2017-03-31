@@ -96,23 +96,33 @@ async function init() {
     }
   }
 
-  progress = ora('Adding new entries to .gitignore').start();
+  progress = ora();
 
   const pathToGitIgnore = path.join(cwd, '.gitignore');
   if (fs.existsSync(pathToGitIgnore)) {
-    const _gitignore = fs.readFileSync(pathToGitIgnore);
-    if (!_gitignore.includes('# Haul')) {
-      const fd = fs.openSync(pathToGitIgnore, 'w+');
-      const buffer = new Buffer('# Haul\n#\n.happypack\nhaul-debug.log\n\n');
-      fs.writeSync(fd, buffer, 0, buffer.length, 0);
-      fs.writeSync(fd, _gitignore, 0, _gitignore.length, buffer.length);
-      fs.close(fd);
-      progress.succeed('Added new entries to .gitignore');
+    const gitignore = fs.readFileSync(pathToGitIgnore);
+
+    if (!gitignore.includes('# Haul')) {
+      progress = ora(messages.gitAddingEntries()).start();
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      fs.appendFileSync(
+        pathToGitIgnore,
+        dedent`
+        \n
+        # Haul
+        #
+        haul-debug.log
+        .happypack
+      `,
+      );
+
+      progress.succeed(messages.gitAddedEntries());
     } else {
-      progress.info('.gitignore already contains # Haul');
+      progress.info(messages.gitAlreadyAdded());
     }
   } else {
-    progress.warn('No .gitignore found, skipping adding new entries');
+    progress.warn(messages.gitNotFound());
   }
 
   progress = ora(messages.generatingConfig()).start();
