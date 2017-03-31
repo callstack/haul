@@ -20,7 +20,7 @@
 
 ## Getting started
 
-Start by adding Haul as a dependency to your React Native project (or use `react-native init MyProject` to create one):
+Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
 yarn add --dev haul-cli
@@ -40,7 +40,7 @@ Next, you're ready to start the development server:
 yarn run haul start -- --platform ios
 ```
 
-Finally, in another tab, run your app just like you normally would:
+Finally, reload your app to update the bundle or run your app just like you normally would:
 
 ```bash
 react-native run-ios
