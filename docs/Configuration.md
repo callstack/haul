@@ -42,7 +42,7 @@ module.exports = ({ platform }, defaults) => ({
   module: {
     ...defaults.module,
     rules: {
-      ...defaults.rules,
+      ...defaults.module.rules,
       {
         test: /\.js$/,
         use: 'custom-loader',
