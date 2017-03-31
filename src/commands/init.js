@@ -101,21 +101,19 @@ async function init() {
   const pathToGitIgnore = path.join(cwd, '.gitignore');
   if (fs.existsSync(pathToGitIgnore)) {
     const gitignore = fs.readFileSync(pathToGitIgnore);
+    const haulIgnore = dedent`
+      \n
+      # Haul
+      #
+      haul-debug.log
+      .happypack
+    `;
 
-    if (!gitignore.includes('# Haul')) {
+    if (!gitignore.includes(haulIgnore)) {
       progress = ora(messages.gitAddingEntries()).start();
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      fs.appendFileSync(
-        pathToGitIgnore,
-        dedent`
-        \n
-        # Haul
-        #
-        haul-debug.log
-        .happypack
-      `,
-      );
+      fs.appendFileSync(pathToGitIgnore, haulIgnore);
 
       progress.succeed(messages.gitAddedEntries());
     } else {
