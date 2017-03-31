@@ -112,6 +112,10 @@ const getDefaultConfig = (
           new webpack.optimize.UglifyJsPlugin({
             test: /\.(js|bundle)($|\?)/i,
             sourceMap: true,
+            compress: {
+              screw_ie8: true,
+              warnings: false,
+            },
           }),
         ]
       : [],
