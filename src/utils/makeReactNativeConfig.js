@@ -59,7 +59,7 @@ const getDefaultConfig = (
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules\/(?!react|@expo)/,
+        exclude: /node_modules\/(?!react|@expo|haul)/,
         use: {
           loader: require.resolve('happypack/loader'),
           query: { id: 'babel' },
