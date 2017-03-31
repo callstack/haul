@@ -44,7 +44,7 @@ The platform to build the bundle for.
 
 ### `--dev <true|false>`
 
-Whether to build in development mode. This is `true` by default.
+Whether to build in development mode. This is `false` by default.
 
 ### `--minify <true|false>`
 
