@@ -41,13 +41,13 @@ module.exports = ({ platform }, defaults) => ({
   entry: `./index.${platform}.js`,
   module: {
     ...defaults.module,
-    rules: {
-      ...defaults.rules,
+    rules: [
+      ...defaults.module.rules,
       {
         test: /\.js$/,
         use: 'custom-loader',
       }
-    },
+    ],
   },
   resolve: {
     ...defaults.resolve,
