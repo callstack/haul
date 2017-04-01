@@ -10,7 +10,7 @@ const messages = require('../../messages');
 const logger = require('../../logger');
 
 /**
- * Create an Express middleware for handling React Native symbolication requests.
+ * Create an Express middleware for handling React Native symbolication requests
  *
  * @param {*} compiler - WebPack compiler.
  * @return {function} The Express middleware.
