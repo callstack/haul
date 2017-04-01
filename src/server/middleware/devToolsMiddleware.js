@@ -34,7 +34,7 @@ const launchChrome = url => {
  */
 function devToolsMiddleware(debuggerProxy) {
   return (req, res, next) => {
-    switch (req.url) {
+    switch (req.path) {
       /**
        * Request for the debugger frontend
        */

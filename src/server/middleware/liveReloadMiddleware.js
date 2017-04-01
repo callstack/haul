@@ -14,7 +14,7 @@ function liveReloadMiddleware(compiler) {
      * React Native client opens connection at `/onchange`
      * and awaits reload signal (http status code - 205)
      */
-    if (req.url === '/onchange') {
+    if (req.path === '/onchange') {
       const watcher = { req, res };
 
       watchers.push(watcher);
