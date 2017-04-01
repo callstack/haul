@@ -23,97 +23,81 @@ const delve = require('dlv');
 const messages = require('../../messages');
 const logger = require('../../logger');
 
-/**
- * React Native's version of a stack frame.
- */
 type ReactNativeStackFrame = {
-  // ths
   lineNumber: number,
   column: number,
   file: string,
   methodName: string,
 };
 
-/**
- * A list of React Native stack frames.
- */
 type ReactNativeStack = Array<ReactNativeStackFrame>;
 
-/**
- * The payload of a symbolicate request sent from React Native.
- */
 type ReactNativeSymbolicateRequest = {
   stack: ReactNativeStack,
 };
 
-/**
- * The payload that is returned to React Native after we symbolicate.
- */
 type ReactNativeSymbolicateResponse = {
   stack: ReactNativeStack,
 };
 
 /**
+ * Creates a SourceMapConsumer so we can query it.
+ */
+function createSourceMapConsumer(compiler: *) {
+  // turns /path/to/use into 'path.to.use'
+  const outputPath: string = compiler.options.output.path;
+  const hops: Array<string> = outputPath
+    .split(path.sep)
+    .filter((pathPart: string) => pathPart !== ''); // no blanks please
+
+  // grab the base directory out of webpack's deeply nested filesystem
+  const base = delve(compiler.outputFileSystem.data, hops);
+
+  // grab the Buffer for the source map
+  const sourceMapBuffer = base &&
+    base[`${compiler.options.output.filename}.map`];
+
+  // we stop here if we couldn't find that map
+  if (!sourceMapBuffer) {
+    logger.warn(messages.sourceMapFileNotFound());
+    return null;
+  }
+
+  // feed the raw source map into our consumer
+  try {
+    const raw: string = sourceMapBuffer.toString();
+    return new SourceMapConsumer(raw);
+  } catch (err) {
+    logger.error(messages.sourceMapInvalidFormat());
+    return null;
+  }
+}
+
+/**
+ * Gets the stack frames that React Native wants us to convert.
+ */
+function getRequestedFrames(req: *): ?ReactNativeStack {
+  try {
+    const payload: ReactNativeSymbolicateRequest = JSON.parse(req.body);
+    return payload.stack;
+  } catch (err) {
+    // should happen, but at least we won't die
+    return null;
+  }
+}
+
+/**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(compiler: any): Function {
-  /**
-   * Creates a SourceMapConsumer so we can query it.
-   */
-  function createSourceMapConsumer() {
-    // In haul, webpack stores its bundled stuff in a memory file system. Let's
-    // go grab the root object where we expect the source map to live.
-    const hops: Array<string> = compiler.options.output.path
-      .split(path.sep)
-      .filter(x => x !== '');
-    const base = delve(compiler.outputFileSystem.data, hops);
-
-    // grab the Buffer for the source map
-    const sourceMapBuffer = base &&
-      base[`${compiler.options.output.filename}.map`];
-
-    // jet if it's missing?
-    if (!sourceMapBuffer) {
-      logger.warn(messages.sourceMapFileNotFound());
-      return null;
-    }
-
-    // feed the raw source map into our consumer
-    try {
-      const raw: string = sourceMapBuffer.toString();
-      return new SourceMapConsumer(raw);
-    } catch (err) {
-      logger.error(messages.sourceMapInvalidFormat());
-      return null;
-    }
-  }
-
-  /**
-   * Gets the stack frames that React Native wants us to convert.
-   */
-  function getRequestedFrames(req: any): ?ReactNativeStack {
-    try {
-      const payload: ReactNativeSymbolicateRequest = JSON.parse(req.body);
-      return payload.stack;
-    } catch (err) {
-      // should happen, but at least we won't die
-      return null;
-    }
-  }
-
+function create(compiler: *): Function {
   /**
    * The Express middleware for symbolicatin'.
    */
-  function symbolicateMiddleware(
-    req: any,
-    res: any,
-    next: Function,
-  ): ?Function {
-    // jet unless we're asked to symbolicate
+  function symbolicateMiddleware(req: *, res: *, next: Function): ?Function {
     if (req.url !== '/symbolicate') return next();
 
-    // grab our source map consumer or jet
-    const consumer = createSourceMapConsumer();
+    // grab our source map consumer
+    const consumer = createSourceMapConsumer(compiler);
     if (!consumer) return next();
 
     // grab the source stack frames
