@@ -94,7 +94,7 @@ function create(compiler: *): Function {
    * The Express middleware for symbolicatin'.
    */
   function symbolicateMiddleware(req: *, res: *, next: Function): ?Function {
-    if (req.url !== '/symbolicate') return next();
+    if (req.path !== '/symbolicate') return next();
 
     // grab our source map consumer
     const consumer = createSourceMapConsumer(compiler);
