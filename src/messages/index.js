@@ -13,7 +13,6 @@ module.exports = {
   bundleBuilding: require('./bundleBuilding'),
   bundleFailed: require('./bundleFailed'),
   commandNotImplemented: require('./commandNotImplemented'),
-  commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
   invalidOption: require('./invalidOption'),
   haulHelp: require('./haulHelp'),
