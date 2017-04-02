@@ -9,7 +9,7 @@
  * loading can begin
  */
 function statusPageMiddleware(req, res, next) {
-  if (req.url === '/status') {
+  if (req.path === '/status') {
     res.end('packager-status:running');
     return;
   }

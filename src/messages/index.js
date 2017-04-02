@@ -29,4 +29,8 @@ module.exports = {
   overwriteConfig: require('./overwriteConfig'),
   sourceMapFileNotFound: require('./sourceMapFileNotFound'),
   sourceMapInvalidFormat: require('./sourceMapInvalidFormat'),
+  gitAddingEntries: require('./gitAddingEntries'),
+  gitAddedEntries: require('./gitAddedEntries'),
+  gitAlreadyAdded: require('./gitAlreadyAdded'),
+  gitNotFound: require('./gitNotFound'),
 };

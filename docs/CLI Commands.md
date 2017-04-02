@@ -2,7 +2,7 @@
 
 ## `haul init`
 
-This creates `webpack.haul.js` file in your project directory which is require by `Haul` to function. The file contains the app's entry point used for creating the app bundle.
+This creates `webpack.haul.js` file in your project directory which is required by `Haul` to function. The file contains the app's entry point used for creating the app bundle.
 
 See [Configuration](Configuration.md) for more details on `webpack.haul.js`.
 

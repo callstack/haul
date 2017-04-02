@@ -47,7 +47,7 @@ react-native run-ios
 ```
 
 <p align="center">
-  <img width="650" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
+  <img width="635" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
 </p>
 
 ## Documentation
@@ -64,7 +64,6 @@ Haul uses a completely different architecture from React Native packager, which 
 We are actively working on adding support for the following:
 
 - Existing `react-native` commands 
-- React DevTools
 - Developer menu -> Start systrace
 
 The following features are **unlikely to be supported** in the future:

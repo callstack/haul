@@ -1,9 +1,9 @@
 {
-  "version": "0.1.4",
+  "version": "0.2.0",
   "name": "haul-cli",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
-    "haul": "./bin/cli"
+    "haul": "./bin/cli.js"
   },
   "scripts": {
     "precommit": "lint-staged",

@@ -96,6 +96,35 @@ async function init() {
     }
   }
 
+  progress = ora();
+
+  const pathToGitIgnore = path.join(cwd, '.gitignore');
+
+  if (fs.existsSync(pathToGitIgnore)) {
+    progress = ora(messages.gitAddingEntries()).start();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const gitignore = fs.readFileSync(pathToGitIgnore);
+    const gitEntries = ['haul-debug.log', '.happypack'];
+    const haulIgnoreHeader = '\n# Haul\n#\n';
+    let haulIgnore = haulIgnoreHeader;
+
+    for (const gitEntry of gitEntries) {
+      if (!gitignore.includes(gitEntry)) {
+        haulIgnore += `${gitEntry}\n`;
+      }
+    }
+
+    if (haulIgnore !== haulIgnoreHeader) {
+      fs.appendFileSync(pathToGitIgnore, haulIgnore);
+      progress.succeed(messages.gitAddedEntries());
+    } else {
+      progress.info(messages.gitAlreadyAdded());
+    }
+  } else {
+    progress.warn(messages.gitNotFound());
+  }
+
   progress = ora(messages.generatingConfig()).start();
 
   await new Promise(resolve => setTimeout(resolve, 1000));
