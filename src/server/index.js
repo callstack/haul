@@ -8,6 +8,7 @@ import type { WebpackStats } from '../types';
 
 const Express = require('express');
 const http = require('http');
+const bodyParser = require('body-parser');
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -19,6 +20,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
+const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
 
 /**
@@ -52,9 +54,11 @@ function createServer(
 
   // Middlewares
   appHandler
+    .use(bodyParser.text())
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
+    .use(symbolicateMiddleware(compiler))
     .use(loggerMiddleware)
     .use(webpackMiddleware);
 

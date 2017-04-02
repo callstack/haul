@@ -27,6 +27,8 @@ module.exports = {
   enterEntryFileName: require('./enterEntryFileName'),
   selectEntryFile: require('./selectEntryFile'),
   overwriteConfig: require('./overwriteConfig'),
+  sourceMapFileNotFound: require('./sourceMapFileNotFound'),
+  sourceMapInvalidFormat: require('./sourceMapInvalidFormat'),
   gitAddingEntries: require('./gitAddingEntries'),
   gitAddedEntries: require('./gitAddedEntries'),
   gitAlreadyAdded: require('./gitAlreadyAdded'),
