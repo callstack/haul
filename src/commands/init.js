@@ -215,9 +215,9 @@ const addToXcodeBuild = async (cwd: string) => {
     return match.replace(
       'buildPhases = (',
       dedent`
-          buildPhases = (
-            AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */,
-          `,
+        buildPhases = (
+          AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */,
+        `,
     );
   });
 
