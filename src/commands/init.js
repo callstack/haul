@@ -187,12 +187,39 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
+  // 1. Define buildPhase
   project = project.replace(
-    /buildSettings = {/g,
-    'buildSettings = {\n CLI_PATH = ./node_modules/haul/bin/cli.js;',
+    '/* Begin PBXShellScriptBuildPhase section */',
+    dedent`
+      /* Begin PBXShellScriptBuildPhase section */
+      AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */ = {
+        isa = PBXShellScriptBuildPhase;
+        buildActionMask = 2147483647;
+        files = (
+        );
+        inputPaths = (
+        );
+        outputPaths = (
+        );
+        runOnlyForDeploymentPostprocessing = 0;
+        shellPath = /bin/sh;
+        shellScript = "bash ../node_modules/haul/vendor/packager/haul-integrate.sh";
+      };`,
   );
 
-  // Set environmental variables
+  // 2. Add build phase to React Native targets
+  project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
+    if (!match.includes('React Native')) {
+      return match;
+    }
+    return match.replace(
+      'buildPhases = (',
+      dedent`
+          buildPhases = (
+            AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */,
+          `,
+    );
+  });
 
   fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
 
