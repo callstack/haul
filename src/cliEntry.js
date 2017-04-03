@@ -15,6 +15,8 @@ const logger = require('./logger');
 const messages = require('./messages');
 const { MessageError } = require('./errors');
 
+const DEFAULT_COMMAND = require('./commands/start');
+
 const COMMANDS: Array<Command> = [
   require('./commands/init'),
   require('./commands/start'),
@@ -93,16 +95,12 @@ async function run(args: Array<string>) {
     return;
   }
 
-  const command = COMMANDS.find(cmd => cmd.name === args[0]);
-
-  if (!command) {
-    if (NOT_SUPPORTED_COMMANDS.includes(args[0])) {
-      logger.info(messages.commandNotImplemented(args[0]));
-    } else {
-      logger.error(messages.commandNotFound(args[0]));
-    }
+  if (NOT_SUPPORTED_COMMANDS.includes(args[0])) {
+    logger.info(messages.commandNotImplemented(args[0]));
     return;
   }
+
+  const command = COMMANDS.find(cmd => cmd.name === args[0]) || DEFAULT_COMMAND;
 
   if (args.includes('--help') || args.includes('-h')) {
     console.log(messages.haulCommandHelp(command));
