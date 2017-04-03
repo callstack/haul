@@ -6,6 +6,8 @@
  */
 
 module.exports = {
+  addingToBuildPipeline: require('./addingToBuildPipeline'),
+  addedToBuildPipeline: require('./addedToBuildPipeline'),
   webpackConfigNotFound: require('./webpackConfigNotFound'),
   initialStartInformation: require('./initialStartInformation'),
   initialBundleInformation: require('./initialBundleInformation'),
@@ -15,6 +17,7 @@ module.exports = {
   commandNotImplemented: require('./commandNotImplemented'),
   commandNotFound: require('./commandNotFound'),
   commandFailed: require('./commandFailed'),
+  enterXcodeProjectFileName: require('./enterXcodeProjectFileName'),
   invalidOption: require('./invalidOption'),
   haulHelp: require('./haulHelp'),
   haulCommandHelp: require('./haulCommandHelp'),
@@ -33,4 +36,5 @@ module.exports = {
   gitAddedEntries: require('./gitAddedEntries'),
   gitAlreadyAdded: require('./gitAlreadyAdded'),
   gitNotFound: require('./gitNotFound'),
+  xcodeProjectNotFound: require('./xcodeProjectNotFound'),
 };

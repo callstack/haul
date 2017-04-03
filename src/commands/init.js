@@ -168,18 +168,18 @@ const addHaulToiOSBuild = async (cwd: string) => {
       {
         type: 'input',
         name: 'entry',
-        message: 'Enter full path to your .xcodeproj file',
+        message: messages.enterXcodeProjectFileName(),
         validate: pathToFile =>
           fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
             ? true
-            : `${pathToFile} doesn't exist`,
+            : messages.xcodeProjectNotFound(pathToFile),
       },
     ]);
 
     entry = path.join(cwd, result.entry);
   }
 
-  const progress = ora('Adding `haul` to iOS build pipeline');
+  const progress = ora(messages.addingToBuildPipeline());
 
   await sleep();
 
@@ -192,7 +192,7 @@ const addHaulToiOSBuild = async (cwd: string) => {
 
   fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
 
-  progress.succeed('Added `haul` to iOS build');
+  progress.succeed(messages.addedToBuildPipeline());
 };
 
 module.exports = {
