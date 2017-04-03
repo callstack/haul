@@ -125,6 +125,8 @@ async function init() {
     progress.warn(messages.gitNotFound());
   }
 
+  await addHaulToiOSBuild(cwd);
+
   progress = ora(messages.generatingConfig()).start();
 
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -139,6 +141,59 @@ async function init() {
 
   progress.succeed(messages.generatedConfig());
 }
+
+const sleep = (time: number = 1000) =>
+  new Promise(resolve => setTimeout(resolve, time));
+
+// Adds Haul to iOS build pipeline
+const addHaulToiOSBuild = async (cwd: string) => {
+  let entry;
+
+  // Does `ios/*.xcodeproj` exist?
+  const iosPath = path.join(cwd, 'ios');
+  if (fs.existsSync(iosPath)) {
+    const list = fs
+      .readdirSync(path.join(cwd, 'ios'))
+      .filter(file => file.includes('.xcodeproj'));
+
+    // Do nothing if multiple projects were found
+    if (list.length === 1) {
+      entry = path.join(iosPath, list[0]);
+    }
+  }
+
+  // Otherwise, ask for path to a file
+  if (!entry) {
+    const result = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'entry',
+        message: 'Enter full path to your .xcodeproj file',
+        validate: pathToFile =>
+          fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
+            ? true
+            : `${pathToFile} doesn't exist`,
+      },
+    ]);
+
+    entry = path.join(cwd, result.entry);
+  }
+
+  const progress = ora('Adding `haul` to iOS build pipeline');
+
+  await sleep();
+
+  let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
+
+  project = project.replace(
+    /export NODE_BINARY=node\\n\.\.\/node_modules\/react-native\/packager\/react-native-xcode\.sh/g,
+    '../node_modules/haul/bin/xcode.sh',
+  );
+
+  fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
+
+  progress.succeed('Added `haul` to iOS build');
+};
 
 module.exports = {
   name: 'init',
