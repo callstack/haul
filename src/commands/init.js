@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const dedent = require('dedent');
 const ora = require('ora');
+const chalk = require('chalk');
 const inquirer = require('inquirer');
 
 const messages = require('../messages');
@@ -125,6 +126,8 @@ async function init() {
     progress.warn(messages.gitNotFound());
   }
 
+  await addToXcodeBuild(cwd);
+
   progress = ora(messages.generatingConfig()).start();
 
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -139,6 +142,124 @@ async function init() {
 
   progress.succeed(messages.generatedConfig());
 }
+
+const sleep = (time: number = 1000) =>
+  new Promise(resolve => setTimeout(resolve, time));
+
+/**
+ * Adds Haul to native iOS build pipeline
+ */
+const addToXcodeBuild = async (cwd: string) => {
+  let entry;
+
+  // Does `ios/*.xcodeproj` exist?
+  const iosPath = path.join(cwd, 'ios');
+  if (fs.existsSync(iosPath)) {
+    const list = fs
+      .readdirSync(path.join(cwd, 'ios'))
+      .filter(file => file.includes('.xcodeproj'));
+
+    // Do nothing if multiple projects were found
+    if (list.length === 1) {
+      entry = path.join(iosPath, list[0]);
+    }
+  }
+
+  // Otherwise, ask for path to a file
+  if (!entry) {
+    const result = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the .xcodeproj file',
+        validate: pathToFile =>
+          fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
+            ? true
+            : `${pathToFile} is not a valid .xcodeproj`,
+      },
+    ]);
+
+    entry = path.resolve(cwd, result.entry);
+  }
+
+  const progress = ora('Adding haul to your Xcode build scripts');
+
+  await sleep();
+
+  let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
+
+  const haulScriptKey = 'AD0CE2C91E925489006FC317';
+
+  // Are we already integrated?
+  if (project.includes(haulScriptKey)) {
+    progress.info('Haul is already part of your build scripts');
+    return;
+  }
+
+  /**
+   * Define Haul integration script in the PBXShellScriptBuildPhase section.
+   * 
+   * This is done by prepending our predefined script phase to the list
+   * of all phases.
+   */
+  project = project.replace(
+    '/* Begin PBXShellScriptBuildPhase section */',
+    dedent`
+      /* Begin PBXShellScriptBuildPhase section */
+      ${haulScriptKey} /* Integrate Haul with React Native */ = {
+        isa = PBXShellScriptBuildPhase;
+        buildActionMask = 2147483647;
+        name = "Integrate Haul with React Native";
+        files = (
+        );
+        inputPaths = (
+        );
+        outputPaths = (
+        );
+        runOnlyForDeploymentPostprocessing = 0;
+        shellPath = /bin/sh;
+        shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
+      };`,
+  );
+
+  /**
+   * Add Haul integration to build phases that already contain `react-native-xcode.sh`
+   * 
+   * We are typically trying to match the following:
+   * 
+   * ```
+   *   buildPhases = (
+   *     13B07F871A680F5B00A75B9A \/* Sources *\/,
+   *     13B07F8C1A680F5B00A75B9A \/* Frameworks *\/,
+   *     13B07F8E1A680F5B00A75B9A \/* Resources *\/,
+   *     00DD1BFF1BD5951E006B06BC \/* Bundle React Native code and images *\/,
+   *   );
+   * ```
+   *
+   * and prepend our build phase to the beginning.
+   */
+  let sectionsCount = 0;
+  project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
+    if (!match.includes('React Native')) return match;
+    sectionsCount++;
+    return match.replace(
+      'buildPhases = (',
+      dedent`
+        buildPhases = (
+          ${haulScriptKey} /* Integrate Haul with React Native */,
+        `,
+    );
+  });
+
+  if (sectionsCount === 0) {
+    fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
+    progress.succeed('Added haul to your Xcode build scripts');
+  } else {
+    progress.fail(
+      `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey('https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode')} for manual instructions`,
+    );
+  }
+};
 
 module.exports = {
   name: 'init',
