@@ -190,7 +190,7 @@ const addToXcodeBuild = async (cwd: string) => {
 
   project = project.replace(
     /export NODE_BINARY=node\\n\.\.\/node_modules\/react-native\/packager\/react-native-xcode\.sh/g,
-    '../node_modules/haul/bin/xcode.sh',
+    '../node_modules/haul/vendor/react-native-xcode.sh',
   );
 
   fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
