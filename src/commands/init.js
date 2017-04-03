@@ -146,8 +146,7 @@ const sleep = (time: number = 1000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
 /**
- * Adds Haul to native iOS build pipeline by:
- * 1) replacing all calls to `react-native-xcode.sh` with Haul own run script
+ * Adds Haul to native iOS build pipeline
  */
 const addToXcodeBuild = async (cwd: string) => {
   let entry;
@@ -188,10 +187,13 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
+  // Vendor `react-native-xcode.sh` for backwards compatibility
   project = project.replace(
-    /\.\.\/node_modules\/react-native\/packager\/react-native-xcode\.sh/g,
-    '../node_modules/haul/vendor/react-native-xcode.sh',
+    /buildSettings = {/g,
+    'buildSettings = {\n CLI_PATH = ./node_modules/haul/bin/cli.js;',
   );
+
+  // Set environmental variables
 
   fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
 
