@@ -220,21 +220,21 @@ const addToXcodeBuild = async (cwd: string) => {
   );
 
   /**
-  * Add Haul integration to build phases that already contain `react-native-xcode.sh`
-  * 
-  * We are typically trying to match the following:
-  * 
-  * ```
-  *   buildPhases = (
-  *     13B07F871A680F5B00A75B9A \/* Sources *\/,
-  *     13B07F8C1A680F5B00A75B9A \/* Frameworks *\/,
-  *     13B07F8E1A680F5B00A75B9A \/* Resources *\/,
-  *     00DD1BFF1BD5951E006B06BC \/* Bundle React Native code and images *\/,
-  *   );
-  * ```
-  *
-  * and prepend our build phase to the beginning.
-  */
+   * Add Haul integration to build phases that already contain `react-native-xcode.sh`
+   * 
+   * We are typically trying to match the following:
+   * 
+   * ```
+   *   buildPhases = (
+   *     13B07F871A680F5B00A75B9A \/* Sources *\/,
+   *     13B07F8C1A680F5B00A75B9A \/* Frameworks *\/,
+   *     13B07F8E1A680F5B00A75B9A \/* Resources *\/,
+   *     00DD1BFF1BD5951E006B06BC \/* Bundle React Native code and images *\/,
+   *   );
+   * ```
+   *
+   * and prepend our build phase to the beginning.
+   */
   let sectionsCount = 0;
   project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
     if (!match.includes('React Native')) return match;
