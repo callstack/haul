@@ -215,7 +215,7 @@ const addToXcodeBuild = async (cwd: string) => {
         );
         runOnlyForDeploymentPostprocessing = 0;
         shellPath = /bin/sh;
-        shellScript = "bash ../node_modules/haul/vendor/packager/haul-integrate.sh";
+        shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
       };`,
   );
 
