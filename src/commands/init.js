@@ -181,15 +181,17 @@ const addToXcodeBuild = async (cwd: string) => {
     entry = path.resolve(cwd, result.entry);
   }
 
-  const progress = ora('Adding haul to your native build pipeline');
+  const progress = ora('Adding haul to your Xcode build scripts');
 
   await sleep();
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
+  const haulScriptKey = 'AD0CE2C91E925489006FC317';
+
   // Are we already integrated?
-  if (project.includes('AD0CE2C91E925489006FC317')) {
-    progress.info('Haul is already part of your build pipeline');
+  if (project.includes(haulScriptKey)) {
+    progress.info('Haul is already part of your build scripts');
     return;
   }
 
@@ -203,7 +205,7 @@ const addToXcodeBuild = async (cwd: string) => {
     '/* Begin PBXShellScriptBuildPhase section */',
     dedent`
       /* Begin PBXShellScriptBuildPhase section */
-      AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */ = {
+      ${haulScriptKey} /* Integrate Haul with React Native */ = {
         isa = PBXShellScriptBuildPhase;
         buildActionMask = 2147483647;
         name = "Integrate Haul with React Native";
@@ -243,17 +245,17 @@ const addToXcodeBuild = async (cwd: string) => {
       'buildPhases = (',
       dedent`
         buildPhases = (
-          AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */,
+          ${haulScriptKey} /* Integrate Haul with React Native */,
         `,
     );
   });
 
   if (sectionsCount > 0) {
     fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
-    progress.succeed('Added haul to your native build pipeline');
+    progress.succeed('Added haul to your Xcode build scripts');
   } else {
     progress.fail(
-      'Failed to add Haul to your build pipeline. See docs for manual instructions.',
+      'Failed to add Haul to your Xcode build scripts. See docs for manual instructions.',
     );
   }
 };
