@@ -170,7 +170,7 @@ const addToXcodeBuild = async (cwd: string) => {
       {
         type: 'input',
         name: 'entry',
-        message: 'Enter the name of the .xcodeproj file',
+        message: 'Enter path to the .xcodeproj file',
         validate: pathToFile =>
           fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
             ? true
@@ -178,7 +178,7 @@ const addToXcodeBuild = async (cwd: string) => {
       },
     ]);
 
-    entry = path.join(cwd, result.entry);
+    entry = path.resolve(cwd, result.entry);
   }
 
   const progress = ora('Adding haul to your native build pipeline');
