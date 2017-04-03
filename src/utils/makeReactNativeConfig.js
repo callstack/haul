@@ -6,9 +6,11 @@
  *
  * @flow
  */
+
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const path = require('path');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -46,19 +48,36 @@ type WebpackConfigFactory =
 const getDefaultConfig = (
   { platform, root, dev, minify, bundle },
 ): WebpackConfig => ({
-  // Default polyfills and entry-point setup
   context: root,
-  entry: [require.resolve('./polyfillEnvironment.js')],
-  devtool: 'source-map',
+  entry: [
+    /**
+     * Polyfills we include for latest JS features
+     * It is also needed to setup the required environment
+     */
+    require.resolve('./polyfillEnvironment.js'),
+  ],
+  /**
+   * `eval-source-map` will have a fast rebuild speed
+   * and provide column mappings
+   */
+  devtool: dev ? 'eval-source-map' : 'source-map',
   output: {
     path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
   },
-  // Built-in loaders
   module: {
     rules: [
+      /**
+       * This is a non-standard feature
+       * And, it won't work coz we don't have DOM
+       */
+      { parser: { requireEnsure: false } },
       {
         test: /\.js$/,
+        /**
+         * The React Native ecosystem publishes untranspiled modules
+         * We transpile modules prefixed with react for compatibility
+         */
         exclude: /node_modules\/(?!react|@expo|haul)/,
         use: {
           loader: require.resolve('happypack/loader'),
@@ -68,19 +87,31 @@ const getDefaultConfig = (
       {
         test: AssetResolver.test,
         use: {
+          /**
+           * Asset loader enables asset management based on image scale
+           * This needs the AssetResolver plugin in resolver.plugins to work
+           */
           loader: require.resolve('../loaders/assetLoader'),
           query: { platform, root, bundle },
         },
       },
     ],
   },
-  // Default plugins
   plugins: [
+    /**
+     * MacOS has a case insensitive filesystem
+     * This is needed so we can error on incorrect case
+     */
+    new CaseSensitivePathsPlugin(),
     new ProgressBarPlugin({
       format: `[:bar] :percent`,
       summary: false,
     }),
     new webpack.DefinePlugin({
+      /**
+       * Various libraries like React rely on `process.env.NODE_ENV`
+       * to distinguish between production and development
+       */
       'process.env': { NODE_ENV: dev ? '"development"' : '"production"' },
       __DEV__: dev,
     }),
@@ -89,19 +120,30 @@ const getDefaultConfig = (
       debug: dev,
     }),
     new webpack.NamedModulesPlugin(),
-    // The default configuration only generates sourcemap with *.js
+    /**
+     * By default, sourcemaps are only generated with *.js files
+     * We need to use the plugin to configure *.bundle to emit sourcemap
+     */
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js|css|bundle)($|\?)/i,
       filename: '[file].map',
     }),
-    // Use HappyPack to speed up Babel build times
-    // significantly
+    /**
+     * HappyPack runs transforms in parallel to improve build performance
+     */
     new HappyPack({
       id: 'babel',
       loaders: [
         {
           path: require.resolve('babel-loader'),
-          query: getBabelConfig(root),
+          query: Object.assign({}, getBabelConfig(root), {
+            /**
+             * This enables caching results in ./node_modules/.cache/babel-loader/
+             * to improve the rebuild speeds
+             * This is a feature of `babel-loader` and not babel
+             */
+            cacheDirectory: dev,
+          }),
         },
       ],
       verbose: false,
@@ -110,25 +152,48 @@ const getDefaultConfig = (
     minify
       ? [
           new webpack.optimize.UglifyJsPlugin({
+            /**
+             * By default, uglify only minifies *.js files
+             * We need to use the plugin to configutr *.bundle to get minified
+             * Also disable IE8 support as we don't need it'
+             */
             test: /\.(js|bundle)($|\?)/i,
             sourceMap: true,
             compress: {
               screw_ie8: true,
               warnings: false,
             },
+            mangle: {
+              screw_ie8: true,
+            },
+            output: {
+              comments: false,
+              screw_ie8: true,
+            },
           }),
         ]
       : [],
   ),
-  // Default resolve
   resolve: {
     plugins: [
+      /**
+       * React Native uses a module system called Haste
+       * We don't support it, but need to provide a compatibility layer
+       */
       new HasteResolver({
         directories: [path.resolve(root, 'node_modules/react-native')],
       }),
+      /**
+       * This is required by asset loader to resolve extra scales
+       * It will resolve assets like image@1x.png when image.png is not present
+       */
       new AssetResolver({ platform }),
     ],
-    mainFields: ['browser', 'main'],
+    /**
+     * Match what React Native packager supports
+     * First entry takes precendece
+     */
+    mainFields: ['react-native', 'browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
 });
