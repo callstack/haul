@@ -187,13 +187,18 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
-  // If xcode-project already contains our uuid
+  // Are we already integrated?
   if (project.includes('AD0CE2C91E925489006FC317')) {
     progress.info(messages.alreadyAddedToBuildPipeline());
     return;
   }
 
-  // Define Haul build phase
+  /**
+   * Define Haul integration script in the PBXShellScriptBuildPhase section.
+   * 
+   * This is done by prepending our predefined script phase to the list
+   * of all phases.
+   */
   project = project.replace(
     '/* Begin PBXShellScriptBuildPhase section */',
     dedent`
@@ -201,6 +206,7 @@ const addToXcodeBuild = async (cwd: string) => {
       AD0CE2C91E925489006FC317 /* Integrate Haul with React Native */ = {
         isa = PBXShellScriptBuildPhase;
         buildActionMask = 2147483647;
+        name = "Integrate Haul with React Native";
         files = (
         );
         inputPaths = (
@@ -213,7 +219,22 @@ const addToXcodeBuild = async (cwd: string) => {
       };`,
   );
 
-  // Add run script to phases that already contain `react-native-xcode.sh`
+  /**
+  * Add Haul integration to build phases that already contain `react-native-xcode.sh`
+  * 
+  * We are typically trying to match the following:
+  * 
+  * ```
+  *   buildPhases = (
+  *     13B07F871A680F5B00A75B9A \/* Sources *\/,
+  *     13B07F8C1A680F5B00A75B9A \/* Frameworks *\/,
+  *     13B07F8E1A680F5B00A75B9A \/* Resources *\/,
+  *     00DD1BFF1BD5951E006B06BC \/* Bundle React Native code and images *\/,
+  *   );
+  * ```
+  *
+  * and prepend our build phase to the beginning.
+  */
   project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
     if (!match.includes('React Native')) return match;
     return match.replace(
