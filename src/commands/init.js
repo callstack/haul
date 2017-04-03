@@ -125,7 +125,7 @@ async function init() {
     progress.warn(messages.gitNotFound());
   }
 
-  await addHaulToiOSBuild(cwd);
+  await addToXcodeBuild(cwd);
 
   progress = ora(messages.generatingConfig()).start();
 
@@ -145,8 +145,11 @@ async function init() {
 const sleep = (time: number = 1000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-// Adds Haul to iOS build pipeline
-const addHaulToiOSBuild = async (cwd: string) => {
+/**
+ * Adds Haul to native iOS build pipeline by:
+ * 1) replacing all calls to `react-native-xcode.sh` with Haul own run script
+ */
+const addToXcodeBuild = async (cwd: string) => {
   let entry;
 
   // Does `ios/*.xcodeproj` exist?
