@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Bundles React Native code and image for offline use.
+# Bundles React Native code and images for offline use.
 #
 # This script is supposed to be called as a part of Xcode build process
 # and relies on its environment variables.
