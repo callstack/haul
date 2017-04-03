@@ -187,7 +187,6 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
-  // Vendor `react-native-xcode.sh` for backwards compatibility
   project = project.replace(
     /buildSettings = {/g,
     'buildSettings = {\n CLI_PATH = ./node_modules/haul/bin/cli.js;',
