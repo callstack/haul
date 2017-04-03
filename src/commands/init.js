@@ -187,7 +187,13 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
-  // 1. Define buildPhase
+  // If xcode-project already contains our uuid
+  if (project.includes('AD0CE2C91E925489006FC317')) {
+    progress.info(messages.alreadyAddedToBuildPipeline());
+    return;
+  }
+
+  // Define Haul build phase
   project = project.replace(
     '/* Begin PBXShellScriptBuildPhase section */',
     dedent`
@@ -207,11 +213,9 @@ const addToXcodeBuild = async (cwd: string) => {
       };`,
   );
 
-  // 2. Add build phase to React Native targets
+  // Add run script to phases that already contain `react-native-xcode.sh`
   project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
-    if (!match.includes('React Native')) {
-      return match;
-    }
+    if (!match.includes('React Native')) return match;
     return match.replace(
       'buildPhases = (',
       dedent`

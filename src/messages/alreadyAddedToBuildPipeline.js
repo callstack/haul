@@ -5,4 +5,4 @@
  * @flow
  */
 
-module.exports = () => `Adding haul to your native build pipeline`;
+module.exports = () => `Haul is already part of your build pipeline`;
