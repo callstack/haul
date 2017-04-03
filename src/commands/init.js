@@ -235,8 +235,10 @@ const addToXcodeBuild = async (cwd: string) => {
   *
   * and prepend our build phase to the beginning.
   */
+  let sectionsCount = 0;
   project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
     if (!match.includes('React Native')) return match;
+    sectionsCount++;
     return match.replace(
       'buildPhases = (',
       dedent`
@@ -246,9 +248,12 @@ const addToXcodeBuild = async (cwd: string) => {
     );
   });
 
-  fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
-
-  progress.succeed(messages.addedToBuildPipeline());
+  if (sectionsCount > 0) {
+    fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
+    progress.succeed(messages.addedToBuildPipeline());
+  } else {
+    progress.fail(messages.failedToAddToBuildPipeline());
+  }
 };
 
 module.exports = {

@@ -9,6 +9,7 @@ module.exports = {
   addingToBuildPipeline: require('./addingToBuildPipeline'),
   alreadyAddedToBuildPipeline: require('./alreadyAddedToBuildPipeline'),
   addedToBuildPipeline: require('./addedToBuildPipeline'),
+  failedToAddToBuildPipeline: require('./failedToAddToBuildPipeline'),
   webpackConfigNotFound: require('./webpackConfigNotFound'),
   initialStartInformation: require('./initialStartInformation'),
   initialBundleInformation: require('./initialBundleInformation'),
