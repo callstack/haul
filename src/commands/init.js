@@ -170,7 +170,7 @@ const addToXcodeBuild = async (cwd: string) => {
       {
         type: 'input',
         name: 'entry',
-        message: messages.enterXcodeProjectFileName(),
+        message: 'Enter the name of the .xcodeproj file',
         validate: pathToFile =>
           fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
             ? true
@@ -181,7 +181,7 @@ const addToXcodeBuild = async (cwd: string) => {
     entry = path.join(cwd, result.entry);
   }
 
-  const progress = ora(messages.addingToBuildPipeline());
+  const progress = ora('Adding haul to your native build pipeline');
 
   await sleep();
 
@@ -189,7 +189,7 @@ const addToXcodeBuild = async (cwd: string) => {
 
   // Are we already integrated?
   if (project.includes('AD0CE2C91E925489006FC317')) {
-    progress.info(messages.alreadyAddedToBuildPipeline());
+    progress.info('Haul is already part of your build pipeline');
     return;
   }
 
@@ -250,9 +250,11 @@ const addToXcodeBuild = async (cwd: string) => {
 
   if (sectionsCount > 0) {
     fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
-    progress.succeed(messages.addedToBuildPipeline());
+    progress.succeed('Added haul to your native build pipeline');
   } else {
-    progress.fail(messages.failedToAddToBuildPipeline());
+    progress.fail(
+      'Failed to add Haul to your build pipeline. See docs for manual instructions.',
+    );
   }
 };
 
