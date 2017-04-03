@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-#
-# React Native adds few scripts into Xcode build phase. Some of them
-# are defined internally inside React.xcodeproj which makes it impossible
-# to receive environmental variables set.
 
 THIS_DIR=$(dirname $0)
 
