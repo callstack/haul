@@ -174,7 +174,7 @@ const addToXcodeBuild = async (cwd: string) => {
         validate: pathToFile =>
           fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
             ? true
-            : messages.xcodeProjectNotFound(pathToFile),
+            : `${pathToFile} is not a valid .xcodeproj`,
       },
     ]);
 
