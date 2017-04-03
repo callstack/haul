@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const dedent = require('dedent');
 const ora = require('ora');
+const chalk = require('chalk');
 const inquirer = require('inquirer');
 
 const messages = require('../messages');
@@ -250,12 +251,12 @@ const addToXcodeBuild = async (cwd: string) => {
     );
   });
 
-  if (sectionsCount > 0) {
+  if (sectionsCount === 0) {
     fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
     progress.succeed('Added haul to your Xcode build scripts');
   } else {
     progress.fail(
-      'Failed to add Haul to your Xcode build scripts. See docs for manual instructions.',
+      `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey('https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode')} for manual instructions`,
     );
   }
 };
