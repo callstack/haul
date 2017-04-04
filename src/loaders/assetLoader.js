@@ -11,6 +11,12 @@ const path = require('path');
 const hasha = require('hasha');
 const escapeStringRegexp = require('escape-string-regexp');
 
+type Config = {
+  platform: string,
+  bundle?: boolean,
+  root: string,
+};
+
 module.exports = async function assetLoader() {
   this.cacheable();
 
@@ -18,7 +24,7 @@ module.exports = async function assetLoader() {
 
   const query = utils.getOptions(this) || {};
   const options = this.options[query.config] || {};
-  const config = Object.assign({}, options, query);
+  const config: Config = Object.assign({}, options, query);
 
   const filepath = this.resourcePath;
   const info = size(filepath);
