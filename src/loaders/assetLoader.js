@@ -25,10 +25,14 @@ module.exports = async function assetLoader() {
   const dirname = path.dirname(filepath);
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
-  const url = path.relative(query.root, dirname);
-  const longname = `${`${url.replace(/\//g, '_')}_${filename}`
-    .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
+
+  // When building for `all` platforms in dev mode (query.bundle == false)
+  // we need to make assets platform-specific, otherwise they overwrite
+  // each other
+  const url = path.relative(
+    query.root,
+    path.join(dirname, query.bundle ? '' : query.platform),
+  );
 
   const regex = new RegExp(`^${escapeStringRegexp(filename)}${suffix}`);
 
@@ -111,18 +115,20 @@ module.exports = async function assetLoader() {
                   throw new Error(`Unknown scale ${scale} for ${filepath}`);
               }
 
+              const longname = `${`${url.replace(/\//g, '_')}_${filename}`
+                .toLowerCase()
+                .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
+
               dest = path.join(dest, longname);
             } else {
               const name = `${filename}${scale === '@1x' ? '' : scale}.${info.type}`;
-              dest = path.join('assets', url, name);
+              dest = path.join(url, name);
             }
 
-            if (config.outputPath) {
-              // support functions as outputPath to generate them dynamically
-              dest = typeof config.outputPath === 'function'
-                ? config.outputPath(dest)
-                : path.join(config.outputPath, dest);
-            }
+            // support functions as outputPath to generate them dynamically
+            dest = typeof config.outputPath === 'function'
+              ? config.outputPath(dest)
+              : path.join(config.outputPath || '', dest);
 
             this.emitFile(dest, res);
 
@@ -132,16 +138,12 @@ module.exports = async function assetLoader() {
     }),
   );
 
-  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/assets', url))}`;
-
-  if (config.publicPath) {
+  const publicPath = JSON.stringify(
     // support functions as publicPath to generate them dynamically
-    publicPath = JSON.stringify(
-      typeof config.publicPath === 'function'
-        ? config.publicPath(url)
-        : path.join(config.publicPath, url),
-    );
-  }
+    typeof config.publicPath === 'function'
+      ? config.publicPath(url)
+      : path.join(config.publicPath || '', url),
+  );
 
   callback(
     null,
