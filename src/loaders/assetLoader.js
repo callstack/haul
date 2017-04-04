@@ -23,9 +23,10 @@ module.exports = async function assetLoader() {
   const filepath = this.resourcePath;
   const info = size(filepath);
   const dirname = path.dirname(filepath);
-  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${query.platform}|native))?\\.${info.type}$`;
+  const url = path.relative(config.root, dirname);
+  const assets = path.join('assets', config.bundle ? '' : config.platform);
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${info.type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
-  const url = path.relative(query.root, dirname);
   const longname = `${`${url.replace(/\//g, '_')}_${filename}`
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
@@ -52,7 +53,7 @@ module.exports = async function assetLoader() {
 
         if (acc[scale]) {
           // platform takes highest prio, so if it exists, don't do anything
-          if (acc[scale].platform === query.platform) {
+          if (acc[scale].platform === config.platform) {
             return acc;
           }
 
@@ -87,7 +88,7 @@ module.exports = async function assetLoader() {
           } else {
             let dest;
 
-            if (query.bundle && query.platform === 'android') {
+            if (config.bundle && config.platform === 'android') {
               switch (scale) {
                 case '@0.75x':
                   dest = 'drawable-ldpi';
@@ -114,7 +115,7 @@ module.exports = async function assetLoader() {
               dest = path.join(dest, longname);
             } else {
               const name = `${filename}${scale === '@1x' ? '' : scale}.${info.type}`;
-              dest = path.join('assets', url, name);
+              dest = path.join(assets, url, name);
             }
 
             if (config.outputPath) {
@@ -132,7 +133,7 @@ module.exports = async function assetLoader() {
     }),
   );
 
-  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/assets', url))}`;
+  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join(assets, url))}`;
 
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
@@ -149,7 +150,7 @@ module.exports = async function assetLoader() {
     var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,
-      fileSystemLocation: ${JSON.stringify(query.bundle ? null : path.dirname(this.resourcePath))},
+      fileSystemLocation: ${JSON.stringify(config.bundle ? null : dirname)},
       httpServerLocation: ${publicPath},
       name: ${JSON.stringify(filename)},
       width: ${info.width},
