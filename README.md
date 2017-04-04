@@ -6,6 +6,10 @@
   A command line tool for developing React Native apps
 </p>
 
+<p align="center">
+<a href="https://circleci.com/gh/callstack-io/haul">  
+  <img src="https://circleci.com/gh/callstack-io/haul.svg?style=svg&circle-token=ac39ec56260bd185ed1b5011dab721e35d49557c" /></a>
+</p>
 ---
 
 Haul is a drop-in replacement for `react-native` CLI built on open tools like Webpack. It can act as a development server or bundle your React Native app for production.
