@@ -15,6 +15,8 @@ type Config = {
   platform: string,
   bundle?: boolean,
   root: string,
+  outputPath?: string | ((path: string) => string),
+  publicPath?: string | ((path: string) => string),
 };
 
 module.exports = async function assetLoader() {
