@@ -62,7 +62,7 @@ function createServer(
     .use(symbolicateMiddleware(compiler))
     .use(loggerMiddleware)
     .use(webpackMiddleware)
-    .use(missingBundleMiddleware(compiler));
+    .use(missingBundleMiddleware);
 
   // Handle callbacks
   let didHaveIssues = false;
