@@ -127,6 +127,7 @@ async function init() {
   }
 
   await addToXcodeBuild(cwd);
+  await addToPackageScripts(cwd);
 
   progress = ora(messages.generatingConfig()).start();
 
@@ -145,6 +146,66 @@ async function init() {
 
 const sleep = (time: number = 1000) =>
   new Promise(resolve => setTimeout(resolve, time));
+
+const getRunScript = scriptName => {
+  const runCommand = scriptName === 'start' ? 'yarn' : 'yarn run';
+  return `${runCommand} ${scriptName}`;
+};
+
+/**
+ * Adds Haul to package.json scripts
+ */
+const addToPackageScripts = async (cwd: string) => {
+  const pjson = JSON.parse(
+    fs.readFileSync(path.join(cwd, 'package.json')).toString(),
+  );
+
+  const scripts = pjson.scripts || {};
+
+  const haulScript = Object.keys(scripts).find(name =>
+    scripts[name].includes('haul'));
+
+  if (haulScript) {
+    ora().info(
+      `Haul is already in your package's scripts. You can start it by running '${getRunScript(haulScript)}'`,
+    );
+    return;
+  }
+
+  let scriptName = 'start';
+
+  if (
+    scripts.start &&
+    scripts.start !== 'node ./node_modules/react-native/local-cli/cli.js start'
+  ) {
+    const result = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'scriptName',
+        message: 'Enter name of script to add to package.json',
+        default: scriptName,
+      },
+    ]);
+
+    scriptName = result.scriptName;
+  }
+
+  pjson.scripts = Object.assign({}, scripts, {
+    [scriptName]: 'haul start',
+  });
+
+  const progress = ora(
+    `Adding \`${scriptName}\` script to your package.json`,
+  ).start();
+
+  await sleep();
+
+  fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(pjson));
+
+  progress.succeed(
+    `You can now start Haul by running '${getRunScript(haulScript)}'`,
+  );
+};
 
 /**
  * Adds Haul to native iOS build pipeline
