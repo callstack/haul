@@ -48,7 +48,6 @@
     "loader-utils": "^1.1.0",
     "minimist": "^1.2.0",
     "morgan": "^1.8.1",
-    "node-emoji": "^1.5.1",
     "opn": "^4.0.2",
     "ora": "^1.2.0",
     "progress-bar-webpack-plugin": "^1.9.3",

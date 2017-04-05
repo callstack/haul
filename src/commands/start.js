@@ -101,7 +101,7 @@ async function start(opts: *) {
     }
   }
 
-  app.listen(opts.port, '127.0.0.1', () => {
+  app.listen(opts.port, () => {
     logger.info(
       messages.initialStartInformation({
         entries: Array.isArray(config)

@@ -5,14 +5,16 @@
  * @flow
  */
 const morgan = require('morgan');
-const chalk = require('chalk');
+const logger = require('../../logger');
 
 module.exports = morgan((tokens, req, res) => {
-  return [
-    chalk.cyan(tokens.method(req, res)),
-    chalk.grey(req.path),
-    chalk.grey(tokens.status(req, res)),
-    chalk.grey(tokens.res(req, res, 'content-length'), '-'),
-    chalk.grey(tokens['response-time'](req, res), 'ms'),
-  ].join(' ');
+  return logger.debug(
+    tokens.method(req, res),
+    req.path,
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'),
+    '-',
+    tokens['response-time'](req, res),
+    'ms',
+  );
 });

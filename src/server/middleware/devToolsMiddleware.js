@@ -64,7 +64,7 @@ function devToolsMiddleware(debuggerProxy) {
        */
       case '/launch-js-devtools': {
         if (!debuggerProxy.isDebuggerConnected()) {
-          launchChrome(`http://${req.get('host')}/debugger-ui`);
+          launchChrome(`http://localhost:${req.socket.localPort}/debugger-ui`);
         }
         res.end('OK');
         break;
