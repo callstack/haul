@@ -18,22 +18,26 @@ const systraceMiddleware: Middleware = (req: $Request, res, next) => {
 
   const path = `/tmp/react_native_${Date.now()}.json`;
 
-  // $FlowFixMe: rawBodyMiddleware adds `rawBody` to all requests
-  fs.writeFileSync(path, req.rawBody);
+  fs.writeFile(path, req.rawBody, err => {
+    if (err) {
+      next(err);
+      return;
+    }
 
-  logger.debug('Systrace', `/tmp/react_native_${Date.now()}.json`);
+    logger.debug('Systrace', `/tmp/react_native_${Date.now()}.json`);
 
-  res.end(
-    dedent`
-    Your trace report was saved at ${path}.
-    
-    You can open it with Google Chrome by navigating to 'chrome://tracing'
-    and clicking 'load'.
+    res.end(
+      dedent`
+      Your trace report was saved at ${path}.
+      
+      You can open it with Google Chrome by navigating to 'chrome://tracing'
+      and clicking 'load'.
 
-    The path to the report was printed by Haul in your Terminal so you can
-    copy it.
-  `,
-  );
+      The path to the report was printed by Haul in your Terminal so you can
+      copy it.
+    `,
+    );
+  });
 };
 
 module.exports = systraceMiddleware;
