@@ -147,7 +147,7 @@ async function init() {
 const sleep = (time: number = 1000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-const getRunScript = scriptName => {
+const getRunScript = (scriptName: string) => {
   const runCommand = scriptName === 'start' ? 'yarn' : 'yarn run';
   return `${runCommand} ${scriptName}`;
 };
@@ -203,7 +203,7 @@ const addToPackageScripts = async (cwd: string) => {
   fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(pjson));
 
   progress.succeed(
-    `You can now start Haul by running '${getRunScript(haulScript)}'`,
+    `You can now start Haul by running '${getRunScript(scriptName)}'`,
   );
 };
 
