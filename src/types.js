@@ -43,5 +43,4 @@ export type Logger = {
   error: LoggerPrint,
   done: LoggerPrint,
   debug: LoggerPrint,
-  log: LoggerPrint,
 };

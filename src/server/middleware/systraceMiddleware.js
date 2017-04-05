@@ -11,8 +11,13 @@ const dedent = require('dedent');
 const logger = require('../../logger');
 const chalk = require('chalk');
 
+const howToOpenReport = dedent`
+  You can open the trace report in Google Chrome by navigating to
+  'chrome://tracing' and clicking 'load'.
+`;
+
 const systraceMiddleware: Middleware = (req: $Request, res, next) => {
-  const path = `/tmp/react_native_${Date.now()}.json`;
+  const path = `/tmp/haul_${Date.now()}.json`;
 
   fs.writeFile(path, req.rawBody, err => {
     if (err) {
@@ -20,18 +25,21 @@ const systraceMiddleware: Middleware = (req: $Request, res, next) => {
       return;
     }
 
-    const message = dedent`
+    logger.info(
+      dedent`
       We've saved the trace report at ${chalk.bold(path)}
       
-      You can open the following trace report in Google Chrome by navigating to
-      'chrome://tracing' and clicking 'load'.
-    `;
+      ${howToOpenReport} \n
+    `,
+    );
 
-    logger.log('\n');
-    logger.info(message);
-    logger.log('\n');
+    res.end(
+      dedent`
+      We've saved the trace report at ${path}
 
-    res.end(message);
+      ${howToOpenReport}
+    `,
+    );
   });
 };
 
