@@ -20,9 +20,9 @@ function missingBundleMiddleware(compiler) {
         dedent`
         Bundle couldn't be loaded.
 
-        Check the following:
-        1) Haul is running with '--platform all' or '--platform ${platform}' flag
-        2) Check the Terminal window where Haul is running for any errors
+        Try the following to fix the issue:
+        - Ensure that Haul is running with --platform all or --platform ${platform}
+        - Ensure that bundle has compiled successfuly by checking terminal window where Haul is running
       `,
       );
       return;
