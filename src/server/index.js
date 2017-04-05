@@ -22,6 +22,7 @@ const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
+const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
@@ -60,7 +61,8 @@ function createServer(
     .use(statusPageMiddleware)
     .use(symbolicateMiddleware(compiler))
     .use(loggerMiddleware)
-    .use(webpackMiddleware);
+    .use(webpackMiddleware)
+    .use(missingBundleMiddleware(compiler));
 
   // Handle callbacks
   let didHaveIssues = false;
