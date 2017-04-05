@@ -19,6 +19,7 @@ const howToOpenReport = dedent`
 const systraceMiddleware: Middleware = (req: $Request, res, next) => {
   const path = `/tmp/haul_${Date.now()}.json`;
 
+  // $FlowFixMe: `req.rawBody` is added by rawBodyMiddleware
   fs.writeFile(path, req.rawBody, err => {
     if (err) {
       next(err);
