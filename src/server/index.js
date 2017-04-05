@@ -62,7 +62,7 @@ function createServer(
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
     .use(symbolicateMiddleware(compiler))
-    .use(systraceMiddleware)
+    .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
     .use(webpackMiddleware);
 

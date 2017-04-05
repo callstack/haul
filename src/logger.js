@@ -14,6 +14,7 @@ const logger: Logger = {
     console.log(chalk.black.bgYellow(' WARN '), ...args),
   error: (...args: any[]) => console.log(chalk.black.bgRed(' ERROR '), ...args),
   done: (...args: any[]) => console.log(chalk.black.bgGreen(' DONE '), ...args),
+  log: console.log,
   debug: (prefix: string, ...args: any[]) =>
     console.log(
       chalk.cyan(prefix.toUpperCase()),
