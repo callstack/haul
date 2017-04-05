@@ -167,7 +167,7 @@ const addToPackageScripts = async (cwd: string) => {
 
   if (haulScript) {
     ora().info(
-      `Haul is already in your package's scripts. You can start it by running '${getRunScript(haulScript)}'`,
+      `Haul already exists in your package.json. Start Haul by running ${getRunScript(haulScript)}'`,
     );
     return;
   }
@@ -182,7 +182,7 @@ const addToPackageScripts = async (cwd: string) => {
       {
         type: 'input',
         name: 'scriptName',
-        message: 'Enter name of script to add to package.json',
+        message: 'Enter the name of the script to add to package.json',
         default: scriptName,
       },
     ]);
