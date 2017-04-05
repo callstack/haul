@@ -16,6 +16,7 @@
  *   the source map that is tucked away inside webpack's in-memory filesystem.
  *
  */
+import type { $Request, Middleware } from 'express';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
@@ -76,7 +77,11 @@ function createSourceMapConsumer(compiler: *) {
 /**
  * Gets the stack frames that React Native wants us to convert.
  */
-function getRequestedFrames(req: *): ?ReactNativeStack {
+function getRequestedFrames(req: $Request): ?ReactNativeStack {
+  if (typeof req.body !== 'string') {
+    return null;
+  }
+
   try {
     const payload: ReactNativeSymbolicateRequest = JSON.parse(req.body);
     return payload.stack;
@@ -89,11 +94,11 @@ function getRequestedFrames(req: *): ?ReactNativeStack {
 /**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(compiler: *): Function {
+function create(compiler: *): Middleware {
   /**
    * The Express middleware for symbolicatin'.
    */
-  function symbolicateMiddleware(req: *, res: *, next: Function): ?Function {
+  function symbolicateMiddleware(req: $Request, res, next) {
     if (req.path !== '/symbolicate') return next();
 
     // grab our source map consumer

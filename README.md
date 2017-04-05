@@ -63,7 +63,6 @@ Haul uses a completely different architecture from React Native packager, which 
 We are actively working on adding support for the following:
 
 - Existing `react-native` commands 
-- Developer menu -> Start systrace
 
 The following features are **unlikely to be supported** in the future:
 

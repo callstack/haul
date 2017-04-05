@@ -6,7 +6,7 @@
  */
 import type { WebpackStats } from '../types';
 
-const Express = require('express');
+const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
 
@@ -22,6 +22,8 @@ const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
+const systraceMiddleware = require('./middleware/systraceMiddleware');
+const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
@@ -36,7 +38,7 @@ function createServer(
   onInvalid: InvalidCallback,
   onCompile: CompileCallback,
 ) {
-  const appHandler = new Express();
+  const appHandler = express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
     noInfo: true,
@@ -54,11 +56,13 @@ function createServer(
 
   // Middlewares
   appHandler
+    .use(rawBodyMiddleware)
     .use(bodyParser.text())
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
     .use(symbolicateMiddleware(compiler))
+    .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
     .use(webpackMiddleware);
 

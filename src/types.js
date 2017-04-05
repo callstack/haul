@@ -35,14 +35,12 @@ export type WebpackStats = {
   hasErrors: () => boolean,
 };
 
-export type LoggerPrintLogo = (offset?: number, enchance?: Function) => void;
-
 type LoggerPrint = (...args: any[]) => void;
 
 export type Logger = {
-  printLogo: LoggerPrintLogo,
   info: LoggerPrint,
   warn: LoggerPrint,
   error: LoggerPrint,
   done: LoggerPrint,
+  debug: LoggerPrint,
 };
