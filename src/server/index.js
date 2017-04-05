@@ -6,7 +6,7 @@
  */
 import type { WebpackStats } from '../types';
 
-const Express = require('express');
+const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
 
@@ -38,7 +38,7 @@ function createServer(
   onInvalid: InvalidCallback,
   onCompile: CompileCallback,
 ) {
-  const appHandler = new Express();
+  const appHandler = express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
     noInfo: true,
