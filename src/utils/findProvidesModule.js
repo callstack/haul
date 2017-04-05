@@ -20,7 +20,7 @@ const defaultOpts = {
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ['ios', 'android', 'native', 'web'],
+  platforms: ['ios', 'android', 'windows', 'native', 'web'],
 };
 
 /**

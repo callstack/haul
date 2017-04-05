@@ -165,11 +165,15 @@ module.exports = {
       choices: [
         {
           value: 'ios',
-          description: 'Servers iOS bundle',
+          description: 'Serves iOS bundle',
         },
         {
           value: 'android',
           description: 'Serves Android bundle',
+        },
+        {
+          value: 'windows',
+          description: 'Serves Windows bundle',
         },
         {
           value: 'all',

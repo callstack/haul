@@ -13,7 +13,7 @@ type Request = {
 
 type Options = {
   test?: RegExp,
-  platform: 'ios' | 'android',
+  platform: 'ios' | 'android' | 'windows',
 };
 
 function AssetResolver(options: Options) {

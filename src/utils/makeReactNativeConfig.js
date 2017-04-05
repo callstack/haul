@@ -18,7 +18,7 @@ const HasteResolver = require('../resolvers/HasteResolver');
 
 const getBabelConfig = require('./getBabelConfig');
 
-const PLATFORMS = ['ios', 'android'];
+const PLATFORMS = ['ios', 'android', 'windows'];
 
 type ConfigOptions = {
   root: string,
