@@ -11,11 +11,9 @@ function missingBundleMiddleware(req, res, next) {
   if (platform) {
     res.status(500).end(
       dedent`
-      Bundle couldn't be loaded.
+      Couldn't load bundle
 
-      Try the following to fix the issue:
-      - Ensure that Haul is running with --platform all or --platform ${platform}
-      - Ensure that bundle has compiled successfuly by checking terminal window where Haul is running
+      Make sure that Haul is running with --platform all or --platform ${platform}
     `,
     );
     return;
