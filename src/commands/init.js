@@ -162,8 +162,9 @@ const addToPackageScripts = async (cwd: string) => {
 
   const scripts = pjson.scripts || {};
 
-  const haulScript = Object.keys(scripts).find(name =>
-    scripts[name].includes('haul'));
+  const haulScript = Object.keys(scripts).find(
+    name => scripts[name] === 'haul start',
+  );
 
   if (haulScript) {
     ora().info(
@@ -182,8 +183,8 @@ const addToPackageScripts = async (cwd: string) => {
       {
         type: 'input',
         name: 'scriptName',
-        message: 'Enter the name of the script to add to package.json',
-        default: scriptName,
+        message: 'Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`',
+        default: 'haul',
       },
     ]);
 
