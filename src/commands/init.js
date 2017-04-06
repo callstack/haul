@@ -201,7 +201,7 @@ const addToPackageScripts = async (cwd: string) => {
 
   await sleep();
 
-  fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(pjson));
+  fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(pjson, null, 2));
 
   progress.succeed(
     `You can now start Haul by running '${getRunScript(scriptName)}'`,
