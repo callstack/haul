@@ -313,7 +313,7 @@ const addToXcodeBuild = async (cwd: string) => {
     );
   });
 
-  if (sectionsCount === 0) {
+  if (sectionsCount > 0) {
     fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
     progress.succeed('Added haul to your Xcode build scripts');
   } else {
