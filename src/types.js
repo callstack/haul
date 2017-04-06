@@ -15,7 +15,6 @@ export type CommandOption = {
   parse?: (val: string) => mixed,
   default?: mixed | ((opts: { [key: string]: string }) => mixed),
   example?: string,
-  note?: string,
   choices?: Array<{
     value: mixed,
     description: string,

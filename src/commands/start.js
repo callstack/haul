@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const clear = require('clear');
-const chalk = require('chalk');
 
 const logger = require('../logger');
 const createServer = require('../server');
@@ -157,7 +156,6 @@ module.exports = {
       name: 'platform',
       description: 'Platform to bundle for',
       example: 'haul start --platform ios',
-      note: `${chalk.bold('--platform=all')} is similar to how React Native packager works - you can run iOS and Android versions of your app at the same time. It will become the default value in future after we fix the performance issues.`,
       required: true,
       choices: [
         {
