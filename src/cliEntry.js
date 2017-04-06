@@ -53,8 +53,11 @@ const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
 
   if (execPath && scriptName) {
     const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
+    const exec = ['start', 'test'].includes(scriptName)
+      ? `${client} ${scriptName}`
+      : `${client} run ${scriptName} ${command}`;
 
-    return `${client} run ${scriptName} ${command} -- ${list}`;
+    return `${exec} -- ${list}`;
   }
 
   return `haul ${command} ${list}`;
