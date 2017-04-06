@@ -56,7 +56,7 @@ async function validateOptions(options, flags) {
     const missingValue = option.required && typeof value === 'undefined';
     const invalidOption = option.choices &&
       typeof value !== 'undefined' &&
-      typeof option.choices.find(c => c.value === value) !== 'undefined';
+      typeof option.choices.find(c => c.value === value) === 'undefined';
 
     if (missingValue || invalidOption) {
       const message = option.choices ? 'Select' : 'Enter';
