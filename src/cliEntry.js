@@ -53,14 +53,12 @@ async function validateOptions(options, flags) {
 
     let value = flags[option.name] ? parse(flags[option.name]) : defaultValue;
 
-    if (
-      // If value is required but not provided
-      (option.required && typeof value === 'undefined') ||
-      // If value is provided but not matching any of the options
-      (typeof value !== 'undefined' &&
-        option.choices &&
-        typeof option.choices.find(c => c.value === value) !== 'undefined')
-    ) {
+    const missingValue = option.required && typeof value === 'undefined';
+    const invalidOption = option.choices &&
+      typeof value !== 'undefined' &&
+      typeof option.choices.find(c => c.value === value) !== 'undefined';
+
+    if (missingValue || invalidOption) {
       const message = option.choices ? 'Select' : 'Enter';
 
       // eslint-disable-next-line no-await-in-loop
