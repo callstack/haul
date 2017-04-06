@@ -42,25 +42,42 @@ const NOT_SUPPORTED_COMMANDS = [
 ];
 
 const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
-  const list = Object.keys(opts)
-    .map(key => `--${key} ${String(opts[key])}`)
-    .join(' ');
+  const list = Object.keys(opts).map(key => `--${key} ${String(opts[key])}`);
 
   const {
     npm_execpath: execPath,
     npm_lifecycle_event: scriptName,
+    npm_config_argv: npmArgv,
   } = process.env;
 
-  if (execPath && scriptName) {
-    const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
-    const exec = ['start', 'test'].includes(scriptName)
-      ? `${client} ${scriptName}`
-      : `${client} run ${scriptName} ${command}`;
-
-    return `${exec} -- ${list}`;
+  // Haul has been called directly
+  if (!execPath || !scriptName || !npmArgv) {
+    return `haul ${command} ${list.join(' ')}`;
   }
 
-  return `haul ${command} ${list}`;
+  const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
+
+  if (client === 'npm') {
+    const argv = JSON.parse(npmArgv).original;
+
+    return [
+      'npm',
+      ...(argv.includes('--') ? argv.slice(0, argv.indexOf('--')) : argv),
+      '--',
+      ...list,
+    ].join(' ');
+  }
+
+  // Yarn doesn't have `npmArgv` support
+  const lifecycleScript = process.env[`npm_package_scripts_${scriptName}`];
+
+  // If it's `npm script` that already defines command, e.g. "start": "haul start"
+  // then, `yarn run start --` is enough. Otherwise, command has to be set.
+  const exec = lifecycleScript && lifecycleScript.includes(command)
+    ? `yarn run ${scriptName}`
+    : `yarn run ${scriptName} ${command}`;
+
+  return `${exec} -- ${list.join(' ')}`;
 };
 
 async function validateOptions(options, flags) {
