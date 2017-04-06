@@ -121,21 +121,20 @@ module.exports = {
     {
       name: 'port',
       description: 'Port to run your webpack server',
-      default: '8081',
+      default: 8081,
       parse: Number,
     },
     {
       name: 'dev',
       description: 'Whether to build in development mode',
-      default: 'true',
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Builds in development mode',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Builds in production mode',
         },
       ],
@@ -143,15 +142,15 @@ module.exports = {
     {
       name: 'minify',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
-      default: ({ dev }: *) => String(!dev),
+      default: ({ dev }: *) => !dev,
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Enables minification for the bundle',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Disables minification for the bundle',
         },
       ],
@@ -165,7 +164,7 @@ module.exports = {
       choices: [
         {
           value: 'ios',
-          description: 'Servers iOS bundle',
+          description: 'Serves iOS bundle',
         },
         {
           value: 'android',

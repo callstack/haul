@@ -14,7 +14,6 @@ module.exports = {
   bundleFailed: require('./bundleFailed'),
   commandNotImplemented: require('./commandNotImplemented'),
   commandFailed: require('./commandFailed'),
-  invalidOption: require('./invalidOption'),
   haulHelp: require('./haulHelp'),
   haulCommandHelp: require('./haulCommandHelp'),
   commandSuccess: require('./commandSuccess'),

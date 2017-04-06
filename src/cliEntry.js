@@ -9,6 +9,7 @@ import type { Command } from './types';
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const clear = require('clear');
+const inquirer = require('inquirer');
 
 const pjson = require('../package.json');
 const logger = require('./logger');
@@ -38,48 +39,50 @@ const NOT_SUPPORTED_COMMANDS = [
   'dependencies',
 ];
 
-function validateOptions(options, flags, command) {
-  return options.reduce(
-    (acc, option) => {
-      const defaultValue = typeof option.default === 'function'
-        ? option.default(acc)
-        : option.default;
+async function validateOptions(options, flags) {
+  const acc = {};
 
-      let value = flags[option.name] || defaultValue;
+  for (const option of options) {
+    const defaultValue = typeof option.default === 'function'
+      ? option.default(acc)
+      : option.default;
 
-      if (option.required && !value) {
-        throw new MessageError(
-          messages.invalidOption({
-            option,
-            command,
-          }),
-        );
-      }
+    const parse = typeof option.parse === 'function'
+      ? option.parse
+      : val => val;
 
-      if (!value) {
-        return acc;
-      }
+    let value = flags[option.name] ? parse(flags[option.name]) : defaultValue;
 
-      if (option.choices && !option.choices.find(c => c.value === value)) {
-        throw new MessageError(
-          messages.invalidOption({
-            option,
-            value,
-            command,
-          }),
-        );
-      }
+    if (
+      // If value is required but not provided
+      (option.required && !value) ||
+      // If value is provided but not matching any of the options
+      (value && option.choices && !option.choices.find(c => c.value === value))
+    ) {
+      const message = option.choices ? 'Select' : 'Enter';
 
-      if (option.parse) {
-        value = option.parse(value);
-      }
+      // eslint-disable-next-line no-await-in-loop
+      const question = await inquirer.prompt([
+        {
+          type: option.choices ? 'list' : 'input',
+          name: 'answer',
+          message: `${message} ${(option.description || option.name)
+            .toLowerCase()}`,
+          choices: (option.choices || []).map(choice => ({
+            name: `${String(choice.value)} - ${choice.description}`,
+            value: choice.value,
+            short: choice.value,
+          })),
+        },
+      ]);
 
-      return Object.assign({}, acc, {
-        [option.name]: value,
-      });
-    },
-    {},
-  );
+      value = option.choices ? question.answer : parse(question.answer);
+    }
+
+    acc[option.name] = value;
+  }
+
+  return acc;
 }
 
 async function run(args: Array<string>) {
@@ -118,7 +121,7 @@ async function run(args: Array<string>) {
   const displayName = `haul ${command.name}`;
 
   try {
-    await command.action(validateOptions(opts, flags, displayName));
+    await command.action(await validateOptions(opts, flags));
   } catch (error) {
     clear();
     if (error instanceof MessageError) {
