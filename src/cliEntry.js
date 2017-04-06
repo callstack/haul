@@ -148,7 +148,7 @@ async function run(args: Array<string>) {
   const userDefinedOptions = { ...flags, ...promptedOptions };
   const displayName = getDisplayName(command.name, userDefinedOptions);
 
-  if (Object.keys(userDefinedOptions).length) {
+  if (Object.keys(promptedOptions).length) {
     logger.info(`Running ${chalk.cyan(displayName)}`);
   }
 
