@@ -55,9 +55,11 @@ async function validateOptions(options, flags) {
 
     if (
       // If value is required but not provided
-      (option.required && !value) ||
+      (option.required && typeof value === 'undefined') ||
       // If value is provided but not matching any of the options
-      (value && option.choices && !option.choices.find(c => c.value === value))
+      (typeof value !== 'undefined' &&
+        option.choices &&
+        typeof option.choices.find(c => c.value === value) !== 'undefined')
     ) {
       const message = option.choices ? 'Select' : 'Enter';
 
@@ -66,8 +68,7 @@ async function validateOptions(options, flags) {
         {
           type: option.choices ? 'list' : 'input',
           name: 'answer',
-          message: `${message} ${(option.description || option.name)
-            .toLowerCase()}`,
+          message: `${message} ${option.description.toLowerCase()}`,
           choices: (option.choices || []).map(choice => ({
             name: `${String(choice.value)} - ${choice.description}`,
             value: choice.value,
