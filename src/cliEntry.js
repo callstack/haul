@@ -151,7 +151,6 @@ async function run(args: Array<string>) {
 
   try {
     await command.action(options);
-    throw new Error('t');
   } catch (error) {
     clear();
     if (error instanceof MessageError) {
