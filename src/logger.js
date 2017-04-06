@@ -7,22 +7,21 @@
 import type { Logger } from './types';
 
 const chalk = require('chalk');
+const stripAnsi = require('strip-ansi');
 
-let lastChar = '\n';
+let lastChar;
 
 const last = arr => arr[arr.length - 1];
 
 const section = (...args) => {
   if (lastChar !== '\n') {
-    console.log('\n');
+    console.log();
   }
-
   log(...args);
 };
 
 const log = (...args) => {
-  lastChar = last(last(args));
-
+  lastChar = last(stripAnsi(last(args)));
   console.log(...args);
 };
 

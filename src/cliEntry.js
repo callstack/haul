@@ -10,6 +10,8 @@ const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const clear = require('clear');
 const inquirer = require('inquirer');
+const path = require('path');
+const chalk = require('chalk');
 
 const pjson = require('../package.json');
 const logger = require('./logger');
@@ -39,8 +41,24 @@ const NOT_SUPPORTED_COMMANDS = [
   'dependencies',
 ];
 
+const HAUL_COMMAND = (() => {
+  const {
+    npm_execpath: execPath,
+    npm_lifecycle_event: scriptName,
+  } = process.env;
+
+  if (execPath && scriptName) {
+    const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
+
+    return `${client} run ${scriptName} --`;
+  }
+
+  return `haul`;
+})();
+
 async function validateOptions(options, flags) {
   const acc = {};
+  const promptedAcc = {};
 
   for (const option of options) {
     const defaultValue = typeof option.default === 'function'
@@ -76,12 +94,14 @@ async function validateOptions(options, flags) {
       ]);
 
       value = option.choices ? question.answer : parse(question.answer);
+
+      promptedAcc[option.name] = value;
     }
 
     acc[option.name] = value;
   }
 
-  return acc;
+  return { options: acc, promptedOptions: promptedAcc };
 }
 
 async function run(args: Array<string>) {
@@ -111,7 +131,7 @@ async function run(args: Array<string>) {
 
   const opts = command.options || [];
 
-  const flags = camelcaseKeys(
+  const { _, ...flags } = camelcaseKeys(
     minimist(args, {
       string: opts.map(opt => opt.name),
     }),
@@ -120,7 +140,18 @@ async function run(args: Array<string>) {
   const displayName = `haul ${command.name}`;
 
   try {
-    await command.action(await validateOptions(opts, flags));
+    const { options, promptedOptions } = await validateOptions(opts, flags);
+
+    if (Object.keys(promptedOptions).length) {
+      const allOptions = { ...flags, ...promptedOptions };
+      const list = Object.keys(allOptions)
+        .map(key => `--${key} ${String(options[key])}`)
+        .join(' ');
+
+      logger.info(`Running ${chalk.cyan(`${HAUL_COMMAND} ${list}`)}`);
+    }
+
+    await command.action(options);
   } catch (error) {
     clear();
     if (error instanceof MessageError) {

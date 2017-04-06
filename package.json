@@ -54,10 +54,12 @@
     "source-map": "^0.5.6",
     "webpack": "^2.3.1",
     "webpack-dev-middleware": "^1.10.1",
-    "ws": "^2.2.2"
+    "ws": "^2.2.2",
+    "strip-ansi": "^3.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-config-prettier": "^1.5.0",
@@ -91,7 +93,8 @@
       ]
     ],
     "plugins": [
-      "transform-flow-strip-types"
+      "transform-flow-strip-types",
+      "transform-object-rest-spread"
     ]
   },
   "eslintConfig": {
