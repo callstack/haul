@@ -41,7 +41,11 @@ const NOT_SUPPORTED_COMMANDS = [
   'dependencies',
 ];
 
-const HAUL_COMMAND = (() => {
+const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
+  const list = Object.keys(opts)
+    .map(key => `--${key} ${String(opts[key])}`)
+    .join(' ');
+
   const {
     npm_execpath: execPath,
     npm_lifecycle_event: scriptName,
@@ -50,11 +54,11 @@ const HAUL_COMMAND = (() => {
   if (execPath && scriptName) {
     const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
 
-    return `${client} run ${scriptName} --`;
+    return `${client} run ${scriptName} ${command} -- ${list}`;
   }
 
-  return `haul`;
-})();
+  return `haul ${command} ${list}`;
+};
 
 async function validateOptions(options, flags) {
   const acc = {};
@@ -137,21 +141,17 @@ async function run(args: Array<string>) {
     }),
   );
 
-  const displayName = `haul ${command.name}`;
+  const { options, promptedOptions } = await validateOptions(opts, flags);
+  const userDefinedOptions = { ...flags, ...promptedOptions };
+  const displayName = getDisplayName(command.name, userDefinedOptions);
+
+  if (Object.keys(userDefinedOptions).length) {
+    logger.info(`Running ${chalk.cyan(displayName)}`);
+  }
 
   try {
-    const { options, promptedOptions } = await validateOptions(opts, flags);
-
-    if (Object.keys(promptedOptions).length) {
-      const allOptions = { ...flags, ...promptedOptions };
-      const list = Object.keys(allOptions)
-        .map(key => `--${key} ${String(options[key])}`)
-        .join(' ');
-
-      logger.info(`Running ${chalk.cyan(`${HAUL_COMMAND} ${list}`)}`);
-    }
-
     await command.action(options);
+    throw new Error('t');
   } catch (error) {
     clear();
     if (error instanceof MessageError) {
