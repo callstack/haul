@@ -98,15 +98,15 @@ module.exports = {
     {
       name: 'dev',
       description: 'Whether to build in development mode',
-      default: 'false',
+      default: false,
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Builds in development mode',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Builds in production mode',
         },
       ],
@@ -114,15 +114,15 @@ module.exports = {
     {
       name: 'minify',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
-      default: ({ dev }: *) => String(!dev),
+      default: ({ dev }: *) => !dev,
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Enables minification for the bundle',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Disables minification for the bundle',
         },
       ],

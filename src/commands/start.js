@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const clear = require('clear');
-const chalk = require('chalk');
 
 const logger = require('../logger');
 const createServer = require('../server');
@@ -47,8 +46,6 @@ async function start(opts: *) {
   if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
     config = config[platforms.indexOf(opts.platform)];
   }
-
-  clear();
 
   const compiler = webpack(config);
 
@@ -121,21 +118,20 @@ module.exports = {
     {
       name: 'port',
       description: 'Port to run your webpack server',
-      default: '8081',
+      default: 8081,
       parse: Number,
     },
     {
       name: 'dev',
       description: 'Whether to build in development mode',
-      default: 'true',
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Builds in development mode',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Builds in production mode',
         },
       ],
@@ -143,15 +139,15 @@ module.exports = {
     {
       name: 'minify',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
-      default: ({ dev }: *) => String(!dev),
+      default: ({ dev }: *) => !dev,
       parse: (val: string) => val !== 'false',
       choices: [
         {
-          value: 'true',
+          value: true,
           description: 'Enables minification for the bundle',
         },
         {
-          value: 'false',
+          value: false,
           description: 'Disables minification for the bundle',
         },
       ],
@@ -160,12 +156,11 @@ module.exports = {
       name: 'platform',
       description: 'Platform to bundle for',
       example: 'haul start --platform ios',
-      note: `${chalk.bold('--platform=all')} is similar to how React Native packager works - you can run iOS and Android versions of your app at the same time. It will become the default value in future after we fix the performance issues.`,
       required: true,
       choices: [
         {
           value: 'ios',
-          description: 'Servers iOS bundle',
+          description: 'Serves iOS bundle',
         },
         {
           value: 'android',

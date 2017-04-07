@@ -26,8 +26,8 @@ const printName = option => {
 
 const printDescription = option => {
   if (option.default && typeof option.default !== 'function') {
-    const def = `${option.default} by default`;
-    return option.description ? `${option.description}, ${def}` : def;
+    const def = `${String(option.default)} by default`;
+    return `${option.description}, ${def}`;
   }
 
   return option.description;
@@ -40,9 +40,7 @@ module.exports = (command: Command) => {
 
   ui.div(chalk.bold.cyan(`haul ${command.name} [options]`));
 
-  if (command.description) {
-    ui.div(`${command.description}`);
-  }
+  ui.div(`${command.description}`);
 
   if (command.options && command.options.length > 0) {
     ui.div(`\n${chalk.bold('Options:')}\n`);

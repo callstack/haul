@@ -9,6 +9,9 @@ import type { Command } from './types';
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const clear = require('clear');
+const inquirer = require('inquirer');
+const path = require('path');
+const chalk = require('chalk');
 
 const pjson = require('../package.json');
 const logger = require('./logger');
@@ -38,48 +41,91 @@ const NOT_SUPPORTED_COMMANDS = [
   'dependencies',
 ];
 
-function validateOptions(options, flags, command) {
-  return options.reduce(
-    (acc, option) => {
-      const defaultValue = typeof option.default === 'function'
-        ? option.default(acc)
-        : option.default;
+const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
+  const list = Object.keys(opts).map(key => `--${key} ${String(opts[key])}`);
 
-      let value = flags[option.name] || defaultValue;
+  const {
+    npm_execpath: execPath,
+    npm_lifecycle_event: scriptName,
+    npm_config_argv: npmArgv,
+  } = process.env;
 
-      if (option.required && !value) {
-        throw new MessageError(
-          messages.invalidOption({
-            option,
-            command,
-          }),
-        );
-      }
+  // Haul has been called directly
+  if (!execPath || !scriptName || !npmArgv) {
+    return `haul ${command} ${list.join(' ')}`;
+  }
 
-      if (!value) {
-        return acc;
-      }
+  const client = path.basename(execPath) === 'yarn.js' ? 'yarn' : 'npm';
 
-      if (option.choices && !option.choices.find(c => c.value === value)) {
-        throw new MessageError(
-          messages.invalidOption({
-            option,
-            value,
-            command,
-          }),
-        );
-      }
+  if (client === 'npm') {
+    const argv = JSON.parse(npmArgv).original;
 
-      if (option.parse) {
-        value = option.parse(value);
-      }
+    return [
+      'npm',
+      ...(argv.includes('--') ? argv.slice(0, argv.indexOf('--')) : argv),
+      '--',
+      ...list,
+    ].join(' ');
+  }
 
-      return Object.assign({}, acc, {
-        [option.name]: value,
-      });
-    },
-    {},
-  );
+  // Yarn doesn't have `npmArgv` support
+  const lifecycleScript = process.env[`npm_package_scripts_${scriptName}`];
+
+  // If it's `npm script` that already defines command, e.g. "start": "haul start"
+  // then, `yarn run start --` is enough. Otherwise, command has to be set.
+  const exec = lifecycleScript && lifecycleScript.includes(command)
+    ? `yarn run ${scriptName}`
+    : `yarn run ${scriptName} ${command}`;
+
+  return `${exec} -- ${list.join(' ')}`;
+};
+
+async function validateOptions(options, flags) {
+  const acc = {};
+  const promptedAcc = {};
+
+  for (const option of options) {
+    const defaultValue = typeof option.default === 'function'
+      ? option.default(acc)
+      : option.default;
+
+    const parse = typeof option.parse === 'function'
+      ? option.parse
+      : val => val;
+
+    let value = flags[option.name] ? parse(flags[option.name]) : defaultValue;
+
+    const missingValue = option.required && typeof value === 'undefined';
+    const invalidOption = option.choices &&
+      typeof value !== 'undefined' &&
+      typeof option.choices.find(c => c.value === value) === 'undefined';
+
+    if (missingValue || invalidOption) {
+      const message = option.choices ? 'Select' : 'Enter';
+
+      // eslint-disable-next-line no-await-in-loop
+      const question = await inquirer.prompt([
+        {
+          type: option.choices ? 'list' : 'input',
+          name: 'answer',
+          message: `${message} ${option.description.toLowerCase()}`,
+          choices: (option.choices || []).map(choice => ({
+            name: `${String(choice.value)} - ${choice.description}`,
+            value: choice.value,
+            short: choice.value,
+          })),
+        },
+      ]);
+
+      value = option.choices ? question.answer : parse(question.answer);
+
+      promptedAcc[option.name] = value;
+    }
+
+    acc[option.name] = value;
+  }
+
+  return { options: acc, promptedOptions: promptedAcc };
 }
 
 async function run(args: Array<string>) {
@@ -109,16 +155,22 @@ async function run(args: Array<string>) {
 
   const opts = command.options || [];
 
-  const flags = camelcaseKeys(
+  const { _, ...flags } = camelcaseKeys(
     minimist(args, {
       string: opts.map(opt => opt.name),
     }),
   );
 
-  const displayName = `haul ${command.name}`;
+  const { options, promptedOptions } = await validateOptions(opts, flags);
+  const userDefinedOptions = { ...flags, ...promptedOptions };
+  const displayName = getDisplayName(command.name, userDefinedOptions);
+
+  if (Object.keys(promptedOptions).length) {
+    logger.info(`Running ${chalk.cyan(displayName)}`);
+  }
 
   try {
-    await command.action(validateOptions(opts, flags, displayName));
+    await command.action(options);
   } catch (error) {
     clear();
     if (error instanceof MessageError) {

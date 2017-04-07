@@ -11,21 +11,19 @@ export type CommandArgs = Array<string>;
 
 export type CommandOption = {
   name: string,
-  description?: string,
+  description: string,
   parse?: (val: string) => mixed,
-  default?: string | ((opts: { [key: string]: string }) => string),
+  default?: mixed | ((opts: { [key: string]: string }) => mixed),
   example?: string,
-  note?: string,
   choices?: Array<{
-    value: string,
+    value: mixed,
     description: string,
   }>,
 };
 
 export type Command = {
   name: string,
-  description?: string,
-  allowUnknownOptions?: boolean,
+  description: string,
   action: (args: Object) => void | Promise<void>,
   options?: Array<CommandOption>,
 };
