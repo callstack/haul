@@ -280,7 +280,7 @@ const addToXcodeBuild = async (cwd: string) => {
         );
         runOnlyForDeploymentPostprocessing = 0;
         shellPath = /bin/sh;
-        shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
+        shellScript = "bash ../node_modules/haul-cli/src/utils/haul-integrate.sh";
       };`,
   );
 
