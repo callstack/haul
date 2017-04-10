@@ -6,6 +6,7 @@
  */
 
 const path = require('path');
+const escapeStringRegexp = require('escape-string-regexp');
 
 type Request = {
   path: string,
@@ -31,33 +32,42 @@ function AssetResolver(options: Options) {
               return;
             }
 
-            const name = request.path.replace(/\.[^.]+$/, '');
-            const ext = request.path.split('.').pop();
-            const files = [
-              `${name}@1x.${platform}.${ext}`,
-              `${name}.${platform}.${ext}`,
-              `${name}@1x.native.${ext}`,
-              `${name}.native.${ext}`,
-              `${name}@1x.${ext}`,
-              request.path,
-            ];
+            const name = path.basename(request.path).replace(/\.[^.]+$/, '');
+            const type = request.path.split('.').pop();
 
-            for (const file of files) {
-              if (result.includes(path.basename(file))) {
-                callback(
-                  null,
-                  Object.assign({}, request, {
-                    path: file,
-                    relativePath: request.relativePath &&
-                      resolver.join(request.relativePath, file),
-                    file: true,
-                  }),
-                );
-                return;
-              }
+            let resolved = result.includes(path.basename(request.path))
+              ? request.path
+              : null;
+
+            if (!resolved) {
+              const map = AssetResolver.collect(result, {
+                name,
+                type,
+                platform,
+              });
+              const key = Object.keys(map).sort(
+                (a, b) =>
+                  Number(a.replace(/[^\d.]/g, '')) -
+                  Number(b.replace(/[^\d.]/g, '')),
+              )[0];
+              resolved = map[key] && map[key].name
+                ? path.resolve(path.dirname(request.path), map[key].name)
+                : null;
             }
 
-            callback();
+            if (resolved) {
+              callback(
+                null,
+                Object.assign({}, request, {
+                  path: resolved,
+                  relativePath: request.relativePath &&
+                    resolver.join(request.relativePath, resolved),
+                  file: true,
+                }),
+              );
+            } else {
+              callback();
+            }
           },
         );
       } else {
@@ -68,5 +78,42 @@ function AssetResolver(options: Options) {
 }
 
 AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png)$/;
+AssetResolver.collect = (list, { name, type, platform }: { name: string, type: string, platform: string }) => {
+  const regex = new RegExp(
+    `^${escapeStringRegexp(name)}(@\\d+(\\.\\d+)?x)?(\\.(${platform}|native))?\\.${type}$`,
+  );
+
+  // Build a map of files according to the scale
+  return list.reduce(
+    (acc, curr) => {
+      const match = regex.exec(curr);
+
+      if (match) {
+        let [x, scale, y, z, platform] = match; // eslint-disable-line
+
+        scale = scale || '@1x';
+
+        if (acc[scale]) {
+          // platform takes highest prio, so if it exists, don't do anything
+          if (acc[scale].platform === platform) {
+            return acc;
+          }
+
+          // native takes second prio, so if it exists and platform doesn't, don't do anything
+          if (acc[scale].platform === 'native' && !platform) {
+            return acc;
+          }
+        }
+
+        return Object.assign({}, acc, {
+          [scale]: { platform, name: curr },
+        });
+      }
+
+      return acc;
+    },
+    {},
+  );
+};
 
 module.exports = AssetResolver;

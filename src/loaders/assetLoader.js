@@ -9,7 +9,7 @@ const utils = require('loader-utils');
 const size = require('image-size');
 const path = require('path');
 const hasha = require('hasha');
-const escapeStringRegexp = require('escape-string-regexp');
+const AssetResolver = require('../resolvers/AssetResolver');
 
 type Config = {
   platform: string,
@@ -39,8 +39,6 @@ module.exports = async function assetLoader() {
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
 
-  const regex = new RegExp(`^${escapeStringRegexp(filename)}${suffix}`);
-
   const result = await new Promise((resolve, reject) =>
     this.fs.readdir(dirname, (err, res) => {
       if (err) {
@@ -50,36 +48,11 @@ module.exports = async function assetLoader() {
       }
     }));
 
-  const map = result.reduce(
-    (acc, name) => {
-      const match = name.match(regex);
-
-      if (match) {
-        let [x, scale, y, z, platform] = match; // eslint-disable-line
-
-        scale = scale || '@1x';
-
-        if (acc[scale]) {
-          // platform takes highest prio, so if it exists, don't do anything
-          if (acc[scale].platform === config.platform) {
-            return acc;
-          }
-
-          // native takes second prio, so if it exists and platform doesn't, don't do anything
-          if (acc[scale].platform === 'native' && !platform) {
-            return acc;
-          }
-        }
-
-        return Object.assign({}, acc, {
-          [scale]: { platform, name },
-        });
-      }
-
-      return acc;
-    },
-    {},
-  );
+  const map = AssetResolver.collect(result, {
+    name: filename,
+    type: info.type,
+    platform: config.platform,
+  });
 
   const scales = Object.keys(map)
     .map(s => Number(s.replace(/[^\d.]/g, '')))
