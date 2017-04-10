@@ -124,6 +124,7 @@ module.exports = {
     {
       name: 'dev',
       description: 'Whether to build in development mode',
+      default: true,
       parse: (val: string) => val !== 'false',
       choices: [
         {
