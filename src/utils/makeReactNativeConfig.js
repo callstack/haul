@@ -57,10 +57,10 @@ const getDefaultConfig = (
     require.resolve('./polyfillEnvironment.js'),
   ],
   /**
-   * `eval-source-map` will have a fast rebuild speed
-   * and provide column mappings
+   * `cheap-module-source-map` is faster than `source-map`,
+   * but it doesn't have column mappings
    */
-  devtool: dev ? 'eval-source-map' : 'source-map',
+  devtool: dev ? 'cheap-module-source-map' : 'source-map',
   output: {
     path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
