@@ -45,11 +45,13 @@ function AssetResolver(options: Options) {
                 type,
                 platform,
               });
-              const key = Object.keys(map).sort(
-                (a, b) =>
-                  Number(a.replace(/[^\d.]/g, '')) -
-                  Number(b.replace(/[^\d.]/g, '')),
-              )[0];
+              const key = map['@1x']
+                ? '@1x'
+                : Object.keys(map).sort(
+                    (a, b) =>
+                      Number(a.replace(/[^\d.]/g, '')) -
+                      Number(b.replace(/[^\d.]/g, '')),
+                  )[0];
               resolved = map[key] && map[key].name
                 ? path.resolve(path.dirname(request.path), map[key].name)
                 : null;
@@ -78,7 +80,10 @@ function AssetResolver(options: Options) {
 }
 
 AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png)$/;
-AssetResolver.collect = (list, { name, type, platform }: { name: string, type: string, platform: string }) => {
+AssetResolver.collect = (
+  list,
+  { name, type, platform }: { name: string, type: string, platform: string },
+) => {
   const regex = new RegExp(
     `^${escapeStringRegexp(name)}(@\\d+(\\.\\d+)?x)?(\\.(${platform}|native))?\\.${type}$`,
   );
