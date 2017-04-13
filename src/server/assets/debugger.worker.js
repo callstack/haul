@@ -7,17 +7,16 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-/* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */
-
-/* eslint-disable */
+/* global __fbBatchedBridge: true */
+/* eslint-env worker */
 
 'use strict';
 
-onmessage = (function() {
+self.onmessage = (() => {
   let visibilityState;
-  const showVisibilityWarning = (function() {
+  const showVisibilityWarning = (() => {
     let hasWarned = false;
-    return function() {
+    return () => {
       // Wait until `YellowBox` gets initialized before displaying the warning.
       if (hasWarned || console.warn.toString().includes('[native code]')) {
         return;
@@ -31,13 +30,13 @@ onmessage = (function() {
   })();
 
   const messageHandlers = {
-    executeApplicationScript(message, sendReply) {
-      for (const key in message.inject) {
-        self[key] = JSON.parse(message.inject[key]);
+    executeApplicationScript({ inject, url }, sendReply) {
+      for (const key in inject) {
+        self[key] = JSON.parse(inject[key]);
       }
       let error;
       try {
-        importScripts(message.url);
+        importScripts(url);
       } catch (err) {
         error = JSON.stringify(err);
       }
@@ -48,14 +47,14 @@ onmessage = (function() {
     },
   };
 
-  return function(message) {
+  return function({ data }) {
     if (visibilityState === 'hidden') {
       showVisibilityWarning();
     }
 
-    const obj = message.data;
+    const obj = data;
 
-    const sendReply = function(result, error) {
+    const sendReply = (result, error) => {
       postMessage({ replyID: obj.id, result, error });
     };
 

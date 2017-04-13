@@ -1,10 +1,16 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ *
+ * @flow
  */
+
+import type { $Request, $Response } from 'express';
+
 const fs = require('fs');
 const path = require('path');
 const opn = require('opn');
+const babel = require('babel-core');
 
 /**
  * Returns name of Chrome app to launch based on the platform
@@ -32,11 +38,13 @@ const launchChrome = url => {
 /**
  * Devtools middleware compatible with default React Native implementation
  */
-function devToolsMiddleware(debuggerProxy) {
-  return (req, res, next) => {
+function devToolsMiddleware(
+  debuggerProxy: { isDebuggerConnected: () => boolean },
+) {
+  return (req: $Request, res: $Response, next: Function) => {
     switch (req.path) {
       /**
-       * Request for the debugger frontend
+       * Request for the debugger frontend (HTML)
        */
       case '/debugger-ui': {
         const readStream = fs.createReadStream(
@@ -50,14 +58,40 @@ function devToolsMiddleware(debuggerProxy) {
       /**
        * Request for the debugger worker
        */
-      case '/debuggerWorker.js': {
-        const readStream = fs.createReadStream(
-          path.join(__dirname, '../assets/debuggerWorker.js'),
+      case '/debugger-ui.js':
+        fs.readFile(
+          path.join(__dirname, '../assets/debugger.js'),
+          (err, content) => {
+            if (err) {
+              res.sendStatus(500);
+              res.end();
+              throw err;
+            } else {
+              res.writeHead(200, { 'Content-Type': 'application/javascript' });
+              res.end(babel.transform(content.toString()).code);
+            }
+          },
         );
-        res.writeHead(200, { 'Content-Type': 'application/javascript' });
-        readStream.pipe(res);
         break;
-      }
+
+      /**
+       * Request for the debugger worker
+       */
+      case '/debugger.worker.js':
+        fs.readFile(
+          path.join(__dirname, '../assets/debugger.worker.js'),
+          (err, content) => {
+            if (err) {
+              res.sendStatus(500);
+              res.end();
+              throw err;
+            } else {
+              res.writeHead(200, { 'Content-Type': 'application/javascript' });
+              res.end(babel.transform(content.toString()).code);
+            }
+          },
+        );
+        break;
 
       /**
        * Request for (maybe) launching devtools

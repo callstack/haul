@@ -5,102 +5,9 @@
 <head>
   <meta charset=utf-8>
 
-  <link rel="icon" type="image/png" href="https://webpack.github.io/assets/favicon.png" />
-
   <title>Haul Debugger</title>
 
-  <script>
-    (function () {
-      function setStatus(status) {
-        document.getElementById('status').innerHTML = status;
-      }
-      var isMacLike = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
-      var refresh_shortcut = isMacLike ? '⌘R' : 'Ctrl R';
-      window.onload = function () {
-        if (!isMacLike) {
-          document.getElementById('dev_tools_shortcut').innerHTML = 'Ctrl⇧J';
-        }
-      };
-      var INITIAL_MESSAGE = 'Waiting, press <span class="shortcut">' + refresh_shortcut + '</span> in simulator to reload and connect.';
-      function connectToDebuggerProxy() {
-        var worker;
-        var ws = new WebSocket('ws://' + window.location.host + '/debugger-proxy?role=debugger&name=Chrome');
-        function createJSRuntime() {
-          // This worker will run the application javascript code,
-          // making sure that it's run in an environment without a global
-          // document, to make it consistent with the JSC executor environment.
-          worker = new Worker('debuggerWorker.js');
-          worker.onmessage = function (message) {
-            ws.send(JSON.stringify(message.data));
-          };
-          window.onbeforeunload = function () {
-            return 'If you reload this page, it is going to break the debugging session. ' +
-              'You should press' + refresh_shortcut + 'in simulator to reload.';
-          };
-          updateVisibility();
-        }
-        function shutdownJSRuntime() {
-          if (worker) {
-            worker.terminate();
-            worker = null;
-            window.onbeforeunload = null;
-          }
-        }
-        function updateVisibility() {
-          if (worker) {
-            worker.postMessage({
-              method: 'setDebuggerVisibility',
-              visibilityState: document.visibilityState,
-            });
-          }
-        }
-        ws.onopen = function () {
-          setStatus(INITIAL_MESSAGE);
-        };
-        ws.onmessage = function (message) {
-          if (!message.data) {
-            return;
-          }
-          var object = JSON.parse(message.data);
-          if (object.$event === 'client-disconnected') {
-            shutdownJSRuntime();
-            setStatus('Waiting, press <span class="shortcut">' + refresh_shortcut + '</span> in simulator to reload and connect.');
-            return;
-          }
-          if (!object.method) {
-            return;
-          }
-          // Special message that asks for a new JS runtime
-          if (object.method === 'prepareJSRuntime') {
-            shutdownJSRuntime();
-            console.clear();
-            createJSRuntime();
-            ws.send(JSON.stringify({ replyID: object.id }));
-            setStatus('Debugger session #' + object.id + ' active.');
-          } else if (object.method === '$disconnected') {
-            shutdownJSRuntime();
-            setStatus(INITIAL_MESSAGE);
-          } else {
-            // Otherwise, pass through to the worker.
-            worker.postMessage(object);
-          }
-        };
-        ws.onclose = function (e) {
-          shutdownJSRuntime();
-          setStatus('Disconnected. Attempting to reconnect. Check if `haul` is running.');
-          if (e.reason) {
-            setStatus(e.reason);
-            console.warn(e.reason);
-          }
-          setTimeout(connectToDebuggerProxy, 500);
-        };
-        // Let debuggerWorker.js know when we're not visible so that we can warn about
-        // poor performance when using remote debugging.
-        document.addEventListener('visibilitychange', updateVisibility, false);
-      }
-      connectToDebuggerProxy();
-    })();
-  </script>
+  <script src='/debugger-ui.js'></script>
 
   <style type="text/css">
     body {
@@ -110,7 +17,7 @@
       margin: 0;
       padding: 0;
     }
-    
+
     .shortcut {
       border-radius: 4px;
       color: #eee;
@@ -120,7 +27,7 @@
       letter-spacing: 3px;
       padding: 4px;
     }
-    
+
     main {
       padding: 10px;
     }
