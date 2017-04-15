@@ -8,7 +8,6 @@ import type { WebpackStats } from '../types';
 
 const express = require('express');
 const http = require('http');
-const bodyParser = require('body-parser');
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -58,7 +57,6 @@ function createServer(
   // Middlewares
   appHandler
     .use(rawBodyMiddleware)
-    .use(bodyParser.text())
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)

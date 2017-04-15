@@ -78,12 +78,12 @@ function createSourceMapConsumer(compiler: *) {
  * Gets the stack frames that React Native wants us to convert.
  */
 function getRequestedFrames(req: $Request): ?ReactNativeStack {
-  if (typeof req.body !== 'string') {
+  if (typeof req.rawBody !== 'string') {
     return null;
   }
 
   try {
-    const payload: ReactNativeSymbolicateRequest = JSON.parse(req.body);
+    const payload: ReactNativeSymbolicateRequest = JSON.parse(req.rawBody);
     return payload.stack;
   } catch (err) {
     // should happen, but at least we won't die
