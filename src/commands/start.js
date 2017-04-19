@@ -6,14 +6,13 @@
  */
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const clear = require('clear');
 
 const logger = require('../logger');
 const createServer = require('../server');
 const messages = require('../messages');
 const exec = require('../utils/exec');
-const { MessageError } = require('../errors');
+const getWebpackConfig = require('../utils/getWebpackConfig');
 
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 
@@ -22,15 +21,7 @@ const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
  */
 async function start(opts: *) {
   const directory = process.cwd();
-  const configPath = path.join(directory, opts.config);
-
-  if (!fs.existsSync(configPath)) {
-    throw new MessageError(
-      messages.webpackConfigNotFound({
-        directory,
-      }),
-    );
-  }
+  const configPath = getWebpackConfig(directory, opts.config);
 
   // eslint-disable-next-line prefer-const
   let [config, platforms] = makeReactNativeConfig(

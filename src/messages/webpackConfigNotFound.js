@@ -8,7 +8,7 @@ const dedent = require('dedent');
 const chalk = require('chalk');
 
 module.exports = ({ directory }: { directory: string }) => dedent`
-   Couldn't find configuration file in ${chalk.bold(directory)}
+   Couldn't find configuration file ${chalk.bold(directory)}
 
    Make sure:
    • You are running haul from your project directory
