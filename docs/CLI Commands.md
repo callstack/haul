@@ -30,6 +30,10 @@ Whether to minify the bundle while serving. This will make the bundling process 
 
 Port on which the server should run. defaults to `8081`.
 
+### `--config [path]`
+
+Path to the webpack haul config. defaults to `webpack.haul.js`.
+
 ## `haul bundle`
 
 This generates the app bundle and assets for packaging the app.
@@ -57,3 +61,7 @@ Path to use for the bundle file. e.g. - `build/index.android.bundle`.
 ### `--assets-dest <string>`
 
 Path to the directory to store the assets. e.g. - `build/assets`.
+
+### `--config [path]`
+
+Path to the webpack haul config. defaults to `webpack.haul.js`.
