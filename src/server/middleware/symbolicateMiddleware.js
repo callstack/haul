@@ -121,6 +121,14 @@ function create(compiler: *): Middleware {
           column: originalFrame.column,
         });
 
+        // If lookup fails, we get the same shape object, but with
+        // all values set to null
+        if (lookup.source == null) {
+          // It is better to gracefully return the original frame
+          // than to throw an exception
+          return originalFrame;
+        }
+
         // convert the original source into an absolute path
         const mappedFile = lookup.source
           .replace('webpack:///~', path.resolve(root, 'node_modules'))
