@@ -22,7 +22,6 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack-io/haul/issues",
   "dependencies": {
-    "babel": "^6.23.0",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
