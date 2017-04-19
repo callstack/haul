@@ -19,7 +19,7 @@ const logger = require('../logger');
  */
 async function bundle(opts: *) {
   const directory = process.cwd();
-  const configPath = path.join(directory, 'webpack.haul.js');
+  const configPath = path.join(directory, opts.config);
 
   if (!fs.existsSync(configPath)) {
     throw new MessageError(
@@ -150,6 +150,11 @@ module.exports = {
     {
       name: 'assetsDest',
       description: 'Path to directory where to store assets, eg. /tmp/dist',
+    },
+    {
+      name: 'config',
+      description: 'Path to config file, eg. webpack.haul.js',
+      default: 'webpack.haul.js',
     },
   ],
 };

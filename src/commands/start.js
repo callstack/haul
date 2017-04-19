@@ -22,7 +22,7 @@ const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
  */
 async function start(opts: *) {
   const directory = process.cwd();
-  const configPath = path.join(directory, 'webpack.haul.js');
+  const configPath = path.join(directory, opts.config);
 
   if (!fs.existsSync(configPath)) {
     throw new MessageError(
@@ -172,6 +172,11 @@ module.exports = {
           description: 'Serves both platforms',
         },
       ],
+    },
+    {
+      name: 'config',
+      description: 'Path to config file, eg. webpack.haul.js',
+      default: 'webpack.haul.js',
     },
   ],
 };
