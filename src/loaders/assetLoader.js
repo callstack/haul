@@ -148,16 +148,16 @@ module.exports = async function assetLoader() {
     var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,
-      fileSystemLocation: ${JSON.stringify(config.bundle ? null : dirname)},
-      httpServerLocation: ${publicPath},
+      scales: ${JSON.stringify(scales)},
       name: ${JSON.stringify(filename)},
-      width: ${info ? info.width : JSON.stringify(null)},
-      height: ${info ? info.height : JSON.stringify(null)},
       type: ${JSON.stringify(type)},
       hash: ${JSON.stringify(hashes.join())},
-      scales: ${JSON.stringify(scales)},
+      httpServerLocation: ${publicPath},
+      ${config.bundle ? '' : `fileSystemLocation: ${JSON.stringify(dirname)},`}
+      ${info ? `height: ${info.height},` : ''}
+      ${info ? `width: ${info.width},` : ''}
     });
-  `,
+    `,
   );
 };
 
