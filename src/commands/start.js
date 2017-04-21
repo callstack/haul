@@ -40,6 +40,8 @@ async function start(opts: *) {
       root: directory,
       dev: opts.dev,
       minify: opts.minify,
+      hot: opts.hot,
+      port: opts.port,
     },
   );
 
@@ -170,6 +172,22 @@ module.exports = {
         {
           value: 'all',
           description: 'Serves both platforms',
+        },
+      ],
+    },
+    {
+      name: 'hot',
+      description: 'Enable hot module replacement',
+      default: false,
+      parse: (val: string) => val !== 'false',
+      choices: [
+        {
+          value: true,
+          description: 'Enables hot module replacement',
+        },
+        {
+          value: false,
+          description: 'Disables hot module replacement',
         },
       ],
     },

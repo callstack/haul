@@ -23,6 +23,8 @@ const PLATFORMS = ['ios', 'android'];
 type ConfigOptions = {
   root: string,
   dev: boolean,
+  hot?: boolean,
+  port?: number,
 };
 
 type WebpackPlugin = {
@@ -46,7 +48,7 @@ type WebpackConfigFactory =
  * Returns default config based on environment
  */
 const getDefaultConfig = (
-  { platform, root, dev, minify, bundle },
+  { platform, root, dev, minify, hot, port, bundle },
 ): WebpackConfig => ({
   context: root,
   entry: [
@@ -55,7 +57,11 @@ const getDefaultConfig = (
      * It is also needed to setup the required environment
      */
     require.resolve('./polyfillEnvironment.js'),
-  ],
+  ].concat(
+    hot
+      ? `${require.resolve('webpack-hot-middleware/client')}?path=http://localhost:${port}/__webpack_hmr`
+      : [],
+  ),
   /**
    * `cheap-module-source-map` is faster than `source-map`,
    * but it doesn't have column mappings
@@ -148,32 +154,41 @@ const getDefaultConfig = (
       ],
       verbose: false,
     }),
-  ].concat(
-    minify
-      ? [
-          new webpack.optimize.UglifyJsPlugin({
-            /**
+  ]
+    .concat(
+      minify
+        ? [
+            new webpack.optimize.UglifyJsPlugin({
+              /**
              * By default, uglify only minifies *.js files
              * We need to use the plugin to configutr *.bundle to get minified
              * Also disable IE8 support as we don't need it'
              */
-            test: /\.(js|bundle)($|\?)/i,
-            sourceMap: true,
-            compress: {
-              screw_ie8: true,
-              warnings: false,
-            },
-            mangle: {
-              screw_ie8: true,
-            },
-            output: {
-              comments: false,
-              screw_ie8: true,
-            },
-          }),
-        ]
-      : [],
-  ),
+              test: /\.(js|bundle)($|\?)/i,
+              sourceMap: true,
+              compress: {
+                screw_ie8: true,
+                warnings: false,
+              },
+              mangle: {
+                screw_ie8: true,
+              },
+              output: {
+                comments: false,
+                screw_ie8: true,
+              },
+            }),
+          ]
+        : [],
+    )
+    .concat(
+      hot
+        ? [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
+          ]
+        : [],
+    ),
   resolve: {
     plugins: [
       /**
