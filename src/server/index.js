@@ -20,6 +20,7 @@ const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
+const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
@@ -61,6 +62,7 @@ function createServer(
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
     .use(symbolicateMiddleware(compiler))
+    .use(openInEditorMiddleware())
     .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
     .use(webpackMiddleware)

@@ -42,3 +42,12 @@ export type Logger = {
   done: LoggerPrint,
   debug: LoggerPrint,
 };
+
+export type ReactNativeStackFrame = {
+  lineNumber: number,
+  column: number,
+  file: string,
+  methodName: string,
+};
+
+export type ReactNativeStack = Array<ReactNativeStackFrame>;

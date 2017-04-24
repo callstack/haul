@@ -17,21 +17,13 @@
  *
  */
 import type { $Request, Middleware } from 'express';
+import type { ReactNativeStackFrame, ReactNativeStack } from '../../types';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
 const delve = require('dlv');
 const messages = require('../../messages');
 const logger = require('../../logger');
-
-type ReactNativeStackFrame = {
-  lineNumber: number,
-  column: number,
-  file: string,
-  methodName: string,
-};
-
-type ReactNativeStack = Array<ReactNativeStackFrame>;
 
 type ReactNativeSymbolicateRequest = {
   stack: ReactNativeStack,

@@ -31,4 +31,5 @@ module.exports = {
   gitAddedEntries: require('./gitAddedEntries'),
   gitAlreadyAdded: require('./gitAlreadyAdded'),
   gitNotFound: require('./gitNotFound'),
+  editorNotConfigured: require('./editorNotConfigured'),
 };
