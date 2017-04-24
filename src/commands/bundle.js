@@ -5,13 +5,13 @@
  * @flow
  */
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
 const clear = require('clear');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
+const getWebpackConfig = require('../utils/getWebpackConfig');
 const logger = require('../logger');
 
 /**
@@ -19,15 +19,7 @@ const logger = require('../logger');
  */
 async function bundle(opts: *) {
   const directory = process.cwd();
-  const configPath = path.join(directory, 'webpack.haul.js');
-
-  if (!fs.existsSync(configPath)) {
-    throw new MessageError(
-      messages.webpackConfigNotFound({
-        directory,
-      }),
-    );
-  }
+  const configPath = getWebpackConfig(directory, opts.config);
 
   const [
     configs,
@@ -150,6 +142,11 @@ module.exports = {
     {
       name: 'assetsDest',
       description: 'Path to directory where to store assets, eg. /tmp/dist',
+    },
+    {
+      name: 'config',
+      description: 'Path to config file, eg. webpack.haul.js',
+      default: 'webpack.haul.js',
     },
   ],
 };
