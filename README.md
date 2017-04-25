@@ -8,7 +8,7 @@
 
 ---
 
-<a title="Join on Slack" href="slack.callstack.io"><img src="https://slack.callstack.io/badge.svg" /></a>
+<a title="Join on Slack" href="https://slack.callstack.io/"><img src="https://slack.callstack.io/badge.svg" /></a>
 
 Haul is a drop-in replacement for `react-native` CLI built on open tools like Webpack. It can act as a development server or bundle your React Native app for production.
 
