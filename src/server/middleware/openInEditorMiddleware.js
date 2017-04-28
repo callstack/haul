@@ -23,9 +23,9 @@ import type { ReactNativeStackFrame } from '../../types';
 
 // A configuration object fed into `open-in-editor`.
 type OpenInEditorConfig = {
-  editor?: string | null,
-  cmd?: string | null,
-  pattern?: string | null,
+  editor?: ?string,
+  cmd?: ?string,
+  pattern?: ?string,
 };
 
 const basename = require('path').basename;
@@ -36,7 +36,7 @@ const logger = require('../../logger');
 
 // does `open-in-editor` know how to detect this editor?
 const isKnownEditor = (editor: string): boolean =>
-  editors.indexOf(basename(editor)) >= 0;
+  editors.includes(basename(editor));
 
 /**
  * Detect the editor type to use. We use just the basename in case the user
@@ -47,17 +47,12 @@ const isKnownEditor = (editor: string): boolean =>
  *   - /usr/local/bin/atom
  *
  */
-function detectEditorType(): string | null {
-  // check for HAUL_EDITOR first
-  if (process.env.HAUL_EDITOR) {
-    const editor = basename(process.env.HAUL_EDITOR);
-    if (isKnownEditor(editor)) return editor;
-  }
-
-  // fallback to REACT_EDITOR
+function detectEditorType(): ?string {
   if (process.env.REACT_EDITOR) {
     const editor = basename(process.env.REACT_EDITOR);
-    if (isKnownEditor(editor)) return editor;
+    if (isKnownEditor(editor)) {
+      return editor;
+    }
   }
 
   return null;
@@ -68,16 +63,13 @@ function detectEditorType(): string | null {
  * need to use this if you've got a specific script or symlink you're trying
  * to target.
  */
-function detectEditorCmd(): string | null {
+function detectEditorCmd(): ?string {
   // the specific haul command gets precident
-  if (process.env.HAUL_EDITOR_CMD) return process.env.HAUL_EDITOR_CMD;
-
-  // use HAUL_EDITOR unless it's a shortcut (like just the word 'atom')
-  if (process.env.HAUL_EDITOR && !isKnownEditor(process.env.HAUL_EDITOR)) {
-    return process.env.HAUL_EDITOR;
+  if (process.env.REACT_EDITOR_CMD) {
+    return process.env.REACT_EDITOR_CMD;
   }
 
-  // fallback to REACT_EDITOR
+  // use REACT_EDITOR unless it's a shortcut (like just the word 'atom')
   if (process.env.REACT_EDITOR && !isKnownEditor(process.env.REACT_EDITOR)) {
     return process.env.REACT_EDITOR;
   }
@@ -89,8 +81,8 @@ function detectEditorCmd(): string | null {
  * If provided, this allows people to control how the arguments are passed
  * to their editor.  For example: -r -g {filename}:{line}:{column}
  */
-function detectEditorPattern(): string | null {
-  return process.env.HAUL_EDITOR_PATTERN || null;
+function detectEditorPattern(): ?string {
+  return process.env.REACT_EDITOR_PATTERN || null;
 }
 
 // configure the editor open library
@@ -116,7 +108,9 @@ function create(): Middleware {
    */
   function openInEditorMiddleware(req: $Request, res: $Response, next) {
     // only allow the appropriate path
-    if (req.path !== '/open-stack-frame') return next();
+    if (req.path !== '/open-stack-frame') {
+      return next();
+    }
 
     // prevent corner cases from blowing up
     if (typeof req.rawBody !== 'string') {
