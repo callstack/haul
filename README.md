@@ -27,6 +27,14 @@ Start by adding Haul as a dependency to your React Native project (use `react-na
 yarn add --dev haul-cli
 ```
 
+If you're on a React Native version >= 0.43, add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
+
+```
+project.ext.react = [
+    cliPath: "node_modules/haul-cli/bin/cli.js"
+]
+```
+
 To configure your project to use haul, run the following:
 
 ```bash
