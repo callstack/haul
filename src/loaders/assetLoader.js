@@ -28,16 +28,24 @@ module.exports = async function assetLoader() {
   const options = this.options[query.config] || {};
   const config: Config = Object.assign({}, options, query);
 
+  let info: ?{ width: number, height: number, type: string };
+
+  try {
+    info = size(this.resourcePath);
+  } catch (e) {
+    // Asset is not an image
+  }
+
   const filepath = this.resourcePath;
-  const info = size(filepath);
   const dirname = path.dirname(filepath);
   const url = path.relative(config.root, dirname);
+  const type = path.extname(filepath).replace(/^\./, '');
   const assets = path.join('assets', config.bundle ? '' : config.platform);
-  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${info.type}$`;
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
   const longname = `${`${url.replace(/\//g, '_')}_${filename}`
     .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '')}.${info.type}`;
+    .replace(/[^a-z0-9_]/g, '')}.${type}`;
 
   const result = await new Promise((resolve, reject) =>
     this.fs.readdir(dirname, (err, res) => {
@@ -50,7 +58,7 @@ module.exports = async function assetLoader() {
 
   const map = AssetResolver.collect(result, {
     name: filename,
-    type: info.type,
+    type,
     platform: config.platform,
   });
 
@@ -58,7 +66,7 @@ module.exports = async function assetLoader() {
     .map(s => Number(s.replace(/[^\d.]/g, '')))
     .sort();
 
-  const buffers = await Promise.all(
+  const pairs = await Promise.all(
     Object.keys(map).map(scale => {
       this.addDependency(path.join(dirname, map[scale].name));
 
@@ -95,24 +103,31 @@ module.exports = async function assetLoader() {
 
               dest = path.join(dest, longname);
             } else {
-              const name = `${filename}${scale === '@1x' ? '' : scale}.${info.type}`;
+              const name = `${filename}${scale === '@1x' ? '' : scale}.${type}`;
               dest = path.join(assets, url, name);
             }
 
-            if (config.outputPath) {
-              // support functions as outputPath to generate them dynamically
-              dest = typeof config.outputPath === 'function'
-                ? config.outputPath(dest)
-                : path.join(config.outputPath, dest);
-            }
-
-            this.emitFile(dest, res);
-
-            resolve(res);
+            resolve({
+              destination: dest,
+              content: res,
+            });
           }
         }));
     }),
   );
+
+  pairs.forEach(item => {
+    let dest = item.destination;
+
+    if (config.outputPath) {
+      // support functions as outputPath to generate them dynamically
+      dest = typeof config.outputPath === 'function'
+        ? config.outputPath(dest)
+        : path.join(config.outputPath, dest);
+    }
+
+    this.emitFile(dest, item.content);
+  });
 
   let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/', assets, url))}`;
 
@@ -125,22 +140,24 @@ module.exports = async function assetLoader() {
     );
   }
 
+  const hashes = pairs.map(item => hasha(item.content, { algorithm: 'md5' }));
+
   callback(
     null,
     `
     var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,
-      fileSystemLocation: ${JSON.stringify(config.bundle ? null : dirname)},
-      httpServerLocation: ${publicPath},
-      name: ${JSON.stringify(filename)},
-      width: ${info.width},
-      height: ${info.height},
-      type: ${JSON.stringify(info.type)},
-      hash: ${JSON.stringify(hasha(Buffer.concat(buffers)))},
       scales: ${JSON.stringify(scales)},
+      name: ${JSON.stringify(filename)},
+      type: ${JSON.stringify(type)},
+      hash: ${JSON.stringify(hashes.join())},
+      httpServerLocation: ${publicPath},
+      ${config.bundle ? '' : `fileSystemLocation: ${JSON.stringify(dirname)},`}
+      ${info ? `height: ${info.height},` : ''}
+      ${info ? `width: ${info.width},` : ''}
     });
-  `,
+    `,
   );
 };
 
