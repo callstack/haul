@@ -28,6 +28,8 @@ require('../../vendor/polyfills/babelHelpers.js');
 //   check to fail.  This must be something that the packager is doing that haul isn't.
 //   I also so people complaining about this in Jest as well.
 //
-global.self = global; /* eslint-disable-line */
+if (!global.self) {
+  global.self = global; /* eslint-disable-line */
+}
 
 require('InitializeCore');
