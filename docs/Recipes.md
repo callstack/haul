@@ -65,5 +65,3 @@ module.exports = ({ platform }, { module, resolve }) => ({
 	},
 });
 ```
-
- default imports, such as `import React from 'react'`
