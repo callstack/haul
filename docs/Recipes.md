@@ -21,9 +21,32 @@ module.exports = ({ platform }, { module, resolve }) => ({
   },
   resolve: {
     ...resolve,
-    extensions: ['.ts', '.tsx', `.${platform}.ts`, '.native.ts', `.${platform}.tsx`, '.native.tsx', ...resolve.extensions],
-  },
+    extensions: [
+      '.ts',
+      '.tsx',
+      `.${platform}.ts`,
+      '.native.ts',
+      `.${platform}.tsx`,
+      '.native.tsx',
+      ...resolve.extensions
+    ]
+  }
 });
+```
+
+And a corresponding (example) `tsconfig.json`
+```json
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 ```
 
 
@@ -60,8 +83,16 @@ module.exports = ({ platform }, { module, resolve }) => ({
 		]
 	},
 	resolve: {
-		...resolve,
-		extensions: ['.ts', '.tsx', `.${platform}.ts`, '.native.ts', `.${platform}.tsx`, '.native.tsx', ...resolve.extensions],
-	},
+      ...resolve,
+      extensions: [
+        '.ts',
+        '.tsx',
+        `.${platform}.ts`,
+        '.native.ts',
+        `.${platform}.tsx`,
+        '.native.tsx',
+        ...resolve.extensions
+      ]
+    }
 });
 ```
