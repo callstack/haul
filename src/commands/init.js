@@ -127,7 +127,6 @@ async function init() {
   }
 
   await addToXcodeBuild(cwd);
-  await addToPackageScripts(cwd);
 
   progress = ora(messages.generatingConfig()).start();
 
@@ -146,70 +145,6 @@ async function init() {
 
 const sleep = (time: number = 1000) =>
   new Promise(resolve => setTimeout(resolve, time));
-
-const getRunScript = (scriptName: string) => {
-  const runCommand = scriptName === 'start' ? 'yarn' : 'yarn run';
-  return `${runCommand} ${scriptName}`;
-};
-
-/**
- * Adds Haul to package.json scripts
- */
-const addToPackageScripts = async (cwd: string) => {
-  const pjson = JSON.parse(
-    fs.readFileSync(path.join(cwd, 'package.json')).toString(),
-  );
-
-  const scripts = pjson.scripts || {};
-
-  const haulScript = Object.keys(scripts).find(
-    name => scripts[name] === 'haul start',
-  );
-
-  if (haulScript) {
-    ora().info(
-      `Haul already exists in your package.json. Start Haul by running ${getRunScript(haulScript)}'`,
-    );
-    return;
-  }
-
-  let scriptName = 'start';
-
-  if (
-    scripts.start &&
-    scripts.start !== 'node ./node_modules/react-native/local-cli/cli.js start'
-  ) {
-    const result = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'scriptName',
-        message: 'Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`',
-        default: 'haul',
-      },
-    ]);
-
-    scriptName = result.scriptName;
-  }
-
-  pjson.scripts = Object.assign({}, scripts, {
-    [scriptName]: 'haul start',
-  });
-
-  const progress = ora(
-    `Adding \`${scriptName}\` script to your package.json`,
-  ).start();
-
-  await sleep();
-
-  fs.writeFileSync(
-    path.join(cwd, 'package.json'),
-    JSON.stringify(pjson, null, 2),
-  );
-
-  progress.succeed(
-    `You can now start Haul by running '${getRunScript(scriptName)}'`,
-  );
-};
 
 /**
  * Adds Haul to native iOS build pipeline
@@ -263,7 +198,7 @@ const addToXcodeBuild = async (cwd: string) => {
 
   /**
    * Define Haul integration script in the PBXShellScriptBuildPhase section.
-   * 
+   *
    * This is done by prepending our predefined script phase to the list
    * of all phases.
    */
@@ -289,9 +224,9 @@ const addToXcodeBuild = async (cwd: string) => {
 
   /**
    * Add Haul integration to build phases that already contain `react-native-xcode.sh`
-   * 
+   *
    * We are typically trying to match the following:
-   * 
+   *
    * ```
    *   buildPhases = (
    *     13B07F871A680F5B00A75B9A \/* Sources *\/,
