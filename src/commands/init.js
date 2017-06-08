@@ -11,6 +11,7 @@ const dedent = require('dedent');
 const ora = require('ora');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const isReactNativeProject = require('../utils/isReactNativeProject');
 
 const messages = require('../messages');
 
@@ -22,21 +23,7 @@ async function init() {
   const cwd = process.cwd();
 
   // Are we inside a React Native project?
-  let valid = false;
-
-  try {
-    const pak = JSON.parse(
-      fs.readFileSync(path.join(cwd, 'package.json')).toString(),
-    );
-
-    if (pak.dependencies['react-native']) {
-      valid = true;
-    }
-  } catch (e) {
-    // Ignore
-  }
-
-  if (valid) {
+  if (isReactNativeProject(cwd)) {
     progress.succeed(messages.verifiedProject());
   } else {
     progress.fail(messages.invalidProject());
