@@ -15,6 +15,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
+const moduleResolve = require('../utils/resolveModule');
 
 const getBabelConfig = require('./getBabelConfig');
 
@@ -181,7 +182,7 @@ const getDefaultConfig = (
        * We don't support it, but need to provide a compatibility layer
        */
       new HasteResolver({
-        directories: [path.resolve(root, 'node_modules/react-native')],
+        directories: [moduleResolve(root, 'react-native')],
       }),
       /**
        * This is required by asset loader to resolve extra scales
