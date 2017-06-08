@@ -263,7 +263,7 @@ const addToXcodeBuild = async (cwd: string) => {
 
   /**
    * Define Haul integration script in the PBXShellScriptBuildPhase section.
-   * 
+   *
    * This is done by prepending our predefined script phase to the list
    * of all phases.
    */
@@ -283,15 +283,15 @@ const addToXcodeBuild = async (cwd: string) => {
         );
         runOnlyForDeploymentPostprocessing = 0;
         shellPath = /bin/sh;
-        shellScript = "bash ../node_modules/haul-cli/src/utils/haul-integrate.sh";
+        shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
       };`,
   );
 
   /**
    * Add Haul integration to build phases that already contain `react-native-xcode.sh`
-   * 
+   *
    * We are typically trying to match the following:
-   * 
+   *
    * ```
    *   buildPhases = (
    *     13B07F871A680F5B00A75B9A \/* Sources *\/,
