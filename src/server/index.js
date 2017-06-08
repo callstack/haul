@@ -8,6 +8,7 @@ import type { WebpackStats } from '../types';
 
 const express = require('express');
 const http = require('http');
+const path = require('path');
 
 type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
@@ -57,6 +58,7 @@ function createServer(
 
   // Middlewares
   appHandler
+    .use(express.static(path.join(__dirname, '/assets/public')))
     .use(rawBodyMiddleware)
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
