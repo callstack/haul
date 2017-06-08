@@ -46,7 +46,7 @@ This will automatically add the configuration needed to make Haul work with your
 Next, you're ready to start the development server:
 
 ```bash
-yarn run haul start -- --platform ios
+yarn run haul start --platform ios
 ```
 
 Finally, reload your app to update the bundle or run your app just like you normally would:
