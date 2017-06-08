@@ -42,9 +42,9 @@ Example: `haul bundle --platform android --bundle-output build/index.bundle --as
 
 You can specify following parameters to configure the bundle generation:
 
-### `--platform <ios|android>`
+### `--platform <ios|android|all>`
 
-The platform to build the bundle for.
+The platform to build the bundle for. `all` will build the bundle for both `android` and `ios` and is slower.
 
 ### `--dev <true|false>`
 

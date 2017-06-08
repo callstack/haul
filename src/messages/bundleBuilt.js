@@ -14,25 +14,30 @@ module.exports = (
   {
     stats,
     platform,
-    assetsPath,
-    bundlePath,
+    outputs,
   }: {
     stats: WebpackStats,
     platform: string,
-    assetsPath?: string,
-    bundlePath?: string,
+    outputs?: [{
+      path: string,
+      filename: string,
+    }],
   },
 ) => {
   const heading = stats.hasWarnings()
     ? chalk.yellow('Built with warnings')
     : 'Built successfully!';
 
-  if (assetsPath && bundlePath) {
+  if (outputs && outputs.length) {
     return dedent`
       ${heading}
 
-      Assets location: ${chalk.grey(assetsPath)}
-      Bundle location: ${chalk.grey(path.join(assetsPath, bundlePath))}      
+      ${outputs
+      .map(e => dedent`
+        Assets location: ${chalk.grey(e.path)}
+        Bundle location: ${chalk.grey(path.join(e.path, e.filename))}
+      `)
+      .join('\n\n')}
     `;
   }
 

@@ -21,10 +21,8 @@ async function bundle(opts: *) {
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
 
-  const [
-    configs,
-    availablePlatforms,
-  ] = makeReactNativeConfig(
+  // eslint-disable-next-line prefer-const
+  let [config, platforms] = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
@@ -35,7 +33,9 @@ async function bundle(opts: *) {
     },
   );
 
-  const config = configs[availablePlatforms.indexOf(opts.platform)];
+  if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
+    config = config[platforms.indexOf(opts.platform)];
+  }
 
   if (opts.assetsDest) {
     config.output.path = path.isAbsolute(opts.assetsDest)
@@ -56,7 +56,9 @@ async function bundle(opts: *) {
 
   logger.info(
     messages.initialBundleInformation({
-      entry: config.entry,
+      entries: Array.isArray(config)
+        ? config.map(c => c.entry)
+        : [config.entry],
       dev: opts.dev,
     }),
   );
@@ -76,8 +78,9 @@ async function bundle(opts: *) {
     messages.bundleBuilt({
       stats,
       platform: opts.platform,
-      assetsPath: config.output.path,
-      bundlePath: config.output.filename,
+      outputs: Array.isArray(config)
+        ? config.map(c => c.output)
+        : [config.output],
     }),
   );
 }
@@ -131,6 +134,10 @@ module.exports = {
         {
           value: 'android',
           description: 'Builds Android bundle',
+        },
+        {
+          value: 'all',
+          description: 'Builds both platforms',
         },
       ],
       example: 'haul bundle --platform ios',
