@@ -24,14 +24,14 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
-yarn add --dev haul-cli
+yarn add --dev haul
 ```
 
 If you're on a React Native version >= 0.43, add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
 
 ```
 project.ext.react = [
-    cliPath: "node_modules/haul-cli/bin/cli.js"
+    cliPath: "node_modules/haul/bin/cli.js"
 ]
 ```
 
@@ -72,7 +72,7 @@ Haul uses a completely different architecture from React Native packager, which 
 
 We are actively working on adding support for the following:
 
-- Existing `react-native` commands 
+- Existing `react-native` commands
 
 The following features are **unlikely to be supported** in the future:
 
