@@ -78,7 +78,7 @@ const getDefaultConfig = (
          * The React Native ecosystem publishes untranspiled modules
          * We transpile modules prefixed with react for compatibility
          */
-        exclude: /node_modules\/(?!react|@expo|haul)/,
+        exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
         use: {
           loader: require.resolve('happypack/loader'),
           query: { id: 'babel' },
