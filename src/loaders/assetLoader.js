@@ -8,7 +8,9 @@
 const utils = require('loader-utils');
 const size = require('image-size');
 const path = require('path');
+const dedent = require('dedent');
 const hasha = require('hasha');
+const escapeStringRegexp = require('escape-string-regexp');
 const AssetResolver = require('../resolvers/AssetResolver');
 
 type Config = {
@@ -28,14 +30,6 @@ module.exports = async function assetLoader() {
   const options = this.options[query.config] || {};
   const config: Config = Object.assign({}, options, query);
 
-  let info: ?{ width: number, height: number, type: string };
-
-  try {
-    info = size(this.resourcePath);
-  } catch (e) {
-    // Asset is not an image
-  }
-
   const filepath = this.resourcePath;
   const dirname = path.dirname(filepath);
   const url = path.relative(config.root, dirname);
@@ -54,7 +48,8 @@ module.exports = async function assetLoader() {
       } else {
         resolve(res);
       }
-    }));
+    }),
+  );
 
   const map = AssetResolver.collect(result, {
     name: filename,
@@ -112,7 +107,8 @@ module.exports = async function assetLoader() {
               content: res,
             });
           }
-        }));
+        }),
+      );
     }),
   );
 
@@ -142,9 +138,30 @@ module.exports = async function assetLoader() {
 
   const hashes = pairs.map(item => hasha(item.content, { algorithm: 'md5' }));
 
+  let info: ?{ width: number, height: number, type: string };
+
+  try {
+    info = size(this.resourcePath);
+
+    const match = path
+      .basename(this.resourcePath)
+      .match(new RegExp(`^${escapeStringRegexp(filename)}${suffix}`));
+
+    if (match && match[1]) {
+      const scale = Number(match[1].replace(/[^\d.]/g, ''));
+
+      if (typeof scale === 'number' && Number.isFinite(scale)) {
+        info.width /= scale;
+        info.height /= scale;
+      }
+    }
+  } catch (e) {
+    // Asset is not an image
+  }
+
   callback(
     null,
-    `
+    dedent`
     var AssetRegistry = require('react-native/Libraries/Image/AssetRegistry');
     module.exports = AssetRegistry.registerAsset({
       __packager_asset: true,

@@ -93,36 +93,33 @@ AssetResolver.collect = (
       );
 
   // Build a map of files according to the scale
-  return list.reduce(
-    (acc, curr) => {
-      const match = regex.exec(curr);
+  return list.reduce((acc, curr) => {
+    const match = regex.exec(curr);
 
-      if (match) {
-        let [x, scale, y, z, platform] = match; // eslint-disable-line
+    if (match) {
+      let [x, scale, y, z, platform] = match; // eslint-disable-line
 
-        scale = scale || '@1x';
+      scale = scale || '@1x';
 
-        if (acc[scale]) {
-          // platform takes highest prio, so if it exists, don't do anything
-          if (acc[scale].platform === platform) {
-            return acc;
-          }
-
-          // native takes second prio, so if it exists and platform doesn't, don't do anything
-          if (acc[scale].platform === 'native' && !platform) {
-            return acc;
-          }
+      if (acc[scale]) {
+        // platform takes highest prio, so if it exists, don't do anything
+        if (acc[scale].platform === platform) {
+          return acc;
         }
 
-        return Object.assign({}, acc, {
-          [scale]: { platform, name: curr },
-        });
+        // native takes second prio, so if it exists and platform doesn't, don't do anything
+        if (acc[scale].platform === 'native' && !platform) {
+          return acc;
+        }
       }
 
-      return acc;
-    },
-    {},
-  );
+      return Object.assign({}, acc, {
+        [scale]: { platform, name: curr },
+      });
+    }
+
+    return acc;
+  }, {});
 };
 
 module.exports = AssetResolver;
