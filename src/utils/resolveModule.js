@@ -12,7 +12,7 @@ const resolver = require('resolve');
 * We point to 'package.json', then remove it to receive a path to the directory itself
 */
 
-module.exports = (root, name) =>
+module.exports = (root: string, name: string) =>
   resolver
     .sync(`${name}/package.json`, { basedir: root })
     .replace('/package.json', '');
