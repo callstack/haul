@@ -57,7 +57,7 @@ function findProvidesModule(directories, opts = {}) {
   const modulesMap = {};
 
   const walk = dir => {
-    const stat = fs.statSync(dir);
+    const stat = fs.lstatSync(dir);
 
     if (stat.isDirectory()) {
       fs.readdirSync(dir).forEach(file => {
