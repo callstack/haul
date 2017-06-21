@@ -15,4 +15,4 @@ const resolver = require('resolve');
 module.exports = (root: string, name: string) =>
   resolver
     .sync(`${name}/package.json`, { basedir: root })
-    .replace('/package.json', '');
+    .replace(/(\\|\\\\|\/)package.json$/, '');
