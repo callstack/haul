@@ -33,6 +33,20 @@ const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 const WebSocketProxy = require('./util/WebsocketProxy.js');
 
 /**
+ * Custom repoter for webpackMiddleware, that will check if there are any compilation errors
+ * If yes, throw it using console.error
+ */
+
+const customReporter = ({ stats }) => {
+  const hasErrors = !!(stats.compilation.errors &&
+    stats.compilation.errors.length);
+  if (hasErrors) {
+    const error = stats.compilation.errors.toString();
+    console.error(`\n${error}`);
+  }
+};
+
+/**
  * Packager-like Server running on top of Webpack
  */
 function createServer(
@@ -44,7 +58,7 @@ function createServer(
   const webpackMiddleware = webpackDevMiddleware(compiler, {
     lazy: false,
     noInfo: true,
-    reporter: null,
+    reporter: customReporter,
     stats: 'errors-only',
     watchOptions: {
       aggregateTimeout: 300,
