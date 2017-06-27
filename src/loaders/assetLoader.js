@@ -36,6 +36,7 @@ module.exports = async function assetLoader() {
     // Asset is not an image
   }
 
+  const pathSepPattern = new RegExp(`\\${path.sep}`, 'g');
   const filepath = this.resourcePath;
   const dirname = path.dirname(filepath);
   const url = path.relative(config.root, dirname);
@@ -43,7 +44,7 @@ module.exports = async function assetLoader() {
   const assets = path.join('assets', config.bundle ? '' : config.platform);
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
-  const longname = `${`${url.replace(/\//g, '_')}_${filename}`
+  const longname = `${`${url.replace(pathSepPattern, '_')}_${filename}`
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')}.${type}`;
 
@@ -129,7 +130,7 @@ module.exports = async function assetLoader() {
     this.emitFile(dest, item.content);
   });
 
-  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/', assets, url))}`;
+  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/', assets, url).replace(pathSepPattern, '/'))}`;
 
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
