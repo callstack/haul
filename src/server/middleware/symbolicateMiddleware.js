@@ -84,6 +84,8 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
     stack = null;
   }
 
+  if (!stack) return null;
+
   const newStack = stack.filter(stackLine => {
     const { methodName } = stackLine;
     const unwantedStackRegExp = new RegExp(
