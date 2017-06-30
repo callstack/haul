@@ -35,14 +35,18 @@ onmessage = (function() {
       for (const key in message.inject) {
         self[key] = JSON.parse(message.inject[key]);
       }
-      let error; //
-      try {
-        importScripts(message.url);
-      } catch (err) {
-        self.ErrorUtils.reportFatalError(err);
-      } finally {
-        sendReply(null /* result */, error);
+
+      function evalJS(js) {
+        try {
+          eval(js);
+        } catch (e) {
+          self.ErrorUtils.reportFatalError(e);
+        } finally {
+          self.postMessage({ replyID: message.id });
+        }
       }
+
+      fetch(message.url).then(resp => resp.text()).then(evalJS);
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;
