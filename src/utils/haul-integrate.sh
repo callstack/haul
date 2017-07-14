@@ -3,8 +3,9 @@
 THIS_DIR=$(dirname $0)
 
 SCRIPT_SRC="${THIS_DIR}/../../../react-native/packager"
+
+# Check if react-native/packager exists, for React Native < 0.46
 if [ ! -d "${SCRIPT_SRC}" ]; then
-  # Check if react-native/packager is exist, for >= 0.46 RN version.
   SCRIPT_SRC="${THIS_DIR}/../../../react-native/scripts"
 fi
 
