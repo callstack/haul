@@ -40,7 +40,7 @@
     "escape-string-regexp": "^1.0.5",
     "eslint-plugin-prettier": "^2.0.1",
     "express": "^4.15.2",
-    "happypack": "github:amireh/happypack#3256a3380dde2e06e3ad2ca3b41e9a81fd4f9673",
+    "happypack": "3.1.0",
     "hasha": "^2.2.0",
     "image-size": "^0.5.1",
     "inquirer": "^3.0.6",
