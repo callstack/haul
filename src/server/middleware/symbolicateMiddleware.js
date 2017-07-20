@@ -74,13 +74,35 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
     return null;
   }
 
+  let stack;
+
   try {
     const payload: ReactNativeSymbolicateRequest = JSON.parse(req.rawBody);
-    return payload.stack;
+    stack = payload.stack;
   } catch (err) {
     // should happen, but at least we won't die
-    return null;
+    stack = null;
   }
+
+  if (!stack) return null;
+
+  const newStack = stack.filter(stackLine => {
+    const { methodName } = stackLine;
+    const unwantedStackRegExp = new RegExp(
+      /(__webpack_require__|haul|eval(JS){0,1})/,
+    );
+
+    if (unwantedStackRegExp.test(methodName)) return false; // we don't need those
+
+    const evalLine = methodName.indexOf('Object../');
+    if (evalLine > -1) {
+      const newMethodName = methodName.slice(evalLine + 9); // removing this prefix in method names
+      stackLine.methodName = newMethodName; // eslint-disable-line
+    }
+    return true;
+  });
+
+  return newStack;
 }
 
 /**

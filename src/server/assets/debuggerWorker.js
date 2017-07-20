@@ -7,7 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-/* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */
+/* global __fbBatchedBridge, self, importScripts, postMessage, onmessage: true */ // eslint-disable-line
 
 /* eslint-disable */
 
@@ -35,13 +35,18 @@ onmessage = (function() {
       for (const key in message.inject) {
         self[key] = JSON.parse(message.inject[key]);
       }
-      let error;
-      try {
-        importScripts(message.url);
-      } catch (err) {
-        error = JSON.stringify(err);
+
+      function evalJS(js) {
+        try {
+          eval(js);
+        } catch (e) {
+          self.ErrorUtils.reportFatalError(e);
+        } finally {
+          self.postMessage({ replyID: message.id });
+        }
       }
-      sendReply(null /* result */, error);
+
+      fetch(message.url).then(resp => resp.text()).then(evalJS);
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;
