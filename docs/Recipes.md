@@ -1,6 +1,6 @@
 # Recipes
 
-# Typescript
+## Typescript
 You will need to install `ts-loader` for Haul to work with TypeScript.
 
 ```yarn add -D ts-loader```
@@ -21,7 +21,14 @@ module.exports = ({ platform }, { module, resolve }) => ({
   },
   resolve: {
     ...resolve,
-    extensions: ['.ts', '.tsx', `.${platform}.ts`, '.native.ts', `.${platform}.tsx`, '.native.tsx', ...resolve.extensions],
+    extensions: [
+      '.ts',
+      '.tsx',
+      `.${platform}.ts`,
+      '.native.ts',
+      `.${platform}.tsx`,
+      '.native.tsx',
+      ...resolve.extensions],
   },
 });
 ```
@@ -40,28 +47,35 @@ Revised `webpack.haul.js`
 
 ```javascript
 module.exports = ({ platform }, { module, resolve }) => ({
-	entry: `./src/index.${platform}.tsx`,
-	module: {
-		...module,
-		rules: [
-			{
-				test: /\.tsx?$/,
-				exclude: '/node_modules/',
-				use: [
-					{
-						loader: 'babel-loader',
-					},
-					{
-						loader: 'ts-loader'
-					},
-				],
-			},
-			...module.rules
-		]
-	},
-	resolve: {
-		...resolve,
-		extensions: ['.ts', '.tsx', `.${platform}.ts`, '.native.ts', `.${platform}.tsx`, '.native.tsx', ...resolve.extensions],
-	},
+  entry: `./src/index.${platform}.tsx`,
+  module: {
+    ...module,
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: '/node_modules/',
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+          {
+            loader: 'ts-loader'
+          },
+        ],
+      },
+      ...module.rules
+    ]
+  },
+  resolve: {
+    ...resolve,
+    extensions: [
+      '.ts',
+      '.tsx',
+      `.${platform}.ts`,
+      '.native.ts',
+      `.${platform}.tsx`,
+      '.native.tsx',
+      ...resolve.extensions],
+  },
 });
 ```
