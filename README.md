@@ -65,6 +65,7 @@ Check out the docs to learn more about available commands and tips on customizin
 
 1. [CLI Commands](docs/CLI%20Commands.md)
 1. [Configuration](docs/Configuration.md)
+1. [Recipes](docs/Recipes.md)
 
 ## Limitations
 
