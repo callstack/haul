@@ -28,9 +28,25 @@ module.exports = ({ platform }, { module, resolve }) => ({
       '.native.ts',
       `.${platform}.tsx`,
       '.native.tsx',
-      ...resolve.extensions],
-  },
+      ...resolve.extensions
+    ]
+  }
 });
+```
+
+And a corresponding (example) `tsconfig.json`
+```json
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 ```
 
 
