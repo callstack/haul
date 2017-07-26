@@ -8,7 +8,7 @@
  */
 
 /* eslint-disable import/no-extraneous-dependencies */
-require('../../vendor/polyfills/console.js');
+require('../../vendor/polyfills/console.js')(global);
 require('../../vendor/polyfills/error-guard.js');
 require('../../vendor/polyfills/Number.es6.js');
 require('../../vendor/polyfills/String.prototype.es6.js');
