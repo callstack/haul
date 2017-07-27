@@ -46,9 +46,15 @@ workflows:
   node-8:
     jobs:
       - build
-      - lint
-      - test
+      - lint:
+        requires:
+          - build
+      - test:
+        requires:
+          - build
   node-4:
     jobs:
       - build-node-4
-      - test
+      - test:
+        requires:
+          - build-node-4
