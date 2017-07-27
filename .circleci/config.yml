@@ -1,35 +1,19 @@
 version: 2
 jobs:
-<<<<<<< 792bbf2e59a793d215b66426db62b9686d6cd87b
   # Testing Node 8; running Yarn, ESLint, Flow and Jest
   test-node-8:
     docker:
       - image: circleci/node:8.1.4
-=======
-  build:
-    docker:
-      - image: circleci/node:8.1.4
-    working_directory: ~/haul
->>>>>>> Configure CircleCi 2
     steps:
       - checkout
       - restore_cache:
           keys:
-<<<<<<< 792bbf2e59a793d215b66426db62b9686d6cd87b
           - node8-dependencies-{{ checksum "package.json" }}
           - node8-dependencies
-=======
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies
-      - run:
-          name: update-yarn
-          command: sudo npm i -g yarn
->>>>>>> Configure CircleCi 2
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-<<<<<<< 792bbf2e59a793d215b66426db62b9686d6cd87b
           key: node8-dependencies-{{ checksum "package.json" }}
       - run: yarn test
 
@@ -59,21 +43,3 @@ workflows:
   node-4:
     jobs:
       - test-node-4
-=======
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run:
-          name: install-nvm
-          command: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-      - run:
-          name: node-4
-          command: |
-            nvm install 4
-            nvm use 4
-            yarn jest
-      - run:
-          name: node-6
-          command: |
-            nvm install 6
-            nvm use 6
-            yarn test
->>>>>>> Configure CircleCi 2
