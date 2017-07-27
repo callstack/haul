@@ -10,13 +10,13 @@ function fixRequireIssue() {
     visitor: {
       AssignmentExpression(path) {
         if (path.node.operator === '=') {
-          const { left } = path.node;
+          const {left} = path.node;
 
           if (left.type !== 'MemberExpression') {
             return;
           }
 
-          const { object } = left;
+          const {object} = left;
 
           if (
             // require.xxx

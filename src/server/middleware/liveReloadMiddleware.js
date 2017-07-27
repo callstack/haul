@@ -15,7 +15,7 @@ function liveReloadMiddleware(compiler) {
      * and awaits reload signal (http status code - 205)
      */
     if (req.path === '/onchange') {
-      const watcher = { req, res };
+      const watcher = {req, res};
 
       watchers.push(watcher);
 
@@ -36,7 +36,7 @@ function liveReloadMiddleware(compiler) {
 
       watchers.forEach(watcher => {
         watcher.res.writeHead(205, headers);
-        watcher.res.end(JSON.stringify({ changed: true }));
+        watcher.res.end(JSON.stringify({changed: true}));
       });
 
       watchers = [];

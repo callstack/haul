@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type { Command } from '../types';
+import type {Command} from '../types';
 
 const chalk = require('chalk');
 const cliui = require('cliui');
@@ -50,7 +50,9 @@ module.exports = (command: Command) => {
       command.options
         .map(
           option =>
-            `  ${printName(option)}   \t ${chalk.gray(printDescription(option))}`,
+            `  ${printName(option)}   \t ${chalk.gray(
+              printDescription(option),
+            )}`,
         )
         .join('\n'),
     );

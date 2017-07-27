@@ -18,7 +18,7 @@ module.exports = function getBabelConfig(cwd: string) {
   const file = path.join(cwd, '.babelrc');
 
   if (fs.existsSync(file)) {
-    babelrc = { extends: file };
+    babelrc = {extends: file};
   } else {
     babelrc = DEFAULT_BABELRC;
   }

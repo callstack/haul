@@ -52,9 +52,10 @@ function AssetResolver(options: Options) {
                       Number(a.replace(/[^\d.]/g, '')) -
                       Number(b.replace(/[^\d.]/g, '')),
                   )[0];
-              resolved = map[key] && map[key].name
-                ? path.resolve(path.dirname(request.path), map[key].name)
-                : null;
+              resolved =
+                map[key] && map[key].name
+                  ? path.resolve(path.dirname(request.path), map[key].name)
+                  : null;
             }
 
             if (resolved) {
@@ -62,7 +63,8 @@ function AssetResolver(options: Options) {
                 null,
                 Object.assign({}, request, {
                   path: resolved,
-                  relativePath: request.relativePath &&
+                  relativePath:
+                    request.relativePath &&
                     resolver.join(request.relativePath, resolved),
                   file: true,
                 }),
@@ -82,11 +84,13 @@ function AssetResolver(options: Options) {
 AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|m4v|aac|aiff|caf|m4a|mp3|wav|html|pdf)$/;
 AssetResolver.collect = (
   list,
-  { name, type, platform }: { name: string, type: string, platform: string },
+  {name, type, platform}: {name: string, type: string, platform: string},
 ) => {
   const regex = /^(bmp|gif|jpg|jpeg|png|psd|tiff|webp|svg)$/.test(type)
     ? new RegExp(
-        `^${escapeStringRegexp(name)}(@\\d+(\\.\\d+)?x)?(\\.(${platform}|native))?\\.${type}$`,
+        `^${escapeStringRegexp(
+          name,
+        )}(@\\d+(\\.\\d+)?x)?(\\.(${platform}|native))?\\.${type}$`,
       )
     : new RegExp(
         `^${escapeStringRegexp(name)}(\\.(${platform}|native))?\\.${type}$`,
@@ -114,7 +118,7 @@ AssetResolver.collect = (
       }
 
       return Object.assign({}, acc, {
-        [scale]: { platform, name: curr },
+        [scale]: {platform, name: curr},
       });
     }
 

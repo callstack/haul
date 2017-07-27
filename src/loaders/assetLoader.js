@@ -118,15 +118,18 @@ module.exports = async function assetLoader() {
 
     if (config.outputPath) {
       // support functions as outputPath to generate them dynamically
-      dest = typeof config.outputPath === 'function'
-        ? config.outputPath(dest)
-        : path.join(config.outputPath, dest);
+      dest =
+        typeof config.outputPath === 'function'
+          ? config.outputPath(dest)
+          : path.join(config.outputPath, dest);
     }
 
     this.emitFile(dest, item.content);
   });
 
-  let publicPath = `__webpack_public_path__ + ${JSON.stringify(path.join('/', assets, url).replace(pathSepPattern, '/'))}`;
+  let publicPath = `__webpack_public_path__ + ${JSON.stringify(
+    path.join('/', assets, url).replace(pathSepPattern, '/'),
+  )}`;
 
   if (config.publicPath) {
     // support functions as publicPath to generate them dynamically
@@ -137,9 +140,9 @@ module.exports = async function assetLoader() {
     );
   }
 
-  const hashes = pairs.map(item => hasha(item.content, { algorithm: 'md5' }));
+  const hashes = pairs.map(item => hasha(item.content, {algorithm: 'md5'}));
 
-  let info: ?{ width: number, height: number, type: string };
+  let info: ?{width: number, height: number, type: string};
 
   try {
     info = size(this.resourcePath);

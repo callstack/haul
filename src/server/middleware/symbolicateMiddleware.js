@@ -16,8 +16,8 @@
  *   the source map that is tucked away inside webpack's in-memory filesystem.
  *
  */
-import type { $Request, Middleware } from 'express';
-import type { ReactNativeStackFrame, ReactNativeStack } from '../../types';
+import type {$Request, Middleware} from 'express';
+import type {ReactNativeStackFrame, ReactNativeStack} from '../../types';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
@@ -47,8 +47,8 @@ function createSourceMapConsumer(compiler: *) {
   const base = delve(compiler.outputFileSystem.data, hops);
 
   // grab the Buffer for the source map
-  const sourceMapBuffer = base &&
-    base[`${compiler.options.output.filename}.map`];
+  const sourceMapBuffer =
+    base && base[`${compiler.options.output.filename}.map`];
 
   // we stop here if we couldn't find that map
   if (!sourceMapBuffer) {
@@ -87,7 +87,7 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
   if (!stack) return null;
 
   const newStack = stack.filter(stackLine => {
-    const { methodName } = stackLine;
+    const {methodName} = stackLine;
     const unwantedStackRegExp = new RegExp(
       /(__webpack_require__|haul|eval(JS){0,1})/,
     );

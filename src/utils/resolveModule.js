@@ -14,7 +14,7 @@ const path = require('path');
 */
 
 module.exports = (root: string, name: string) => {
-  const filePath = resolver.sync(`${name}/package.json`, { basedir: root });
+  const filePath = resolver.sync(`${name}/package.json`, {basedir: root});
 
   return path.dirname(filePath);
 };

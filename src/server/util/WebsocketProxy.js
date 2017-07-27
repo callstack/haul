@@ -20,7 +20,7 @@ const send = (socket, message) => {
  */
 class WebSocketProxy {
   constructor(server, path) {
-    this.wss = new WebSocketServer({ server, path });
+    this.wss = new WebSocketServer({server, path});
 
     this.wss.on('connection', this.onConnection.bind(this));
   }
@@ -30,7 +30,7 @@ class WebSocketProxy {
    * `role` param, which we use to determine type of connection.
    */
   onConnection(socket) {
-    const { url } = socket.upgradeReq;
+    const {url} = socket.upgradeReq;
 
     if (url.indexOf('role=debugger') >= 0) {
       this.handleDebuggerSocket(socket);
@@ -65,7 +65,7 @@ class WebSocketProxy {
     this.debuggerSocket.onerror = onCloseHandler;
     this.debuggerSocket.onclose = onCloseHandler;
 
-    this.debuggerSocket.onmessage = ({ data }) => {
+    this.debuggerSocket.onmessage = ({data}) => {
       if (this.clientSocket) {
         send(this.clientSocket, data);
       }
@@ -88,7 +88,7 @@ class WebSocketProxy {
     const onCloseHandler = () => {
       this.clientSocket = null;
       if (this.debuggerSocket) {
-        send(this.debuggerSocket, JSON.stringify({ method: '$disconnected' }));
+        send(this.debuggerSocket, JSON.stringify({method: '$disconnected'}));
       }
     };
 
@@ -96,7 +96,7 @@ class WebSocketProxy {
     this.clientSocket.onerror = onCloseHandler;
     this.clientSocket.onclose = onCloseHandler;
 
-    this.clientSocket.onmessage = ({ data }) => {
+    this.clientSocket.onmessage = ({data}) => {
       if (this.debuggerSocket) {
         send(this.debuggerSocket, data);
       }

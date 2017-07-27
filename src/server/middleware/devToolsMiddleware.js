@@ -24,7 +24,7 @@ const getChromeAppName = () => {
  * Launches given `url` in Chrome
  */
 const launchChrome = url => {
-  opn(url, { app: getChromeAppName() }, err => {
+  opn(url, {app: getChromeAppName()}, err => {
     console.error('Google Chrome exited with error', err);
   });
 };
@@ -42,7 +42,7 @@ function devToolsMiddleware(debuggerProxy) {
         const readStream = fs.createReadStream(
           path.join(__dirname, '../assets/debugger.html'),
         );
-        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.writeHead(200, {'Content-Type': 'text/html'});
         readStream.pipe(res);
         break;
       }
@@ -54,7 +54,7 @@ function devToolsMiddleware(debuggerProxy) {
         const readStream = fs.createReadStream(
           path.join(__dirname, '../assets/debuggerWorker.js'),
         );
-        res.writeHead(200, { 'Content-Type': 'application/javascript' });
+        res.writeHead(200, {'Content-Type': 'application/javascript'});
         readStream.pipe(res);
         break;
       }

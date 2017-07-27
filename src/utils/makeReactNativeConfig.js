@@ -46,9 +46,13 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = (
-  { platform, root, dev, minify, bundle },
-): WebpackConfig => ({
+const getDefaultConfig = ({
+  platform,
+  root,
+  dev,
+  minify,
+  bundle,
+}): WebpackConfig => ({
   context: root,
   entry: [
     /**
@@ -72,7 +76,7 @@ const getDefaultConfig = (
        * This is a non-standard feature
        * And, it won't work coz we don't have DOM
        */
-      { parser: { requireEnsure: false } },
+      {parser: {requireEnsure: false}},
       {
         test: /\.js$/,
         /**
@@ -82,7 +86,7 @@ const getDefaultConfig = (
         exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
         use: {
           loader: require.resolve('happypack/loader'),
-          query: { id: 'babel' },
+          query: {id: 'babel'},
         },
       },
       {
@@ -93,7 +97,7 @@ const getDefaultConfig = (
            * This needs the AssetResolver plugin in resolver.plugins to work
            */
           loader: require.resolve('../loaders/assetLoader'),
-          query: { platform, root, bundle },
+          query: {platform, root, bundle},
         },
       },
     ],
@@ -113,7 +117,7 @@ const getDefaultConfig = (
        * Various libraries like React rely on `process.env.NODE_ENV`
        * to distinguish between production and development
        */
-      'process.env': { NODE_ENV: dev ? '"development"' : '"production"' },
+      'process.env': {NODE_ENV: dev ? '"development"' : '"production"'},
       __DEV__: dev,
     }),
     new webpack.LoaderOptionsPlugin({
@@ -188,7 +192,7 @@ const getDefaultConfig = (
        * This is required by asset loader to resolve extra scales
        * It will resolve assets like image@1x.png when image.png is not present
        */
-      new AssetResolver({ platform }),
+      new AssetResolver({platform}),
     ],
     /**
      * Match what React Native packager supports
@@ -208,7 +212,7 @@ function makeReactNativeConfig(
   options: ConfigOptions,
 ): [Array<WebpackConfig>, typeof PLATFORMS] {
   const configs = PLATFORMS.map(platform => {
-    const env = Object.assign({}, options, { platform });
+    const env = Object.assign({}, options, {platform});
     const defaultWebpackConfig = getDefaultConfig(env);
 
     const config = Object.assign(

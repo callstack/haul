@@ -8,7 +8,7 @@ const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
 
-const { MessageError } = require('../errors');
+const {MessageError} = require('../errors');
 const messages = require('../messages');
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 const getWebpackConfig = require('../utils/getWebpackConfig');
@@ -68,7 +68,8 @@ async function bundle(opts: *) {
       } else {
         resolve(info);
       }
-    }));
+    }),
+  );
 
   clear();
 
@@ -106,7 +107,7 @@ module.exports = {
     {
       name: 'minify',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
-      default: ({ dev }: *) => !dev,
+      default: ({dev}: *) => !dev,
       parse: (val: string) => val !== 'false',
       choices: [
         {

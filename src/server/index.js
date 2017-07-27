@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type { WebpackStats } from '../types';
+import type {WebpackStats} from '../types';
 
 const express = require('express');
 const http = require('http');
