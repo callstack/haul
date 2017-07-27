@@ -27,8 +27,8 @@ jobs:
           keys:
           - node4-dependencies-{{ checksum "package.json" }}
           - node4-dependencies
-      - run: |
-        export PKG=eslint-config-callstack-io; npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG"
+      - run:
+          (export PKG=eslint-config-callstack-io; npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG")
       - run: npm install
       - save_cache:
           paths:
