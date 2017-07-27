@@ -34,12 +34,20 @@ jobs:
       - image: circleci/node:8.1.4
     steps:
       - checkout
+      - restore_cache:
+          keys:
+          - node4-dependencies-{{ checksum "package.json" }}
+          - node4-dependencies
       - run: yarn lint && yarn flow
   test:
     docker:
       - image: circleci/node:8.1.4
     steps:
       - checkout
+      - restore_cache:
+          keys:
+          - node4-dependencies-{{ checksum "package.json" }}
+          - node4-dependencies
       - run: yarn jest
 workflows:
   version: 2
