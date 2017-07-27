@@ -1,0 +1,54 @@
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node8-dependencies-{{ checksum "package.json" }}
+          - node8-dependencies
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: node8-dependencies-{{ checksum "package.json" }}
+  build-node-4:
+    docker:
+      - image: circleci/node:4.8.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node4-dependencies-{{ checksum "package.json" }}
+          - node4-dependencies
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: node4-dependencies-{{ checksum "package.json" }}
+  lint:
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - checkout
+      - run: yarn lint && yarn flow
+  test:
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - checkout
+      - run: yarn jest
+workflows:
+  version: 2
+  node-8:
+    jobs:
+      - build
+      - lint
+      - test
+  node-4:
+    jobs:
+      - build-node-4
+      - test
