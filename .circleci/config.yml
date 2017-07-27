@@ -1,7 +1,7 @@
-
 version: 2
 jobs:
-  build:
+  # Testing Node 8; running Yarn, ESLint, Flow and Jest
+  test-node-8:
     docker:
       - image: circleci/node:8.1.4
     steps:
@@ -17,7 +17,8 @@ jobs:
           key: node8-dependencies-{{ checksum "package.json" }}
       - run: yarn test
 
-  build-node-4:
+  # Testing Node 4; running just Jest, as we develop on Node >=6.
+  test-node-4:
     docker:
       - image: circleci/node:4.8.4
     steps:
@@ -31,13 +32,14 @@ jobs:
           paths:
             - node_modules
           key: node4-dependencies-{{ checksum "package.json" }}
-      - run: yarn jest
+      - run: npm run jest
 
+# Workflows enables us to run multiple jobs in parallel
 workflows:
   version: 2
   node-8:
     jobs:
-      - build
+      - test-node-8
   node-4:
     jobs:
-      - build-node-4
+      - test-node-4
