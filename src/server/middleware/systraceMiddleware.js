@@ -4,7 +4,7 @@
  * 
  * @flow
  */
-import type {Middleware, $Request} from 'express';
+import type { Middleware, $Request } from 'express';
 
 const fs = require('fs');
 const dedent = require('dedent');

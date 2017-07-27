@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type {Command} from '../types';
+import type { Command } from '../types';
 
 const chalk = require('chalk');
 const cliui = require('cliui');

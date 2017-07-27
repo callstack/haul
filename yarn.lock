@@ -1609,9 +1609,9 @@ eslint-config-airbnb@^15.1.0:
   dependencies:
     eslint-config-airbnb-base "^11.3.0"
 
-eslint-config-callstack-io@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-callstack-io/-/eslint-config-callstack-io-0.2.1.tgz#e1a2117269405cc63de41436410efd3c8ef918df"
+eslint-config-callstack-io@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-callstack-io/-/eslint-config-callstack-io-0.3.0.tgz#5c3442581fd704490f87d2fd919070d83d5480ab"
   dependencies:
     babel-eslint "^7.2.3"
     eslint-config-airbnb "^15.1.0"

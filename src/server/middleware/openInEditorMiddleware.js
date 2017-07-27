@@ -18,8 +18,8 @@
  * We will rely on the NPM package `open-in-editor` to provide this
  * functionality. (read: scapegoat).
  */
-import type {$Request, $Response, Middleware} from 'express';
-import type {ReactNativeStackFrame} from '../../types';
+import type { $Request, $Response, Middleware } from 'express';
+import type { ReactNativeStackFrame } from '../../types';
 
 // A configuration object fed into `open-in-editor`.
 type OpenInEditorConfig = {

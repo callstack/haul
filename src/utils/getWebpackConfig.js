@@ -6,7 +6,7 @@
  */
 const path = require('path');
 const fs = require('fs');
-const {MessageError} = require('../errors');
+const { MessageError } = require('../errors');
 const messages = require('../messages');
 
 module.exports = function getWebpackConfig(cwd: string, config: string) {

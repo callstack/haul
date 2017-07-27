@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type {WebpackStats} from '../types';
+import type { WebpackStats } from '../types';
 
 const chalk = require('chalk');
 const dedent = require('dedent');

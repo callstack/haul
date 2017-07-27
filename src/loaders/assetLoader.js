@@ -140,9 +140,9 @@ module.exports = async function assetLoader() {
     );
   }
 
-  const hashes = pairs.map(item => hasha(item.content, {algorithm: 'md5'}));
+  const hashes = pairs.map(item => hasha(item.content, { algorithm: 'md5' }));
 
-  let info: ?{width: number, height: number, type: string};
+  let info: ?{ width: number, height: number, type: string };
 
   try {
     info = size(this.resourcePath);

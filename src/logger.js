@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type {Logger} from './types';
+import type { Logger } from './types';
 
 const chalk = require('chalk');
 const stripAnsi = require('strip-ansi');

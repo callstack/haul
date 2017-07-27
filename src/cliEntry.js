@@ -4,7 +4,7 @@
  *
  * @flow
  */
-import type {Command} from './types';
+import type { Command } from './types';
 
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
@@ -16,7 +16,7 @@ const chalk = require('chalk');
 const pjson = require('../package.json');
 const logger = require('./logger');
 const messages = require('./messages');
-const {MessageError} = require('./errors');
+const { MessageError } = require('./errors');
 
 const DEFAULT_COMMAND = require('./commands/start');
 
@@ -41,7 +41,7 @@ const NOT_SUPPORTED_COMMANDS = [
   'dependencies',
 ];
 
-const getDisplayName = (command: string, opts: {[key: string]: mixed}) => {
+const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
   const list = Object.keys(opts).map(key => `--${key} ${String(opts[key])}`);
 
   const {
@@ -127,7 +127,7 @@ async function validateOptions(options, flags) {
     acc[option.name] = value;
   }
 
-  return {options: acc, promptedOptions: promptedAcc};
+  return { options: acc, promptedOptions: promptedAcc };
 }
 
 async function run(args: Array<string>) {
@@ -159,14 +159,14 @@ async function run(args: Array<string>) {
 
   const opts = command.options || [];
 
-  const {_, ...flags} = camelcaseKeys(
+  const { _, ...flags } = camelcaseKeys(
     minimist(args, {
       string: opts.map(opt => opt.name),
     }),
   );
 
-  const {options, promptedOptions} = await validateOptions(opts, flags);
-  const userDefinedOptions = {...flags, ...promptedOptions};
+  const { options, promptedOptions } = await validateOptions(opts, flags);
+  const userDefinedOptions = { ...flags, ...promptedOptions };
   const displayName = getDisplayName(command.name, userDefinedOptions);
 
   if (Object.keys(promptedOptions).length) {
