@@ -27,9 +27,9 @@ jobs:
           keys:
           - node4-dependencies-{{ checksum "package.json" }}
           - node4-dependencies
-      - run: npm install
       - run: sudo npm install -g install-peerdeps
       - run: install-peerdeps --dev eslint-config-callstack-io
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
