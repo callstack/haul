@@ -155,7 +155,9 @@ const addToPackageScripts = async (cwd: string) => {
 
   if (haulScript) {
     ora().info(
-      `Haul already exists in your package.json. Start Haul by running ${getRunScript(haulScript)}'`,
+      `Haul already exists in your package.json. Start Haul by running ${getRunScript(
+        haulScript,
+      )}'`,
     );
     return;
   }
@@ -170,7 +172,8 @@ const addToPackageScripts = async (cwd: string) => {
       {
         type: 'input',
         name: 'scriptName',
-        message: 'Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`',
+        message:
+          'Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`',
         default: 'haul',
       },
     ]);
@@ -308,7 +311,9 @@ const addToXcodeBuild = async (cwd: string) => {
     progress.succeed('Added haul to your Xcode build scripts');
   } else {
     progress.fail(
-      `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey('https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode')} for manual instructions`,
+      `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey(
+        'https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode',
+      )} for manual instructions`,
     );
   }
 };

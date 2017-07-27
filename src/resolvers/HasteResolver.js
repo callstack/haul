@@ -37,7 +37,9 @@ function HasteResolver(options: Options) {
         return resolver.doResolve(
           'resolve',
           obj,
-          `Aliased ${innerRequest} with haste mapping: ${hasteMap[innerRequest]}`,
+          `Aliased ${innerRequest} with haste mapping: ${hasteMap[
+            innerRequest
+          ]}`,
           callback,
         );
       },

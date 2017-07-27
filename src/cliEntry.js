@@ -73,9 +73,10 @@ const getDisplayName = (command: string, opts: { [key: string]: mixed }) => {
 
   // If it's `npm script` that already defines command, e.g. "start": "haul start"
   // then, `yarn run start --` is enough. Otherwise, command has to be set.
-  const exec = lifecycleScript && lifecycleScript.includes(command)
-    ? `yarn run ${scriptName}`
-    : `yarn run ${scriptName} ${command}`;
+  const exec =
+    lifecycleScript && lifecycleScript.includes(command)
+      ? `yarn run ${scriptName}`
+      : `yarn run ${scriptName} ${command}`;
 
   return `${exec} -- ${list.join(' ')}`;
 };
@@ -85,18 +86,19 @@ async function validateOptions(options, flags) {
   const promptedAcc = {};
 
   for (const option of options) {
-    const defaultValue = typeof option.default === 'function'
-      ? option.default(acc)
-      : option.default;
+    const defaultValue =
+      typeof option.default === 'function'
+        ? option.default(acc)
+        : option.default;
 
-    const parse = typeof option.parse === 'function'
-      ? option.parse
-      : val => val;
+    const parse =
+      typeof option.parse === 'function' ? option.parse : val => val;
 
     let value = flags[option.name] ? parse(flags[option.name]) : defaultValue;
 
     const missingValue = option.required && typeof value === 'undefined';
-    const invalidOption = option.choices &&
+    const invalidOption =
+      option.choices &&
       typeof value !== 'undefined' &&
       typeof option.choices.find(c => c.value === value) === 'undefined';
 
@@ -130,7 +132,9 @@ async function validateOptions(options, flags) {
 
 async function run(args: Array<string>) {
   if (
-    args[0] === 'version' || args.includes('-v') || args.includes('--version')
+    args[0] === 'version' ||
+    args.includes('-v') ||
+    args.includes('--version')
   ) {
     console.log(`v${pjson.version}`);
     return;

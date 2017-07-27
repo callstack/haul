@@ -27,7 +27,9 @@ ${commands
       .map(command => `  ${command.name} \t ${chalk.gray(command.description)}`)
       .join('\n')}
 
-Run ${chalk.bold('haul COMMAND --help')} for more information on specific commands
+Run ${chalk.bold(
+      'haul COMMAND --help',
+    )} for more information on specific commands
 `,
   );
 

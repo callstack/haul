@@ -50,7 +50,9 @@ module.exports = (command: Command) => {
       command.options
         .map(
           option =>
-            `  ${printName(option)}   \t ${chalk.gray(printDescription(option))}`,
+            `  ${printName(option)}   \t ${chalk.gray(
+              printDescription(option),
+            )}`,
         )
         .join('\n'),
     );

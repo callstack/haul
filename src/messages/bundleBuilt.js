@@ -10,19 +10,17 @@ const chalk = require('chalk');
 const dedent = require('dedent');
 const path = require('path');
 
-module.exports = (
-  {
-    stats,
-    platform,
-    assetsPath,
-    bundlePath,
-  }: {
-    stats: WebpackStats,
-    platform: string,
-    assetsPath?: string,
-    bundlePath?: string,
-  },
-) => {
+module.exports = ({
+  stats,
+  platform,
+  assetsPath,
+  bundlePath,
+}: {
+  stats: WebpackStats,
+  platform: string,
+  assetsPath?: string,
+  bundlePath?: string,
+}) => {
   const heading = stats.hasWarnings()
     ? chalk.yellow('Built with warnings')
     : 'Built successfully!';
