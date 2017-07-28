@@ -58,6 +58,7 @@
     "ws": "^2.2.2"
   },
   "devDependencies": {
+    "babel-jest": "test",
     "eslint": "^4.3.0",
     "eslint-config-callstack-io": "^0.3.1",
     "flow-bin": "^0.42.0",
