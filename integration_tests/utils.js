@@ -24,7 +24,7 @@ const run = (cmd: string, cwd?: string) => {
       STDOUT: ${result.stdout && result.stdout.toString()}
       STDERR: ${result.stderr && result.stderr.toString()}
       STATUS: ${result.status}
-      ERROR: ${result.error.toString()}
+      ERROR: ${result.error && result.error.toString()}
     `;
     throw new Error(message);
   }
