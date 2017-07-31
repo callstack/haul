@@ -85,7 +85,7 @@
         "env",
         {
           "targets": {
-            "node": "current"
+            "node": 4
           },
           "useBuiltIns": true
         }
@@ -127,6 +127,7 @@
     }
   },
   "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
     "testPathIgnorePatterns": [
       "/integration_tests/.*/__tests__"
     ]
