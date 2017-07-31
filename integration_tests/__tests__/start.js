@@ -6,7 +6,7 @@
  */
 
 const { runHaul, runHaulSync } = require('../runHaul');
-const { cleanup, writeFiles, replaceTestPath } = require('../utils');
+const { cleanup, writeFiles } = require('../utils');
 const path = require('path');
 const os = require('os');
 const { run } = require('../utils');
@@ -43,9 +43,7 @@ test('start --platform android', done => {
 });
 
 function testPlatform(platform, done) {
-  // $FlowFixMe – new Jest API not yet in typings
-  jest.setTimeout(20000);
-  expect.assertions(1);
+  expect.assertions(4);
   const messageBuffer = [];
   const haul = runHaul(TEST_PROJECT_DIR, ['start', '--platform', platform]);
 
@@ -56,7 +54,13 @@ function testPlatform(platform, done) {
     }
 
     if (message.match('Built successfully!')) {
-      expect(replaceTestPath(messageBuffer.join('\n'))).toMatchSnapshot();
+      const stdout = messageBuffer.join('\n');
+      expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
+      expect(stdout).toMatch('Haul is now bundling your React Native app');
+      expect(stdout).toMatch('A fresh build may take longer than usual');
+      expect(stdout).toMatch(
+        `You can now run the app on your ${platform} device`,
+      );
       done();
       haul.kill();
     }

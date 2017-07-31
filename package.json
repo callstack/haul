@@ -85,7 +85,7 @@
         "env",
         {
           "targets": {
-            "node": "current"
+            "node": 4
           },
           "useBuiltIns": true
         }

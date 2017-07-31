@@ -1,31 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`start --platform android 1`] = `
-"WARN  Error running adb reverse tcp:8081 tcp:8081: error: device '(null)' not found
-error: device '(null)' not found
-INFO  Ready at http://localhost:8081
-
-Haul is now bundling your React Native app, starting from:
-<<REPLACED>>/fixtures/react-native-generated-project/index.android.js
-
-A fresh build may take longer than usual
-DONE  Built successfully!
-
-You can now run the app on your android device"
-`;
-
-exports[`start --platform ios 1`] = `
-"INFO  Ready at http://localhost:8081
-
-Haul is now bundling your React Native app, starting from:
-<<REPLACED>>/fixtures/react-native-generated-project/index.ios.js
-
-A fresh build may take longer than usual
-DONE  Built successfully!
-
-You can now run the app on your ios device"
-`;
-
 exports[`start command displays "Select platform" message 1`] = `
 "? Select platform to bundle for (Use arrow keys)
 ❯ ios - Serves iOS bundle 
