@@ -11,6 +11,7 @@ jobs:
           keys:
           - node8-dependencies-{{ checksum "package.json" }}
           - node8-dependencies
+      - run: sudo npm i -g yarn
       - run: yarn install
       - save_cache:
           paths:
@@ -36,6 +37,8 @@ jobs:
           paths:
             - node_modules
           key: node4-dependencies-{{ checksum "package.json" }}
+      # We use yarn to install integration_tests fixtures
+      - run: sudo npm i -g yarn
       - run: npm run jest
 
 # Workflows enables us to run multiple jobs in parallel
