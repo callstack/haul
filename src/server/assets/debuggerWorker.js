@@ -54,8 +54,7 @@ onmessage = (function() {
         try {
           eval(
             js
-              .replace('this[“webpackHotUpdate”]', 'self[“webpackHotUpdate”]')
-              .replace('this[“webpackHotUpdate”]', 'self[“webpackHotUpdate”]'),
+              .replace(/this\[“webpackHotUpdate”\]/g, 'self[“webpackHotUpdate”]')
           );
         } catch (e) {
           self.ErrorUtils.reportFatalError(e);
