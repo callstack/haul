@@ -85,12 +85,27 @@
         "env",
         {
           "targets": {
-            "node": 4
+            "node": "current"
           },
           "useBuiltIns": true
         }
       ]
     ],
+    "env": {
+      "test": {
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "node": 4
+              },
+              "useBuiltIns": true
+            }
+          ]
+        ]
+      }
+    },
     "plugins": [
       "transform-flow-strip-types",
       "transform-object-rest-spread"

@@ -16,7 +16,7 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 beforeEach(() => {
-  run('yarn --force', TEST_PROJECT_DIR);
+  run('yarn', TEST_PROJECT_DIR);
   cleanup(path.resolve(TEST_PROJECT_DIR, 'dist'));
 });
 
@@ -35,5 +35,5 @@ function bundleForPlatform(platform) {
     `index.${platform}.bundle`,
   );
   runHaulSync(TEST_PROJECT_DIR, ['bundle', '--platform', platform]);
-  expect(fs.existsSync(bundlePath));
+  expect(fs.existsSync(bundlePath)).toBe(true);
 }
