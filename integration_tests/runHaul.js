@@ -8,7 +8,7 @@
  */
 
 const path = require('path');
-const { spawnSync } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 
 const BIN_PATH = path.resolve(__dirname, '../bin/cli.js');
 
@@ -17,7 +17,7 @@ type RunHaulOptions = {
   skipPkgJsonCheck?: boolean, // don't complain if can't find package.json
 };
 
-function runHaul(
+function runHaulSync(
   dir: string,
   args?: Array<string>,
   options: RunHaulOptions = {},
@@ -40,4 +40,26 @@ function runHaul(
   return result;
 }
 
-module.exports = runHaul;
+function runHaul(
+  dir: string,
+  args?: Array<string>,
+  options: RunHaulOptions = {},
+) {
+  let cwd = dir;
+  const isRelative = cwd[0] !== '/';
+
+  if (isRelative) {
+    cwd = path.resolve(__dirname, cwd);
+  }
+
+  const env = options.nodePath
+    ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
+    : process.env;
+
+  return spawn(BIN_PATH, args || [], { cwd, env });
+}
+
+module.exports = {
+  runHaul,
+  runHaulSync,
+};

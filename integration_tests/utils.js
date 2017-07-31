@@ -105,6 +105,10 @@ const createEmptyPackage = (
   );
 };
 
+function replaceTestPath(string: string) {
+  return string.replace(/^\W+(.*)integration_tests/gm, '<<REPLACED>>');
+}
+
 module.exports = {
   cleanup,
   copyDir,
@@ -112,4 +116,5 @@ module.exports = {
   fileExists,
   run,
   writeFiles,
+  replaceTestPath,
 };
