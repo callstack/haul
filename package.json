@@ -73,10 +73,7 @@
     "babel-preset-react-native": "^2.0.0"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"]
   },
   "babel": {
     "presets": [
@@ -90,10 +87,7 @@
         }
       ]
     ],
-    "plugins": [
-      "transform-flow-strip-types",
-      "transform-object-rest-spread"
-    ]
+    "plugins": ["transform-flow-strip-types", "transform-object-rest-spread"]
   },
   "eslintConfig": {
     "extends": "callstack-io",
@@ -117,12 +111,13 @@
         "import/no-extraneous-dependencies": [
           "error",
           {
-            "devDependencies": [
-              "**/integration_tests/**"
-            ]
+            "devDependencies": ["**/integration_tests/**"]
           }
         ]
       }
     }
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["/integration_tests/.*/__tests__"]
   }
 }
