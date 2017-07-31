@@ -2,6 +2,7 @@ version: 2
 jobs:
   # Testing Node 8; running Yarn, ESLint, Flow and Jest
   test-node-8:
+    working_directory: ~/haul
     docker:
       - image: circleci/node:8.1.4
     steps:
@@ -19,6 +20,7 @@ jobs:
 
   # Testing Node 4; running just Jest, as we develop on Node >=6.
   test-node-4:
+    working_directory: ~/haul
     docker:
       - image: circleci/node:4.8.4
     steps:
