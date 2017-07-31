@@ -16,7 +16,7 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 beforeEach(() => {
-  run('yarn', TEST_PROJECT_DIR);
+  run('yarn --force', TEST_PROJECT_DIR);
   cleanup(path.resolve(TEST_PROJECT_DIR, 'dist'));
 });
 
