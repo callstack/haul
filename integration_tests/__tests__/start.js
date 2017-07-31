@@ -43,6 +43,7 @@ test('start --platform android', done => {
 });
 
 function testPlatform(platform, done) {
+  // $FlowFixMe – new Jest API not yet in typings
   jest.setTimeout(20000);
   expect.assertions(1);
   const messageBuffer = [];
