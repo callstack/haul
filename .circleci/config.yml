@@ -1,0 +1,47 @@
+version: 2
+jobs:
+  # Testing Node 8; running Yarn, ESLint, Flow and Jest
+  test-node-8:
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node8-dependencies-{{ checksum "package.json" }}
+          - node8-dependencies
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: node8-dependencies-{{ checksum "package.json" }}
+      - run: yarn test
+
+  # Testing Node 4; running just Jest, as we develop on Node >=6.
+  test-node-4:
+    docker:
+      - image: circleci/node:4.8.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node4-dependencies-{{ checksum "package.json" }}
+          - node4-dependencies
+      - run: |
+          (export PKG=eslint-config-callstack-io; npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG")
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: node4-dependencies-{{ checksum "package.json" }}
+      - run: npm run jest
+
+# Workflows enables us to run multiple jobs in parallel
+workflows:
+  version: 2
+  node-8:
+    jobs:
+      - test-node-8
+  node-4:
+    jobs:
+      - test-node-4

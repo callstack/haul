@@ -46,9 +46,13 @@ type WebpackConfigFactory =
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = (
-  { platform, root, dev, minify, bundle },
-): WebpackConfig => ({
+const getDefaultConfig = ({
+  platform,
+  root,
+  dev,
+  minify,
+  bundle,
+}): WebpackConfig => ({
   context: root,
   entry: [
     /**

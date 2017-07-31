@@ -68,7 +68,8 @@ async function bundle(opts: *) {
       } else {
         resolve(info);
       }
-    }));
+    }),
+  );
 
   clear();
 
