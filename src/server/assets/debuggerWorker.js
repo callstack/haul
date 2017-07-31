@@ -34,7 +34,7 @@ onmessage = (function() {
     };
   })();
 
-  const processAllMessages = function() {
+  const processEnqueuedMessages = function() {
     while (messageQueue.length) {
       const messageProcess = messageQueue.shift();
       messageProcess();
@@ -52,12 +52,16 @@ onmessage = (function() {
 
       function evalJS(js) {
         try {
-          eval(js);
+          eval(
+            js
+              .replace('this[“webpackHotUpdate”]', 'self[“webpackHotUpdate”]')
+              .replace('this[“webpackHotUpdate”]', 'self[“webpackHotUpdate”]'),
+          );
         } catch (e) {
           self.ErrorUtils.reportFatalError(e);
         } finally {
           self.postMessage({ replyID: message.id });
-          processAllMessages();
+          processEnqueuedMessages();
         }
       }
 
