@@ -8,7 +8,7 @@
 const { runHaulSync } = require('../runHaul');
 const path = require('path');
 const fs = require('fs');
-const { cleanup, run, replaceTestPath } = require('../utils');
+const { cleanup, run } = require('../utils');
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
@@ -35,11 +35,6 @@ function bundleForPlatform(platform) {
     'dist',
     `index.${platform}.bundle`,
   );
-  const { stdout } = runHaulSync(TEST_PROJECT_DIR, [
-    'bundle',
-    '--platform',
-    platform,
-  ]);
-  expect(replaceTestPath(stdout.toString())).toMatchSnapshot();
+  runHaulSync(TEST_PROJECT_DIR, ['bundle', '--platform', platform]);
   expect(fs.existsSync(bundlePath));
 }
