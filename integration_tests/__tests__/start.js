@@ -18,11 +18,10 @@ const TEST_PROJECT_DIR = path.resolve(
   '../fixtures/react-native-generated-project',
 );
 
-beforeAll(() => {
+beforeEach(() => {
   run('yarn', TEST_PROJECT_DIR);
+  cleanup(TEMP_DIR);
 });
-
-beforeEach(() => cleanup(TEMP_DIR));
 afterEach(() => cleanup(TEMP_DIR));
 
 test('start command displays "Select platform" message', () => {

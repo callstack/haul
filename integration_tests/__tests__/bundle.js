@@ -15,11 +15,10 @@ const TEST_PROJECT_DIR = path.resolve(
   '../fixtures/react-native-generated-project',
 );
 
-beforeAll(() => {
+beforeEach(() => {
   run('yarn', TEST_PROJECT_DIR);
+  cleanup(path.resolve(TEST_PROJECT_DIR, 'dist'));
 });
-
-beforeEach(() => cleanup(path.resolve(TEST_PROJECT_DIR, 'dist')));
 
 test('bundle ios project', () => {
   bundleForPlatform('ios');
