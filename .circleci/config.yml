@@ -19,7 +19,7 @@ jobs:
           paths:
             - node_modules
           key: node8-dependencies-{{ checksum "package.json" }}
-      - run: yarn test-ci
+      - run: yarn test
 
   # Testing Node 4; running just Jest, as we develop on Node >=6.
   test-node-4:
