@@ -19,7 +19,7 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 beforeEach(() => {
-  run('yarn', TEST_PROJECT_DIR);
+  run('yarn --mutex network', TEST_PROJECT_DIR);
   cleanup(TEMP_DIR);
 });
 afterEach(() => cleanup(TEMP_DIR));
