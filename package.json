@@ -11,7 +11,6 @@
     "lint": "eslint .",
     "jest": "jest",
     "test": "npm run flow && npm run lint && npm run jest",
-    "test-ci": "npm run flow && npm run lint && npm run jest -i",
     "format": "eslint --fix ."
   },
   "author": "Mike Grabowski <mike@callstack.io>",
