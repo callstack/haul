@@ -28,7 +28,6 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.2.2",
-    "babel-preset-react-native": "^1.9.1",
     "babel-register": "^6.24.0",
     "camelcase-keys": "^4.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.0.0",
@@ -64,7 +63,11 @@
     "flow-bin": "^0.42.0",
     "husky": "^0.13.3",
     "jest": "^19.0.2",
-    "lint-staged": "^3.4.0"
+    "lint-staged": "^3.4.0",
+    "babel-preset-react-native": "^2.0.0"
+  },
+  "peerDependencies": {
+    "babel-preset-react-native": "^2.0.0"
   },
   "lint-staged": {
     "*.js": [

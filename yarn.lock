@@ -768,9 +768,9 @@ babel-preset-jest@^19.0.0:
   dependencies:
     babel-plugin-jest-hoist "^19.0.0"
 
-babel-preset-react-native@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/babel-preset-react-native/-/babel-preset-react-native-1.9.1.tgz#ec8e378274410d78f550fa9f8edd70353f3bb2fe"
+babel-preset-react-native@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/babel-preset-react-native/-/babel-preset-react-native-2.1.0.tgz#9013ebd82da1c88102bf588810ff59e209ca2b8a"
   dependencies:
     babel-plugin-check-es2015-constants "^6.5.0"
     babel-plugin-react-transform "2.0.2"
