@@ -48,8 +48,14 @@ function testPlatform(platform, done) {
 
   haul.stdout.on('data', data => {
     const message = stripAnsi(data.toString()).trim();
+
     if (message.length > 0) {
       messageBuffer.push(message);
+    }
+
+    if (message.match(/ERROR/g)) {
+      done.fail(message);
+      haul.kill();
     }
 
     if (message.match('Built successfully!')) {

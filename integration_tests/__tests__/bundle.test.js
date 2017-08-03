@@ -34,6 +34,15 @@ function bundleForPlatform(platform) {
     'dist',
     `index.${platform}.bundle`,
   );
-  runHaulSync(TEST_PROJECT_DIR, ['bundle', '--platform', platform]);
+  const { stdout } = runHaulSync(TEST_PROJECT_DIR, [
+    'bundle',
+    '--platform',
+    platform,
+  ]);
+
+  if (stdout.toString().match(/ERROR/g)) {
+    throw new Error(stdout);
+  }
+
   expect(fs.existsSync(bundlePath)).toBe(true);
 }
