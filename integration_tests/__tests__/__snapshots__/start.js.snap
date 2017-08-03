@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`start command displays "Select platform" message 1`] = `
-"? Select platform to bundle for (Use arrow keys)
-❯ ios - Serves iOS bundle 
-  android - Serves Android bundle 
-  all - Serves both platforms [30D[30C
-"
-`;

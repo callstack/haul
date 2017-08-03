@@ -15,11 +15,13 @@ const stripAnsi = require('strip-ansi');
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-with-haul',
+  '../fixtures/react-native-generated-project',
 );
 
-beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
-beforeEach(() => cleanup(TEMP_DIR));
+beforeEach(() => {
+  run('yarn --mutex network', TEST_PROJECT_DIR);
+  cleanup(TEMP_DIR);
+});
 afterEach(() => cleanup(TEMP_DIR));
 
 test('start command displays "Select platform" message', () => {

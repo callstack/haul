@@ -12,11 +12,13 @@ const { cleanup, run } = require('../utils');
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-with-haul',
+  '../fixtures/react-native-generated-project',
 );
 
-beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
-beforeEach(() => cleanup(path.resolve(TEST_PROJECT_DIR, 'dist')));
+beforeEach(() => {
+  run('yarn --mutex network', TEST_PROJECT_DIR);
+  cleanup(path.resolve(TEST_PROJECT_DIR, 'dist'));
+});
 
 test('bundle ios project', () => {
   bundleForPlatform('ios');
@@ -37,8 +39,8 @@ function bundleForPlatform(platform) {
     '--platform',
     platform,
   ]);
-  // $FlowFixMe
-  if (stdout.match(/ERROR/g)) {
+
+  if (stdout.toString().match(/ERROR/g)) {
     throw new Error(stdout);
   }
 
