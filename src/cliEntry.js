@@ -193,3 +193,4 @@ async function run(args: Array<string>) {
 }
 
 module.exports = run;
+module.exports.validateOptions = validateOptions;
