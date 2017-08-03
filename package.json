@@ -129,6 +129,9 @@
     "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
     "testPathIgnorePatterns": [
       "/integration_tests/.*/__tests__"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^jest/(.*)": "<rootDir>/jest/$1"
+    }
   }
 }
