@@ -34,8 +34,8 @@ function runHaulSync(
     : process.env;
   const result = spawnSync(BIN_PATH, args || [], { cwd, env });
 
-  result.stdout = result.stdout && result.stdout.toString();
-  result.stderr = result.stderr && result.stderr.toString();
+  result.stdout = result.stdout.toString();
+  result.stderr = result.stderr.toString();
 
   return result;
 }

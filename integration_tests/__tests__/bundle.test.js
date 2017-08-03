@@ -39,8 +39,8 @@ function bundleForPlatform(platform) {
     '--platform',
     platform,
   ]);
-
-  if (stdout.toString().match(/ERROR/g)) {
+  // $FlowFixMe
+  if (stdout.match(/ERROR/g)) {
     throw new Error(stdout);
   }
 
