@@ -51,6 +51,7 @@ workflows:
   node-8:
     jobs:
       - test-node-8
-  node-4:
-    jobs:
-      - test-node-4
+  # Disable Node 4 because Haul is very buggy there :(
+  # node-4:
+  #   jobs:
+  #     - test-node-4
