@@ -12,7 +12,7 @@ const { cleanup, run } = require('../utils');
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-generated-project',
+  '../fixtures/react-native-with-haul',
 );
 
 beforeEach(() => {
