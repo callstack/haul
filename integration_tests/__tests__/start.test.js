@@ -15,7 +15,7 @@ const stripAnsi = require('strip-ansi');
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-generated-project',
+  '../fixtures/react-native-with-haul',
 );
 
 beforeEach(() => {
