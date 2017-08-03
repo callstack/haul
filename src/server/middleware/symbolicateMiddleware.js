@@ -24,6 +24,7 @@ const path = require('path');
 const delve = require('dlv');
 const messages = require('../../messages');
 const logger = require('../../logger');
+const getCompilerByPlatform = require('../../utils/getCompilerByPlatform');
 
 type ReactNativeSymbolicateRequest = {
   stack: ReactNativeStack,
@@ -108,20 +109,29 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
 /**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(compiler: *): Middleware {
+function create(webpackCompiler: *): Middleware {
   /**
    * The Express middleware for symbolicatin'.
    */
   function symbolicateMiddleware(req: $Request, res, next) {
     if (req.path !== '/symbolicate') return next();
 
-    // grab our source map consumer
-    const consumer = createSourceMapConsumer(compiler);
-    if (!consumer) return next();
-
     // grab the source stack frames
     const unconvertedFrames = getRequestedFrames(req);
     if (!unconvertedFrames) return next();
+
+    // grab the platform from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
+    const platformMatch = unconvertedFrames[0].file.match(
+      /platform=([a-zA-Z]*)/,
+    );
+    const platform: ?string = platformMatch && platformMatch[1];
+
+    // grab the appropriate webpack compiler
+    const compiler = getCompilerByPlatform(webpackCompiler, platform);
+
+    // grab our source map consumer
+    const consumer = createSourceMapConsumer(compiler);
+    if (!consumer) return next();
 
     // the base directory
     const root = compiler.options.context;

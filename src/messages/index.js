@@ -32,4 +32,5 @@ module.exports = {
   gitAlreadyAdded: require('./gitAlreadyAdded'),
   gitNotFound: require('./gitNotFound'),
   editorNotConfigured: require('./editorNotConfigured'),
+  webpackCompilerPlatformNotFound: require('./webpackCompilerPlatformNotFound'),
 };
