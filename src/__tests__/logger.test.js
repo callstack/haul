@@ -17,8 +17,20 @@ afterEach(() => jest.clearAllMocks());
 test('section logs are always separated by one newline', () => {
   logger.info('single line');
   logger.info('multiple', 'entries');
-  logger.info('single line with a newline\n');
-  logger.info('test');
+  logger.info('single line', 'with a newline\n');
+
+  logger.warn('single line');
+  logger.warn('multiple', 'entries');
+  logger.warn('single line', 'with a newline\n');
+
+  logger.error('single line');
+  logger.error('multiple', 'entries');
+  logger.error('single line', 'with a newline\n');
+
+  logger.done('single line');
+  logger.done('multiple', 'entries');
+  logger.done('single line', 'with a newline\n');
+
   const { calls } = console.log.mock;
   const logs = calls.map(call => call.join(' ')).join('\n');
   expect(stripAnsi(logs)).toMatchSnapshot();
