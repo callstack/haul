@@ -132,6 +132,9 @@
     ],
     "moduleNameMapper": {
       "^jest/(.*)": "<rootDir>/jest/$1"
-    }
+    },
+    "testMatch": [
+      "**/*.test.js"
+    ]
   }
 }
