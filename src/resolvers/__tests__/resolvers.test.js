@@ -18,23 +18,36 @@ const filesFromEntry = [
   require.resolve('./fixtures/file@2x.gif'),
 ];
 
-test('Resolves to file@{number}x.{ext} if file.{ext} not present', done => {
+const runWebpack = (assertion: (assetPaths: Array<string>) => void, done) => {
   webpack(config, (err, stats) => {
     if (err) {
       done.fail(err);
     } else if (stats.hasErrors()) {
       done.fail(stats.toString());
     }
-
     const assetPaths = stats.toJson().modules.map(module => module.identifier);
 
     try {
-      expect(assetPaths).toEqual(expect.arrayContaining(filesFromEntry));
+      assertion(assetPaths);
       done();
     } catch (error) {
       done.fail(error);
     }
   });
+};
+
+test('resolves to file@{number}x.{ext} if file.{ext} not present', done => {
+  runWebpack(assetPaths => {
+    expect(assetPaths).toEqual(expect.arrayContaining(filesFromEntry));
+  }, done);
+});
+
+test('resolves Haste modules', done => {
+  runWebpack(assetPaths => {
+    expect(assetPaths).toEqual(
+      expect.arrayContaining([require.resolve('./fixtures/HasteModule.js')]),
+    );
+  }, done);
 });
 
 test('AssetResolver.collect returns empty object for empty list', () => {
