@@ -6,15 +6,36 @@
  */
 
 import stripAnsi from 'strip-ansi';
+import inquirer from 'inquirer';
 import { flushPromises } from 'jest/helpers';
 import run from '../cliEntry';
 import init from '../commands/init';
+import bundle from '../commands/bundle';
+
+jest.mock('inquirer', () => {
+  // $FlowFixMe
+  const acutual = require.requireActual('inquirer');
+  return {
+    ...acutual,
+    prompt: jest.fn(() => Promise.resolve({ answer: 'ios' })),
+  };
+});
 
 jest.mock('../commands/init', () => {
+  // $FlowFixMe
+  const actual = require.requireActual('../commands/init');
   return {
-    name: 'init',
-    description: 'Generates necessary configuration files',
-    action: jest.fn(),
+    ...actual,
+    action: jest.fn(() => Promise.resolve()),
+  };
+});
+
+jest.mock('../commands/bundle', () => {
+  // $FlowFixMe
+  const actual = require.requireActual('../commands/bundle');
+  return {
+    ...actual,
+    action: jest.fn(() => Promise.resolve()),
   };
 });
 
@@ -56,4 +77,22 @@ test('run a command without options (init)', async () => {
   run(['init']);
   await flushPromises();
   expect(init.action).toBeCalledWith({});
+});
+
+test('run a command with options (bundle)', async () => {
+  run(['bundle']);
+  await flushPromises();
+  expect(inquirer.prompt).toBeCalledWith([
+    {
+      choices: expect.arrayContaining([
+        { name: expect.any(String), short: expect.any(String), value: 'ios' },
+      ]),
+      message: expect.any(String),
+      name: expect.any(String),
+      type: expect.any(String),
+    },
+  ]);
+  expect(bundle.action).toBeCalledWith(
+    expect.objectContaining({ platform: 'ios' }),
+  );
 });
