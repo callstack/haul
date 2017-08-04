@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`debug logs are displayed without extra newlines 1`] = `
+"PIGEON no space above
+PIGEON no space above, but has newline
+
+PIGEON space above"
+`;
+
+exports[`section logs are always separated by one newline 1`] = `
+"
+ INFO  single line
+
+ INFO  multiple entries
+
+ INFO  single line with a newline
+
+ INFO  test"
+`;
