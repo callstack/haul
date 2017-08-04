@@ -39,18 +39,11 @@ jest.mock('../commands/bundle', () => {
   };
 });
 
-const originalConsoleLog = console.log;
-
 beforeEach(() => {
   // $FlowFixMe
   console.log = jest.fn();
 });
-
-afterEach(() => {
-  // $FlowFixMe
-  console.log = originalConsoleLog;
-  jest.clearAllMocks();
-});
+afterEach(() => jest.clearAllMocks());
 
 test('display help', () => {
   run(['help']);
