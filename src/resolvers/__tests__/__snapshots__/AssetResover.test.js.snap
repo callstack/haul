@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AssetResolver.collect returns a map of paths to resolve 1`] = `
+Object {
+  "@1x": Object {
+    "name": "filename@1x.ios.jpeg",
+    "platform": "ios",
+  },
+  "@2x": Object {
+    "name": "filename@2x.jpeg",
+    "platform": undefined,
+  },
+  "@3x": Object {
+    "name": "filename@3x.jpeg",
+    "platform": undefined,
+  },
+  "@4x": Object {
+    "name": "filename@4x.native.jpeg",
+    "platform": "native",
+  },
+}
+`;
