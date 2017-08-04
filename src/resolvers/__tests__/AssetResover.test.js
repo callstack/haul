@@ -41,6 +41,7 @@ test('AssetResolver.collect returns empty object for empty list', () => {
   const result = AssetResolver.collect([], {
     name: 'filename',
     type: 'jpeg',
+    platform: 'native',
   });
 
   expect(result).toEqual({});
@@ -50,6 +51,7 @@ test('AssetResolver.collect returns empty object when file not in the list', () 
   const result = AssetResolver.collect(['file.jpeg', 'filename.png'], {
     name: 'filename',
     type: 'jpeg',
+    platform: 'android',
   });
 
   expect(result).toEqual({});
