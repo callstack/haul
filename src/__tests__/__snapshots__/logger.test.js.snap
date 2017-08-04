@@ -15,5 +15,22 @@ exports[`section logs are always separated by one newline 1`] = `
 
  INFO  single line with a newline
 
- INFO  test"
+ WARN  single line
+
+ WARN  multiple entries
+
+ WARN  single line with a newline
+
+ ERROR  single line
+
+ ERROR  multiple entries
+
+ ERROR  single line with a newline
+
+ DONE  single line
+
+ DONE  multiple entries
+
+ DONE  single line with a newline
+"
 `;
