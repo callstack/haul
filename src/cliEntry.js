@@ -184,7 +184,7 @@ async function run(args: Array<string>) {
         messages.commandFailed({
           command: displayName,
           error,
-          stack: error && error.stack,
+          stack: error.stack,
         }),
       );
     }
@@ -193,4 +193,3 @@ async function run(args: Array<string>) {
 }
 
 module.exports = run;
-module.exports.validateOptions = validateOptions;
