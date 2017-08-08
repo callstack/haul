@@ -2,8 +2,6 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  *
- * makeReactNativeConfig.js
- *
  * @flow
  */
 
@@ -12,11 +10,9 @@ const HappyPack = require('happypack');
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
-
 const getBabelConfig = require('./getBabelConfig');
 
 const PLATFORMS = ['ios', 'android'];

@@ -1,0 +1,344 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates config from defaults (configs) 1`] = `
+Array [
+  Object {
+    "context": "<<REPLACED>>/utils/__tests__/fixtures",
+    "devtool": "cheap-module-source-map",
+    "entry": Array [
+      "<<REPLACED>>/utils/polyfillEnvironment.js",
+      "./file.js",
+    ],
+    "module": Object {
+      "rules": Array [
+        Object {
+          "parser": Object {
+            "requireEnsure": false,
+          },
+        },
+        Object {
+          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+          "test": /\\\\\\.js\\$/,
+          "use": Object {
+            "loader": "<<NODE_MODULE>>/happypack/loader.js",
+            "query": Object {
+              "id": "babel",
+            },
+          },
+        },
+        Object {
+          "test": /\\\\\\.\\(bmp\\|gif\\|jpg\\|jpeg\\|png\\|psd\\|svg\\|webp\\|m4v\\|aac\\|aiff\\|caf\\|m4a\\|mp3\\|wav\\|html\\|pdf\\)\\$/,
+          "use": Object {
+            "loader": "<<REPLACED>>/loaders/assetLoader.js",
+            "query": Object {
+              "bundle": undefined,
+              "platform": "ios",
+              "root": "<<REPLACED>>/utils/__tests__/fixtures",
+            },
+          },
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "index.ios.bundle",
+      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+    },
+    "plugins": Array [
+      CaseSensitivePathsPlugin {
+        "fsOperations": 0,
+        "options": Object {},
+        "pathCache": Object {},
+        "primed": false,
+      },
+      ProgressPlugin {
+        "handler": [Function],
+        "profile": undefined,
+      },
+      DefinePlugin {
+        "definitions": Object {
+          "__DEV__": true,
+          "process.env": Object {
+            "NODE_ENV": "\\"development\\"",
+          },
+        },
+      },
+      LoaderOptionsPlugin {
+        "options": Object {
+          "debug": true,
+          "minimize": false,
+          "test": Object {
+            "test": [Function],
+          },
+        },
+      },
+      NamedModulesPlugin {
+        "options": Object {},
+      },
+      SourceMapDevToolPlugin {
+        "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
+        "moduleFilenameTemplate": "webpack:///[resourcePath]",
+        "options": Object {
+          "filename": "[file].map",
+          "test": /\\\\\\.\\(js\\|css\\|bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+        },
+        "sourceMapFilename": "[file].map",
+        "sourceMappingURLComment": "
+//# sourceMappingURL=[url]",
+      },
+      HappyPlugin {
+        "config": Object {
+          "cache": true,
+          "cacheContext": Object {},
+          "compilerId": "default",
+          "enabled": true,
+          "id": "babel",
+          "loaders": Array [
+            Object {
+              "path": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+              "query": Object {
+                "babelrc": false,
+                "cacheDirectory": true,
+                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+                "plugins": Array [
+                  "<<REPLACED>>/utils/fixRequireIssues.js",
+                ],
+              },
+            },
+          ],
+          "tempDir": ".happypack",
+          "threads": 3,
+          "verbose": false,
+        },
+        "id": "babel",
+        "name": "HappyPack",
+        "state": Object {
+          "baseLoaderRequest": "",
+          "debug": false,
+          "foregroundThreadPool": null,
+          "loaders": Array [],
+          "started": false,
+          "verbose": false,
+        },
+      },
+    ],
+    "resolve": Object {
+      "extensions": Array [
+        ".ios.js",
+        ".native.js",
+        ".js",
+      ],
+      "mainFields": Array [
+        "react-native",
+        "browser",
+        "main",
+      ],
+      "plugins": Array [
+        HasteResolver {
+          "apply": [Function],
+        },
+        AssetResolver {
+          "apply": [Function],
+        },
+      ],
+    },
+  },
+  Object {
+    "context": "<<REPLACED>>/utils/__tests__/fixtures",
+    "devtool": "cheap-module-source-map",
+    "entry": Array [
+      "<<REPLACED>>/utils/polyfillEnvironment.js",
+      "./file.js",
+    ],
+    "module": Object {
+      "rules": Array [
+        Object {
+          "parser": Object {
+            "requireEnsure": false,
+          },
+        },
+        Object {
+          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+          "test": /\\\\\\.js\\$/,
+          "use": Object {
+            "loader": "<<NODE_MODULE>>/happypack/loader.js",
+            "query": Object {
+              "id": "babel",
+            },
+          },
+        },
+        Object {
+          "test": /\\\\\\.\\(bmp\\|gif\\|jpg\\|jpeg\\|png\\|psd\\|svg\\|webp\\|m4v\\|aac\\|aiff\\|caf\\|m4a\\|mp3\\|wav\\|html\\|pdf\\)\\$/,
+          "use": Object {
+            "loader": "<<REPLACED>>/loaders/assetLoader.js",
+            "query": Object {
+              "bundle": undefined,
+              "platform": "android",
+              "root": "<<REPLACED>>/utils/__tests__/fixtures",
+            },
+          },
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "index.android.bundle",
+      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+    },
+    "plugins": Array [
+      CaseSensitivePathsPlugin {
+        "fsOperations": 0,
+        "options": Object {},
+        "pathCache": Object {},
+        "primed": false,
+      },
+      ProgressPlugin {
+        "handler": [Function],
+        "profile": undefined,
+      },
+      DefinePlugin {
+        "definitions": Object {
+          "__DEV__": true,
+          "process.env": Object {
+            "NODE_ENV": "\\"development\\"",
+          },
+        },
+      },
+      LoaderOptionsPlugin {
+        "options": Object {
+          "debug": true,
+          "minimize": false,
+          "test": Object {
+            "test": [Function],
+          },
+        },
+      },
+      NamedModulesPlugin {
+        "options": Object {},
+      },
+      SourceMapDevToolPlugin {
+        "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
+        "moduleFilenameTemplate": "webpack:///[resourcePath]",
+        "options": Object {
+          "filename": "[file].map",
+          "test": /\\\\\\.\\(js\\|css\\|bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+        },
+        "sourceMapFilename": "[file].map",
+        "sourceMappingURLComment": "
+//# sourceMappingURL=[url]",
+      },
+      HappyPlugin {
+        "config": Object {
+          "cache": true,
+          "cacheContext": Object {},
+          "compilerId": "default",
+          "enabled": true,
+          "id": "babel",
+          "loaders": Array [
+            Object {
+              "path": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+              "query": Object {
+                "babelrc": false,
+                "cacheDirectory": true,
+                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+                "plugins": Array [
+                  "<<REPLACED>>/utils/fixRequireIssues.js",
+                ],
+              },
+            },
+          ],
+          "tempDir": ".happypack",
+          "threads": 3,
+          "verbose": false,
+        },
+        "id": "babel",
+        "name": "HappyPack",
+        "state": Object {
+          "baseLoaderRequest": "",
+          "debug": false,
+          "foregroundThreadPool": null,
+          "loaders": Array [],
+          "started": false,
+          "verbose": false,
+        },
+      },
+    ],
+    "resolve": Object {
+      "extensions": Array [
+        ".android.js",
+        ".native.js",
+        ".js",
+      ],
+      "mainFields": Array [
+        "react-native",
+        "browser",
+        "main",
+      ],
+      "plugins": Array [
+        HasteResolver {
+          "apply": [Function],
+        },
+        AssetResolver {
+          "apply": [Function],
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`creates config from defaults (platforms) 1`] = `
+Array [
+  "ios",
+  "android",
+]
+`;
+
+exports[`merges existing config 1`] = `
+Array [
+  Object {
+    "context": "<<REPLACED>>/utils/__tests__/fixtures",
+    "devtool": "cheap-module-source-map",
+    "entry": Array [
+      "<<REPLACED>>/utils/polyfillEnvironment.js",
+      "/some/file.js",
+    ],
+    "module": Object {
+      "rules": Array [
+        Object {
+          "parser": Object {
+            "requireEnsure": false,
+          },
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "index.ios.bundle",
+      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+    },
+    "plugins": Array [],
+    "resolve": Object {},
+  },
+  Object {
+    "context": "<<REPLACED>>/utils/__tests__/fixtures",
+    "devtool": "cheap-module-source-map",
+    "entry": Array [
+      "<<REPLACED>>/utils/polyfillEnvironment.js",
+      "/some/file.js",
+    ],
+    "module": Object {
+      "rules": Array [
+        Object {
+          "parser": Object {
+            "requireEnsure": false,
+          },
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "index.android.bundle",
+      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+    },
+    "plugins": Array [],
+    "resolve": Object {},
+  },
+]
+`;

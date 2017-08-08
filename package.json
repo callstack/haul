@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "babel-jest": "test",
+    "babel-preset-react-native": "^2.0.0",
     "eslint": "^4.3.0",
     "eslint-config-callstack-io": "^0.3.1",
     "flow-bin": "^0.42.0",
@@ -67,7 +68,7 @@
     "lint-staged": "^3.4.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
-    "babel-preset-react-native": "^2.0.0"
+    "traverse": "^0.6.6"
   },
   "peerDependencies": {
     "babel-preset-react-native": "^2.0.0"
@@ -129,6 +130,9 @@
     "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
     "testPathIgnorePatterns": [
       "/integration_tests/.*/__tests__"
+    ],
+    "testMatch": [
+      "**/*.test.js"
     ]
   }
 }
