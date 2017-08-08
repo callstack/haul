@@ -15,10 +15,8 @@ const TEST_PROJECT_DIR = path.resolve(
   '../fixtures/react-native-with-haul',
 );
 
-beforeEach(() => {
-  run('yarn --mutex network', TEST_PROJECT_DIR);
-  cleanup(path.resolve(TEST_PROJECT_DIR, 'dist'));
-});
+beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
+beforeEach(() => cleanup(path.resolve(TEST_PROJECT_DIR, 'dist')));
 
 test('bundle ios project', () => {
   bundleForPlatform('ios');
