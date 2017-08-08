@@ -40,6 +40,7 @@ test('debug logs are displayed without extra newlines', () => {
   logger.debug('pigeon', 'no space above');
   logger.debug('pigeon', 'no space above, but has newline\n');
   logger.debug('pigeon', 'space above');
+
   const { calls } = console.log.mock;
   const logs = calls.map(call => call.join(' ')).join('\n');
   expect(stripAnsi(logs)).toMatchSnapshot();
