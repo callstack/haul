@@ -18,10 +18,8 @@ const TEST_PROJECT_DIR = path.resolve(
   '../fixtures/react-native-with-haul',
 );
 
-beforeEach(() => {
-  run('yarn --mutex network', TEST_PROJECT_DIR);
-  cleanup(TEMP_DIR);
-});
+beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
+beforeEach(() => cleanup(TEMP_DIR));
 afterEach(() => cleanup(TEMP_DIR));
 
 test('start command displays "Select platform" message', () => {
