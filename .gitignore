@@ -9,4 +9,3 @@ jsconfig.json
 .idea
 .happypack
 dist
-/coverage

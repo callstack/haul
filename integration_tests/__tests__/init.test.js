@@ -32,10 +32,7 @@ test('init command on react-native project', done => {
   haul.stdout.on('close', () => {
     try {
       const haulConfig = fs.readFileSync(CONFIG_FILE_PATH, 'utf8');
-      expect(haulConfig).toEqual(
-        // eslint-disable-next-line
-        'module.exports = ({ platform }) => ({\n  entry: `./index.${platform}.js`,\n});',
-      );
+      expect(haulConfig).toMatchSnapshot();
       done();
     } catch (error) {
       done.fail(error);
