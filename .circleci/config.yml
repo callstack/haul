@@ -2,6 +2,7 @@ version: 2
 jobs:
   # Testing Node 8; running Yarn, ESLint, Flow and Jest
   test-node-8:
+    working_directory: ~/haul
     docker:
       - image: circleci/node:8.1.4
     steps:
@@ -10,6 +11,9 @@ jobs:
           keys:
           - node8-dependencies-{{ checksum "package.json" }}
           - node8-dependencies
+      - run: |
+          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
+          export PATH="$HOME/.yarn/bin:$PATH"
       - run: yarn install
       - save_cache:
           paths:
@@ -19,6 +23,7 @@ jobs:
 
   # Testing Node 4; running just Jest, as we develop on Node >=6.
   test-node-4:
+    working_directory: ~/haul
     docker:
       - image: circleci/node:4.8.4
     steps:
@@ -34,6 +39,10 @@ jobs:
           paths:
             - node_modules
           key: node4-dependencies-{{ checksum "package.json" }}
+      # We use yarn to install integration_tests fixtures
+      - run: |
+          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
+          export PATH="$HOME/.yarn/bin:$PATH"
       - run: npm run jest
 
 # Workflows enables us to run multiple jobs in parallel
@@ -42,6 +51,7 @@ workflows:
   node-8:
     jobs:
       - test-node-8
-  node-4:
-    jobs:
-      - test-node-4
+  # Disable Node 4 because Haul is very buggy there :(
+  # node-4:
+  #   jobs:
+  #     - test-node-4

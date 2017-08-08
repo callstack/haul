@@ -1,2 +1,3 @@
 **/flow-typed/**
 vendor/**
+integration_tests/fixtures/**

@@ -5,4 +5,4 @@
 .*/example
 .*/node_modules/react-native
 .*/node_modules/fbjs/*
-.*/node_modules/jest-validate/*
+.*/integration_tests/fixtures/.*
