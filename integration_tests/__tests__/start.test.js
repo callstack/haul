@@ -28,7 +28,7 @@ test('start command displays "Select platform" message', () => {
   });
 
   const { stdout } = runHaulSync(TEMP_DIR, ['start']);
-  expect(stdout).toMatchSnapshot();
+  expect(stripAnsi(stdout).trim()).toMatchSnapshot();
 });
 
 test('start --platform ios', done => {
