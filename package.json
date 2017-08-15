@@ -80,9 +80,6 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1"
   },
-  "peerDependencies": {
-    "babel-preset-react-native": "^2.0.0"
-  },
   "lint-staged": {
     "*.js": [
       "eslint --fix",
