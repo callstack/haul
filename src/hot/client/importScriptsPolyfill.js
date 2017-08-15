@@ -17,11 +17,6 @@ global.importScripts =
   global.importScripts ||
   (importPath =>
     fetch(importPath).then(response => response.text()).then(body => {
-      try {
-        // eslint-disable-next-line no-eval
-        eval(body);
-      } catch (error) {
-        return Promise.reject(error);
-      }
-      return Promise.resolve();
+      // eslint-disable-next-line no-eval
+      eval(body);
     }));
