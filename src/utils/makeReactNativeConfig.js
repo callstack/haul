@@ -52,6 +52,7 @@ const getDefaultConfig = ({
   dev,
   minify,
   bundle,
+  port,
 }): WebpackConfig => ({
   context: root,
   entry: [
@@ -69,6 +70,7 @@ const getDefaultConfig = ({
   output: {
     path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
+    publicPath: `http://localhost:${port}/`,
   },
   module: {
     rules: [
@@ -117,7 +119,10 @@ const getDefaultConfig = ({
        * Various libraries like React rely on `process.env.NODE_ENV`
        * to distinguish between production and development
        */
-      'process.env': { NODE_ENV: dev ? '"development"' : '"production"' },
+      'process.env': {
+        NODE_ENV: dev ? '"development"' : '"production"',
+        DEV_SERVER_ORIGIN: JSON.stringify(`http://localhost:${port}`),
+      },
       __DEV__: dev,
     }),
     new webpack.LoaderOptionsPlugin({
@@ -153,32 +158,38 @@ const getDefaultConfig = ({
       ],
       verbose: false,
     }),
-  ].concat(
-    minify
-      ? [
-          new webpack.optimize.UglifyJsPlugin({
-            /**
+  ]
+    .concat(
+      process.env.NODE_ENV === 'production'
+        ? []
+        : new webpack.HotModuleReplacementPlugin(),
+    )
+    .concat(
+      minify
+        ? [
+            new webpack.optimize.UglifyJsPlugin({
+              /**
              * By default, uglify only minifies *.js files
              * We need to use the plugin to configutr *.bundle to get minified
              * Also disable IE8 support as we don't need it'
              */
-            test: /\.(js|bundle)($|\?)/i,
-            sourceMap: true,
-            compress: {
-              screw_ie8: true,
-              warnings: false,
-            },
-            mangle: {
-              screw_ie8: true,
-            },
-            output: {
-              comments: false,
-              screw_ie8: true,
-            },
-          }),
-        ]
-      : [],
-  ),
+              test: /\.(js|bundle)($|\?)/i,
+              sourceMap: true,
+              compress: {
+                screw_ie8: true,
+                warnings: false,
+              },
+              mangle: {
+                screw_ie8: true,
+              },
+              output: {
+                comments: false,
+                screw_ie8: true,
+              },
+            }),
+          ]
+        : [],
+    ),
   resolve: {
     plugins: [
       /**
@@ -201,6 +212,10 @@ const getDefaultConfig = ({
     mainFields: ['react-native', 'browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
+  /**
+   * Set target to webworker as it's closer to RN environment than `web`.
+   */
+  target: 'webworker',
 });
 
 /**

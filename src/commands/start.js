@@ -31,6 +31,7 @@ async function start(opts: *) {
       root: directory,
       dev: opts.dev,
       minify: opts.minify,
+      port: opts.port,
     },
   );
 

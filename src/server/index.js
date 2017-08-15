@@ -17,6 +17,7 @@ type CompileCallback = (stats: WebpackStats) => void;
  * Custom made middlewares
  */
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const hotMiddleware = require('./middleware/hotMiddleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
@@ -27,10 +28,13 @@ const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 
+const WebSocketServer = require('ws').Server;
+
 /**
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
-const WebSocketProxy = require('./util/WebsocketProxy.js');
+const webSocketProxy = require('./util/websocketProxy');
+const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
 
 /**
  * Packager-like Server running on top of Webpack
@@ -46,6 +50,7 @@ function createServer(
     noInfo: true,
     reporter: null,
     stats: 'errors-only',
+    hot: true,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000,
@@ -54,7 +59,15 @@ function createServer(
 
   const httpServer = http.createServer(appHandler);
 
-  const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
+  const webSocketServer = new WebSocketServer({ server: httpServer });
+  const debuggerProxy = new WebSocketDebuggerProxy(
+    webSocketProxy(webSocketServer, '/debugger-proxy'),
+  );
+
+  hotMiddleware(compiler, {
+    nativeProxy: webSocketProxy(webSocketServer, '/hot'),
+    haulProxy: webSocketProxy(webSocketServer, '/haul-hmr'),
+  });
 
   // Middlewares
   appHandler
