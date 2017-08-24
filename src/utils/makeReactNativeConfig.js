@@ -66,7 +66,7 @@ const getDefaultConfig = ({
    * `cheap-module-source-map` is faster than `source-map`,
    * but it doesn't have column mappings
    */
-  devtool: dev ? 'cheap-module-source-map' : 'source-map',
+  devtool: dev ? 'eval-source-map' : 'source-map',
   output: {
     path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
