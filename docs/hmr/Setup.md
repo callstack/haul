@@ -38,7 +38,7 @@ In order to enable HMR add `import 'haul/hot';` at the top of the root file - us
 
 For advanced projects or the ones with different structure, we provide our own HMR API, which allows you to enable HMR regardless of which navigation library you use and how you structure your code.
 
-This guide below is not a list of setps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following naviagion libraries, please refer to associated guide:
+This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following naviagion libraries, please refer to associated guide:
 
 * [`react-naviagion`](./guides/react-navigation.md)
 * [`react-native-navigation`](./guides/react-native-navigation.md)
