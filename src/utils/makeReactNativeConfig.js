@@ -53,6 +53,7 @@ const getDefaultConfig = ({
   minify,
   bundle,
   port,
+  serve,
 }): WebpackConfig => ({
   context: root,
   entry: [
@@ -69,7 +70,7 @@ const getDefaultConfig = ({
   devtool: dev ? 'cheap-module-source-map' : 'source-map',
   output: {
     path: path.join(root, 'dist'),
-    filename: `index.${platform}.bundle`,
+    filename: `index.${platform}.bundle${serve ? '.js' : ''}`,
     publicPath: `http://localhost:${port}/`,
   },
   module: {
