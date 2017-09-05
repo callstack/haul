@@ -51,6 +51,7 @@ function createServer(
     reporter: null,
     stats: 'errors-only',
     hot: true,
+    mimeTypes: { 'application/javascript': ['bundle'] },
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000,
