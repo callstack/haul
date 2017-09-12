@@ -12,6 +12,7 @@ const clear = require('clear');
 const inquirer = require('inquirer');
 const path = require('path');
 const chalk = require('chalk');
+const { isPortTaken, killHaulProcess } = require('./utils/haulPortHandler');
 
 const pjson = require('../package.json');
 const logger = require('./logger');
@@ -169,6 +170,28 @@ async function run(args: Array<string>) {
   const { options, promptedOptions } = await validateOptions(opts, flags);
   const userDefinedOptions = { ...flags, ...promptedOptions };
   const displayName = getDisplayName(command.name, userDefinedOptions);
+
+  if (command.name === 'start') {
+    const isTaken = await isPortTaken(options.port);
+    if (isTaken) {
+      const { userChoice } = await inquirer.prompt({
+        type: 'list',
+        name: 'userChoice',
+        message: `Port ${options.port} is already in use. What should we do?`,
+        choices: [
+          `Kill process using port ${options.port} and start server`,
+          'Quit',
+        ],
+      });
+      if (userChoice === 'Quit') return;
+      const result = await killHaulProcess(options.port);
+      if (!result) {
+        logger.error(`Could not kill process! Aborting.`);
+        return;
+      }
+      logger.info(`Successfully killed processes.`);
+    }
+  }
 
   if (Object.keys(promptedOptions).length) {
     logger.info(`Running ${chalk.cyan(displayName)}`);
