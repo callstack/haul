@@ -12,7 +12,7 @@ const clear = require('clear');
 const inquirer = require('inquirer');
 const path = require('path');
 const chalk = require('chalk');
-const { isPortTaken, killHaulProcess } = require('./utils/haulPortHandler');
+const { isPortTaken, killProcess } = require('./utils/haulPortHandler');
 
 const pjson = require('../package.json');
 const logger = require('./logger');
@@ -184,7 +184,7 @@ async function run(args: Array<string>) {
         ],
       });
       if (userChoice === 'Quit') return;
-      const result = await killHaulProcess(options.port);
+      const result = await killProcess(options.port);
       if (!result) {
         logger.error(`Could not kill process! Aborting.`);
         return;
