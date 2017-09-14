@@ -19,11 +19,8 @@ function isPortTaken(port: number) {
         return resolve(true);
       })
       .once('listening', () => {
-        portTester
-          .once('close', () => {
-            resolve(false);
-          })
-          .close();
+        portTester.close();
+        resolve(false);
       })
       .listen(port);
   });
@@ -52,8 +49,8 @@ function killProcess(port: number) {
         return;
       }
       /* 
-       * If no error, that means port is in use 
-       * And this port is used only by one process
+       * If no error, port is in use 
+       * And that port is used only by one process
        */
       const PIDInfo = stdout
         .trim()
@@ -71,11 +68,8 @@ function killProcess(port: number) {
       /*
        * Kill process
        */
-      try {
-        process.kill(PID);
-      } catch (e) {
-        resolve(false);
-      }
+      process.kill(PID);
+
       resolve(true);
     });
   });
