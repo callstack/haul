@@ -6,15 +6,11 @@
  */
 const dedent = require('dedent');
 const chalk = require('chalk');
-const path = require('path');
+const entryPointList = require('./entryPointList');
 
 type Params = {
   entry: Array<string>,
   dev: boolean,
-};
-
-const getEntryFile = (entries: Array<string>) => {
-  return path.resolve(process.cwd(), entries[entries.length - 1]);
 };
 
 module.exports = (config: Params) => {
@@ -22,9 +18,9 @@ module.exports = (config: Params) => {
 
   return dedent`
     Haul is now bundling your React Native app in ${chalk.bold(mode)} mode.
-    
+
     Starting from:
 
-    ${chalk.grey(getEntryFile(config.entry))} \n
+    ${entryPointList({ entries: [config.entry] })} \n
   `;
 };

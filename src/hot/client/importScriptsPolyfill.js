@@ -16,7 +16,9 @@
 global.importScripts =
   global.importScripts ||
   (importPath =>
-    fetch(importPath).then(response => response.text()).then(body => {
-      // eslint-disable-next-line no-eval
-      eval(body);
-    }));
+    fetch(importPath)
+      .then(response => response.text())
+      .then(body => {
+        // eslint-disable-next-line no-eval
+        eval(body);
+      }));
