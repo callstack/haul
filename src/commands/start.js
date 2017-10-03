@@ -39,33 +39,6 @@ async function start(opts: *) {
     config = config[platforms.indexOf(opts.platform)];
   }
 
-  const compiler = webpack(config);
-
-  const app = createServer(
-    compiler,
-    didHaveIssues => {
-      clear();
-      if (didHaveIssues) {
-        logger.warn(messages.bundleBuilding(didHaveIssues));
-      } else {
-        logger.info(messages.bundleBuilding(didHaveIssues));
-      }
-    },
-    stats => {
-      clear();
-      if (stats.hasErrors()) {
-        logger.error(messages.bundleFailed());
-      } else {
-        logger.done(
-          messages.bundleBuilt({
-            stats,
-            platform: opts.platform,
-          }),
-        );
-      }
-    },
-  );
-
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
     const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
@@ -90,16 +63,41 @@ async function start(opts: *) {
     }
   }
 
-  app.listen(opts.port, () => {
-    logger.info(
-      messages.initialStartInformation({
-        entries: Array.isArray(config)
-          ? config.map(c => c.entry)
-          : [config.entry],
-        port: opts.port,
-      }),
-    );
-  });
+  logger.info(
+    messages.initialStartInformation({
+      entries: Array.isArray(config)
+        ? config.map(c => c.entry)
+        : [config.entry],
+      port: opts.port,
+    }),
+  );
+
+  const compiler = webpack(config);
+
+  createServer(
+    compiler,
+    didHaveIssues => {
+      clear();
+      if (didHaveIssues) {
+        logger.warn(messages.bundleBuilding(didHaveIssues));
+      } else {
+        logger.info(messages.bundleBuilding(didHaveIssues));
+      }
+    },
+    stats => {
+      clear();
+      if (stats.hasErrors()) {
+        logger.error(messages.bundleFailed());
+      } else {
+        logger.done(
+          messages.bundleBuilt({
+            stats,
+            platform: opts.platform,
+          }),
+        );
+      }
+    },
+  ).listen(opts.port);
 }
 
 module.exports = {

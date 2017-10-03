@@ -31,6 +31,7 @@ export type Command = {
 export type WebpackStats = {
   hasWarnings: () => boolean,
   hasErrors: () => boolean,
+  toJson: ({ [key: string]: any }) => { [key: string]: any },
 };
 
 type LoggerPrint = (...args: any[]) => void;
