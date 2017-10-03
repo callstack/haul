@@ -89,10 +89,10 @@ const getDefaultConfig = ({
             loader: require.resolve('babel-loader'),
             options: Object.assign({}, getBabelConfig(root), {
               /**
-             * This enables caching results in ./node_modules/.cache/babel-loader/
-             * to improve the rebuild speeds
-             * This is a feature of `babel-loader` and not babel
-             */
+               * This enables caching results in ./node_modules/.cache/babel-loader/
+               * to improve the rebuild speeds
+               * This is a feature of `babel-loader` and not babel
+               */
               cacheDirectory: dev,
             }),
           },
@@ -156,10 +156,10 @@ const getDefaultConfig = ({
         ? [
             new webpack.optimize.UglifyJsPlugin({
               /**
-             * By default, uglify only minifies *.js files
-             * We need to use the plugin to configutr *.bundle to get minified
-             * Also disable IE8 support as we don't need it'
-             */
+               * By default, uglify only minifies *.js files
+               * We need to use the plugin to configutr *.bundle to get minified
+               * Also disable IE8 support as we don't need it'
+               */
               test: /\.(js|bundle)($|\?)/i,
               sourceMap: true,
               compress: {
