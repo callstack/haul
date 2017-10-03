@@ -145,9 +145,6 @@ const getDefaultConfig = ({
       test: /\.(js|css|bundle)($|\?)/i,
       filename: '[file].map',
     }),
-    /**
-     * HappyPack runs transforms in parallel to improve build performance
-     */
   ]
     .concat(
       process.env.NODE_ENV === 'production'
