@@ -8,7 +8,6 @@
  */
 
 const webpack = require('webpack');
-const HappyPack = require('happypack');
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
@@ -82,10 +81,22 @@ const getDefaultConfig = ({
          * We transpile modules prefixed with react for compatibility
          */
         exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
-        use: {
-          loader: require.resolve('happypack/loader'),
-          query: { id: 'babel' },
-        },
+        use: [
+          {
+            loader: require.resolve('thread-loader'),
+          },
+          {
+            loader: require.resolve('babel-loader'),
+            options: Object.assign({}, getBabelConfig(root), {
+              /**
+             * This enables caching results in ./node_modules/.cache/babel-loader/
+             * to improve the rebuild speeds
+             * This is a feature of `babel-loader` and not babel
+             */
+              cacheDirectory: dev,
+            }),
+          },
+        ],
       },
       {
         test: AssetResolver.test,
@@ -137,23 +148,6 @@ const getDefaultConfig = ({
     /**
      * HappyPack runs transforms in parallel to improve build performance
      */
-    new HappyPack({
-      id: 'babel',
-      loaders: [
-        {
-          path: require.resolve('babel-loader'),
-          query: Object.assign({}, getBabelConfig(root), {
-            /**
-             * This enables caching results in ./node_modules/.cache/babel-loader/
-             * to improve the rebuild speeds
-             * This is a feature of `babel-loader` and not babel
-             */
-            cacheDirectory: dev,
-          }),
-        },
-      ],
-      verbose: false,
-    }),
   ]
     .concat(
       process.env.NODE_ENV === 'production'
