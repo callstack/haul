@@ -52,6 +52,7 @@ function createServer(
     stats: 'errors-only',
     hot: true,
     mimeTypes: { 'application/javascript': ['bundle'] },
+    headers: { 'Content-Type': 'application/javascript' },
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000,
