@@ -40,7 +40,7 @@ For advanced projects or the ones with different structure, we provide our own H
 
 This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following naviagion libraries, please refer to associated guide:
 
-* [`react-naviagion`](./guides/react-navigation.md)
+* [`react-navigation`](./guides/react-navigation.md)
 * [`react-native-navigation`](./guides/react-native-navigation.md)
 
 ------
