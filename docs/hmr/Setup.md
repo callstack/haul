@@ -68,7 +68,7 @@ AppRegistry.registerComponent('MyApp', () => MyApp);
 Navigation.registerComponent('MyScreen', () => MyScreen);
 ```
 
-After wrapping those with `makeHot` it should looke like this:
+After wrapping those with `makeHot` it should look like this:
 
 ```javascript
 AppRegistry.registerComponent('MyApp', makeHot(() => MyApp));
