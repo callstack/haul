@@ -12,14 +12,19 @@ const HappyPack = require('happypack');
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const semver = require('semver');
 
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
+const getRNVersion = require('../utils/getReactNativeVersion');
 
 const getBabelConfig = require('./getBabelConfig');
 
 const PLATFORMS = ['ios', 'android'];
+
+// Getting Minor version
+const rnVersion = getRNVersion();
 
 type ConfigOptions = {
   root: string,
@@ -65,7 +70,9 @@ const getDefaultConfig = ({
   devtool: bundle ? 'source-map' : 'eval-source-map',
   output: {
     path: path.join(root, 'dist'),
-    filename: `index.${platform}.bundle`,
+    filename: semver.gte(rnVersion, '0.49.0')
+      ? `index.bundle`
+      : `index.${platform}.bundle`,
     publicPath: `http://localhost:${port}/`,
   },
   module: {

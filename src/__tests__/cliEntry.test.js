@@ -39,6 +39,10 @@ jest.mock('../commands/bundle', () => {
   };
 });
 
+jest.mock('../utils/getReactNativeVersion.js', () => {
+  return () => '0.47.1';
+});
+
 beforeEach(() => {
   // $FlowFixMe
   console.log = jest.fn();
