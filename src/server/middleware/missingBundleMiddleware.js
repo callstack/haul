@@ -6,7 +6,9 @@ const dedent = require('dedent');
 
 function missingBundleMiddleware(req, res, next) {
   // eslint-disable-next-line no-unused-vars
-  const [_, platform] = req.path.match(/(?:\.(ios|android))?\.bundle$/) || [];
+  const [_, platform] = req.path.match(
+    /(?:\.(ios|android|windows))?\.bundle$/,
+  ) || [];
 
   if (platform) {
     res.status(500).end(

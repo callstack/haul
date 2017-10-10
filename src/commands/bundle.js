@@ -133,6 +133,10 @@ module.exports = {
           value: 'android',
           description: 'Builds Android bundle',
         },
+        {
+          value: 'windows',
+          description: 'Builds Windows bundle',
+        },
       ],
       example: 'haul bundle --platform ios',
     },

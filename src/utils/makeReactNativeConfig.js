@@ -20,7 +20,7 @@ const getRNVersion = require('../utils/getReactNativeVersion');
 
 const getBabelConfig = require('./getBabelConfig');
 
-const PLATFORMS = ['ios', 'android'];
+const PLATFORMS = ['ios', 'android', 'windows'];
 
 // Getting Minor version
 const rnVersion = getRNVersion();

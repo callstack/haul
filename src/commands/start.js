@@ -182,6 +182,10 @@ module.exports = {
           description: 'Serves Android bundle',
         },
         {
+          value: 'windows',
+          description: 'Serves Windows bundle',
+        },
+        {
           value: 'all',
           description: 'Serves both platforms',
         },
