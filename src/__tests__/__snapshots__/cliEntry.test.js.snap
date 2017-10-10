@@ -28,6 +28,7 @@ Commands:
   init       Generates necessary configuration files
   start      Starts a new webpack server
   bundle     Builds the app bundle for packaging
+  reload     Sends reload request to all devices that enabled live reload
 
 Run haul COMMAND --help for more information on specific commands
 "

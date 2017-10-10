@@ -23,6 +23,10 @@
         document.getElementById('devtools-info').innerHTML = 'Press <span class="shortcut">' +
           refresh_shortcut +
           '</span> in simulator to reload and connect.';
+
+        document.getElementById('reloadButton').addEventListener('click', function() {
+          fetch('http://' + window.location.host + '/reloadapp', { method: 'HEAD' });
+        })
       };
       var INITIAL_MESSAGE = '<span class="circle circle-green"></span> Waiting';
       function connectToDebuggerProxy() {
@@ -154,6 +158,33 @@
       text-align: center;
     }
 
+    .features {
+      text-align: center;
+    }
+
+    #reloadButton {
+      background-color:#b8e356;
+      border-radius:6px;
+      border:1px solid #83c41a;
+      display:inline-block;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:15px;
+      cursor: pointer;
+      font-weight:bold;
+      padding:6px 24px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #86ae47;
+      outline: none;
+    }
+    #reloadButton:hover {
+      background-color:#a5cc52;
+    }
+    #reloadButton:active {
+      position:relative;
+      top:1px;
+    }
+
     img {
       width: 100%;
     }
@@ -178,6 +209,10 @@
     <div class='info'>
       <p>Press <kbd id='dev_tools_shortcut' class="shortcut">⌘⌥J</kbd> to open Developer Tools.</p>
       <p id='devtools-info'></p>
+    </div>
+
+    <div class="features">
+      <button title="Make sure 'Live Reload' is enabled on the device" id="reloadButton">Reload App</button>
     </div>
   </main>
 </body>

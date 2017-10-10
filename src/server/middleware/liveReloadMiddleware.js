@@ -8,6 +8,18 @@
  */
 function liveReloadMiddleware(compiler) {
   let watchers = [];
+  const headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  function notifyAllWatchers() {
+    watchers.forEach(watcher => {
+      watcher.res.writeHead(205, headers);
+      watcher.res.end(JSON.stringify({ changed: true }));
+    });
+
+    watchers = [];
+  }
 
   return (req, res, next) => {
     /**
@@ -26,20 +38,17 @@ function liveReloadMiddleware(compiler) {
       return;
     }
 
+    if (req.path === '/reloadapp') {
+      notifyAllWatchers();
+      res.end();
+      return;
+    }
+
     /**
      * On new `build`, notify all registered watchers to reload
      */
     compiler.plugin('done', () => {
-      const headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-
-      watchers.forEach(watcher => {
-        watcher.res.writeHead(205, headers);
-        watcher.res.end(JSON.stringify({ changed: true }));
-      });
-
-      watchers = [];
+      notifyAllWatchers();
     });
 
     next();
