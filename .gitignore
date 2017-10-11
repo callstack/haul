@@ -2,7 +2,8 @@
 .DS_Store
 
 *.log
-node_modules/
+/node_modules
+fixtures/**/node_modules
 
 .vscode/
 jsconfig.json

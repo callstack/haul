@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates new config when no .babelrc found 1`] = `
+Object {
+  "babelrc": false,
+  "plugins": Array [
+    "<<REPLACED>>/utils/fixRequireIssues.js",
+    "<<NODE_MODULE>>/react-hot-loader/babel.js",
+    "<<REPLACED>>/hot/babelPlugin.js",
+  ],
+  "presets": Array [
+    "react-native",
+  ],
+}
+`;
+
+exports[`does not include "hot" plugins in production 1`] = `
+Object {
+  "babelrc": false,
+  "plugins": Array [
+    "<<REPLACED>>/utils/fixRequireIssues.js",
+  ],
+  "presets": Array [
+    "react-native",
+  ],
+}
+`;

@@ -7,10 +7,22 @@
 
 'use strict';
 
-function flushPromises() {
-  return new Promise(resolve => setTimeout(resolve));
-}
+const traverse = require('traverse'); // eslint-disable-line import/no-extraneous-dependencies
+
+const flushPromises = () => new Promise(resolve => setTimeout(resolve));
+
+const replacePathsInObject = (object: mixed) => {
+  return traverse(object).map(
+    entry =>
+      typeof entry === 'string'
+        ? entry
+            .replace(/\/.*\/src/, '<<REPLACED>>')
+            .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
+        : entry,
+  );
+};
 
 module.exports = {
   flushPromises,
+  replacePathsInObject,
 };

@@ -2,8 +2,6 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  *
- * makeReactNativeConfig.js
- *
  * @flow
  */
 
@@ -16,13 +14,9 @@ const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
 const getRNVersion = require('../utils/getReactNativeVersion');
-
 const getBabelConfig = require('./getBabelConfig');
 
 const PLATFORMS = ['ios', 'android'];
-
-// Getting Minor version
-const rnVersion = getRNVersion();
 
 type ConfigOptions = {
   root: string,
@@ -57,6 +51,8 @@ const getDefaultConfig = ({
   bundle,
   port,
 }): WebpackConfig => {
+  // Getting Minor version
+  const rnVersion = getRNVersion(root);
   const platformProgressBar = haulProgressBar(platform);
   return {
     context: root,
