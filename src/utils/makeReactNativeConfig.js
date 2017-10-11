@@ -85,8 +85,8 @@ const getDefaultConfig = ({
               loader: require.resolve('thread-loader'),
             },
             {
+              loader: require.resolve('babel-loader'),
               options: Object.assign({}, getBabelConfig(root), {
-                loader: require.resolve('babel-loader'),
                 /**
                  * to improve the rebuild speeds
                  * This enables caching results in ./node_modules/.cache/babel-loader/
