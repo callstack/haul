@@ -7,12 +7,14 @@
 const webpack = require('webpack');
 const path = require('path');
 const clear = require('clear');
+const inquirer = require('inquirer');
 
 const logger = require('../logger');
 const createServer = require('../server');
 const messages = require('../messages');
 const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
+const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
 
 const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 
@@ -20,6 +22,26 @@ const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
  * Starts development server
  */
 async function start(opts: *) {
+  const isTaken = await isPortTaken(opts.port);
+  if (isTaken) {
+    const { userChoice } = await inquirer.prompt({
+      type: 'list',
+      name: 'userChoice',
+      message: `Port ${opts.port} is already in use. What should we do?`,
+      choices: [`Kill process using port ${opts.port} and start Haul`, 'Quit'],
+    });
+    if (userChoice === 'Quit') {
+      process.exit();
+    }
+    try {
+      await killProcess(opts.port);
+    } catch (e) {
+      logger.error(`Could not kill process! Reason: \n ${e.message}`);
+      process.exit(1);
+    }
+    logger.info(`Successfully killed processes.`);
+  }
+
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
 
@@ -31,6 +53,7 @@ async function start(opts: *) {
       root: directory,
       dev: opts.dev,
       minify: opts.minify,
+      port: opts.port,
     },
   );
 

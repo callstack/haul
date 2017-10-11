@@ -24,6 +24,7 @@ const COMMANDS: Array<Command> = [
   require('./commands/init'),
   require('./commands/start'),
   require('./commands/bundle'),
+  require('./commands/reload'),
 ];
 
 const NOT_SUPPORTED_COMMANDS = [

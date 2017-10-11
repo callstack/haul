@@ -118,7 +118,7 @@ function create(webpackCompiler: *): Middleware {
 
     // grab the source stack frames
     const unconvertedFrames = getRequestedFrames(req);
-    if (!unconvertedFrames) return next();
+    if (!unconvertedFrames || unconvertedFrames.length === 0) return next();
 
     // grab the platform from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
     const platformMatch = unconvertedFrames[0].file.match(

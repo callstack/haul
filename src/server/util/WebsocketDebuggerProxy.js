@@ -2,7 +2,6 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  */
-const WebSocketServer = require('ws').Server;
 
 /**
  * Sends message to a given socket
@@ -19,10 +18,8 @@ const send = (socket, message) => {
  * Websocket proxy between debugger and React Native client
  */
 class WebSocketProxy {
-  constructor(server, path) {
-    this.wss = new WebSocketServer({ server, path });
-
-    this.wss.on('connection', this.onConnection.bind(this));
+  constructor(wsp) {
+    wsp.onConnection(this.onConnection.bind(this));
   }
 
   /**

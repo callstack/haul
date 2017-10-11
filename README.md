@@ -18,6 +18,7 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 - Access to full webpack ecosystem, using additonal loaders and plugins is simple
 - Doesn't need watchman, symlinks work nicely
 - Helpful and easy to understand error messages
+- Hot Module Reloading
 
 ## Getting started
 
@@ -67,6 +68,9 @@ Check out the docs to learn more about available commands and tips on customizin
 1. [Configuration](docs/Configuration.md)
 1. [Recipes](docs/Recipes.md)
 
+### Hot Module Replacement
+Please refer to the [Setup guide](./docs/hmr/Setup.md).
+
 ## Limitations
 
 Haul uses a completely different architecture from React Native packager, which means there are some things which don't work quite the same.
@@ -77,7 +81,6 @@ We are actively working on adding support for the following:
 
 The following features are **unlikely to be supported** in the future:
 
-- Developer menu -> Enable Hot Reloading: use `webpack.haul.js` config instead
 - Haste module system: use something like [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) instead
 - Transpile files under `node_modules`: transpile your modules before publishing, or configure webpack not to ignore them
 
