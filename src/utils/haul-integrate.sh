@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-THIS_DIR=$(dirname $0)
+THIS_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 SCRIPT_SRC="${THIS_DIR}/../../../react-native/packager"
 
@@ -15,5 +15,5 @@ SRC="$(cd "${SCRIPT_SRC}" && pwd)"
 sed -i -e 's|$REACT_NATIVE_DIR/local-cli/cli.js|./node_modules/.bin/haul|' ${SRC}/react-native-xcode.sh
 
 # Replace `react-native start` in `packager.sh`
-PACKAGER_CONTENT="cd \"$THIS_DIR/../../../\" && node \"./node_modules/.bin/haul\" start --platform ios \"\$@\""
+PACKAGER_CONTENT="cd \"$THIS_DIR/../../../../\" && node \"./node_modules/.bin/haul\" start --platform ios \"\$@\""
 echo "$PACKAGER_CONTENT" > ${SRC}/packager.sh
