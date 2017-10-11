@@ -26,6 +26,9 @@ test('start command displays "Select platform" message', () => {
   writeFiles(TEMP_DIR, {
     'webpack.haul.js': '{}',
   });
+  writeFiles(path.resolve(TEMP_DIR, 'node_modules', 'react-native'), {
+    'package.json': JSON.stringify({ version: '0.47.1' }),
+  });
 
   const { stdout } = runHaulSync(TEMP_DIR, ['start']);
   expect(stripAnsi(stdout).trim()).toMatchSnapshot();
