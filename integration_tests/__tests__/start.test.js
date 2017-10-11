@@ -59,7 +59,7 @@ function testPlatform(platform, done) {
       haul.kill();
     }
 
-    if (message.match('Built successfully!')) {
+    if (message.match('Built successfully in ')) {
       const stdout = messageBuffer.join('\n');
       expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
       expect(stdout).toMatch('Haul is now bundling your React Native app');
