@@ -7,6 +7,7 @@
 
 const resolveCwd = require('resolve-cwd');
 const fs = require('fs');
+const path = require('path');
 const logger = require('../logger');
 
 /**
@@ -14,11 +15,13 @@ const logger = require('../logger');
 * and return it's version
 */
 
-module.exports = (): string => {
+module.exports = (root: string): string => {
   let rnVersion = '';
   try {
-    const pckJsonLocation = resolveCwd('react-native/package.json');
-    rnVersion = JSON.parse(fs.readFileSync(pckJsonLocation, 'utf-8')).version;
+    const pkgJsonLocation = resolveCwd(
+      path.join(root, 'node_modules', 'react-native', 'package.json'),
+    );
+    rnVersion = JSON.parse(fs.readFileSync(pkgJsonLocation, 'utf-8')).version;
   } catch (error) {
     logger.warn(error.toString());
   }

@@ -4,7 +4,7 @@ exports[`creates config from defaults (configs) 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "cheap-module-source-map",
+    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
@@ -42,6 +42,7 @@ Array [
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+      "publicPath": "http://localhost:undefined/",
     },
     "plugins": Array [
       CaseSensitivePathsPlugin {
@@ -58,6 +59,7 @@ Array [
         "definitions": Object {
           "__DEV__": true,
           "process.env": Object {
+            "DEV_SERVER_ORIGIN": "\\"http://localhost:undefined\\"",
             "NODE_ENV": "\\"development\\"",
           },
         },
@@ -101,6 +103,8 @@ Array [
                 "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
                 "plugins": Array [
                   "<<REPLACED>>/utils/fixRequireIssues.js",
+                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                  "<<REPLACED>>/hot/babelPlugin.js",
                 ],
               },
             },
@@ -119,6 +123,10 @@ Array [
           "started": false,
           "verbose": false,
         },
+      },
+      HotModuleReplacementPlugin {
+        "fullBuildTimeout": 200,
+        "multiStep": undefined,
       },
     ],
     "resolve": Object {
@@ -141,10 +149,11 @@ Array [
         },
       ],
     },
+    "target": "webworker",
   },
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "cheap-module-source-map",
+    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
@@ -182,6 +191,7 @@ Array [
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+      "publicPath": "http://localhost:undefined/",
     },
     "plugins": Array [
       CaseSensitivePathsPlugin {
@@ -198,6 +208,7 @@ Array [
         "definitions": Object {
           "__DEV__": true,
           "process.env": Object {
+            "DEV_SERVER_ORIGIN": "\\"http://localhost:undefined\\"",
             "NODE_ENV": "\\"development\\"",
           },
         },
@@ -241,6 +252,8 @@ Array [
                 "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
                 "plugins": Array [
                   "<<REPLACED>>/utils/fixRequireIssues.js",
+                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                  "<<REPLACED>>/hot/babelPlugin.js",
                 ],
               },
             },
@@ -259,6 +272,10 @@ Array [
           "started": false,
           "verbose": false,
         },
+      },
+      HotModuleReplacementPlugin {
+        "fullBuildTimeout": 200,
+        "multiStep": undefined,
       },
     ],
     "resolve": Object {
@@ -281,6 +298,7 @@ Array [
         },
       ],
     },
+    "target": "webworker",
   },
 ]
 `;
@@ -296,7 +314,7 @@ exports[`merges existing config 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "cheap-module-source-map",
+    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
@@ -313,13 +331,15 @@ Array [
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+      "publicPath": "http://localhost:undefined/",
     },
     "plugins": Array [],
     "resolve": Object {},
+    "target": "webworker",
   },
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "cheap-module-source-map",
+    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
@@ -336,9 +356,11 @@ Array [
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
+      "publicPath": "http://localhost:undefined/",
     },
     "plugins": Array [],
     "resolve": Object {},
+    "target": "webworker",
   },
 ]
 `;

@@ -8,22 +8,29 @@
 const path = require('path');
 const getBabelConfig = require('../getBabelConfig');
 
+const orignalEnv = process.env.NODE_ENV;
+
+afterEach(() => {
+  process.env.NODE_ENV = orignalEnv;
+});
+
 test('extracts config from .babelrc', () => {
   const cwd = path.resolve(__dirname, './fixtures');
   const config = getBabelConfig(cwd);
-  expect(config).toEqual({
-    babelrc: false,
+  expect(config).toMatchObject({
     extends: path.resolve(cwd, '.babelrc'),
-    plugins: [require.resolve('../fixRequireIssues')],
   });
 });
 
 test('creates new config when no .babelrc found', () => {
   const cwd = path.resolve('mocked/path');
   const config = getBabelConfig(cwd);
-  expect(config).toEqual({
-    babelrc: false,
-    presets: ['react-native'],
-    plugins: [require.resolve('../fixRequireIssues')],
-  });
+  expect(config).toMatchSnapshot();
+});
+
+test('does not include "hot" plugins in production', () => {
+  process.env.NODE_ENV = 'production';
+  const cwd = path.resolve('mocked/path');
+  const config = getBabelConfig(cwd);
+  expect(config).toMatchSnapshot();
 });
