@@ -7,6 +7,7 @@
 
 const path = require('path');
 const getBabelConfig = require('../getBabelConfig');
+const traverse = require('traverse');
 
 const orignalEnv = process.env.NODE_ENV;
 
@@ -25,12 +26,30 @@ test('extracts config from .babelrc', () => {
 test('creates new config when no .babelrc found', () => {
   const cwd = path.resolve('mocked/path');
   const config = getBabelConfig(cwd);
-  expect(config).toMatchSnapshot();
+  expect(
+    traverse(config).map(
+      entry =>
+        typeof entry === 'string'
+          ? entry
+              .replace(/\/.*\/src/, '<<REPLACED>>')
+              .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
+          : entry,
+    ),
+  ).toMatchSnapshot();
 });
 
 test('does not include "hot" plugins in production', () => {
   process.env.NODE_ENV = 'production';
   const cwd = path.resolve('mocked/path');
   const config = getBabelConfig(cwd);
-  expect(config).toMatchSnapshot();
+  expect(
+    traverse(config).map(
+      entry =>
+        typeof entry === 'string'
+          ? entry
+              .replace(/\/.*\/src/, '<<REPLACED>>')
+              .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
+          : entry,
+    ),
+  ).toMatchSnapshot();
 });
