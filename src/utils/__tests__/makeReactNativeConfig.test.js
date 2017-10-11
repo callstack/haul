@@ -6,7 +6,7 @@
  */
 
 import path from 'path';
-import traverse from 'traverse';
+import { replacePathsInObject } from 'jest/helpers';
 import makeReactNativeConfig from '../makeReactNativeConfig';
 
 test('creates config from defaults', () => {
@@ -16,16 +16,9 @@ test('creates config from defaults', () => {
     root: path.resolve(__dirname, 'fixtures'),
   });
 
-  expect(
-    traverse(configs).map(
-      entry =>
-        typeof entry === 'string'
-          ? entry
-              .replace(/\/.*\/src/, '<<REPLACED>>')
-              .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
-          : entry,
-    ),
-  ).toMatchSnapshot('creates config from defaults (configs)');
+  expect(replacePathsInObject(configs)).toMatchSnapshot(
+    'creates config from defaults (configs)',
+  );
   expect(platforms).toMatchSnapshot('creates config from defaults (platforms)');
 });
 
@@ -36,14 +29,7 @@ test('merges existing config', () => {
     root: path.resolve(__dirname, 'fixtures'),
   });
 
-  expect(
-    traverse(configs).map(
-      entry =>
-        typeof entry === 'string'
-          ? entry
-              .replace(/\/.*\/src/, '<<REPLACED>>')
-              .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
-          : entry,
-    ),
-  ).toMatchSnapshot('merges existing config');
+  expect(replacePathsInObject(configs)).toMatchSnapshot(
+    'merges existing config',
+  );
 });
