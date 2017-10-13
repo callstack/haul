@@ -17,14 +17,24 @@ Array [
           },
         },
         Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
           "test": /\\\\\\.js\\$/,
-          "use": Object {
-            "loader": "<<NODE_MODULE>>/happypack/loader.js",
-            "query": Object {
-              "id": "babel",
+          "use": Array [
+            Object {
+              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
             },
-          },
+            Object {
+              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+              "options": Object {
+                "cacheDirectory": true,
+                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+                "plugins": Array [
+                  "<<REPLACED>>/utils/fixRequireIssues.js",
+                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                  "<<REPLACED>>/hot/babelPlugin.js",
+                ],
+              },
+            },
+          ],
         },
         Object {
           "test": /\\\\\\.\\(bmp\\|gif\\|jpg\\|jpeg\\|png\\|psd\\|svg\\|webp\\|m4v\\|aac\\|aiff\\|caf\\|m4a\\|mp3\\|wav\\|html\\|pdf\\)\\$/,
@@ -87,46 +97,11 @@ Array [
         "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
       },
-      HappyPlugin {
-        "config": Object {
-          "cache": true,
-          "cacheContext": Object {},
-          "compilerId": "default",
-          "enabled": true,
-          "id": "babel",
-          "loaders": Array [
-            Object {
-              "path": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "query": Object {
-                "babelrc": false,
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-          "tempDir": ".happypack",
-          "threads": 3,
-          "verbose": false,
-        },
-        "id": "babel",
-        "name": "HappyPack",
-        "state": Object {
-          "baseLoaderRequest": "",
-          "debug": false,
-          "foregroundThreadPool": null,
-          "loaders": Array [],
-          "started": false,
-          "verbose": false,
-        },
-      },
       HotModuleReplacementPlugin {
         "fullBuildTimeout": 200,
         "multiStep": undefined,
+        "options": Object {},
+        "requestTimeout": 10000,
       },
     ],
     "resolve": Object {
@@ -166,14 +141,24 @@ Array [
           },
         },
         Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
           "test": /\\\\\\.js\\$/,
-          "use": Object {
-            "loader": "<<NODE_MODULE>>/happypack/loader.js",
-            "query": Object {
-              "id": "babel",
+          "use": Array [
+            Object {
+              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
             },
-          },
+            Object {
+              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+              "options": Object {
+                "cacheDirectory": true,
+                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+                "plugins": Array [
+                  "<<REPLACED>>/utils/fixRequireIssues.js",
+                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                  "<<REPLACED>>/hot/babelPlugin.js",
+                ],
+              },
+            },
+          ],
         },
         Object {
           "test": /\\\\\\.\\(bmp\\|gif\\|jpg\\|jpeg\\|png\\|psd\\|svg\\|webp\\|m4v\\|aac\\|aiff\\|caf\\|m4a\\|mp3\\|wav\\|html\\|pdf\\)\\$/,
@@ -236,46 +221,11 @@ Array [
         "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
       },
-      HappyPlugin {
-        "config": Object {
-          "cache": true,
-          "cacheContext": Object {},
-          "compilerId": "default",
-          "enabled": true,
-          "id": "babel",
-          "loaders": Array [
-            Object {
-              "path": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "query": Object {
-                "babelrc": false,
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-          "tempDir": ".happypack",
-          "threads": 3,
-          "verbose": false,
-        },
-        "id": "babel",
-        "name": "HappyPack",
-        "state": Object {
-          "baseLoaderRequest": "",
-          "debug": false,
-          "foregroundThreadPool": null,
-          "loaders": Array [],
-          "started": false,
-          "verbose": false,
-        },
-      },
       HotModuleReplacementPlugin {
         "fullBuildTimeout": 200,
         "multiStep": undefined,
+        "options": Object {},
+        "requestTimeout": 10000,
       },
     ],
     "resolve": Object {
