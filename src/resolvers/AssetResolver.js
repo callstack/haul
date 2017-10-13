@@ -83,9 +83,14 @@ function AssetResolver(options: Options) {
 
 AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|m4v|aac|aiff|caf|m4a|mp3|wav|html|pdf)$/;
 AssetResolver.collect = (
-  list,
+  list: Array<string>,
   { name, type, platform }: { name: string, type: string, platform: string },
-) => {
+): {
+  [key: string]: {
+    platform: 'ios' | 'android',
+    name: string,
+  },
+} => {
   const regex = /^(bmp|gif|jpg|jpeg|png|psd|tiff|webp|svg)$/.test(type)
     ? new RegExp(
         `^${escapeStringRegexp(

@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -17,24 +17,25 @@ import resetRedBox from './utils';
 
 const instances = {};
 
+type State = {
+  error: ?Object,
+};
+
 /**
  * Wrap root component factory with custom HotWrapper, which allows for deep force update
  * and servers as an error boundry.
  */
 export function makeHot(initialRootFactory: Function, id?: string = 'default') {
   return () => {
-    class HotWrapper extends Component {
-      state: {
-        error: ?Object,
+    class HotWrapper extends Component<*, State> {
+      state = {
+        error: null,
       };
 
       rootComponentFactory: ?Function;
 
       constructor(props: *) {
         super(props);
-        this.state = {
-          error: null,
-        };
         instances[id] = this;
         this.rootComponentFactory = null;
       }
@@ -126,7 +127,7 @@ export function callOnce(callback: Function) {
 
 /**
  * Clear specified module cache. The module must be a resolved with `require.resolve`.
- * 
+ *
  */
 export function clearCacheFor(resolvedModuleName: string) {
   delete require.cache[resolvedModuleName];
