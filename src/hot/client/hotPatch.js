@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -55,7 +55,6 @@ if (typeof global.__REACT_HOT_LOADER__ !== 'undefined') {
       typeof id === 'string' && /react-native/.test(id)
         ? _createElement
         : patchedCreateElement;
-    // $FlowFixMe
     return fn(type, ...args);
   };
 
