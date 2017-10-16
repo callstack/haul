@@ -97,7 +97,7 @@ onmessage = (function() {
         if (typeof __fbBatchedBridge === 'object') {
           returnValue = __fbBatchedBridge[obj.method].apply(
             null,
-            obj.arguments,
+            obj.arguments
           );
         }
       } finally {
