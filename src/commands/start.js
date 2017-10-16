@@ -56,7 +56,7 @@ async function start(opts: *) {
       dev: opts.dev,
       minify: opts.minify,
       port: opts.port,
-    },
+    }
   );
 
   if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
@@ -75,14 +75,14 @@ async function start(opts: *) {
       logger.info(
         messages.commandSuccess({
           command: `${path.basename(adb)} ${args}`,
-        }),
+        })
       );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
           command: `${path.basename(adb)} ${args}`,
           error,
-        }),
+        })
       );
     }
   }
@@ -93,7 +93,7 @@ async function start(opts: *) {
         ? config.map(c => c.entry)
         : [config.entry],
       port: opts.port,
-    }),
+    })
   );
 
   const compiler = webpack(config);
@@ -117,10 +117,10 @@ async function start(opts: *) {
           messages.bundleBuilt({
             stats,
             platform: opts.platform,
-          }),
+          })
         );
       }
-    },
+    }
   ).listen(opts.port);
 }
 

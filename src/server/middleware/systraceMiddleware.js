@@ -31,7 +31,7 @@ const systraceMiddleware: Middleware = (req: $Request, res, next) => {
       We've saved the trace report at ${chalk.bold(path)}
       
       ${howToOpenReport} \n
-    `,
+    `
     );
 
     res.end(
@@ -39,7 +39,7 @@ const systraceMiddleware: Middleware = (req: $Request, res, next) => {
       We've saved the trace report at ${path}
 
       ${howToOpenReport}
-    `,
+    `
     );
   });
 };

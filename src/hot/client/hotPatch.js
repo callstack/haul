@@ -5,7 +5,7 @@
  * @flow
  */
 
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import React from 'react';
 
 const _createElement = React.createElement;
@@ -16,7 +16,7 @@ if (
   _createFactory.isPatchedByReactHotLoader
 ) {
   throw new Error(
-    'React.createElement and createFactory did not got patched in correct order',
+    'React.createElement and createFactory did not got patched in correct order'
   );
 }
 

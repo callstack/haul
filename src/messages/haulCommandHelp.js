@@ -51,10 +51,10 @@ module.exports = (command: Command) => {
         .map(
           option =>
             `  ${printName(option)}   \t ${chalk.gray(
-              printDescription(option),
-            )}`,
+              printDescription(option)
+            )}`
         )
-        .join('\n'),
+        .join('\n')
     );
   }
 

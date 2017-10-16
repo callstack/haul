@@ -6,7 +6,7 @@
  */
 
 import path from 'path';
-import { replacePathsInObject } from 'jest/helpers';
+import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import makeReactNativeConfig from '../makeReactNativeConfig';
 
 test('creates config from defaults', () => {
@@ -17,7 +17,7 @@ test('creates config from defaults', () => {
   });
 
   expect(replacePathsInObject(configs)).toMatchSnapshot(
-    'creates config from defaults (configs)',
+    'creates config from defaults (configs)'
   );
   expect(platforms).toMatchSnapshot('creates config from defaults (platforms)');
 });
@@ -30,6 +30,6 @@ test('merges existing config', () => {
   });
 
   expect(replacePathsInObject(configs)).toMatchSnapshot(
-    'merges existing config',
+    'merges existing config'
   );
 });

@@ -15,6 +15,6 @@ module.exports = (directory: string) => dedent`
    • You have a ${chalk.bold('webpack.haul.js')} file
 
    Run ${chalk.bold('haul init')} to automatically generate a ${chalk.bold(
-  'webpack.haul.js',
+  'webpack.haul.js'
 )} file
 `;

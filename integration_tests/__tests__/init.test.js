@@ -13,7 +13,7 @@ const { runHaul } = require('../runHaul');
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-clean',
+  '../fixtures/react-native-clean'
 );
 const CONFIG_FILE_PATH = path.resolve(TEST_PROJECT_DIR, 'webpack.haul.js');
 const ENTER_KEY = '\x0d';

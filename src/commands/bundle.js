@@ -34,7 +34,7 @@ async function bundle(opts: *) {
       dev: opts.dev,
       minify: opts.minify,
       bundle: true,
-    },
+    }
   );
 
   const config = configs[availablePlatforms.indexOf(opts.platform)];
@@ -50,7 +50,7 @@ async function bundle(opts: *) {
       ? path.relative(config.output.path, opts.bundleOutput)
       : path.relative(
           config.output.path,
-          path.join(directory, opts.bundleOutput),
+          path.join(directory, opts.bundleOutput)
         );
   }
 
@@ -60,7 +60,7 @@ async function bundle(opts: *) {
     messages.initialBundleInformation({
       entry: config.entry,
       dev: opts.dev,
-    }),
+    })
   );
 
   const stats = await new Promise((resolve, reject) =>
@@ -70,7 +70,7 @@ async function bundle(opts: *) {
       } else {
         resolve(info);
       }
-    }),
+    })
   );
 
   clear();
@@ -81,7 +81,7 @@ async function bundle(opts: *) {
       platform: opts.platform,
       assetsPath: config.output.path,
       bundlePath: config.output.filename,
-    }),
+    })
   );
 }
 

@@ -40,7 +40,7 @@ function hotMiddleware(
     nativeProxy,
     haulProxy,
   }: { nativeProxy: WebSocketProxy, haulProxy: WebSocketProxy },
-  opts: { debug: boolean } = { debug: false },
+  opts: { debug: boolean } = { debug: false }
 ) {
   const logger: Logger = {
     log(...args) {
@@ -61,11 +61,11 @@ function hotMiddleware(
   compilerEvent$
     .withLatestFrom(
       nativeConnections$.do(createLog('Native client connected')),
-      mergeCompilerEventWithConnection,
+      mergeCompilerEventWithConnection
     )
     .withLatestFrom(
       haulConnections$.do(createLog('Haul client connected')),
-      mergeCompilerEventWithConnection,
+      mergeCompilerEventWithConnection
     )
     .map(event => ({ ...event, socket: event[event.target] }))
     .skipWhile(({ socket }) => socket.readyState !== socket.OPEN)
@@ -75,7 +75,7 @@ function hotMiddleware(
         const socket = event[target];
 
         logger.log(
-          `Sending message ${body.action || body.type} to ${target} client`,
+          `Sending message ${body.action || body.type} to ${target} client`
         );
 
         socket.send(JSON.stringify(body), error => {
@@ -83,7 +83,7 @@ function hotMiddleware(
             logger.log(
               `Sending message ${body.action ||
                 body.type} to ${target} client failed`,
-              error,
+              error
             );
             socket.close();
           }
@@ -91,7 +91,7 @@ function hotMiddleware(
       },
       error => {
         logger.log('Fatal error', error);
-      },
+      }
     );
 }
 
@@ -124,7 +124,7 @@ function createCompilerEventStream(compiler: Compiler) {
 
 function mergeCompilerEventWithConnection(
   base: Object,
-  connection: { id: string, socket: WebSocket },
+  connection: { id: string, socket: WebSocket }
 ) {
   return {
     ...base,

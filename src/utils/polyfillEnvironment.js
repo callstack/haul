@@ -32,6 +32,6 @@ if (!global.self) {
   global.self = global; /* eslint-disable-line */
 }
 
-require('InitializeCore');
+require('InitializeCore'); // eslint-disable-line import/no-unresolved
 
 require('../hot/client/importScriptsPolyfill');

@@ -18,7 +18,7 @@ module.exports = () => dedent`
     ${chalk.bold('export REACT_EDITOR=/path/to/atom')}
 
     ${chalk.gray(
-      '(sublime, atom, code, webstorm, phpstorm, idea14ce, vim, emacs, visualstudio)',
+      '(sublime, atom, code, webstorm, phpstorm, idea14ce, vim, emacs, visualstudio)'
     )}
     ${chalk.gray('via https://github.com/lahmatiy/open-in-editor')}
 
@@ -29,7 +29,7 @@ module.exports = () => dedent`
     ${chalk.bold('export REACT_EDITOR_CMD=/usr/local/bin/nvim')}
   
     ${chalk.gray(
-      'You can use this if you have recognized editor, but in non-standard location.',
+      'You can use this if you have recognized editor, but in non-standard location.'
     )}
 
 
@@ -37,11 +37,11 @@ module.exports = () => dedent`
 
     ${chalk.bold('export REACT_EDITOR_CMD=/path/to/a/crazy/editor')}
     ${chalk.bold(
-      'export REACT_EDITOR_PATTERN="-r -g {filename}:{line}:{column}"',
+      'export REACT_EDITOR_PATTERN="-r -g {filename}:{line}:{column}"'
     )}
 
     ${chalk.gray(
-      'You can use this if your editor is unknown or you want to launch with different flags.',
+      'You can use this if your editor is unknown or you want to launch with different flags.'
     )}
 
 `;

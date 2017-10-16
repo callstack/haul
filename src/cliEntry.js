@@ -163,7 +163,7 @@ async function run(args: Array<string>) {
   const { _, ...flags } = camelcaseKeys(
     minimist(args, {
       string: opts.map(opt => opt.name),
-    }),
+    })
   );
 
   const { options, promptedOptions } = await validateOptions(opts, flags);
@@ -186,7 +186,7 @@ async function run(args: Array<string>) {
           command: displayName,
           error,
           stack: error && error.stack,
-        }),
+        })
       );
     }
     process.exit(1);

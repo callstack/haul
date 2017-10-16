@@ -15,7 +15,7 @@ const stripAnsi = require('strip-ansi');
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-with-haul',
+  '../fixtures/react-native-with-haul'
 );
 
 beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
@@ -65,7 +65,7 @@ function testPlatform(platform, done) {
       expect(stdout).toMatch('Haul is now bundling your React Native app');
       expect(stdout).toMatch('A fresh build may take longer than usual');
       expect(stdout).toMatch(
-        `You can now run the app on your ${platform} device`,
+        `You can now run the app on your ${platform} device`
       );
       done();
       haul.kill();

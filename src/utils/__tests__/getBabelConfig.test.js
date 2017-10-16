@@ -7,7 +7,7 @@
 
 const path = require('path');
 const getBabelConfig = require('../getBabelConfig');
-const { replacePathsInObject } = require('jest/helpers');
+const { replacePathsInObject } = require('jest/helpers'); // eslint-disable-line import/no-unresolved
 
 const orignalEnv = process.env.NODE_ENV;
 

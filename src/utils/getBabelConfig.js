@@ -31,7 +31,7 @@ module.exports = function getBabelConfig(cwd: string) {
           : [
               require.resolve('react-hot-loader/babel'),
               require.resolve('../hot/babelPlugin'),
-            ],
+            ]
       )
       .concat(babelrc.plugins || []),
   });

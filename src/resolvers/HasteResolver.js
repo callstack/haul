@@ -40,9 +40,9 @@ function HasteResolver(options: Options) {
           `Aliased ${innerRequest} with haste mapping: ${hasteMap[
             innerRequest
           ]}`,
-          callback,
+          callback
         );
-      },
+      }
     );
   };
 }
