@@ -4,6 +4,8 @@
  *
  * @flow
  */
+import type { Command } from '../types';
+
 const webpack = require('webpack');
 const path = require('path');
 const clear = require('clear');
@@ -122,7 +124,7 @@ async function start(opts: *) {
   ).listen(opts.port);
 }
 
-module.exports = {
+module.exports = ({
   name: 'start',
   description: 'Starts a new webpack server',
   action: start,
@@ -191,4 +193,4 @@ module.exports = {
       default: 'webpack.haul.js',
     },
   ],
-};
+}: Command);

@@ -17,6 +17,19 @@ type Options = {
   platform: 'ios' | 'android',
 };
 
+type CollectOutput = {
+  [key: string]: {
+    platform: 'ios' | 'android',
+    name: string,
+  },
+};
+
+type CollectOptions = {
+  name: string,
+  platform: string,
+  type: string,
+};
+
 function AssetResolver(options: Options) {
   const platform = options.platform;
   const test = options.test || AssetResolver.test;
@@ -83,9 +96,9 @@ function AssetResolver(options: Options) {
 
 AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|m4v|aac|aiff|caf|m4a|mp3|wav|html|pdf)$/;
 AssetResolver.collect = (
-  list,
-  { name, type, platform }: { name: string, type: string, platform: string }
-) => {
+  list: Array<string>,
+  { name, type, platform }: CollectOptions
+): CollectOutput => {
   const regex = /^(bmp|gif|jpg|jpeg|png|psd|tiff|webp|svg)$/.test(type)
     ? new RegExp(
         `^${escapeStringRegexp(

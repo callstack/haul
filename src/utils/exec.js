@@ -6,7 +6,7 @@
  */
 const child_process = require('child_process'); // eslint-disable-line camelcase
 
-function exec(args: string) {
+function exec(args: string): Promise<void> {
   return new Promise((resolve, reject) => {
     child_process.exec(args, (err, stdout, stderr) => {
       if (err) {

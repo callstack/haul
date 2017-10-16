@@ -7,18 +7,18 @@
  * @flow
  */
 
-export type CommandArgs = Array<string>;
+type Choice = {
+  value: string | boolean | number,
+  description: string,
+};
 
 export type CommandOption = {
   name: string,
   description: string,
-  parse?: (val: string) => mixed,
-  default?: mixed | ((opts: { [key: string]: string }) => mixed),
+  parse?: Function,
+  default?: any,
   example?: string,
-  choices?: Array<{
-    value: mixed,
-    description: string,
-  }>,
+  choices?: Array<Choice>,
 };
 
 export type Command = {

@@ -4,7 +4,7 @@
  *
  * @flow
  */
-function rawBodyMiddleware(req: *, res: *, next: *) {
+function rawBodyMiddleware(req: any, res: *, next: *) {
   req.rawBody = '';
   req.setEncoding('utf8');
 

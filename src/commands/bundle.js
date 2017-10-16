@@ -4,6 +4,8 @@
  *
  * @flow
  */
+import type { Command } from '../types';
+
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
@@ -83,7 +85,7 @@ async function bundle(opts: *) {
   );
 }
 
-module.exports = {
+module.exports = ({
   name: 'bundle',
   description: 'Builds the app bundle for packaging',
   action: bundle,
@@ -150,4 +152,4 @@ module.exports = {
       default: 'webpack.haul.js',
     },
   ],
-};
+}: Command);

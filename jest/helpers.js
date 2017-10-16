@@ -9,7 +9,8 @@
 
 const traverse = require('traverse'); // eslint-disable-line
 
-const flushPromises = () => new Promise(resolve => setTimeout(resolve));
+const flushPromises = (): Promise<any> =>
+  new Promise(resolve => setTimeout(resolve));
 
 const replacePathsInObject = (object: mixed) => {
   return traverse(object).map(

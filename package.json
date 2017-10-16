@@ -7,7 +7,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "flow": "flow",
+    "flow": "flow --include-warnings",
     "lint": "eslint .",
     "jest": "jest",
     "test": "npm run flow && npm run lint && npm run jest",
@@ -76,7 +76,7 @@
     "babel-preset-react-native": "^2.0.0",
     "eslint": "^4.3.0",
     "eslint-config-callstack-io": "^0.5.0",
-    "flow-bin": "^0.42.0",
+    "flow-bin": "^0.57.2",
     "husky": "^0.13.3",
     "jest": "test",
     "lint-staged": "^3.4.0",

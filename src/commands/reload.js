@@ -4,6 +4,7 @@
  *
  * @flow
  */
+import type { Command } from '../types';
 
 const clear = require('clear');
 const logger = require('../logger');
@@ -40,9 +41,9 @@ async function reload() {
   req.end();
 }
 
-module.exports = {
+module.exports = ({
   name: 'reload',
   description: 'Sends reload request to all devices that enabled live reload',
   action: reload,
   options: [],
-};
+}: Command);

@@ -28,7 +28,12 @@ module.exports = async function assetLoader() {
 
   const query = utils.getOptions(this) || {};
   const options = this.options[query.config] || {};
-  const config: Config = Object.assign({}, options, query);
+  const config: Config = Object.assign(
+    {},
+    { platform: 'ios', root: process.cwd() },
+    options,
+    query
+  );
 
   const pathSepPattern = new RegExp(`\\${path.sep}`, 'g');
   const filepath = this.resourcePath;
