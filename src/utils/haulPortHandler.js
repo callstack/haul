@@ -11,7 +11,7 @@ const exec = require('child_process').exec;
 /*
  * Check if the port is already in use
  */
-function isPortTaken(port: number) {
+function isPortTaken(port: number): Promise<boolean> {
   return new Promise(resolve => {
     const portTester = net
       .createServer()
@@ -26,7 +26,7 @@ function isPortTaken(port: number) {
   });
 }
 
-function killProcess(port: number) {
+function killProcess(port: number): Promise<boolean> {
   /*
    * Based on platform, decide what service
    * should be used to find process PID
@@ -42,14 +42,14 @@ function killProcess(port: number) {
      */
     exec(serviceToUse, (error, stdout) => {
       if (error) {
-        /* 
+        /*
          * Error happens if no process found at given port
          */
         resolve(false);
         return;
       }
-      /* 
-       * If no error, port is in use 
+      /*
+       * If no error, port is in use
        * And that port is used only by one process
        */
       const PIDInfo = stdout
@@ -58,7 +58,7 @@ function killProcess(port: number) {
         .split(' ')
         .filter(entry => entry);
 
-      /* macOSX/Linux: PID is placed at index 1 
+      /* macOSX/Linux: PID is placed at index 1
        * Windows: PID is placed at last index
        */
       const index = process.platform === 'win32' ? PIDInfo.length - 1 : 1;

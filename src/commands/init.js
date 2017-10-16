@@ -4,6 +4,7 @@
  *
  * @flow
  */
+import type { Command } from '../types';
 
 const path = require('path');
 const fs = require('fs');
@@ -318,8 +319,8 @@ const addToXcodeBuild = async (cwd: string) => {
   }
 };
 
-module.exports = {
+module.exports = ({
   name: 'init',
   description: 'Generates necessary configuration files',
   action: init,
-};
+}: Command);
