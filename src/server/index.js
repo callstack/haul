@@ -42,7 +42,7 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
 function createServer(
   compiler: any,
   onInvalid: InvalidCallback,
-  onCompile: CompileCallback,
+  onCompile: CompileCallback
 ) {
   const appHandler = express();
   const webpackMiddleware = webpackDevMiddleware(compiler, {
@@ -66,7 +66,7 @@ function createServer(
 
   const webSocketServer = new WebSocketServer({ server: httpServer });
   const debuggerProxy = new WebSocketDebuggerProxy(
-    webSocketProxy(webSocketServer, '/debugger-proxy'),
+    webSocketProxy(webSocketServer, '/debugger-proxy')
   );
 
   hotMiddleware(compiler, {

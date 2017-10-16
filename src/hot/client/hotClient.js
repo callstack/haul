@@ -53,14 +53,14 @@ function processPayload(payload, { logger, reporter, ...opts }) {
       logger.log(
         `[Haul HMR] Bundle ${payload.name
           ? `'${payload.name}' `
-          : ''}rebuilding`,
+          : ''}rebuilding`
       );
       break;
     case 'built':
       logger.log(
         `[Haul HMR] Bundle ${payload.name
           ? `'${payload.name}' `
-          : ''}rebuilt in ${payload.time}ms`,
+          : ''}rebuilt in ${payload.time}ms`
       );
     // fall through
     case 'sync':
@@ -99,21 +99,21 @@ module.exports = function connect(options: Object) {
   ws.onopen = () => {
     logger.log(
       '[Haul HMR] Client connected, however until you `Enable Hot Reloading`, ' +
-        'you will not get any updates',
+        'you will not get any updates'
     );
   };
 
   ws.onerror = error => {
     logger.error(
       `[Haul HMR] Client could not connect to the server ${opts.path}`,
-      error,
+      error
     );
   };
 
   ws.onmessage = (message: MessageEvent) => {
     if (typeof message.data !== 'string') {
       throw new Error(
-        `[Haul HMR] Data from websocker#onmessage must be a string`,
+        `[Haul HMR] Data from websocker#onmessage must be a string`
       );
     }
     const payload = JSON.parse(message.data);

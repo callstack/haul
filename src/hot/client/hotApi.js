@@ -9,7 +9,7 @@
  * Original code was written by Dan Abramov - https://github.com/gaearon/react-hot-loader/
  */
 
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import React, { Component } from 'react';
 import deepForceUpdate from 'react-deep-force-update';
 import hoistNonReactStatic from 'hoist-non-react-statics';
@@ -58,7 +58,7 @@ export function makeHot(initialRootFactory: Function, id?: string = 'default') {
           console.error(
             'Haul HMR: It appears that "haul-hmr/patch" ' +
               'did not run immediately before the app started. Make sure that it ' +
-              'runs before any other code.',
+              'runs before any other code.'
           );
         }
       }
@@ -96,7 +96,7 @@ export function makeHot(initialRootFactory: Function, id?: string = 'default') {
  */
 export function redraw(
   rootComponentFactory: Function,
-  id?: string = 'default',
+  id?: string = 'default'
 ) {
   instances[id]._redraw(rootComponentFactory);
 }

@@ -10,7 +10,7 @@ const path = require('path');
 module.exports = function isReactNativeProject(cwd: string) {
   try {
     const pak = JSON.parse(
-      fs.readFileSync(path.join(cwd, 'package.json')).toString(),
+      fs.readFileSync(path.join(cwd, 'package.json')).toString()
     );
 
     const deps = {

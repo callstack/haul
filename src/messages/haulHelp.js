@@ -28,9 +28,9 @@ ${commands
       .join('\n')}
 
 Run ${chalk.bold(
-      'haul COMMAND --help',
+      'haul COMMAND --help'
     )} for more information on specific commands
-`,
+`
   );
 
   return ui.toString();

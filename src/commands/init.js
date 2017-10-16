@@ -144,20 +144,20 @@ const getRunScript = (scriptName: string) => {
  */
 const addToPackageScripts = async (cwd: string) => {
   const pjson = JSON.parse(
-    fs.readFileSync(path.join(cwd, 'package.json')).toString(),
+    fs.readFileSync(path.join(cwd, 'package.json')).toString()
   );
 
   const scripts = pjson.scripts || {};
 
   const haulScript = Object.keys(scripts).find(
-    name => scripts[name] === 'haul start',
+    name => scripts[name] === 'haul start'
   );
 
   if (haulScript) {
     ora().info(
       `Haul already exists in your package.json. Start Haul by running ${getRunScript(
-        haulScript,
-      )}'`,
+        haulScript
+      )}'`
     );
     return;
   }
@@ -186,18 +186,18 @@ const addToPackageScripts = async (cwd: string) => {
   });
 
   const progress = ora(
-    `Adding \`${scriptName}\` script to your package.json`,
+    `Adding \`${scriptName}\` script to your package.json`
   ).start();
 
   await sleep();
 
   fs.writeFileSync(
     path.join(cwd, 'package.json'),
-    JSON.stringify(pjson, null, 2),
+    JSON.stringify(pjson, null, 2)
   );
 
   progress.succeed(
-    `You can now start Haul by running '${getRunScript(scriptName)}'`,
+    `You can now start Haul by running '${getRunScript(scriptName)}'`
   );
 };
 
@@ -274,7 +274,7 @@ const addToXcodeBuild = async (cwd: string) => {
         runOnlyForDeploymentPostprocessing = 0;
         shellPath = /bin/sh;
         shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
-      };`,
+      };`
   );
 
   /**
@@ -302,7 +302,7 @@ const addToXcodeBuild = async (cwd: string) => {
       dedent`
         buildPhases = (
           ${haulScriptKey} /* Integrate Haul with React Native */,
-        `,
+        `
     );
   });
 
@@ -312,8 +312,8 @@ const addToXcodeBuild = async (cwd: string) => {
   } else {
     progress.fail(
       `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey(
-        'https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode',
-      )} for manual instructions`,
+        'https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode'
+      )} for manual instructions`
     );
   }
 };

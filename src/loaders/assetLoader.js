@@ -49,7 +49,7 @@ module.exports = async function assetLoader() {
       } else {
         resolve(res);
       }
-    }),
+    })
   );
 
   const map = AssetResolver.collect(result, {
@@ -108,9 +108,9 @@ module.exports = async function assetLoader() {
               content: res,
             });
           }
-        }),
+        })
       );
-    }),
+    })
   );
 
   pairs.forEach(item => {
@@ -128,7 +128,7 @@ module.exports = async function assetLoader() {
   });
 
   let publicPath = JSON.stringify(
-    path.join(assets, url).replace(pathSepPattern, '/'),
+    path.join(assets, url).replace(pathSepPattern, '/')
   );
 
   if (config.publicPath) {
@@ -136,7 +136,7 @@ module.exports = async function assetLoader() {
     publicPath = JSON.stringify(
       typeof config.publicPath === 'function'
         ? config.publicPath(url)
-        : path.join(config.publicPath, url),
+        : path.join(config.publicPath, url)
     );
   }
 
@@ -178,7 +178,7 @@ module.exports = async function assetLoader() {
       ${info ? `height: ${info.height},` : ''}
       ${info ? `width: ${info.width},` : ''}
     });
-    `,
+    `
   );
 };
 

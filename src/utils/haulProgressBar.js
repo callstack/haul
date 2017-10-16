@@ -61,7 +61,7 @@ module.exports = function createProgressBar(newPlatform: string) {
   if (!progressBar[newPlatform]) {
     progressBar[newPlatform] = progressBarFactory.newBar(
       createBarFormat(newPlatform),
-      barOptions,
+      barOptions
     );
     lastPercent[newPlatform] = 0;
   }

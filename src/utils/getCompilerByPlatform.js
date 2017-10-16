@@ -14,7 +14,7 @@ const logger = require('../logger');
  */
 module.exports = function getCompilerByPlatform(
   webpackCompiler: *,
-  platform: ?string,
+  platform: ?string
 ): * {
   const isMulti = Boolean(webpackCompiler.compilers);
 
@@ -26,7 +26,7 @@ module.exports = function getCompilerByPlatform(
   // find the right compiler based on the platform in the bundle's output filename (e.g. index.android.js)
   //   (see: makeReactNativeConfig.js -> getDefaultConfig)
   const compiler = webpackCompiler.compilers.find(
-    c => c.options.output.filename.split('.')[1] === platform,
+    c => c.options.output.filename.split('.')[1] === platform
   );
 
   // sanity check

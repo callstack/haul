@@ -125,7 +125,7 @@ function create(): Middleware {
     if (opener && hasValidConfig) {
       opener.open(`${frame.file}:${frame.lineNumber}:${frame.column}`).then(
         () => null, // no-op if we're successful
-        () => logger.warn(messages.editorNotConfigured()), // problem opening?
+        () => logger.warn(messages.editorNotConfigured()) // problem opening?
       );
     } else {
       logger.warn(messages.editorNotConfigured());

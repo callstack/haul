@@ -7,7 +7,7 @@
 
 import stripAnsi from 'strip-ansi';
 import inquirer from 'inquirer';
-import { flushPromises } from 'jest/helpers';
+import { flushPromises } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import run from '../cliEntry';
 import init from '../commands/init';
 import bundle from '../commands/bundle';
@@ -90,6 +90,6 @@ test('run a command with options (bundle)', async () => {
     },
   ]);
   expect(bundle.action).toBeCalledWith(
-    expect.objectContaining({ platform: 'ios' }),
+    expect.objectContaining({ platform: 'ios' })
   );
 });

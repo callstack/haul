@@ -20,7 +20,7 @@ type RunHaulOptions = {
 function runHaulSync(
   dir: string,
   args?: Array<string>,
-  options: RunHaulOptions = {},
+  options: RunHaulOptions = {}
 ) {
   let cwd = dir;
   const isRelative = cwd[0] !== '/';
@@ -43,7 +43,7 @@ function runHaulSync(
 function runHaul(
   dir: string,
   args?: Array<string>,
-  options: RunHaulOptions = {},
+  options: RunHaulOptions = {}
 ) {
   let cwd = dir;
   const isRelative = cwd[0] !== '/';

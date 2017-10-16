@@ -145,7 +145,7 @@ const getDefaultConfig = ({
       .concat(
         process.env.NODE_ENV === 'production'
           ? []
-          : new webpack.HotModuleReplacementPlugin(),
+          : new webpack.HotModuleReplacementPlugin()
       )
       .concat(
         minify
@@ -171,7 +171,7 @@ const getDefaultConfig = ({
                 },
               }),
             ]
-          : [],
+          : []
       ),
     resolve: {
       plugins: [
@@ -208,7 +208,7 @@ const getDefaultConfig = ({
  */
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
-  options: ConfigOptions,
+  options: ConfigOptions
 ): [Array<WebpackConfig>, typeof PLATFORMS] {
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
@@ -219,7 +219,7 @@ function makeReactNativeConfig(
       defaultWebpackConfig,
       typeof userWebpackConfig === 'function'
         ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig,
+        : userWebpackConfig
     );
 
     // For simplicity, we don't require users to extend

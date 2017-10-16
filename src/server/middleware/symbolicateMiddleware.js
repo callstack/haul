@@ -90,7 +90,7 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
   const newStack = stack.filter(stackLine => {
     const { methodName } = stackLine;
     const unwantedStackRegExp = new RegExp(
-      /(__webpack_require__|haul|eval(JS){0,1})/,
+      /(__webpack_require__|haul|eval(JS){0,1})/
     );
 
     if (unwantedStackRegExp.test(methodName)) return false; // we don't need those
@@ -122,7 +122,7 @@ function create(webpackCompiler: *): Middleware {
 
     // grab the platform from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
     const platformMatch = unconvertedFrames[0].file.match(
-      /platform=([a-zA-Z]*)/,
+      /platform=([a-zA-Z]*)/
     );
     const platform: ?string = platformMatch && platformMatch[1];
 
@@ -165,7 +165,7 @@ function create(webpackCompiler: *): Middleware {
           file: mappedFile,
           methodName: originalFrame.methodName,
         };
-      },
+      }
     );
 
     // send it back to React Native

@@ -45,7 +45,7 @@ test('resolves to file@{number}x.{ext} if file.{ext} not present', done => {
 test('resolves Haste modules', done => {
   runWebpack(assetPaths => {
     expect(assetPaths).toEqual(
-      expect.arrayContaining([require.resolve('./fixtures/HasteModule.js')]),
+      expect.arrayContaining([require.resolve('./fixtures/HasteModule.js')])
     );
   }, done);
 });

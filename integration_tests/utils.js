@@ -58,7 +58,7 @@ const cleanup = (directory: string) => rimraf.sync(directory);
  */
 const writeFiles = (
   directory: string,
-  files: { [filename: string]: string },
+  files: { [filename: string]: string }
 ) => {
   mkdirp.sync(directory);
   Object.keys(files).forEach(fileOrPath => {
@@ -70,7 +70,7 @@ const writeFiles = (
     }
     fs.writeFileSync(
       path.resolve(...[directory, filename, ...filePath]),
-      files[fileOrPath],
+      files[fileOrPath]
     );
   });
 };
@@ -95,13 +95,13 @@ const DEFAULT_PACKAGE_JSON = {
 
 const createEmptyPackage = (
   directory: string,
-  packageJson: Object = DEFAULT_PACKAGE_JSON,
+  packageJson: Object = DEFAULT_PACKAGE_JSON
 ) => {
   mkdirp.sync(directory);
 
   fs.writeFileSync(
     path.resolve(directory, 'package.json'),
-    JSON.stringify(packageJson, null, 2),
+    JSON.stringify(packageJson, null, 2)
   );
 };
 
