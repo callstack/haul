@@ -23,8 +23,8 @@ module.exports = ({
 }) => {
   const heading = stats.hasWarnings()
     ? chalk.yellow('Built with warnings')
-    : `Built successfully in ${(stats.toJson({ timing: true }).time /
-        1000).toFixed(2)}s!`;
+    : `Built successfully in ${(stats.toJson({ timing: true }).time / 1000
+      ).toFixed(2)}s!`;
 
   if (assetsPath && bundlePath) {
     return dedent`
