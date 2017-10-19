@@ -83,9 +83,6 @@ Array [
           },
         },
       },
-      NamedModulesPlugin {
-        "options": Object {},
-      },
       SourceMapDevToolPlugin {
         "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
         "moduleFilenameTemplate": "webpack:///[resourcePath]",
@@ -102,6 +99,9 @@ Array [
         "multiStep": undefined,
         "options": Object {},
         "requestTimeout": 10000,
+      },
+      NamedModulesPlugin {
+        "options": Object {},
       },
     ],
     "resolve": Object {
@@ -207,9 +207,6 @@ Array [
           },
         },
       },
-      NamedModulesPlugin {
-        "options": Object {},
-      },
       SourceMapDevToolPlugin {
         "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
         "moduleFilenameTemplate": "webpack:///[resourcePath]",
@@ -226,6 +223,9 @@ Array [
         "multiStep": undefined,
         "options": Object {},
         "requestTimeout": 10000,
+      },
+      NamedModulesPlugin {
+        "options": Object {},
       },
     ],
     "resolve": Object {

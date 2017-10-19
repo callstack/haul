@@ -203,9 +203,6 @@ const getDefaultConfig = ({
      * Set target to webworker as it's closer to RN environment than `web`.
      */
     target: 'webworker',
-    stats: {
-      optimizationBailout: true,
-    },
   };
 };
 
