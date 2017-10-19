@@ -51,6 +51,8 @@ const getDefaultConfig = ({
   bundle,
   port,
 }): WebpackConfig => {
+  process.env.NODE_ENV = dev ? 'development' : 'production';
+
   // Getting Minor version
   const rnVersion = getRNVersion(root);
   const platformProgressBar = haulProgressBar(platform);
@@ -132,7 +134,6 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
-      new webpack.NamedModulesPlugin(),
       /**
        * By default, sourcemaps are only generated with *.js files
        * We need to use the plugin to configure *.bundle to emit sourcemap
@@ -143,9 +144,12 @@ const getDefaultConfig = ({
       }),
     ]
       .concat(
-        process.env.NODE_ENV === 'production'
-          ? []
-          : new webpack.HotModuleReplacementPlugin()
+        dev
+          ? [
+              new webpack.HotModuleReplacementPlugin(),
+              new webpack.NamedModulesPlugin(),
+            ]
+          : new webpack.optimize.ModuleConcatenationPlugin()
       )
       .concat(
         minify
@@ -199,6 +203,9 @@ const getDefaultConfig = ({
      * Set target to webworker as it's closer to RN environment than `web`.
      */
     target: 'webworker',
+    stats: {
+      optimizationBailout: true,
+    },
   };
 };
 
