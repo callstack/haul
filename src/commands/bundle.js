@@ -66,8 +66,21 @@ async function bundle(opts: *) {
   const stats = await new Promise((resolve, reject) =>
     compiler.run((err, info) => {
       if (err || info.hasErrors()) {
+        if (err) {
+          logger.error(err);
+        }
+        if (info && info.hasWarnings()) {
+          info.toJson().warnings.map(warning => logger.warn(warning));
+        }
+        if (info && info.hasErrors()) {
+          info.toJson().errors.map(error => logger.error(error));
+        }
+
         reject(new MessageError(messages.bundleFailed()));
       } else {
+        if (info && info.hasWarnings()) {
+          info.toJson().warnings.map(warning => logger.warn(warning));
+        }
         resolve(info);
       }
     })

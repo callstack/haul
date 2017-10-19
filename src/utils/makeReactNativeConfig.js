@@ -222,10 +222,13 @@ function makeReactNativeConfig(
         : userWebpackConfig
     );
 
-    // For simplicity, we don't require users to extend
+    // For simplicity, we usually don't require users to extend
     // default config.entry but do it for them.
-    config.entry = defaultWebpackConfig.entry.concat(config.entry);
-
+    // For flexibility, the default does need to be added manually
+    // if multiple bundles are specified
+    if (Array.isArray(config.entry) || typeof config.entry === 'string') {
+      config.entry = defaultWebpackConfig.entry.concat(config.entry);
+    }
     return config;
   });
 
