@@ -8,7 +8,7 @@ const dedent = require('dedent');
 
 module.exports = ({ errors }: { errors: string[] }) => {
   return dedent`
-    Filed to compile.
+    Failed to compile.
  
 ${errors.join('\n\n')}
   `;

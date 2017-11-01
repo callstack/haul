@@ -50,7 +50,7 @@ function createServer(
     noInfo: true,
     reporter: null,
     /**
-     * Quit the default errors, we will handle error by our own
+     * Quiet the default errors, we will handle error by our own
      */
     quiet: true,
     stats: 'errors-only',

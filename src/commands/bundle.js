@@ -69,7 +69,9 @@ async function bundle(opts: *) {
         reject(
           new MessageError(
             messages.bundleFailed({
-              errors: err.toString(),
+              errors: err
+                ? [err.toString()]
+                : info.toJson({ errorDetails: true }).errors,
             })
           )
         );
