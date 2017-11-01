@@ -4,5 +4,12 @@
  *
  * @flow
  */
+const dedent = require('dedent');
 
-module.exports = () => 'Failed to compile';
+module.exports = ({ errors }: { errors: string[] }) => {
+  return dedent`
+    Filed to compile.
+ 
+${errors.join('\n\n')}
+  `;
+};

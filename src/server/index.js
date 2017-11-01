@@ -49,6 +49,10 @@ function createServer(
     lazy: false,
     noInfo: true,
     reporter: null,
+    /**
+     * Quit the default errors, we will handle error by our own
+     */
+    quiet: true,
     stats: 'errors-only',
     hot: true,
     mimeTypes: { 'application/javascript': ['bundle'] },
