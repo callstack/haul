@@ -111,7 +111,11 @@ async function start(opts: *) {
     stats => {
       clear();
       if (stats.hasErrors()) {
-        logger.error(messages.bundleFailed());
+        logger.error(
+          messages.bundleFailed({
+            errors: stats.toJson({ errorDetails: true }).errors,
+          })
+        );
       } else {
         logger.done(
           messages.bundleBuilt({
