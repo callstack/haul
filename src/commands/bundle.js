@@ -70,7 +70,7 @@ async function bundle(opts: *) {
           new MessageError(
             messages.bundleFailed({
               errors: err
-                ? [err.toString()]
+                ? [err.message]
                 : info.toJson({ errorDetails: true }).errors,
             })
           )
