@@ -340,6 +340,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "jukben",
+      "name": "Jakub Beneš",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8135252?v=4",
+      "profile": "https://jukben.cz",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
