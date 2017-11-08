@@ -29,7 +29,7 @@ module.exports = ({
   assetsPath?: string,
   bundlePath?: string,
 }) => {
-  const warnings = stats.toJson().warnings;
+  const warnings = stats.toJson({ warnings: true }).warnings;
   const heading = stats.hasWarnings()
     ? chalk.yellow('Built with warnings')
     : `Built successfully in ${(getBuildTime(stats) / 1000).toFixed(2)}s!`;
