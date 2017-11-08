@@ -11,6 +11,17 @@
 
 /* eslint-disable */
 
+/**
+ * Do not use "use strict" 
+ * (https://github.com/callstack/haul/issues/278)
+ * 
+ * The problem is that Lottie relies upon react-native-safe-module and there is the issue.
+ * React-native-safe-module is trying to "patch" the native module in order to prevent crashes
+ * but the author doesn't count on that requireNativeComponent() could return a string
+ * and that's the issue – when you try to modify string primitive property under strict
+ * mode in web worker environment you get the 'Cannot create property...' error.
+ */
+
 onmessage = (function() {
   let visibilityState;
 
