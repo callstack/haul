@@ -11,8 +11,6 @@
 
 /* eslint-disable */
 
-'use strict';
-
 onmessage = (function() {
   let visibilityState;
 
