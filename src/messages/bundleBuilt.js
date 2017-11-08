@@ -8,7 +8,15 @@ import type { WebpackStats } from '../types';
 
 const chalk = require('chalk');
 const dedent = require('dedent');
+
 const path = require('path');
+
+const getBuildTime = webpackStats => {
+  const stats = webpackStats.toJson({ timing: true });
+  return stats.time
+    ? stats.time
+    : Math.max(...stats.children.map(({ time }) => time));
+};
 
 module.exports = ({
   stats,
@@ -23,8 +31,7 @@ module.exports = ({
 }) => {
   const heading = stats.hasWarnings()
     ? chalk.yellow('Built with warnings')
-    : `Built successfully in ${(stats.toJson({ timing: true }).time / 1000
-      ).toFixed(2)}s!`;
+    : `Built successfully in ${(getBuildTime(stats) / 1000).toFixed(2)}s!`;
 
   if (assetsPath && bundlePath) {
     return dedent`
