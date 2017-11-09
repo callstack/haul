@@ -11,7 +11,16 @@
 
 /* eslint-disable */
 
-'use strict';
+/**
+ * IMPORTANT: Do not add "use strict"
+ * https://github.com/callstack/haul/issues/278
+ * 
+ * Some libraries like react-native-safe-module try to patch native modules to mock them
+ * and prevent crashes, but don't account for the case when `requireNativeComponent` returns
+ * a string. In strict mode, trying to modify properties of the string primitive throws an
+ * error - "Cannot create property...". This breaks some modules like Lottie which use
+ * react-native-safe-module
+ */
 
 onmessage = (function() {
   let visibilityState;
