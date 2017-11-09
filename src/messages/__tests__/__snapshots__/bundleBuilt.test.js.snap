@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`message bundleBuild for all platforms should match the snapshot with warnings 1`] = `
+"Built with warnings in 2.30s!
+
+warn1
+
+warn2
+
+You can now run the app on your device
+"
+`;
+
+exports[`message bundleBuild for all platforms should match the snapshot without warnings 1`] = `
+"Built successfully in 1.00s!
+
+You can now run the app on your device
+"
+`;

@@ -29,8 +29,11 @@ module.exports = ({
   assetsPath?: string,
   bundlePath?: string,
 }) => {
+  const warnings = stats.toJson({ warnings: true }).warnings;
   const heading = stats.hasWarnings()
-    ? chalk.yellow('Built with warnings')
+    ? chalk.yellow(
+        `Built with warnings in ${(getBuildTime(stats) / 1000).toFixed(2)}s!`
+      )
     : `Built successfully in ${(getBuildTime(stats) / 1000).toFixed(2)}s!`;
 
   if (assetsPath && bundlePath) {
@@ -46,7 +49,7 @@ module.exports = ({
 
   return dedent`
     ${heading}
-
+    ${warnings.length ? `\n${warnings.join('\n\n')}\n` : ''}
     You can now run the app on ${device}\n
   `;
 };
