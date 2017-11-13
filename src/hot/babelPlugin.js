@@ -24,16 +24,16 @@ const CLEAR_CACHE_FOR_NAME = 'clearCacheFor';
 
 const codeSnippets = [
   `${TRY_UPDATE_SELF_NAME}();`,
-  `${CALL_ONCE_NAME}(() => {
+  `${CALL_ONCE_NAME}(function () {
     APP_REGISTRATION
   });
   `,
   `if (module.hot) {
-    module.hot.accept(undefined, () => {
+    module.hot.accept(undefined, function () {
       // Self-accept
     });
 
-    module.hot.accept(CHILDREN_IMPORTS, () => {
+    module.hot.accept(CHILDREN_IMPORTS, function () {
       ${CLEAR_CACHE_FOR_NAME}(require.resolve(ROOT_SOURCE_FILEPATH));
       ${REDRAW_NAME}(() => require(ROOT_SOURCE_FILEPATH).default);
     });
@@ -216,6 +216,8 @@ function applyHmrTweaks({ types: t, template }, path, state) {
       )
     );
   }
+
+  programPath.requeue();
 }
 
 module.exports = babel => {
