@@ -50,6 +50,7 @@ Array [
         },
       ],
     },
+    "name": "ios",
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -175,6 +176,7 @@ Array [
         },
       ],
     },
+    "name": "android",
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -280,6 +282,7 @@ Array [
         },
       ],
     },
+    "name": "ios",
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -305,6 +308,7 @@ Array [
         },
       ],
     },
+    "name": "android",
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
