@@ -7,8 +7,8 @@
  */
 
 const processUpdate = require('webpack-hot-middleware/process-update');
-// eslint-disable-next-line import/no-unresolved
-const { Platform } = require('react-native');
+// $FlowFixMe
+const { Platform } = require('react-native'); // eslint-disable-line import/no-unresolved
 
 function normalizeOptions({ path, quiet, overlay, reload, name }) {
   const shouldLog = !quiet;

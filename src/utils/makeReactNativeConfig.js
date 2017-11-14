@@ -32,6 +32,7 @@ type WebpackConfig = {
     filename: string,
   },
   plugins: Array<WebpackPlugin>,
+  name?: string,
 };
 
 type WebpackConfigFactory =
