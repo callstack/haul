@@ -215,7 +215,7 @@ function makeReactNativeConfig(
     const defaultWebpackConfig = getDefaultConfig(env);
 
     const config = Object.assign(
-      {},
+      { name: platform },
       defaultWebpackConfig,
       typeof userWebpackConfig === 'function'
         ? userWebpackConfig(env, defaultWebpackConfig)

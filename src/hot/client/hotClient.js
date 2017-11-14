@@ -7,6 +7,8 @@
  */
 
 const processUpdate = require('webpack-hot-middleware/process-update');
+// eslint-disable-next-line import/no-unresolved
+const { Platform } = require('react-native');
 
 function normalizeOptions({ path, quiet, overlay, reload, name }) {
   const shouldLog = !quiet;
@@ -94,7 +96,7 @@ function processPayload(payload, { logger, reporter, ...opts }) {
  */
 module.exports = function connect(options: Object) {
   const { logger, ...opts } = normalizeOptions(options);
-  const ws = new WebSocket(opts.path);
+  const ws = new WebSocket(`${opts.path}?platform=${Platform.OS}`);
 
   ws.onopen = () => {
     logger.log(
