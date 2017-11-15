@@ -34,6 +34,7 @@ type WebpackConfig = {
     path: string,
     filename: string,
   },
+  name?: string,
   plugins: WebpackPlugin[],
 };
 
@@ -219,6 +220,7 @@ function makeReactNativeConfig(
 
     const config = Object.assign({}, defaultWebpackConfig, userConfig, {
       entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+      name: platform,
     });
 
     return config;

@@ -7,9 +7,11 @@
  * Ideally, this file SHOULD NOT be processed by prettier, since trailing commas
  * are not supported and will cause errors in bundle. This file is used by `babel-loader`
  * and `babel-register` won't be able to strip those trailing commas, thus anyone
- * modifiing this file MUST make sure that prettier won't screw it up - use prettier-ignore
+ * modifying this file MUST make sure that prettier won't screw it up - use prettier-ignore
  * or tweak code, so that it won't be formatted.
  */
+
+// prettier-ignore
 
 const { isAbsolute, join } = require('path');
 const clone = require('clone');
@@ -19,6 +21,29 @@ const REDRAW_NAME = 'redraw';
 const TRY_UPDATE_SELF_NAME = 'tryUpdateSelf';
 const CALL_ONCE_NAME = 'callOnce';
 const CLEAR_CACHE_FOR_NAME = 'clearCacheFor';
+
+const codeSnippets = [
+  `${TRY_UPDATE_SELF_NAME}();`,
+  `${CALL_ONCE_NAME}(function () {
+    APP_REGISTRATION
+  });
+  `,
+  `if (module.hot) {
+    module.hot.accept(undefined, function () {
+      // Self-accept
+    });
+
+    module.hot.accept(CHILDREN_IMPORTS, function () {
+      ${CLEAR_CACHE_FOR_NAME}(require.resolve(ROOT_SOURCE_FILEPATH));
+      ${REDRAW_NAME}(() => require(ROOT_SOURCE_FILEPATH).default);
+    });
+  }
+  `,
+];
+
+function createHmrLogic(template) {
+  return codeSnippets.map(snippet => template(snippet));
+}
 
 function isValidChildPath(source) {
   if (/^\.\.?\//.test(source)) {
@@ -32,36 +57,73 @@ function isValidChildPath(source) {
   return false;
 }
 
-const codeSnippets = [
-  `${TRY_UPDATE_SELF_NAME}();`,
-  `${CALL_ONCE_NAME}(() => {
-    APP_REGISTRATION
-  });
-  `,
-  `if (module.hot) {
-    module.hot.accept(undefined, () => {
-      // Self-accept
-    });
-
-    module.hot.accept(CHILDREN_IMPORTS, () => {
-      ${CLEAR_CACHE_FOR_NAME}(require.resolve(ROOT_SOURCE_FILEPATH));
-      ${REDRAW_NAME}(() => require(ROOT_SOURCE_FILEPATH).default);
-    });
+function getReturnedId({ isIdentifier, isReturnStatement }, { body }) {
+  if (isIdentifier(body)) {
+    return body;
   }
-  `,
-];
 
-function createHmrLogic(template) {
-  return codeSnippets.map(snippet => template(snippet));
+  const returnStatement = body.body.find(node => isReturnStatement(node));
+  return returnStatement ? returnStatement.argument : {};
 }
 
-// prettier-ignore
-function applyHmrTweaks(
-  { types: t, template },
-  programPath,
-  hmrImportPath,
-  state
-) {
+function isLegacy(metadata) {
+  return (
+    metadata.exportDeclarationPath &&
+    metadata.rootComponentName &&
+    metadata.exportDeclarationPath.node.declaration.id.name ===
+      metadata.rootComponentName
+  );
+}
+
+const visitor = {
+  'ImportDefaultSpecifier|ImportSpecifier': function _(path) {
+    if (isValidChildPath(path.parentPath.node.source.value)) {
+      this.importedModules.push({
+        id: path.node.local.name,
+        source: path.parentPath.node.source.value,
+      });
+    }
+  },
+  ExportDefaultDeclaration(path) {
+    this.exportDeclarationPath = path;
+  },
+  CallExpression(path) {
+    // Tweak AppRegistry.registerComponent function call
+    if (
+      this.types.isMemberExpression(path.node.callee) &&
+      path.node.callee.object.name === 'AppRegistry' &&
+      path.node.callee.property.name === 'registerComponent'
+    ) {
+      // Original Root component factory function
+      const rootFactory = path.node.arguments[1];
+      const returnedId = getReturnedId(this.types, rootFactory);
+      this.rootComponentName = returnedId.name;
+
+      this.isRootComponentImported = Boolean(
+        this.importedModules.find(importedModules => {
+          return importedModules.id === returnedId.name;
+        })
+      );
+
+      // Wrap Root component factory using withHMR
+      // eslint-disable-next-line no-param-reassign
+      path.node.arguments = [
+        path.node.arguments[0],
+        this.types.callExpression(this.types.identifier(MAKE_HOT_NAME), [
+          rootFactory,
+        ]),
+      ];
+
+      this.registerComponentDetachedPath = clone(path);
+      path.remove();
+    }
+  },
+};
+
+function applyHmrTweaks({ types: t, template }, path, state) {
+  const { programPath } = state;
+
+  // Add import to `haul/hot/patch` to path React.createElement and createFactory.
   if (
     !programPath.node.body.find(
       bodyNode =>
@@ -69,103 +131,109 @@ function applyHmrTweaks(
         bodyNode.source.value === 'haul/hot/path'
     )
   ) {
-    programPath.node.body.unshift(t.importDeclaration([], t.stringLiteral('haul/hot/patch')));
-  }
-
-  const specifiers = [
-    t.importSpecifier(t.identifier(MAKE_HOT_NAME), t.identifier(MAKE_HOT_NAME)),
-    t.importSpecifier(t.identifier(REDRAW_NAME), t.identifier(REDRAW_NAME)),
-    t.importSpecifier(t.identifier(TRY_UPDATE_SELF_NAME), t.identifier(TRY_UPDATE_SELF_NAME)),
-    t.importSpecifier(t.identifier(CALL_ONCE_NAME), t.identifier(CALL_ONCE_NAME)),
-    t.importSpecifier(t.identifier(CLEAR_CACHE_FOR_NAME), t.identifier(CLEAR_CACHE_FOR_NAME)),
-  ];
-  hmrImportPath.node.specifiers.push(...specifiers);
-  let hasValidDefaultExport = false;
-  let appRegistrationAST = null;
-  const childrenImports = [];
-  let sourceFilepath = state.file.opts.filename;
-  if (!sourceFilepath.includes(process.cwd())) {
-    sourceFilepath = join(process.cwd(), sourceFilepath);
-  }
-
-  programPath.traverse({
-    ImportDeclaration(subpath) {
-      if (isValidChildPath(subpath.node.source.value)) {
-        childrenImports.push(subpath.node.source.value);
-      }
-    },
-    ExportDefaultDeclaration(subpath) {
-      if (t.isClassDeclaration(subpath.node.declaration)) {
-        hasValidDefaultExport = true;
-      }
-    },
-    CallExpression(subpath) {
-      // Tweak AppRegistry.registerComponent function call
-      if (
-        t.isMemberExpression(subpath.node.callee) &&
-        subpath.node.callee.object.name === 'AppRegistry' &&
-        subpath.node.callee.property.name === 'registerComponent'
-      ) {
-        // Original Root component factory function
-        const rootFactory = subpath.node.arguments[1];
-
-        // Wrap Root component factory using withHMR
-        // eslint-disable-next-line no-param-reassign
-        subpath.node.arguments = [
-          subpath.node.arguments[0],
-          t.callExpression(
-            t.identifier(MAKE_HOT_NAME),
-            [rootFactory]
-          ),
-        ];
-
-        appRegistrationAST = clone(subpath);
-        subpath.remove();
-      }
-    },
-  });
-
-  // Throw error if the root component is not a exported as default
-  if (!hasValidDefaultExport) {
-    throw new Error('Haul HMR: Root component must be exported using `export default`');
-  }
-
-  if (!appRegistrationAST) {
-    throw new Error(
-      // prettier-ignore
-      'Haul HMR: `haul-hmr` must be imported in the Root component with the presense ' +
-        'of `AppRegistry.registerComponent` call'
+    programPath.node.body.unshift(
+      t.importDeclaration([], t.stringLiteral('haul/hot/patch'))
     );
   }
 
-  programPath.node.body.push(
-    ...createHmrLogic(template).map(tmpl =>
-      // prettier-ignore
-      tmpl({
-        APP_REGISTRATION: appRegistrationAST,
-        CHILDREN_IMPORTS: t.arrayExpression(
-          // prettier-ignore
-          childrenImports.map(item => t.stringLiteral(item))
-        ),
-        ROOT_SOURCE_FILEPATH: t.stringLiteral(sourceFilepath),
-      }))
-  );
+  // Add specifiers for required functions to import statement.
+  const specifiers = [
+    t.importSpecifier(t.identifier(MAKE_HOT_NAME), t.identifier(MAKE_HOT_NAME)),
+    t.importSpecifier(t.identifier(REDRAW_NAME), t.identifier(REDRAW_NAME)),
+    t.importSpecifier(
+      t.identifier(TRY_UPDATE_SELF_NAME),
+      t.identifier(TRY_UPDATE_SELF_NAME)
+    ),
+    t.importSpecifier(
+      t.identifier(CALL_ONCE_NAME),
+      t.identifier(CALL_ONCE_NAME)
+    ),
+    t.importSpecifier(
+      t.identifier(CLEAR_CACHE_FOR_NAME),
+      t.identifier(CLEAR_CACHE_FOR_NAME)
+    ),
+  ];
+  path.node.specifiers.push(...specifiers);
+
+  let filename = state.file.opts.filename;
+  if (!filename.includes(process.cwd())) {
+    filename = join(process.cwd(), filename);
+  }
+
+  const metadata = {
+    importedModules: [],
+    exportDeclarationPath: null,
+    rootComponentName: null,
+    isRootComponentImported: false,
+    registerComponentDetachedPath: null,
+    types: t,
+  };
+
+  programPath.traverse(visitor, metadata);
+
+  if (!metadata.registerComponentDetachedPath) {
+    throw new Error(
+      'Haul HMR: `haul/hot` must be imported in the file with `AppRegistry.registerComponent` call.'
+    );
+  }
+
+  if (isLegacy(metadata)) {
+    if (!metadata.exportDeclarationPath) {
+      throw new Error(
+        'Haul HMR: Root component must be exported using `export default`.'
+      );
+    }
+
+    programPath.node.body.push(
+      ...createHmrLogic(template).map(partial =>
+        partial({
+          APP_REGISTRATION: metadata.registerComponentDetachedPath,
+          CHILDREN_IMPORTS: t.arrayExpression(
+            metadata.importedModules.map(({ source }) =>
+              t.stringLiteral(source)
+            )
+          ),
+          ROOT_SOURCE_FILEPATH: t.stringLiteral(filename),
+        })
+      )
+    );
+  } else {
+    if (!metadata.isRootComponentImported) {
+      throw new Error('Haul HMR: Root component is not imported.');
+    }
+
+    const rootComponentSource = metadata.importedModules.find(
+      ({ id }) => id === metadata.rootComponentName
+    ).source;
+
+    programPath.node.body.push(
+      ...createHmrLogic(template).map(partial =>
+        partial({
+          APP_REGISTRATION: metadata.registerComponentDetachedPath,
+          CHILDREN_IMPORTS: t.stringLiteral(rootComponentSource),
+          ROOT_SOURCE_FILEPATH: t.stringLiteral(rootComponentSource),
+        })
+      )
+    );
+  }
+
+  programPath.requeue();
 }
 
 module.exports = babel => {
   return {
     visitor: {
       Program(path, state) {
-        path.traverse({
-          ImportDeclaration(importPath) {
-            if (
-              importPath.node.source.value === 'haul/hot' &&
-              !importPath.node.specifiers.length
-            ) {
-              applyHmrTweaks(babel, path, importPath, state);
-            }
-          },
-        });
+        // eslint-disable-next-line no-param-reassign
+        state.programPath = path;
+      },
+      ImportDeclaration(path, state) {
+        if (
+          path.node.source.value === 'haul/hot' &&
+          !path.node.specifiers.length
+        ) {
+          applyHmrTweaks(babel, path, state);
+        }
       },
     },
   };

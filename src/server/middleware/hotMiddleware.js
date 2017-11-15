@@ -67,26 +67,39 @@ function hotMiddleware(
       haulConnections$.do(createLog('Haul client connected')),
       mergeCompilerEventWithConnection
     )
-    .map(event => ({ ...event, socket: event[event.target] }))
-    .skipWhile(({ socket }) => socket.readyState !== socket.OPEN)
+    .map(event => ({
+      body: event.body,
+      platform: event.platform,
+      target: event.target,
+      sockets: event[event.target].filter(
+        socket =>
+          socket.readyState === socket.OPEN &&
+          (event.platform === 'all' ||
+            socket.upgradeReq.url.includes(`platform=${event.platform}`))
+      ),
+    }))
+    .skipWhile(({ sockets }) => !sockets.length)
     .subscribe(
       event => {
-        const { target, body } = event;
-        const socket = event[target];
+        const { target, sockets, body, platform } = event;
 
-        logger.log(
-          `Sending message ${body.action || body.type} to ${target} client`
-        );
+        sockets.forEach(socket => {
+          logger.log(
+            `Sending message '${body.action || body.type}'${body.hash
+              ? `with hash '${body.hash}'`
+              : ''} to ${target}:${platform} client`
+          );
 
-        socket.send(JSON.stringify(body), error => {
-          if (error) {
-            logger.log(
-              `Sending message ${body.action ||
-                body.type} to ${target} client failed`,
-              error
-            );
-            socket.close();
-          }
+          socket.send(JSON.stringify(body), error => {
+            if (error) {
+              logger.log(
+                `Sending message ${body.action ||
+                  body.type} to ${target}:${platform} client failed`,
+                error
+              );
+              socket.close();
+            }
+          });
         });
       },
       error => {
@@ -98,23 +111,38 @@ function hotMiddleware(
 function createConnectionStream(wsProxy: WebSocketProxy, id: string) {
   return Observable.create((observer: *) => {
     wsProxy.onConnection((socket: WebSocket) => {
-      observer.next({ id, socket });
+      observer.next(socket);
     });
-  });
+  })
+    .scan((acc, socket) => [...acc, socket], [])
+    .map(sockets => ({ [id]: sockets }));
 }
 
 function createCompilerEventStream(compiler: Compiler) {
   return Observable.create((observer: *) => {
-    compiler.plugin('compile', () => {
-      observer.next({ target: 'native', body: { type: 'update-start' } });
-      observer.next({ target: 'haul', body: { action: 'building' } });
+    compiler.plugin('invalid', () => {
+      observer.next({
+        target: 'native',
+        platform: 'all',
+        body: { type: 'update-start' },
+      });
+      observer.next({
+        target: 'haul',
+        platform: 'all',
+        body: { action: 'building' },
+      });
     });
 
     compiler.plugin('done', (stats: Object) => {
-      observer.next({ target: 'native', body: { type: 'update-done' } });
+      observer.next({
+        target: 'native',
+        platform: 'all',
+        body: { type: 'update-done' },
+      });
       getStatsPayload(stats).forEach(payload => {
         observer.next({
           target: 'haul',
+          platform: payload.name || 'all',
           body: { action: 'built', ...payload },
         });
       });
@@ -124,11 +152,11 @@ function createCompilerEventStream(compiler: Compiler) {
 
 function mergeCompilerEventWithConnection(
   base: Object,
-  connection: { id: string, socket: WebSocket }
+  connections: { [key: string]: WebSocket[] }
 ) {
   return {
     ...base,
-    [connection.id]: connection.socket,
+    ...connections,
   };
 }
 
