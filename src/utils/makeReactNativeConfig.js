@@ -217,7 +217,7 @@ function makeReactNativeConfig(
       typeof userWebpackConfig === 'function'
         ? userWebpackConfig(env, defaultWebpackConfig)
         : userWebpackConfig;
-    
+
     const config = Object.assign({}, defaultWebpackConfig, userConfig, {
       entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
       name: platform,
