@@ -12,7 +12,7 @@ const clear = require('clear');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
-const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
+const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const logger = require('../logger');
 

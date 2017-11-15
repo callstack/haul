@@ -6,23 +6,26 @@
  */
 const dedent = require('dedent');
 const chalk = require('chalk');
-const path = require('path');
+const getEntryFiles = require('../utils/getEntryFiles');
 
 type Params = {
-  entries: Array<Array<string>>,
+  entries: any,
   port: number,
+  isMulti: boolean,
 };
 
-const getEntryFile = (entries: Array<string>) => {
-  return path.resolve(process.cwd(), entries[entries.length - 1]);
-};
+module.exports = (config: Params) => {
+  const messages = config.isMulti
+    ? config.entries.map(entry => getEntryFiles(entry))
+    : [getEntryFiles(config.entries)];
 
-module.exports = (config: Params) => dedent`
+  return dedent`
   Ready at ${chalk.cyan(`http://localhost:${config.port}`)}
 
   Haul is now bundling your React Native app, starting from:
 
-  ${config.entries.map(e => chalk.grey(getEntryFile(e))).join('\n')}
+  ${messages.join('\n')}
 
   A fresh build may take longer than usual\n
 `;
+};
