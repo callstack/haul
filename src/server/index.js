@@ -14,6 +14,12 @@ type InvalidCallback = (compilingAfterError: boolean) => void;
 type CompileCallback = (stats: WebpackStats) => void;
 
 /**
+ * Event system
+ */
+
+const { addListener, EVENTS } = require('../events');
+
+/**
  * Custom made middlewares
  */
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -28,6 +34,7 @@ const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 const requestChangeMiddleware = require('./middleware/requestChangeMiddleware');
+const haulWebpackMiddleware = require('./middleware/haulWebpackMiddleware');
 
 const WebSocketServer = require('ws').Server;
 
@@ -41,30 +48,38 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
  * Packager-like Server running on top of Webpack
  */
 function createServer(
-  compiler: any,
+  config: {
+    configPath: string,
+    configOptions: Object,
+  },
   onInvalid: InvalidCallback,
   onCompile: CompileCallback
 ) {
   const appHandler = express();
-  const webpackMiddleware = webpackDevMiddleware(compiler, {
-    lazy: false,
-    noInfo: true,
-    reporter: null,
-    /**
-     * Quiet the default errors, we will handle error by our own
-     */
-    quiet: true,
-    stats: 'errors-only',
-    hot: true,
-    mimeTypes: { 'application/javascript': ['bundle'] },
-    headers: {
-      'Content-Type': 'application/javascript',
-      'Access-Control-Allow-Origin': '*',
-    },
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
-    },
+  // const webpackMiddleware = webpackDevMiddleware(compiler, {
+  //   lazy: false,
+  //   noInfo: true,
+  //   reporter: null,
+  //   /**
+  //    * Quiet the default errors, we will handle error by our own
+  //    */
+  //   quiet: true,
+  //   stats: 'errors-only',
+  //   hot: true,
+  //   mimeTypes: { 'application/javascript': ['bundle'] },
+  //   headers: {
+  //     'Content-Type': 'application/javascript',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   watchOptions: {
+  //     aggregateTimeout: 300,
+  //     poll: 1000,
+  //   },
+  // });
+  const { configPath, configOptions } = config;
+  const webpackMiddleware = haulWebpackMiddleware({
+    configPath,
+    configOptions,
   });
 
   const httpServer = http.createServer(appHandler);
@@ -74,19 +89,20 @@ function createServer(
     webSocketProxy(webSocketServer, '/debugger-proxy')
   );
 
-  hotMiddleware(compiler, {
-    nativeProxy: webSocketProxy(webSocketServer, '/hot'),
-    haulProxy: webSocketProxy(webSocketServer, '/haul-hmr'),
-  });
+  // disable for now
+  // hotMiddleware(compiler, {
+  //   nativeProxy: webSocketProxy(webSocketServer, '/hot'),
+  //   haulProxy: webSocketProxy(webSocketServer, '/haul-hmr'),
+  // });
 
   // Middlewares
   appHandler
     .use(express.static(path.join(__dirname, '/assets/public')))
     .use(rawBodyMiddleware)
     .use(devToolsMiddleware(debuggerProxy))
-    .use(liveReloadMiddleware(compiler))
+    // .use(liveReloadMiddleware(compiler)) // disable for now
     .use(statusPageMiddleware)
-    .use(symbolicateMiddleware(compiler))
+    // .use(symbolicateMiddleware(compiler)) // disable for now
     .use(openInEditorMiddleware())
     .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
@@ -94,23 +110,24 @@ function createServer(
     .use(webpackMiddleware)
     .use(missingBundleMiddleware);
 
+  // subscribe to global event
   // Handle callbacks
-  let didHaveIssues = false;
-  compiler.plugin('done', (stats: WebpackStats) => {
-    const hasIssues = stats.hasErrors() || stats.hasWarnings();
+  // let didHaveIssues = false;
+  // compiler.plugin('done', (stats: WebpackStats) => {
+  //   const hasIssues = stats.hasErrors() || stats.hasWarnings();
 
-    if (hasIssues) {
-      didHaveIssues = true;
-    } else {
-      didHaveIssues = false;
-    }
+  //   if (hasIssues) {
+  //     didHaveIssues = true;
+  //   } else {
+  //     didHaveIssues = false;
+  //   }
 
-    onCompile(stats);
-  });
+  //   onCompile(stats);
+  // });
 
-  compiler.plugin('invalid', () => {
-    onInvalid(didHaveIssues);
-  });
+  // compiler.plugin('invalid', () => {
+  //   onInvalid(didHaveIssues);
+  // });
 
   return httpServer;
 }

@@ -6,7 +6,6 @@
  */
 import type { Command } from '../types';
 
-const webpack = require('webpack');
 const path = require('path');
 const clear = require('clear');
 const inquirer = require('inquirer');
@@ -17,8 +16,6 @@ const messages = require('../messages');
 const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
-
-const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
 
 /**
  * Starts development server
@@ -46,22 +43,15 @@ async function start(opts: *) {
 
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
+  const configOptions = {
+    root: directory,
+    dev: opts.dev,
+    minify: opts.minify,
+    port: opts.port,
+  };
 
-  // eslint-disable-next-line prefer-const
-  let [config, platforms] = makeReactNativeConfig(
-    // $FlowFixMe: Dynamic require
-    require(configPath),
-    {
-      root: directory,
-      dev: opts.dev,
-      minify: opts.minify,
-      port: opts.port,
-    }
-  );
-
-  if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
-    config = config[platforms.indexOf(opts.platform)];
-  }
+  /*
+  ** Add this to android build in middleware
 
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
@@ -95,11 +85,14 @@ async function start(opts: *) {
       port: opts.port,
     })
   );
-
-  const compiler = webpack(config);
+*/
+  logger.done(`Haul ready. Send requests to ${configOptions.port}`);
 
   createServer(
-    compiler,
+    {
+      configPath,
+      configOptions,
+    }, // passes path to config now
     didHaveIssues => {
       clear();
       if (didHaveIssues) {
@@ -168,26 +161,6 @@ module.exports = ({
         {
           value: false,
           description: 'Disables minification for the bundle',
-        },
-      ],
-    },
-    {
-      name: 'platform',
-      description: 'Platform to bundle for',
-      example: 'haul start --platform ios',
-      required: true,
-      choices: [
-        {
-          value: 'ios',
-          description: 'Serves iOS bundle',
-        },
-        {
-          value: 'android',
-          description: 'Serves Android bundle',
-        },
-        {
-          value: 'all',
-          description: 'Serves both platforms',
         },
       ],
     },

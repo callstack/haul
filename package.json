@@ -52,6 +52,7 @@
     "image-size": "^0.5.1",
     "inquirer": "^3.0.6",
     "loader-utils": "^1.1.0",
+    "memory-fs": "^0.4.1",
     "minimist": "^1.2.0",
     "morgan": "^1.8.1",
     "multi-progress": "^2.0.0",
@@ -69,7 +70,8 @@
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1",
-    "ws": "^2.2.2"
+    "ws": "^2.2.2",
+    "xpipe": "^1.0.5"
   },
   "devDependencies": {
     "all-contributors-cli": "^4.5.1",

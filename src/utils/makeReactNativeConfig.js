@@ -64,7 +64,7 @@ const getDefaultConfig = ({
     ],
     devtool: bundle ? 'source-map' : 'eval-source-map',
     output: {
-      path: path.join(root, 'dist'),
+      path: path.join(root), // removed 'dist' from path
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port}/`,
     },
@@ -208,28 +208,25 @@ const getDefaultConfig = ({
  */
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
-  options: ConfigOptions
+  options: ConfigOptions,
+  platform
 ): [Array<WebpackConfig>, typeof PLATFORMS] {
-  const configs = PLATFORMS.map(platform => {
-    const env = Object.assign({}, options, { platform });
-    const defaultWebpackConfig = getDefaultConfig(env);
+  const env = Object.assign({}, options, { platform });
+  const defaultWebpackConfig = getDefaultConfig(env);
 
-    const config = Object.assign(
-      {},
-      defaultWebpackConfig,
-      typeof userWebpackConfig === 'function'
-        ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig
-    );
+  const config = Object.assign(
+    {},
+    defaultWebpackConfig,
+    typeof userWebpackConfig === 'function'
+      ? userWebpackConfig(env, defaultWebpackConfig)
+      : userWebpackConfig
+  );
 
-    // For simplicity, we don't require users to extend
-    // default config.entry but do it for them.
-    config.entry = defaultWebpackConfig.entry.concat(config.entry);
+  // For simplicity, we don't require users to extend
+  // default config.entry but do it for them.
+  config.entry = defaultWebpackConfig.entry.concat(config.entry);
 
-    return config;
-  });
-
-  return [configs, PLATFORMS];
+  return config;
 }
 
 module.exports = makeReactNativeConfig;
