@@ -18,7 +18,7 @@ const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
 
-const makeReactNativeConfig = require('../utils/makeReactNativeConfig');
+const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
 
 /**
  * Starts development server
@@ -86,13 +86,11 @@ async function start(opts: *) {
       );
     }
   }
-
   logger.info(
     messages.initialStartInformation({
-      entries: Array.isArray(config)
-        ? config.map(c => c.entry)
-        : [config.entry],
+      entries: Array.isArray(config) ? config.map(c => c.entry) : config.entry,
       port: opts.port,
+      isMulti: Array.isArray(config),
     })
   );
 

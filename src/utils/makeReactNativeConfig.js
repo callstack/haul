@@ -4,6 +4,7 @@
  *
  * @flow
  */
+/* eslint-disable no-param-reassign */
 
 const webpack = require('webpack');
 const path = require('path');
@@ -25,14 +26,16 @@ type WebpackPlugin = {
   apply: (typeof webpack) => void,
 };
 
+type WebpackEntry = string | Array<string> | Object;
+
 type WebpackConfig = {
-  entry: Array<string>,
+  entry: WebpackEntry,
   output: {
     path: string,
     filename: string,
   },
-  plugins: Array<WebpackPlugin>,
   name?: string,
+  plugins: WebpackPlugin[],
 };
 
 type WebpackConfigFactory =
@@ -56,14 +59,8 @@ const getDefaultConfig = ({
   const platformProgressBar = haulProgressBar(platform);
   return {
     context: root,
-    entry: [
-      /**
-       * Polyfills we include for latest JS features
-       * It is also needed to setup the required environment
-       */
-      require.resolve('./polyfillEnvironment.js'),
-    ],
     devtool: bundle ? 'source-map' : 'eval-source-map',
+    entry: [],
     output: {
       path: path.join(root, 'dist'),
       filename: `index.${platform}.bundle`,
@@ -214,20 +211,17 @@ function makeReactNativeConfig(
   const configs = PLATFORMS.map(platform => {
     const env = Object.assign({}, options, { platform });
     const defaultWebpackConfig = getDefaultConfig(env);
+    const polyfillPath = require.resolve('./polyfillEnvironment.js');
 
-    const config = Object.assign(
-      {},
-      defaultWebpackConfig,
+    const userConfig =
       typeof userWebpackConfig === 'function'
         ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig
-    );
-
-    config.name = platform;
-
-    // For simplicity, we don't require users to extend
-    // default config.entry but do it for them.
-    config.entry = defaultWebpackConfig.entry.concat(config.entry);
+        : userWebpackConfig;
+    
+    const config = Object.assign({}, defaultWebpackConfig, userConfig, {
+      entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+      name: platform,
+    });
 
     return config;
   });
@@ -235,4 +229,37 @@ function makeReactNativeConfig(
   return [configs, PLATFORMS];
 }
 
-module.exports = makeReactNativeConfig;
+/*
+ * Takes user entries from webpack.haul.js,
+ * change them to multi-point entries
+ * and injects polyfills
+ */
+function injectPolyfillIntoEntry(
+  userEntry: WebpackEntry,
+  polyfillPath: string
+): WebpackEntry {
+  if (typeof userEntry === 'string') {
+    return [polyfillPath, userEntry];
+  }
+  if (Array.isArray(userEntry)) {
+    return [polyfillPath, ...userEntry];
+  }
+  if (typeof userEntry === 'object') {
+    const chunkNames = Object.keys(userEntry);
+    return chunkNames.reduce((entryObj: Object, name: string) => {
+      // $FlowFixMe
+      const chunk = userEntry[name];
+      if (typeof chunk === 'string') {
+        entryObj[name] = [polyfillPath, chunk];
+        return entryObj;
+      } else if (Array.isArray(chunk)) {
+        entryObj[name] = [polyfillPath, ...chunk];
+        return entryObj;
+      }
+      return chunk;
+    }, {});
+  }
+  return userEntry;
+}
+
+module.exports = { makeReactNativeConfig, injectPolyfillIntoEntry };
