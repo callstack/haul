@@ -4,7 +4,6 @@ exports[`creates config from defaults (configs) 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
@@ -90,7 +89,7 @@ Array [
         "moduleFilenameTemplate": "webpack:///[resourcePath]",
         "options": Object {
           "filename": "[file].map",
-          "test": /\\\\\\.\\(js\\|css\\|bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+          "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
         },
         "sourceMapFilename": "[file].map",
         "sourceMappingURLComment": "
@@ -130,7 +129,6 @@ Array [
   },
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
@@ -216,7 +214,7 @@ Array [
         "moduleFilenameTemplate": "webpack:///[resourcePath]",
         "options": Object {
           "filename": "[file].map",
-          "test": /\\\\\\.\\(js\\|css\\|bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+          "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
         },
         "sourceMapFilename": "[file].map",
         "sourceMappingURLComment": "
@@ -268,7 +266,6 @@ exports[`merges existing config 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
@@ -294,7 +291,6 @@ Array [
   },
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "devtool": "eval-source-map",
     "entry": Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
