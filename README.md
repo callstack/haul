@@ -49,7 +49,7 @@ project.ext.react = [
 To configure your project to use haul, run the following:
 
 ```bash
-yarn run haul init
+yarn haul init
 ```
 
 This will automatically add the configuration needed to make Haul work with your app, e.g. add `webpack.haul.js` to your project, which you can customise to add more functionality.
@@ -57,7 +57,7 @@ This will automatically add the configuration needed to make Haul work with your
 Next, you're ready to start the development server:
 
 ```bash
-yarn run haul start -- --platform ios
+yarn haul start -- --platform ios
 ```
 
 Finally, reload your app to update the bundle or run your app just like you normally would:
