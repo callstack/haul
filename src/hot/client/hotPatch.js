@@ -34,7 +34,18 @@ if (typeof global.__REACT_HOT_LOADER__ !== 'undefined') {
     if (
       typeof type !== 'function' ||
       typeof uniqueLocalName !== 'string' ||
-      typeof fileName !== 'string'
+      typeof fileName !== 'string' ||
+      /**
+       * In case where someone extract function from a prototype 
+       * example: `const hasOwnProperty = Object.prototype.hasOwnProperty`,
+       * then hasOwnProperty is being patched by HMR
+       * Here: https://github.com/gaearon/react-hot-loader/blob/master/src/patch.dev.js#L14-L20
+       * When we get to point where we retrives keys from patched functions
+       * here: https://github.com/gaearon/react-hot-loader/blob/master/src/patch.dev.js#L43
+       * We'll be actually looping over `hasOwnPrototype`'s arities, which are `undefined`
+       * Accessing properties on `undefined` will throw an error
+       */
+      Object.prototype[uniqueLocalName]
     ) {
       return;
     }
