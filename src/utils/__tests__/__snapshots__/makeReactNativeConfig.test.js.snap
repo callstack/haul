@@ -84,22 +84,16 @@ Array [
           },
         },
       },
-      SourceMapDevToolPlugin {
-        "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
-        "moduleFilenameTemplate": "webpack:///[resourcePath]",
-        "options": Object {
-          "filename": "[file].map",
-          "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-        },
-        "sourceMapFilename": "[file].map",
-        "sourceMappingURLComment": "
-//# sourceMappingURL=[url]",
-      },
       HotModuleReplacementPlugin {
         "fullBuildTimeout": 200,
         "multiStep": undefined,
         "options": Object {},
         "requestTimeout": 10000,
+      },
+      EvalSourceMapDevToolPlugin {
+        "options": Object {
+          "module": true,
+        },
       },
       NamedModulesPlugin {
         "options": Object {},
@@ -209,22 +203,16 @@ Array [
           },
         },
       },
-      SourceMapDevToolPlugin {
-        "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
-        "moduleFilenameTemplate": "webpack:///[resourcePath]",
-        "options": Object {
-          "filename": "[file].map",
-          "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-        },
-        "sourceMapFilename": "[file].map",
-        "sourceMappingURLComment": "
-//# sourceMappingURL=[url]",
-      },
       HotModuleReplacementPlugin {
         "fullBuildTimeout": 200,
         "multiStep": undefined,
         "options": Object {},
         "requestTimeout": 10000,
+      },
+      EvalSourceMapDevToolPlugin {
+        "options": Object {
+          "module": true,
+        },
       },
       NamedModulesPlugin {
         "options": Object {},
