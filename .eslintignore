@@ -1,4 +1,4 @@
 flow-typed/**
 coverage/**
 vendor/**
-integration_tests/fixtures/**
+fixtures/**
