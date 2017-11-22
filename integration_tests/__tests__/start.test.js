@@ -31,16 +31,20 @@ test('start command displays "Select platform" message', () => {
   expect(stripAnsi(stdout).trim()).toMatchSnapshot();
 });
 
-test('start --platform ios', done => {
-  testPlatform('ios', done);
+test('starts server and bundling iOS platform', done => {
+  testPlatform('ios', /ios/i, done);
 });
 
-test('start --platform android', done => {
-  testPlatform('android', done);
+test('starts server and bundling Android platform', done => {
+  testPlatform('android', /android/i, done);
 });
 
-function testPlatform(platform, done) {
-  expect.assertions(4);
+test('starts server and bundling all platforms', done => {
+  testPlatform('all', /ios.*\n.*android/i, done);
+});
+
+function testPlatform(platform, matchRegex, done) {
+  expect.hasAssertions();
   const messageBuffer = [];
   const haul = runHaul(TEST_PROJECT_DIR, ['start', '--platform', platform]);
 
@@ -56,13 +60,11 @@ function testPlatform(platform, done) {
       haul.kill();
     }
 
-    if (message.match('Built successfully in ')) {
+    if (message.match(matchRegex)) {
       const stdout = messageBuffer.join('\n');
       expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
-      expect(stdout).toMatch('Haul is now bundling your React Native app');
-      expect(stdout).toMatch('A fresh build may take longer than usual');
       expect(stdout).toMatch(
-        `You can now run the app on your ${platform} device`
+        'Haul is now bundling your React Native app, starting from'
       );
       done();
       haul.kill();
