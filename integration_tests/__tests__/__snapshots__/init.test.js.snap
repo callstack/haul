@@ -2,6 +2,6 @@
 
 exports[`init command on react-native project 1`] = `
 "module.exports = ({ platform }) => ({
-  entry: \`./index.\${platform}.js\`,
+  entry: \`./index.js\`,
 });"
 `;
