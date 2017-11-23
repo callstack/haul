@@ -12,7 +12,7 @@ const fs = require('fs');
 
 export const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../../fixtures/react-native-with-haul'
+  '../../../fixtures/react-native-with-haul'
 );
 
 export function bundleForPlatform(platform: string) {

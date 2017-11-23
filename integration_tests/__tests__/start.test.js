@@ -15,7 +15,7 @@ const stripAnsi = require('strip-ansi');
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../fixtures/react-native-with-haul'
+  '../../fixtures/react-native-with-haul'
 );
 
 beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
@@ -31,16 +31,20 @@ test('start command displays "Select platform" message', () => {
   expect(stripAnsi(stdout).trim()).toMatchSnapshot();
 });
 
-test('start --platform ios', done => {
+test('starts server and bundling iOS platform', done => {
   testPlatform('ios', done);
 });
 
-test('start --platform android', done => {
+test('starts server and bundling Android platform', done => {
+  testPlatform('android', done);
+});
+
+test('starts server and bundling all platforms', done => {
   testPlatform('android', done);
 });
 
 function testPlatform(platform, done) {
-  expect.assertions(4);
+  expect.hasAssertions();
   const messageBuffer = [];
   const haul = runHaul(TEST_PROJECT_DIR, ['start', '--platform', platform]);
 
@@ -56,14 +60,9 @@ function testPlatform(platform, done) {
       haul.kill();
     }
 
-    if (message.match('Built successfully in ')) {
+    if (message.match('bundling your React Native app')) {
       const stdout = messageBuffer.join('\n');
       expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
-      expect(stdout).toMatch('Haul is now bundling your React Native app');
-      expect(stdout).toMatch('A fresh build may take longer than usual');
-      expect(stdout).toMatch(
-        `You can now run the app on your ${platform} device`
-      );
       done();
       haul.kill();
     }
