@@ -59,7 +59,6 @@ const getDefaultConfig = ({
   const platformProgressBar = haulProgressBar(platform);
   return {
     context: root,
-    devtool: bundle ? 'source-map' : 'eval-source-map',
     entry: [],
     output: {
       path: path.join(root, 'dist'),
@@ -128,22 +127,28 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
-      /**
-       * By default, sourcemaps are only generated with *.js files
-       * We need to use the plugin to configure *.bundle to emit sourcemap
-       */
-      new webpack.SourceMapDevToolPlugin({
-        test: /\.(js|css|bundle)($|\?)/i,
-        filename: '[file].map',
-      }),
     ]
       .concat(
         dev
           ? [
               new webpack.HotModuleReplacementPlugin(),
+              new webpack.EvalSourceMapDevToolPlugin({
+                module: true,
+              }),
               new webpack.NamedModulesPlugin(),
             ]
-          : new webpack.optimize.ModuleConcatenationPlugin()
+          : [
+              /**
+               * By default, sourcemaps are only generated with *.js files
+               * We need to use the plugin to configure *.bundle (Android, iOS - development)
+               * and *.jsbundle (iOS - production) to emit sourcemap
+               */
+              new webpack.SourceMapDevToolPlugin({
+                test: /\.(js|css|(js)?bundle)($|\?)/i,
+                filename: '[file].map',
+              }),
+              new webpack.optimize.ModuleConcatenationPlugin(),
+            ]
       )
       .concat(
         minify
@@ -151,10 +156,11 @@ const getDefaultConfig = ({
               new webpack.optimize.UglifyJsPlugin({
                 /**
                  * By default, uglify only minifies *.js files
-                 * We need to use the plugin to configutr *.bundle to get minified
-                 * Also disable IE8 support as we don't need it'
+                 * We need to use the plugin to configure *.bundle (Android, iOS - development) 
+                 * and *.jsbundle (iOS - production) to get minified. 
+                 * Also disable IE8 support as we don't need it.
                  */
-                test: /\.(js|bundle)($|\?)/i,
+                test: /\.(js|(js)?bundle)($|\?)/i,
                 sourceMap: true,
                 compress: {
                   screw_ie8: true,
