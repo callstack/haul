@@ -151,7 +151,7 @@ const addToPackageScripts = async (cwd: string) => {
   const scripts = pjson.scripts || {};
 
   const haulScript = Object.keys(scripts).find(
-    name => scripts[name] === 'haul start'
+    name => scripts[name] === 'haul'
   );
 
   if (haulScript) {
@@ -183,7 +183,7 @@ const addToPackageScripts = async (cwd: string) => {
   }
 
   pjson.scripts = Object.assign({}, scripts, {
-    [scriptName]: 'haul start',
+    [scriptName]: 'haul',
   });
 
   const progress = ora(
