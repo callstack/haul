@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "haul": "../../bin/cli.js"
+    "haul": "../../bin/cli.js",
+    "haul-local": "haul"
   },
   "dependencies": {
     "react": "16.0.0",
