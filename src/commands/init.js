@@ -94,7 +94,7 @@ async function init() {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const gitignore = fs.readFileSync(pathToGitIgnore);
-    const gitEntries = ['haul-debug.log', '.happypack'];
+    const gitEntries = ['haul-debug.log'];
     const haulIgnoreHeader = '\n# Haul\n#\n';
     let haulIgnore = haulIgnoreHeader;
 

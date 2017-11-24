@@ -8,6 +8,5 @@ fixtures/**/node_modules
 .vscode/
 jsconfig.json
 .idea
-.happypack
 dist
 /coverage
