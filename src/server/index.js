@@ -17,8 +17,6 @@ type CompileCallback = (stats: WebpackStats) => void;
  * Event system
  */
 
-const { addListener, EVENTS } = require('../events');
-
 /**
  * Custom made middlewares
  */
@@ -100,7 +98,7 @@ function createServer(
     .use(express.static(path.join(__dirname, '/assets/public')))
     .use(rawBodyMiddleware)
     .use(devToolsMiddleware(debuggerProxy))
-    // .use(liveReloadMiddleware(compiler)) // disable for now
+    .use(liveReloadMiddleware()) // disable for now
     .use(statusPageMiddleware)
     // .use(symbolicateMiddleware(compiler)) // disable for now
     .use(openInEditorMiddleware())

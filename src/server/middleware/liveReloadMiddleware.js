@@ -6,20 +6,20 @@
 /**
  * Live reload middleware
  */
-function liveReloadMiddleware(compiler) {
-  let watchers = [];
-  const headers = {
-    'Content-Type': 'application/json; charset=UTF-8',
-  };
+function liveReloadMiddleware() {
+  // let watchers = [];
+  // const headers = {
+  //   'Content-Type': 'application/json; charset=UTF-8',
+  // };
 
-  function notifyAllWatchers() {
-    watchers.forEach(watcher => {
-      watcher.res.writeHead(205, headers);
-      watcher.res.end(JSON.stringify({ changed: true }));
-    });
+  // function notifyAllWatchers() {
+  //   watchers.forEach(watcher => {
+  //     watcher.res.writeHead(205, headers);
+  //     watcher.res.end(JSON.stringify({ changed: true }));
+  //   });
 
-    watchers = [];
-  }
+  //   watchers = [];
+  // }
 
   return (req, res, next) => {
     /**
@@ -27,29 +27,29 @@ function liveReloadMiddleware(compiler) {
      * and awaits reload signal (http status code - 205)
      */
     if (req.path === '/onchange') {
-      const watcher = { req, res };
+      return res.end(); // Remove once done dev.
+      // const watcher = { req, res };
 
-      watchers.push(watcher);
+      // watchers.push(watcher);
 
-      req.on('close', () => {
-        watchers.splice(watchers.indexOf(watcher), 1);
-      });
-
-      return;
+      // req.on('close', () => {
+      //   watchers.splice(watchers.indexOf(watcher), 1);
+      // });
     }
 
     if (req.path === '/reloadapp') {
-      notifyAllWatchers();
-      res.end();
-      return;
+      return res.end(); // Remove once done dev.
+      // notifyAllWatchers();
+      // res.end();
     }
 
     /**
      * On new `build`, notify all registered watchers to reload
      */
-    compiler.plugin('done', () => {
-      notifyAllWatchers();
-    });
+    // disable for now
+    // compiler.plugin('done', () => {
+    //   notifyAllWatchers();
+    // });
 
     next();
   };
