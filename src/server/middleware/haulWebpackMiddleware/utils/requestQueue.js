@@ -22,6 +22,11 @@ class RequestQueue {
   addSpecific(ID, item) {
     this._queue.splice(ID, 0, item);
   }
+
+  flushQueue(callback) {
+    this._queue.forEach(callback);
+    this._queue.length = 0;
+  }
 }
 
 module.exports = RequestQueue;

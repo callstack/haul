@@ -109,8 +109,8 @@ const sendMessage = (ID, event, payload) => {
     fileReadStream.pipe(conn);
   }
 
-  console.log('\nFork answers:', ID, event);
   process.send({
+    platform: HAUL_PLATFORM,
     ID,
     event,
     payload,

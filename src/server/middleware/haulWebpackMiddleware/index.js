@@ -49,8 +49,6 @@ const closeAllConnections = err => {
 
 const FORKS = {};
 
-const Queue = new RequestQueue();
-
 /**
  * Throws error, saying which function failed
  * @param {string} funcName 
@@ -76,7 +74,7 @@ const createSocketServer = platform => {
       bundle += chunk;
     });
     connection.on('end', () => {
-      FORKS[platform].listeners.forEach(response => {
+      FORKS[platform].listeners.flushQueue(response => {
         response.writeHead(200, { 'Content-Type': 'application/javascript' });
         response.end(bundle);
       });
@@ -85,7 +83,6 @@ const createSocketServer = platform => {
     });
     connection.on('close', () => {
       bundle = '';
-      FORKS[platform].listeners = [];
     });
   });
 };
@@ -97,11 +94,12 @@ const createSocketServer = platform => {
  * @param {string} event 
  */
 const sendMessage = (platform, res, event) => {
-  const ID = Queue.addItem(res);
+  const owner = FORKS[platform];
+  const ID = owner.listeners.addItem(res);
 
   if (!platform || ID === undefined || !event) reportError('sendMessage');
 
-  FORKS[platform].fork.send({
+  owner.fork.send({
     ID,
     event,
   });
@@ -115,17 +113,18 @@ const sendMessage = (platform, res, event) => {
  * @param {*} next express 'next'
  */
 const receiveMessage = (data, req, res, next) => {
-  const { ID, event, payload } = data;
+  const { platform, ID, event, payload } = data;
+  const owner = FORKS[platform];
 
   if (ID === undefined || !event) reportError('receiveMessage');
 
   switch (event) {
     case parentEv.buildFinished: {
-      Queue.getSpecific(ID); // remove item
+      owner.listeners.getSpecific(ID); // remove item
       break;
     }
     case parentEv.buildFailed: {
-      const response = Queue.getSpecific(ID);
+      const response = owner.listeners.getSpecific(ID);
       response.end('BUNDLE FAILED');
       break;
     }
@@ -161,7 +160,7 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
         socket
       );
 
-      platformSpecifics.listeners = [];
+      platformSpecifics.listeners = new RequestQueue();
       platformSpecifics.fork.on('message', data =>
         receiveMessage(data, req, res, next)
       );
@@ -173,7 +172,7 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
     }
 
     // request bundle
-    FORKS[platform].listeners.push(res);
+    FORKS[platform].listeners.addItem(res);
     sendMessage(platform, res, forkEv.requestBuild);
   };
 };
