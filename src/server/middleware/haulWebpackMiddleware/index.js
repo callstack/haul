@@ -35,18 +35,19 @@ const getSocket = plat => xpipe.eq(`/tmp/HAUL_SOCKET_${plat}_.socket`);
 
 /**
  * Kills all forks and closes all connections
- * @param {string} err 
+ * @param {string} err Error message to display/throw
  */
 const closeAllConnections = err => {
   err && console.log('Exiting with error:', err);
-  Object.keys(FORKS).forEach(plat => FORKS[plat].kill());
-  Object.keys(BUNDLE_SERVERS).forEach(plat => BUNDLE_SERVERS[plat].close());
+
+  Object.keys(FORKS).forEach(plat => {
+    FORKS[plat].fork.kill();
+    FORKS[plat].server.close();
+  });
   process.exit(0);
 };
 
 const FORKS = {};
-const LISTENERS = {};
-const BUNDLE_SERVERS = {};
 
 const Queue = new RequestQueue();
 
@@ -66,31 +67,27 @@ const reportError = funcName => {
  * @param {string} platform 
  * @param {string} socket 
  */
-const handleBundleSending = (platform, socket) => {
-  BUNDLE_SERVERS[platform] = net
-    .createServer({ allowHalfOpen: true }, connection => {
-      let bundle = '';
+const createSocketServer = platform => {
+  return net.createServer({ allowHalfOpen: true }, connection => {
+    let bundle = '';
 
-      connection.setEncoding('utf-8');
-      connection.on('data', chunk => {
-        bundle += chunk;
+    connection.setEncoding('utf-8');
+    connection.on('data', chunk => {
+      bundle += chunk;
+    });
+    connection.on('end', () => {
+      FORKS[platform].listeners.forEach(response => {
+        response.writeHead(200, { 'Content-Type': 'application/javascript' });
+        response.end(bundle);
       });
-      connection.on('end', () => {
-        LISTENERS[platform].forEach(response => {
-          if (!response) return;
-          response.writeHead(200, { 'Content-Type': 'application/javascript' });
-          response.end(bundle);
-          return false;
-        });
 
-        connection.end();
-      });
-      connection.on('close', () => {
-        bundle = '';
-        LISTENERS[platform].length = 0;
-      });
-    })
-    .listen(socket);
+      connection.end();
+    });
+    connection.on('close', () => {
+      bundle = '';
+      FORKS[platform].listeners = [];
+    });
+  });
 };
 
 /**
@@ -100,12 +97,11 @@ const handleBundleSending = (platform, socket) => {
  * @param {string} event 
  */
 const sendMessage = (platform, res, event) => {
-  const fork = FORKS[platform];
   const ID = Queue.addItem(res);
 
   if (!platform || ID === undefined || !event) reportError('sendMessage');
 
-  fork.send({
+  FORKS[platform].fork.send({
     ID,
     event,
   });
@@ -153,8 +149,10 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
     if (!platform || !fileName) return next();
     const socket = getSocket(platform);
 
+    // Fork creation
     if (!FORKS[platform]) {
-      FORKS[platform] = createFork(
+      const platformSpecifics = {};
+      platformSpecifics.fork = createFork(
         platform,
         `index.${platform}.bundle`,
         process.cwd(),
@@ -163,15 +161,19 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
         socket
       );
 
-      LISTENERS[platform] = [];
-      FORKS[platform].on('message', data =>
+      platformSpecifics.listeners = [];
+      platformSpecifics.fork.on('message', data =>
         receiveMessage(data, req, res, next)
       );
-      handleBundleSending(platform, socket);
+      platformSpecifics.server = createSocketServer(platform, socket).listen(
+        socket
+      );
+
+      FORKS[platform] = platformSpecifics;
     }
 
     // request bundle
-    LISTENERS[platform].push(res);
+    FORKS[platform].listeners.push(res);
     sendMessage(platform, res, forkEv.requestBuild);
   };
 };
