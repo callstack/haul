@@ -95,3 +95,22 @@ module.exports = ({ platform }, { module, resolve }) => ({
   },
 });
 ```
+
+## Detox
+[Detox](https://github.com/wix/detox) is a "grey box" e2e framework developed by wix.  
+It provides the ability to mock files during tests using [react-native-repackager](https://github.com/wix/react-native-repackager)  
+react-native-repackager is built for the standard react-native packager, so your mocks won't work with haul out-of-the-box. Luckily, it's easy to congiure haul (webpack, actually) to resolve the mocked files instead of the original ones during tests: 
+
+```javascript
+
+// webpack.haul.js
+
+resolve: {
+    ...defaults.resolve,
+    extensions: process.env.APP_ENV === 'detox_tests' // just set this env var before running haul
+            ? ['.mock.behaviour.js', ...defaults.resolve.extensions]
+            : defaults.resolve.extensions
+  },
+
+
+```
