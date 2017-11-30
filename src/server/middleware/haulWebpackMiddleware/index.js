@@ -151,6 +151,7 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
     // Fork creation
     if (!FORKS[platform]) {
       const platformSpecifics = {};
+
       platformSpecifics.fork = createFork(
         platform,
         `index.${platform}.bundle`,

@@ -6,14 +6,12 @@
  */
 import type { Command } from '../types';
 
-const path = require('path');
 const clear = require('clear');
 const inquirer = require('inquirer');
 
 const logger = require('../logger');
 const createServer = require('../server');
 const messages = require('../messages');
-const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
 
@@ -50,49 +48,15 @@ async function start(opts: *) {
     port: opts.port,
   };
 
-  /*
-  ** Add this to android build in middleware
-
-  // Run `adb reverse` on Android
-  if (opts.platform === 'android') {
-    const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
-    const adb = process.env.ANDROID_HOME
-      ? `${process.env.ANDROID_HOME}/platform-tools/adb`
-      : 'adb';
-
-    try {
-      await exec(`${adb} ${args}`);
-      logger.info(
-        messages.commandSuccess({
-          command: `${path.basename(adb)} ${args}`,
-        })
-      );
-    } catch (error) {
-      logger.warn(
-        messages.commandFailed({
-          command: `${path.basename(adb)} ${args}`,
-          error,
-        })
-      );
-    }
-  }
-
-  logger.info(
-    messages.initialStartInformation({
-      entries: Array.isArray(config)
-        ? config.map(c => c.entry)
-        : [config.entry],
-      port: opts.port,
-    })
-  );
-*/
-  logger.done(`Haul ready. Send requests to ${configOptions.port}`);
+  logger.done(`Haul ready at ${configOptions.port}`);
 
   createServer(
     {
-      configPath,
+      configPath, // where forker can find a config
       configOptions,
-    }, // passes path to config now
+    },
+
+    // I'll make use of those later - K.
     didHaveIssues => {
       clear();
       if (didHaveIssues) {

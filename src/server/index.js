@@ -20,12 +20,12 @@ type CompileCallback = (stats: WebpackStats) => void;
 /**
  * Custom made middlewares
  */
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const hotMiddleware = require('./middleware/hotMiddleware');
+
+// const hotMiddleware = require('./middleware/hotMiddleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
-const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
+// const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');

@@ -8,6 +8,15 @@
 const spawn = require('child_process').spawn;
 const path = require('path');
 
+/**
+ * 
+ * @param {*} platform Specific platform: andro/ios
+ * @param {*} fileOutput filename that will be used in output from webpack
+ * @param {*} cwd where Haul was started (project root)
+ * @param {*} middlewareDirectory path to Haul's middleware directory
+ * @param {*} middlewareOptions options set on Haul startup, see MiddlewareOptions in haulWebpack/index.js
+ * @param {*} socket TCP socket name for piping bundle
+ */
 module.exports = function createFork(
   platform: string,
   fileOutput: string,
@@ -22,7 +31,7 @@ module.exports = function createFork(
   );
   const child = spawn(
     process.execPath,
-    // ['--inspect=127.0.0.1:9225', webpackWorkerPath],
+    // ['--inspect=127.0.0.1:9225', webpackWorkerPath], // debugging
     [webpackWorkerPath],
     {
       cwd,
