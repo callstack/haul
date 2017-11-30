@@ -13,6 +13,7 @@ const createFork = require('./utils/createFork');
 const getFileFromPath = require('./utils/getFileFromPath');
 const { parentEv, forkEv } = require('./utils/eventNames');
 const RequestQueue = require('./utils/requestQueue');
+const runAdbReverse = require('./utils/runAdbReverse');
 
 type ConfigOptionsType = {
   root: string,
@@ -170,6 +171,11 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
       );
 
       FORKS[platform] = platformSpecifics;
+
+      if (platform === 'android') {
+        const { port } = options && options.configOptions;
+        runAdbReverse(port);
+      }
     }
 
     // request bundle
