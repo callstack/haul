@@ -96,7 +96,7 @@ module.exports = ({ platform }, { module, resolve }) => ({
 });
 ```
 
-## Detox
+## Mock files when running detox tests
 [Detox](https://github.com/wix/detox) is a "grey box" e2e framework developed by wix.    
 It provides the ability to mock files during tests using [react-native-repackager](https://github.com/wix/react-native-repackager)    
 
