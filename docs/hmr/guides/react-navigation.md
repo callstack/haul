@@ -2,20 +2,14 @@
 
 > Navigate to: [API docs](../API.md)
 
-Since we don't know how your project looks like, we will use one of the possible setups. If your project is structured differently, plese __tweak this guide according to your needs__.
+Since we don't know how your project looks like, we will use one of the possible setups. If your project is structured differently, please __tweak this guide according to your needs__.
 
 ---
 
-Let's assume you have `index.ios.js` / `index.android.js` file which only imports `App.js`:
+Let's assume you have `index.js` file which imports your screens:
 
 ```javascript
-// index.ios.js / index.android.js
-import './App';
-```
-
-```javascript
-// App.js
-import React, { Component } from 'react';
+// index.js
 import {
   AppRegistry,
 } from 'react-native';
@@ -35,9 +29,9 @@ AppRegistry.registerComponent('MyApp', () => MyApp);
 First thing you need to do is to add the following code snipped at the top of `App.js` file:
 
 ```diff
+// index.js
 + import 'haul/hot/patch';
 + import { makeHot, clearCacheFor, redraw } from 'haul/hot';
-import React, { Component } from 'react';
 import {
   AppRegistry,
 } from 'react-native';
@@ -54,16 +48,16 @@ const MyApp = StackNavigator({
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
 
-`import 'haul/hot/patch'` must be placed before anything else, since __the code in that file must be executed at the very begining!__
+`import 'haul/hot/patch'` must be placed before anything else, since __the code in that file must be executed at the very beginning!__
 
 ---
 
 Now, if you're defining your screens using `screen` property, you must replace it with `getScreen` and convert the value to a function:
 
 ```diff
+// index.js
 import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
-import React, { Component } from 'react';
 import {
   AppRegistry,
 } from 'react-native';
@@ -85,9 +79,9 @@ AppRegistry.registerComponent('MyApp', () => MyApp);
 Then, wrap those screen factories with `makeHot` call and pass the name of the screen as a second argument:
 
 ```diff
+// index.js
 import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
-import React, { Component } from 'react';
 import {
   AppRegistry,
 } from 'react-native';
@@ -112,9 +106,9 @@ Now, the screens can be updated upon hot update by calling `redraw`.
 Place the following code snipped at the end of the file:
 
 ```diff
+i// index.js
 import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
-import React, { Component } from 'react';
 import {
   AppRegistry,
 } from 'react-native';
