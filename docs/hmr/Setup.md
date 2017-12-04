@@ -1,35 +1,30 @@
 # Hot Module Replacement setup
+
+For projects created before version 0.49.0, use [this guide](https://github.com/callstack/haul/blob/740b6c3cfb51d3919c69e37935d69a4c96dec94e/docs/hmr/Setup.md).
+
+__The instructions below assume you're running RN 0.49.0 or newer.__
+
 > Jump to: [Automatic setup](#automatic-setup) | [Manual setup](#manual-setup)
 
-For smaller project, we provide automatic option for setting up Hot Module Replacement. If your project meets the following criteria, you can use our on-line setup for HMR:
+For smaller projects, we provide automatic option for setting up Hot Module Replacement. If your project meets the following criteria, you can use our one-line setup for HMR:
 
-* Single root component exported from the root file with `default` keyword (`export default`)
-* Single `AppRegistry.registerComponent` call
-* Root component and `AppRegistry.registerComponent` call are in the same file
+* Single root component exported from `App.js` file with `default` keyword (`export default`)
+* Single `AppRegistry.registerComponent` call in `index.js`
 
-So, the root file (`index.ios.js` or `index.android.js`) should look more or less like this:
+So, `index.js` file should look more or less like this:
 
 ```javascript
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  /* ... */
-} from 'react-native';
+import { AppRegistry } from 'react-native';
+import App from './App';
 
-export default class MyProject extends Component {
-  /* ... */
-}
-
-/* ... */
-
-AppRegistry.registerComponent('MyProject', () => MyProject);
+AppRegistry.registerComponent('MyProject', () => App);
 ```
 
-All **default** `index.ios.js` and `index.android.js` files created by `react-native init` work with the automatic setup out of the box.
+All **default** `index.js` and `App.js` files created by `react-native init` work with the automatic setup out of the box.
 
 ## Automatic setup
 
-In order to enable HMR add `import 'haul/hot';` at the top of the root file - usually `index.ios.js` or `index.android.js`. Then, from within _Developer menu_ tap _Enable Hot Reloading_.
+In order to enable HMR add `import 'haul/hot';` at the top of the `index.js` file. Then, from within _Developer menu_ tap _Enable Hot Reloading_.
 
 ## Manual setup
 > Navigate to: [API docs](./API.md)
@@ -38,15 +33,15 @@ In order to enable HMR add `import 'haul/hot';` at the top of the root file - us
 
 For advanced projects or the ones with different structure, we provide our own HMR API, which allows you to enable HMR regardless of which navigation library you use and how you structure your code.
 
-This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following naviagion libraries, please refer to associated guide:
+This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following navigation libraries, please refer to associated guide:
 
 * [`react-navigation`](./guides/react-navigation.md)
 * [`react-native-navigation`](./guides/react-native-navigation.md)
 
 ------
 
-Haul uses `react-hot-loader` to support HMR, so the first step is to _patch_ React's `createElement` and `createFactory` functions to use `react-proxy`. Proxied component can be updated with a new implementation but it's state is presisted between updates.
-In order to do that, add the following line to __the root file__ - the one that is used as an entrypoint, before any other code:
+Haul uses `react-hot-loader` to support HMR, so the first step is to _patch_ React's `createElement` and `createFactory` functions to use `react-proxy`. Proxied component can be updated with a new implementation but it's state is persisted between updates.
+In order to do that, add the following line to `__the root file__` - the one that is used as an entrypoint, before any other code:
 
 ```javascript
 import 'haul/hot/patch';
@@ -96,28 +91,10 @@ import {
 } from 'haul/hot';
 ```
 
-Next step is optional and __can be applied only if you have a single root component__ and `registerComponent` call in same file. In that case, when the file will be re-evaluated upon hot update, the app won't be refreshed unless you add
-
-```javascript
-tryUpdateSelf();
-```
-
-somewhere in the file. This function will try to rerender the root component.
-
-There's also one thing to keep in mind, if you have the root component and `registerComponent` call in single file, you should use `callOnce` function and pass a callback with code that should run only once, not on every re-evaluation.
-
-```javascript
-callOnce(() => {
-  AppRegistry.registerComponent('MyApp', makeHot(() => MyApp));
-  /* ... other logic, which should run only once ... */
-});
-```
-
 The last thing is to acually tell the Webpack which modules we want to accept and how to update them. You can safely copy-pase the following snippet:
 
 ```javascript
 if (module.hot) {
-  module.hot.accept(() => {})
   module.hot.accept('', () => {
     clearCacheFor(require.resolve(''));
     redraw(() => require('').default);
@@ -126,44 +103,39 @@ if (module.hot) {
 ```
 
 Now, you need to replace empty strings with the paths according to the following rules:
-* If you have a __single root component__, `module.hot.accept` first argument should be an array of paths to children components and the rest of the paths should be to __itself__:
+* If you have a __single root component__, it's better to extract the `module.hot.accept` logic to a parent file (the one that imports the __root component__), then you can replace all of the empty strings with path to that component:
   ```javascript
   // file: index.js
-  import Child1 from './Child1';
-  import Child2 from './Child2';
-
-  /* ... */
-
-  export default MyApp { /* ... */ }
+  import App from './App';
 
   /* ... */
 
   if (module.hot) {
     module.hot.accept(() => {})
-    module.hot.accept(['./Child1', './Child2'], () => {
-      clearCacheFor(require.resolve('./index'));
-      redraw(() => require('./index').default);
+    module.hot.accept('./App', () => {
+      clearCacheFor(require.resolve('./App'));
+      redraw(() => require('./App').default);
     });
   }
   ```
 * If you have a __multi root component__, all of the paths should point to the root component and each of the root components should have a separate `module.hot.accept` call:
   ```javascript
   // file: index.js
-  import Root1 from './Root1';
-  import Root2 from './Root2';
+  import Screen1 from './Screen1';
+  import Screen2 from './Screen2';
 
   /* ... */
 
   if (module.hot) {
     module.hot.accept(() => {})
-    module.hot.accept('./Root1', () => {
-      clearCacheFor(require.resolve('./Root1'));
-      redraw(() => require('./Root1').default, 'Root1');
+    module.hot.accept('./Screen1', () => {
+      clearCacheFor(require.resolve('./Screen1'));
+      redraw(() => require('./Screen1').default, 'Screen1');
     });
 
-    module.hot.accept('./Root2', () => {
-      clearCacheFor(require.resolve('./Root2'));
-      redraw(() => require('./Root2').default, 'Root2');
+    module.hot.accept('./Screen2', () => {
+      clearCacheFor(require.resolve('./Screen2'));
+      redraw(() => require('./Screen2').default, 'Screen2');
     });
   }
   ```
@@ -181,45 +153,18 @@ import {
   clearCacheFor,
   redraw
 } from 'haul/hot';
-import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View,
 } from 'react-native';
-import Header from './Header';
+import App from './App';
 
-export default class MyApp extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Header />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-});
-
-trySelfUpdate();
-
-callOnce(() => {
-  AppRegistry.registerComponent('MyApp', makeHot(() => MyApp));
-});
+AppRegistry.registerComponent('MyApp', makeHot(() => App));
 
 if (module.hot) {
   module.hot.accept(() => {})
-  module.hot.accept(['./Header'], () => {
-    clearCacheFor(require.resolve('./index'));
-    redraw(() => require('./index').default);
+  module.hot.accept(['./App'], () => {
+    clearCacheFor(require.resolve('./App'));
+    redraw(() => require('./App').default);
   });
 }
 ```
@@ -252,11 +197,11 @@ Navigation.registerComponent('Location', makeHot(() => Location, 'Location'));
 if (module.hot) {
   module.hot.accept('./Calendar', () => {
     clearCacheFor(require.resolve('./Calendar'));
-    redraw(() => require('./Calendar').default);
+    redraw(() => require('./Calendar').default, 'Calendar');
   });
   module.hot.accept('./Location', () => {
     clearCacheFor(require.resolve('./Location'));
-    redraw(() => require('./Location').default);
+    redraw(() => require('./Location').default, 'Location');
   });
 }
 ```
