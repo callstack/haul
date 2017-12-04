@@ -6,7 +6,7 @@ __The instructions below assume you're running RN 0.49.0 or newer.__
 
 > Jump to: [Automatic setup](#automatic-setup) | [Manual setup](#manual-setup)
 
-For smaller project, we provide automatic option for setting up Hot Module Replacement. If your project meets the following criteria, you can use our on-line setup for HMR:
+For smaller projects, we provide automatic option for setting up Hot Module Replacement. If your project meets the following criteria, you can use our one-line setup for HMR:
 
 * Single root component exported from `App.js` file with `default` keyword (`export default`)
 * Single `AppRegistry.registerComponent` call in `index.js`
@@ -33,7 +33,7 @@ In order to enable HMR add `import 'haul/hot';` at the top of the `index.js` fil
 
 For advanced projects or the ones with different structure, we provide our own HMR API, which allows you to enable HMR regardless of which navigation library you use and how you structure your code.
 
-This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following naviagion libraries, please refer to associated guide:
+This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following navigation libraries, please refer to associated guide:
 
 * [`react-navigation`](./guides/react-navigation.md)
 * [`react-native-navigation`](./guides/react-native-navigation.md)
@@ -103,7 +103,7 @@ if (module.hot) {
 ```
 
 Now, you need to replace empty strings with the paths according to the following rules:
-* If you have a __single root component__, it's better to extract the `module.hot.accept` logic to a parent file (the one that import the __root component__), then you can replace all of the empty strings with path to that component:
+* If you have a __single root component__, it's better to extract the `module.hot.accept` logic to a parent file (the one that imports the __root component__), then you can replace all of the empty strings with path to that component:
   ```javascript
   // file: index.js
   import App from './App';

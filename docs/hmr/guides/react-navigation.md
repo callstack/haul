@@ -106,7 +106,7 @@ Now, the screens can be updated upon hot update by calling `redraw`.
 Place the following code snipped at the end of the file:
 
 ```diff
-i// index.js
+// index.js
 import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
