@@ -32,13 +32,14 @@ type MiddlewareOptions = {
  * Gets proper IPC socket name, platform specific
  * @param {string} plat 
  */
-const getSocket = plat => xpipe.eq(`/tmp/HAUL_SOCKET_${plat}_.socket`);
+const getSocket = (plat: string) =>
+  xpipe.eq(`/tmp/HAUL_SOCKET_${plat}_.socket`);
 
 /**
  * Kills all forks and closes all connections
  * @param {string} err Error message to display/throw
  */
-const closeAllConnections = err => {
+const closeAllConnections = (err: typeof Error | string) => {
   err && console.log('Exiting with error:', err);
 
   Object.keys(FORKS).forEach(plat => {
@@ -54,7 +55,7 @@ const FORKS = {};
  * Throws error, saying which function failed
  * @param {string} funcName 
  */
-const reportError = funcName => {
+const reportError = (funcName: string) => {
   closeAllConnections();
   throw new Error(
     `Middleware: No platform, ID or event to sendMessage. | ${funcName}`
@@ -62,11 +63,11 @@ const reportError = funcName => {
 };
 
 /**
- * on bundleSuccess, sends 
+ * on bundleSuccess, sends bundle to all rememing connections
  * @param {string} platform 
  * @param {string} socket 
  */
-const createSocketServer = platform => {
+const createSocketServer = (platform: string) => {
   return net.createServer({ allowHalfOpen: true }, connection => {
     let bundle = '';
 
@@ -91,14 +92,17 @@ const createSocketServer = platform => {
 /**
  * Sends a message to worker, with payload
  * @param {string} platform 
- * @param {Object} res 
+ * @param {Object} res express 'res'
  * @param {string} event 
  */
-const sendMessage = (platform, res, event) => {
-  const owner = FORKS[platform];
-  const ID = owner.listeners.addItem(res);
+const sendMessage = (platform: string, res, event: string) => {
+  if (!platform || !event) {
+    reportError('sendMessage');
+    return;
+  }
 
-  if (!platform || ID === undefined || !event) reportError('sendMessage');
+  const owner = FORKS[platform];
+  const ID = owner.listeners.addItem(res); // new task ID
 
   owner.fork.send({
     ID,
@@ -107,7 +111,7 @@ const sendMessage = (platform, res, event) => {
 };
 
 /**
- * Handles received messages from parent
+ * Handles received messages from fork
  * @param {Object} data {ID, event, payload}
  * @param {*} req express 'req'
  * @param {*} res express 'res'
@@ -115,9 +119,13 @@ const sendMessage = (platform, res, event) => {
  */
 const receiveMessage = (data, req, res, next) => {
   const { platform, ID, event, payload } = data;
-  const owner = FORKS[platform];
 
-  if (ID === undefined || !event) reportError('receiveMessage');
+  if (ID === undefined || !platform || !event) {
+    reportError('receiveMessage');
+    return;
+  }
+
+  const owner = FORKS[platform];
 
   switch (event) {
     case parentEv.buildFinished: {
@@ -166,9 +174,8 @@ module.exports = function haulMiddlewareFactory(options: MiddlewareOptions) {
       platformSpecifics.fork.on('message', data =>
         receiveMessage(data, req, res, next)
       );
-      platformSpecifics.server = createSocketServer(platform, socket).listen(
-        socket
-      );
+
+      platformSpecifics.server = createSocketServer(platform).listen(socket);
 
       FORKS[platform] = platformSpecifics;
 

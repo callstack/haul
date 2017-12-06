@@ -8,6 +8,19 @@
 const spawn = require('child_process').spawn;
 const path = require('path');
 
+type ConfigOptionsType = {
+  root: string,
+  dev: boolean,
+  minify: boolean,
+  port: number,
+  platform: string,
+};
+
+type MiddlewareOptions = {
+  configPath: string,
+  configOptions: ConfigOptionsType,
+};
+
 /**
  * 
  * @param {*} platform Specific platform: andro/ios
@@ -22,7 +35,7 @@ module.exports = function createFork(
   fileOutput: string,
   cwd: string,
   middlewareDirectory: string,
-  middlewareOptions: Object,
+  middlewareOptions: MiddlewareOptions,
   socket: string
 ) {
   const webpackWorkerPath = path.resolve(

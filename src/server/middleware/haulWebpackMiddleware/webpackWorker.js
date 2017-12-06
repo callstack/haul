@@ -17,14 +17,14 @@ const net = require('net');
  */
 const {
   HAUL_PLATFORM,
-  HAUL_OPTIONS: optionsPassed,
+  HAUL_OPTIONS, // middleware options
   HAUL_FILEOUTPUT,
   HAUL_DIRECTORY,
   HAUL_SOCKET,
 } = process.env;
 
 /**
- * Import custom modules
+ * Import custom from 'utils' of this middleware
  */
 const workerShared = require(path.resolve(
   HAUL_DIRECTORY,
@@ -38,11 +38,15 @@ const { parentEv, forkEv } = require(path.resolve(
 /**
  * Get Webpack config
  */
-const HAUL_OPTIONS = JSON.parse(optionsPassed);
-const { configPath, configOptions } = HAUL_OPTIONS;
+const middlewareOptions = JSON.parse(HAUL_OPTIONS);
+const { configPath, configOptions } = middlewareOptions;
 const getConfig = require(path.resolve(HAUL_DIRECTORY, './utils/getConfig'));
 const config = getConfig(configPath, configOptions, HAUL_PLATFORM);
 
+/**
+ * Context is a communication way between webpack lifecycles and 
+ * worker-parent communication
+ */
 const context = {
   webpackState: undefined,
   fs: new MemoryFileSystem(),
@@ -65,7 +69,7 @@ context.compiler.outputFileSystem = context.fs;
 /**
  * Add plugin hooks to webpack, setup callbacks etc.
  */
-const shared = workerShared(context);
+const sharedContext = workerShared(context);
 
 /**
  * Sends message to parent about error in message exchange
@@ -87,7 +91,9 @@ const receiveMessage = data => {
 
   switch (data.event) {
     case forkEv.requestBuild: {
-      shared.handleRequest(HAUL_FILEOUTPUT, () => processRequest(taskID));
+      sharedContext.handleRequest(HAUL_FILEOUTPUT, () =>
+        processRequest(taskID)
+      );
       break;
     }
     default:
