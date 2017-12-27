@@ -16,6 +16,7 @@ import hoistNonReactStatic from 'hoist-non-react-statics';
 import resetRedBox from './utils';
 
 const instances = {};
+const pendingRedraws = {};
 
 type State = {
   error: ?Object,
@@ -26,6 +27,8 @@ type State = {
  * and servers as an error boundry.
  */
 export function makeHot(initialRootFactory: Function, id?: string = 'default') {
+  instances[id] = [];
+
   return () => {
     class HotWrapper extends Component<*, State> {
       state = {
@@ -36,8 +39,12 @@ export function makeHot(initialRootFactory: Function, id?: string = 'default') {
 
       constructor(props: *) {
         super(props);
-        instances[id] = this;
-        this.rootComponentFactory = null;
+
+        const pendingRedraw = pendingRedraws[id];
+        delete pendingRedraws[id];
+
+        instances[id].push(this);
+        this.rootComponentFactory = pendingRedraw || null;
       }
 
       _resetError() {
@@ -67,6 +74,10 @@ export function makeHot(initialRootFactory: Function, id?: string = 'default') {
       componentWillReceiveProps() {
         this._resetError();
         deepForceUpdate(this);
+      }
+
+      componentWillUnmount() {
+        instances[id] = instances[id].filter(instance => instance !== this);
       }
 
       componentDidCatch(error: Object) {
@@ -99,7 +110,11 @@ export function redraw(
   rootComponentFactory: Function,
   id?: string = 'default'
 ) {
-  instances[id]._redraw(rootComponentFactory);
+  if (instances[id].length) {
+    instances[id].forEach(instance => instance._redraw(rootComponentFactory));
+  } else {
+    pendingRedraws[id] = rootComponentFactory;
+  }
 }
 
 /**
@@ -109,7 +124,7 @@ export function redraw(
 export function tryUpdateSelf() {
   Object.keys(instances).forEach(id => {
     setTimeout(() => {
-      instances[id]._redraw();
+      instances[id].forEach(instance => instance._redraw());
     }, 0);
   });
 }
