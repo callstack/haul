@@ -31,7 +31,6 @@ if (typeof global.__REACT_HOT_LOADER__ !== 'undefined') {
   const idsByType = new Map();
 
   global.__REACT_HOT_LOADER__.register = (type, uniqueLocalName, fileName) => {
-    // console.log(type, uniqueLocalName)
     if (
       typeof type !== 'function' ||
       typeof uniqueLocalName !== 'string' ||
