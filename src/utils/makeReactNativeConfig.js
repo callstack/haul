@@ -139,10 +139,10 @@ const getDefaultConfig = ({
             ]
           : [
               /**
-               * By default, sourcemaps are only generated with *.js files
-               * We need to use the plugin to configure *.bundle (Android, iOS - development)
-               * and *.jsbundle (iOS - production) to emit sourcemap
-               */
+          * By default, sourcemaps are only generated with *.js files
+          * We need to use the plugin to configure *.bundle (Android, iOS - development)
+          * and *.jsbundle (iOS - production) to emit sourcemap
+          */
               new webpack.SourceMapDevToolPlugin({
                 test: /\.(js|css|(js)?bundle)($|\?)/i,
                 filename: '[file].map',
@@ -155,11 +155,11 @@ const getDefaultConfig = ({
           ? [
               new webpack.optimize.UglifyJsPlugin({
                 /**
-                 * By default, uglify only minifies *.js files
-                 * We need to use the plugin to configure *.bundle (Android, iOS - development) 
-                 * and *.jsbundle (iOS - production) to get minified. 
-                 * Also disable IE8 support as we don't need it.
-                 */
+             * By default, uglify only minifies *.js files
+             * We need to use the plugin to configure *.bundle (Android, iOS - development) 
+             * and *.jsbundle (iOS - production) to get minified. 
+             * Also disable IE8 support as we don't need it.
+             */
                 test: /\.(js|(js)?bundle)($|\?)/i,
                 sourceMap: true,
                 compress: {
@@ -178,6 +178,16 @@ const getDefaultConfig = ({
           : []
       ),
     resolve: {
+      alias:
+        process.env.NODE_ENV === 'production'
+          ? {}
+          : {
+              /**
+             * Latest `react-proxy` version does not contain try/catches from
+             * commit 981815dca250373619138c9f5aadf12295cf1b3f.
+             */
+              'react-proxy': '@zamotany/react-proxy',
+            },
       plugins: [
         /**
          * React Native uses a module system called Haste
