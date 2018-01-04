@@ -100,6 +100,9 @@ Array [
       },
     ],
     "resolve": Object {
+      "alias": Object {
+        "react-proxy": "@zamotany/react-proxy",
+      },
       "extensions": Array [
         ".ios.js",
         ".native.js",
@@ -219,6 +222,9 @@ Array [
       },
     ],
     "resolve": Object {
+      "alias": Object {
+        "react-proxy": "@zamotany/react-proxy",
+      },
       "extensions": Array [
         ".android.js",
         ".native.js",
