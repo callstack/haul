@@ -32,7 +32,7 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 
 ## Getting started
 
-Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
+Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` and `eject` to create one if you don't have a project):
 
 ```bash
 yarn add --dev haul
