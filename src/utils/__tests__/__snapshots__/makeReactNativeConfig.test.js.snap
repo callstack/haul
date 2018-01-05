@@ -70,7 +70,6 @@ Array [
         "definitions": Object {
           "__DEV__": true,
           "process.env": Object {
-            "DEV_SERVER_ORIGIN": "\\"http://localhost:undefined\\"",
             "NODE_ENV": "\\"development\\"",
           },
         },
@@ -192,7 +191,6 @@ Array [
         "definitions": Object {
           "__DEV__": true,
           "process.env": Object {
-            "DEV_SERVER_ORIGIN": "\\"http://localhost:undefined\\"",
             "NODE_ENV": "\\"development\\"",
           },
         },
