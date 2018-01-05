@@ -63,7 +63,7 @@ yarn haul start -- --platform ios
 Finally, reload your app to update the bundle or run your app just like you normally would:
 
 ```bash
-react-native run-ios
+yarn run ios
 ```
 
 <p align="center">
