@@ -57,7 +57,7 @@ Your .tsconfig.json must have `"allowSyntheticDefaultImports": true`,
 and you will need to pass the code through babel.
 You will need `babel-loader` for this.
 
-```yarn add -D babel-loader```
+```yarn add --dev babel-loader```
 
 Revised `webpack.haul.js`
 
