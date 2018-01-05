@@ -3,7 +3,7 @@
 ## Typescript
 You will need to install `ts-loader` for Haul to work with TypeScript.
 
-```yarn add -D ts-loader```
+```yarn add --dev ts-loader```
 
 This is a `webpack.haul.js` that works with TypeScript.
 ```javascript
