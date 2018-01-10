@@ -3,7 +3,8 @@
 
 *.log
 /node_modules
-fixtures/**/node_modules
+integration_tests/fixtures/**/node_modules
+integration_tests/fixtures/**/.happypack
 
 .vscode/
 jsconfig.json
