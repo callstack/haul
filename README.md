@@ -87,6 +87,10 @@ Haul uses a completely different architecture from React Native packager, which 
 
 We are actively working on adding support for the following:
 
+- Delta Bundles (RN 0.52+)
+
+Currently we don't support delta bundles (metro feature) (Android). To make Haul work with `RN 0.52+`, you have to disable that feature - During development, bring up Dev Menu (`cmd + m`), select `Dev Settings` and uncheck `Delta bundles`
+
 - Existing `react-native` commands
 
 The following features are **unlikely to be supported** in the future:
