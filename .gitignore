@@ -1,13 +1,26 @@
-*~
+# OS X
 .DS_Store
 
+# Others
+*~
 *.log
-/node_modules
-integration_tests/fixtures/**/node_modules
-integration_tests/fixtures/**/.happypack
 
+# VSCode
 .vscode/
+tsconfig.json
 jsconfig.json
+
+# NodeJS
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Webpack
+.happypack
+
+# Android/IJ
 .idea
-dist
-/coverage
+.gradle
+
+dist/
+coverage/
