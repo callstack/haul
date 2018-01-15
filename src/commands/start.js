@@ -64,19 +64,19 @@ async function start(opts: *) {
 
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
-    const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
+    const command = `adb reverse tcp:${opts.port} tcp:${opts.port}`;
 
     try {
-      await exec(`adb ${args}`);
+      await exec(command);
       logger.info(
         messages.commandSuccess({
-          command: `adb ${args}`,
+          command,
         })
       );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
-          command: `adb ${args}`,
+          command,
           error,
         })
       );
