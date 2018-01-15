@@ -65,24 +65,18 @@ async function start(opts: *) {
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
     const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
-    /**
-     * ADB should be taken from path (the correct setup is even in React Native documentation)
-     * 
-     * @see https://facebook.github.io/react-native/docs/getting-started.html
-     */
-    const adb = 'adb';
 
     try {
-      await exec(`${adb} ${args}`);
+      await exec(`adb ${args}`);
       logger.info(
         messages.commandSuccess({
-          command: `${adb} ${args}`,
+          command: `adb ${args}`,
         })
       );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
-          command: `${adb} ${args}`,
+          command: `adb ${args}`,
           error,
         })
       );
