@@ -7,7 +7,6 @@
 import type { Command } from '../types';
 
 const webpack = require('webpack');
-const path = require('path');
 const clear = require('clear');
 const inquirer = require('inquirer');
 
@@ -66,21 +65,24 @@ async function start(opts: *) {
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
     const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
-    const adb = process.env.ANDROID_HOME
-      ? `${process.env.ANDROID_HOME}/platform-tools/adb`
-      : 'adb';
+    /**
+     * ADB should be taken from path (the correct setup is even in React Native documentation)
+     * 
+     * @see https://facebook.github.io/react-native/docs/getting-started.html
+     */
+    const adb = 'adb';
 
     try {
       await exec(`${adb} ${args}`);
       logger.info(
         messages.commandSuccess({
-          command: `${path.basename(adb)} ${args}`,
+          command: `${adb} ${args}`,
         })
       );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
-          command: `${path.basename(adb)} ${args}`,
+          command: `${adb} ${args}`,
           error,
         })
       );
