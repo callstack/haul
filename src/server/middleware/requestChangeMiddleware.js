@@ -31,7 +31,7 @@ module.exports = function requestChangeMiddleware(
         );
     }
 
-    req.url = req.url.replace(/index.bundle/, `index.${platform}.bundle`);
+    req.url = req.url.replace(/index\.bundle/, `index.${platform}.bundle`);
   }
   next();
 };
