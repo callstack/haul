@@ -7,7 +7,6 @@
 import type { Command } from '../types';
 
 const webpack = require('webpack');
-const path = require('path');
 const clear = require('clear');
 const inquirer = require('inquirer');
 
@@ -65,22 +64,19 @@ async function start(opts: *) {
 
   // Run `adb reverse` on Android
   if (opts.platform === 'android') {
-    const args = `reverse tcp:${opts.port} tcp:${opts.port}`;
-    const adb = process.env.ANDROID_HOME
-      ? `${process.env.ANDROID_HOME}/platform-tools/adb`
-      : 'adb';
+    const command = `adb reverse tcp:${opts.port} tcp:${opts.port}`;
 
     try {
-      await exec(`${adb} ${args}`);
+      await exec(command);
       logger.info(
         messages.commandSuccess({
-          command: `${path.basename(adb)} ${args}`,
+          command,
         })
       );
     } catch (error) {
       logger.warn(
         messages.commandFailed({
-          command: `${path.basename(adb)} ${args}`,
+          command,
           error,
         })
       );
