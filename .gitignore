@@ -12,6 +12,7 @@ jsconfig.json
 
 # NodeJS
 node_modules/
+!**/__tests__/**/node_modules
 npm-debug.log
 yarn-debug.log
 
