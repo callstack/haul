@@ -12,7 +12,9 @@ const dedent = require('dedent');
 const ora = require('ora');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const semver = require('semver')
 const isReactNativeProject = require('../utils/isReactNativeProject');
+const getReactNativeVersion = require('../utils/getReactNativeVersion');
 
 const messages = require('../messages');
 
@@ -115,7 +117,15 @@ async function init() {
   }
 
   await addToXcodeBuild(cwd);
-  await addToGradleBuild(cwd);
+
+  const rnVersion = getReactNativeVersion();
+
+  if (semver.gte(rnVersion, '0.43')) {
+    await addToGradleBuild(cwd);
+  } else {
+    progress.info('Haul is not required in your build.gradle');
+  }
+
   await addToPackageScripts(cwd);
 
   progress = ora(messages.generatingConfig()).start();
