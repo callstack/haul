@@ -115,6 +115,7 @@ async function init() {
   }
 
   await addToXcodeBuild(cwd);
+  await addToGradleBuild(cwd);
   await addToPackageScripts(cwd);
 
   progress = ora(messages.generatingConfig()).start();
@@ -201,6 +202,71 @@ const addToPackageScripts = async (cwd: string) => {
     `You can now start Haul by running '${getRunScript(scriptName)}'`
   );
 };
+
+const addToGradleBuild = async (cwd: string) => {
+  let entry;
+
+  // Does `android/app/build.gradle` exist?
+  const androidPath = path.join(cwd, 'android/app');
+  if (fs.existsSync(androidPath)) {
+    const list = fs
+      .readdirSync(androidPath)
+      .filter(file => file.includes('build.gradle'));
+
+    // Do nothing if multiple projects were found
+    if (list.length === 1) {
+      entry = path.join(androidPath, list[0]);
+    }
+  }
+
+  // Otherwise, ask for path to a file
+  if (!entry) {
+    const result = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the android/app/build.gradle file',
+        validate: pathToFile =>
+          fs.existsSync(pathToFile) && pathToFile.includes('build.gradle')
+            ? true
+            : `${pathToFile} is not a valid build.gradle`,
+      },
+    ]);
+
+    entry = path.resolve(cwd, result.entry);
+  }
+
+  const progress = ora('Adding haul to your build.gradle');
+
+  await sleep();
+
+  let project = fs.readFileSync(entry).toString();
+
+  const cliString = '"node_modules/haul/bin/cli.js"';
+
+  const gradleConf = `
+    project.ext.react = [
+      cliPath: ${cliString}
+    ]
+  `;
+
+  // Are we already integrated?
+  if (project.includes(cliString)) {
+    progress.info('Haul is already part of your build.gradle');
+    return;
+  }
+
+  project = project.replace(
+    /^apply from: "..\/..\/node_modules\/react-native\/react.gradle"/gm,
+    dedent`
+    ${gradleConf}
+    apply from: "../../node_modules/react-native/react.gradle"
+    `
+  );
+
+  fs.writeFileSync(entry, project);
+  progress.succeed("Added haul to your build.gradle");
+}
 
 /**
  * Adds Haul to native iOS build pipeline
