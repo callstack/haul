@@ -12,7 +12,7 @@ const dedent = require('dedent');
 const ora = require('ora');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
-const semver = require('semver')
+const semver = require('semver');
 const isReactNativeProject = require('../utils/isReactNativeProject');
 const getReactNativeVersion = require('../utils/getReactNativeVersion');
 
@@ -118,9 +118,9 @@ async function init() {
 
   await addToXcodeBuild(cwd);
 
-  const rnVersion = getReactNativeVersion();
+  const rnVersion = getReactNativeVersion(cwd);
 
-  if (semver.gte(rnVersion, '0.43')) {
+  if (semver.gte(rnVersion, '0.43.0')) {
     await addToGradleBuild(cwd);
   } else {
     progress.info('Haul is not required in your build.gradle');
@@ -275,8 +275,8 @@ const addToGradleBuild = async (cwd: string) => {
   );
 
   fs.writeFileSync(entry, project);
-  progress.succeed("Added haul to your build.gradle");
-}
+  progress.succeed('Added haul to your build.gradle');
+};
 
 /**
  * Adds Haul to native iOS build pipeline
