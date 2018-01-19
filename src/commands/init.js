@@ -241,7 +241,7 @@ const addToGradleBuild = async (cwd: string) => {
       },
     ]);
 
-    entry = path.resolve(cwd, result.entry);
+    entry = path.resolve(result.entry);
   }
 
   const progress = ora('Adding haul to your build.gradle');
@@ -309,7 +309,7 @@ const addToXcodeBuild = async (cwd: string) => {
       },
     ]);
 
-    entry = path.resolve(cwd, result.entry);
+    entry = path.resolve(result.entry);
   }
 
   const progress = ora('Adding haul to your Xcode build scripts');
