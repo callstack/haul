@@ -122,8 +122,6 @@ async function init() {
 
   if (semver.gte(rnVersion, '0.43.0')) {
     await addToGradleBuild(cwd);
-  } else {
-    progress.info('Haul is not required in your build.gradle');
   }
 
   await addToPackageScripts(cwd);
