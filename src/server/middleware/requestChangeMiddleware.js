@@ -19,7 +19,19 @@ module.exports = function requestChangeMiddleware(
 ) {
   const { platform } = req.query;
   if (platform) {
-    req.url = req.url.replace('index.bundle', `index.${platform}.bundle`);
+    /*
+      RN 0.52+ comes with experimental feature called Delta Bundles (from metro)
+      So to overcome any issues with this feature, one needs to disable it DevMenu
+    */
+    if (platform === 'android' && /\.delta/.test(req.url)) {
+      res
+        .status(500)
+        .send(
+          'Currently Haul does not support Delta bundles. Please disable them in Dev Settings'
+        );
+    }
+
+    req.url = req.url.replace(/index\.bundle/, `index.${platform}.bundle`);
   }
   next();
 };
