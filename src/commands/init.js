@@ -13,7 +13,6 @@ const ora = require('ora');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const semver = require('semver');
-const isReactNativeProject = require('../utils/isReactNativeProject');
 const getReactNativeVersion = require('../utils/getReactNativeVersion');
 
 const messages = require('../messages');
@@ -26,7 +25,7 @@ async function init() {
   const cwd = process.cwd();
 
   // Are we inside a React Native project?
-  if (isReactNativeProject(cwd)) {
+  if (getReactNativeVersion(cwd)) {
     progress.succeed(messages.verifiedProject());
   } else {
     progress.fail(messages.invalidProject());

@@ -13,7 +13,7 @@ module.exports = () => dedent`
 
   Make sure you have a ${chalk.bold('package.json')} file with ${chalk.bold(
   'react-native'
-)} in dependencies.
+)} in dependencies, and you have installed these dependencies.
 
   To generate a React Native project, run ${chalk.bold(
     'react-native init <ProjectName>'

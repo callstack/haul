@@ -4,24 +4,19 @@
  *
  * @flow
  */
-const fs = require('fs');
 const path = require('path');
 
 module.exports = function getReactNativeVersion(cwd: string) {
   try {
-    const pak = JSON.parse(
-      fs.readFileSync(path.join(cwd, 'package.json')).toString()
-    );
+    const pak = require(path.join(
+      cwd,
+      'node_modules/react-native/package.json'
+    ));
 
-    const deps = {
-      ...(pak.dependencies || {}),
-      ...(pak.devDependencies || {}),
-      ...(pak.peerDependencies || {}),
-    };
-
-    return deps['react-native'];
+    return pak.version;
   } catch (e) {
     // Ignore
   }
-  return false;
+
+  return null;
 };
