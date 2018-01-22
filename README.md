@@ -36,12 +36,19 @@ Start by adding Haul as a dependency to your React Native project (use `react-na
 
 ```bash
 yarn add --dev haul
+# Traditionalist? No problem:
+npm install --save-dev haul
 ```
 
 To configure your project to use haul, run the following:
 
 ```bash
 yarn haul init
+# npm >= 5.2.0 :
+npx haul init
+# npm < 5.2.0 :
+npm install -g npx
+npx haul init
 ```
 
 This will automatically add the configuration needed to make Haul work with your app, e.g. add `webpack.haul.js` to your project, which you can customise to add more functionality.
@@ -50,6 +57,8 @@ Next, you're ready to start the development server:
 
 ```bash
 yarn haul start -- --platform ios
+# Or:
+npx haul start --platform ios
 ```
 
 Finally, reload your app to update the bundle or run your app just like you normally would:
