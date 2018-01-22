@@ -30,6 +30,7 @@
     "react-native": "*"
   },
   "dependencies": {
+    "@zamotany/react-proxy": "3.0.0-alpha.4",
     "babel-core": "^6.24.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -83,6 +84,7 @@
     "jest": "test",
     "lint-staged": "^3.4.0",
     "mkdirp": "^0.5.1",
+    "react-native": "^0.51.0",
     "rimraf": "^2.6.1",
     "traverse": "^0.6.6"
   },

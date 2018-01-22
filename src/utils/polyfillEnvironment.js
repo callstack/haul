@@ -35,3 +35,14 @@ if (!global.self) {
 require('InitializeCore'); // eslint-disable-line import/no-unresolved
 
 require('../hot/client/importScriptsPolyfill');
+
+const scriptURL = require('react-native').NativeModules.SourceCode.scriptURL; // eslint-disable-line import/no-unresolved
+// In order to ensure hot client has a valid URL we need to get a valid origin
+// from URL from which the bundle was loaded. When using iOS simulator/Android emulator
+// or Android device it will be `localhost:<port>` but when using real iOS device
+// it will be `<ip>.xip.io:<port>`. Thus the code below ensure we connect and download
+// manifest/hot-update from a valid origin.
+global.DEV_SERVER_ORIGIN = scriptURL.match(/(^.+)\/index/)[1];
+// Webpack's `publicPath` needs to be overwritten with `DEV_SERVER_ORIGIN` otherwise,
+// it would still make requests to (usually) `localhost`.
+__webpack_require__.p = `${global.DEV_SERVER_ORIGIN}/`; // eslint-disable-line no-undef

@@ -119,7 +119,6 @@ const getDefaultConfig = ({
          */
         'process.env': {
           NODE_ENV: dev ? '"development"' : '"production"',
-          DEV_SERVER_ORIGIN: JSON.stringify(`http://localhost:${port}`),
         },
         __DEV__: dev,
       }),
@@ -178,6 +177,16 @@ const getDefaultConfig = ({
           : []
       ),
     resolve: {
+      alias:
+        process.env.NODE_ENV === 'production'
+          ? {}
+          : {
+              /**
+               * Latest `react-proxy` version does not contain try/catches from
+               * commit 981815dca250373619138c9f5aadf12295cf1b3f.
+               */
+              'react-proxy': '@zamotany/react-proxy',
+            },
       plugins: [
         /**
          * React Native uses a module system called Haste

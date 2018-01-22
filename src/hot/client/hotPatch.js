@@ -45,7 +45,14 @@ if (typeof global.__REACT_HOT_LOADER__ !== 'undefined') {
        * We'll be actually looping over `hasOwnProperty`'s arities, which are `undefined`
        * Accessing properties on `undefined` will throw an error
        */
-      Object.prototype[uniqueLocalName]
+      [
+        'hasOwnProperty',
+        'isPrototypeOf',
+        'propertyIsEnumerable',
+        'toString',
+        'valueOf',
+        'toLocaleString',
+      ].some(fn => Object.prototype[fn] === type)
     ) {
       return;
     }
