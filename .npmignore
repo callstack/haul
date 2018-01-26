@@ -4,6 +4,7 @@
 # tests
 __tests__
 /integration_tests
+/fixtures
 
 # docs and tooling
 /docs
