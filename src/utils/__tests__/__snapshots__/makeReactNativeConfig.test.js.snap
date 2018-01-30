@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates config from defaults: creates config from defaults (configs) 1`] = `
+exports[`creates config from defaults (configs) 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
@@ -247,14 +247,14 @@ Array [
 ]
 `;
 
-exports[`creates config from defaults: creates config from defaults (platforms) 1`] = `
+exports[`creates config from defaults (platforms) 1`] = `
 Array [
   "ios",
   "android",
 ]
 `;
 
-exports[`merges existing config: merges existing config 1`] = `
+exports[`merges existing config 1`] = `
 Array [
   Object {
     "context": "<<REPLACED>>/utils/__tests__/fixtures",
