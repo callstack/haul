@@ -94,7 +94,7 @@ function AssetResolver(options: Options) {
   };
 }
 
-AssetResolver.test = /\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|m4v|aac|aiff|caf|m4a|mp3|wav|html|pdf)$/;
+AssetResolver.test = /\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/;
 AssetResolver.collect = (
   list: Array<string>,
   { name, type, platform }: CollectOptions
