@@ -12,7 +12,9 @@ Click on its default "Run Script" label to set its name to something like "Integ
 
 Add the following command to the script:
 
-`bash ../node_modules/haul/src/utils/haul-integrate.sh`
+```
+bash ../node_modules/haul/src/utils/haul-integrate.sh
+```
 
 Usually, a React Native project has a run script phase that runs `react-native-xcode.sh`. This phase is added during initial integration with RN. Due to the fact that `haul-integrate.sh` rewrites parts of `react-native-xcode.sh`, the new build phase should be run before the existing build phase:
 
@@ -20,8 +22,12 @@ Usually, a React Native project has a run script phase that runs `react-native-x
 
 ## Integrating with Gradle
 
-If you're on React Native version >= 0.43, add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
+If you're on React Native version >= 0.43, run the following to automatically configure your gradle config to use haul:
+```
+haul init
+```
 
+If the automatic setup didn't work for you, you can manually add the following code in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
 ```
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js"
