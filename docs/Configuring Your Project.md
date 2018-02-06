@@ -21,9 +21,9 @@ Usually, a React Native project has a run script phase that runs `react-native-x
 ## Integrating with Gradle
 
 If you're on React Native version >= 0.43, `haul init` will add the following code in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement for you:
-	
-```	
-project.ext.react = [	
-    cliPath: "node_modules/haul/bin/cli.js"	
-]	
+
+```
+project.ext.react = [
+    cliPath: "node_modules/haul/bin/cli.js"
+]
 ```
