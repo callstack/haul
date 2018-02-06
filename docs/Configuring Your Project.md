@@ -25,7 +25,7 @@ If you're on React Native version >= 0.43, run the following to automatically co
 haul init
 ```
 
-If the automatic setup didn't work for you, you can manually add the following code in android/app/build.gradle somewhere before the apply from: "../../node_modules/react-native/react.gradle" statement:
+If the automatic setup didn't work for you, you can manually add the following code in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
 ```
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js"
