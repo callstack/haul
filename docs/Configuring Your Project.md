@@ -12,7 +12,9 @@ Click on its default "Run Script" label to set its name to something like "Integ
 
 Add the following command to the script:
 
-`bash ../node_modules/haul/src/utils/haul-integrate.sh`
+```
+bash ../node_modules/haul/src/utils/haul-integrate.sh
+```
 
 Usually, a React Native project has a run script phase that runs `react-native-xcode.sh`. This phase is added during initial integration with RN. Due to the fact that `haul-integrate.sh` rewrites parts of `react-native-xcode.sh`, the new build phase should be run before the existing build phase:
 
