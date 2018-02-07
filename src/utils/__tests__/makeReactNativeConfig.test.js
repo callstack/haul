@@ -19,10 +19,8 @@ test('creates config from defaults', () => {
     root: path.resolve(__dirname, 'fixtures'),
   });
 
-  expect(replacePathsInObject(configs)).toMatchSnapshot(
-    'creates config from defaults (configs)'
-  );
-  expect(platforms).toMatchSnapshot('creates config from defaults (platforms)');
+  expect(replacePathsInObject(configs)).toMatchSnapshot('(configs)');
+  expect(platforms).toMatchSnapshot('(platforms)');
 });
 
 test('merges existing config', () => {
@@ -32,9 +30,7 @@ test('merges existing config', () => {
     root: path.resolve(__dirname, 'fixtures'),
   });
 
-  expect(replacePathsInObject(configs)).toMatchSnapshot(
-    'merges existing config'
-  );
+  expect(replacePathsInObject(configs)).toMatchSnapshot();
 });
 
 describe('injects polyfill into different entries', () => {
