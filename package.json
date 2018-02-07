@@ -81,7 +81,7 @@
     "eslint-config-callstack-io": "^1.0.1",
     "flow-bin": "^0.57.2",
     "husky": "^0.13.3",
-    "jest": "test",
+    "jest": "^22.2.0",
     "lint-staged": "^3.4.0",
     "mkdirp": "^0.5.1",
     "react-native": "^0.51.0",
