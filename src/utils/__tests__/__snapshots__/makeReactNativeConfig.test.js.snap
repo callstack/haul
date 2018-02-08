@@ -20,9 +20,6 @@ Array [
           "test": /\\\\\\.js\\$/,
           "use": Array [
             Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
-            Object {
               "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
               "options": Object {
                 "cacheDirectory": true,
@@ -50,6 +47,9 @@ Array [
       ],
     },
     "name": "ios",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -141,9 +141,6 @@ Array [
           "test": /\\\\\\.js\\$/,
           "use": Array [
             Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
-            Object {
               "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
               "options": Object {
                 "cacheDirectory": true,
@@ -171,6 +168,9 @@ Array [
       ],
     },
     "name": "android",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -272,6 +272,9 @@ Array [
       ],
     },
     "name": "ios",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -297,6 +300,9 @@ Array [
       ],
     },
     "name": "android",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
