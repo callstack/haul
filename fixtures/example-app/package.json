@@ -9,15 +9,15 @@
     "haul-local": "haul"
   },
   "dependencies": {
-    "react": "16.0.0",
-    "react-native": "0.50.3"
+    "react": "16.2.0",
+    "react-native": "0.53.0"
   },
   "devDependencies": {
-    "babel-jest": "21.2.0",
+    "babel-jest": "22.2.2",
     "babel-preset-react-native": "4.0.0",
-    "haul": "^1.0.0-beta.10",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "haul": "1.0.0-beta.13",
+    "jest": "22.2.2",
+    "react-test-renderer": "16.2.0"
   },
   "jest": {
     "preset": "react-native"
