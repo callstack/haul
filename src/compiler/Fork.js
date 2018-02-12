@@ -20,6 +20,11 @@ type ForkConstructorArgs = {
 const forks = {};
 let transportServer;
 
+/**
+ * Fork class is a abstraction over fork process. It handles creation of the process,
+ * communication over transport server (WebSocket server) and redirecting events from
+ * Webpack compiler in fork process to Fork consumer.
+ */
 module.exports = class Fork extends EventEmitter {
   platform: Platform;
   process: any;
@@ -33,9 +38,7 @@ module.exports = class Fork extends EventEmitter {
     if (!transportServer) {
       transportServer = createWebSocketServer();
 
-      /**
-       * WebSocket connection is established after the Fork is created.
-       */
+      // WebSocket connection is established after the Fork is created.
       transportServer.on('connection', socket => {
         const platformMatch = socket.upgradeReq.url.match(
           /platform=(ios|android)/
@@ -65,6 +68,7 @@ module.exports = class Fork extends EventEmitter {
   setSocket(socket: WebSocket) {
     this.socket = socket;
 
+    // Flush enqueued messages.
     this.enqueuedMessages.forEach(({ type, ...payload }) =>
       this.send(type, payload)
     );

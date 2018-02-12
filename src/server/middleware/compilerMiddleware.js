@@ -26,6 +26,10 @@ type MiddlewareOptions = {
   configOptions: ConfigOptionsType,
 };
 
+/**
+ * Compiler middleware serves as a adapter between Compiler instance, which is a EventEmitter
+ * and Express application.
+ */
 module.exports = function createCompilerMiddleware(
   compiler: Compiler,
   options: MiddlewareOptions
@@ -49,6 +53,8 @@ module.exports = function createCompilerMiddleware(
     response: $Response,
     next: Function
   ) {
+    // If file doesn't include `bundle`, we assume it's just a regular file, hence the
+    // `REQUEST_FILE` event is emitted. Otherwise we emit `REQUEST_BUNDLE` event.
     if (!/bundle$/.test(request.path)) {
       compiler.emit(Compiler.Events.REQUEST_FILE, {
         filename: request.path,

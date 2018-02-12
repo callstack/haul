@@ -61,10 +61,6 @@ Object {
       "pathCache": Object {},
       "primed": false,
     },
-    ProgressPlugin {
-      "handler": [Function],
-      "profile": undefined,
-    },
     DefinePlugin {
       "definitions": Object {
         "__DEV__": true,
@@ -195,10 +191,6 @@ Object {
       "options": Object {},
       "pathCache": Object {},
       "primed": false,
-    },
-    ProgressPlugin {
-      "handler": [Function],
-      "profile": undefined,
     },
     DefinePlugin {
       "definitions": Object {
