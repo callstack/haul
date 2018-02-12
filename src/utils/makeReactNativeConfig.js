@@ -133,6 +133,10 @@ const getDefaultConfig = ({
               module: true,
             }),
             new webpack.NamedModulesPlugin(),
+            new webpack.BannerPlugin({
+              banner: 'if (!this.self) { this.self = this; }',
+              raw: true,
+            }),
           ]
         : [
             /**
