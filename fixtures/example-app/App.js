@@ -15,16 +15,16 @@ const instructions = Platform.select({
 });
 
 type State = {
-  count: number,
+  number: number,
 };
 
-export default class App extends Component<State, *> {
+export default class App extends Component<{}, State> {
   state = {
     number: 0,
   };
 
-  increment = prevState => ({ number: prevState.number + 1 });
-  decrement = prevState => ({ number: prevState.number - 1 });
+  increment = (prevState: State) => ({ number: prevState.number + 1 });
+  decrement = (prevState: State) => ({ number: prevState.number - 1 });
 
   render() {
     return (
