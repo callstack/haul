@@ -1,310 +1,299 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates config from defaults: (configs) 1`] = `
-Array [
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "./file.js",
-    ],
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
+exports[`creates config from defaults: android config 1`] = `
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "./file.js",
+  ],
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
+        },
+      },
+      Object {
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+        "test": /\\\\\\.js\\$/,
+        "use": Array [
+          Object {
+            "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
           },
-        },
-        Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
-          "test": /\\\\\\.js\\$/,
-          "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
-            Object {
-              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "options": Object {
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-        },
-        Object {
-          "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
-          "use": Object {
-            "loader": "<<REPLACED>>/loaders/assetLoader.js",
-            "query": Object {
-              "bundle": undefined,
-              "platform": "ios",
-              "root": "<<REPLACED>>/utils/__tests__/fixtures",
+          Object {
+            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+            "options": Object {
+              "cacheDirectory": true,
+              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "plugins": Array [
+                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                "<<REPLACED>>/hot/babelPlugin.js",
+              ],
             },
           },
-        },
-      ],
-    },
-    "name": "ios",
-    "output": Object {
-      "filename": "index.ios.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [
-      CaseSensitivePathsPlugin {
-        "fsOperations": 0,
-        "options": Object {},
-        "pathCache": Object {},
-        "primed": false,
+        ],
       },
-      ProgressPlugin {
-        "handler": [Function],
-        "profile": undefined,
-      },
-      DefinePlugin {
-        "definitions": Object {
-          "__DEV__": true,
-          "process.env": Object {
-            "NODE_ENV": "\\"development\\"",
+      Object {
+        "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+        "use": Object {
+          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "query": Object {
+            "bundle": undefined,
+            "platform": "android",
+            "root": "<<REPLACED>>/utils/__tests__/fixtures",
           },
         },
-      },
-      LoaderOptionsPlugin {
-        "options": Object {
-          "debug": true,
-          "minimize": false,
-          "test": Object {
-            "test": [Function],
-          },
-        },
-      },
-      HotModuleReplacementPlugin {
-        "fullBuildTimeout": 200,
-        "multiStep": undefined,
-        "options": Object {},
-        "requestTimeout": 10000,
-      },
-      EvalSourceMapDevToolPlugin {
-        "options": Object {
-          "module": true,
-        },
-      },
-      NamedModulesPlugin {
-        "options": Object {},
       },
     ],
-    "resolve": Object {
-      "alias": Object {
-        "react-proxy": "@zamotany/react-proxy",
-      },
-      "extensions": Array [
-        ".ios.js",
-        ".native.js",
-        ".js",
-      ],
-      "mainFields": Array [
-        "react-native",
-        "browser",
-        "main",
-      ],
-      "plugins": Array [
-        HasteResolver {
-          "apply": [Function],
-        },
-        AssetResolver {
-          "apply": [Function],
-        },
-      ],
-    },
-    "target": "webworker",
   },
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "./file.js",
-    ],
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
-        },
-        Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
-          "test": /\\\\\\.js\\$/,
-          "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
-            Object {
-              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "options": Object {
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-        },
-        Object {
-          "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
-          "use": Object {
-            "loader": "<<REPLACED>>/loaders/assetLoader.js",
-            "query": Object {
-              "bundle": undefined,
-              "platform": "android",
-              "root": "<<REPLACED>>/utils/__tests__/fixtures",
-            },
-          },
-        },
-      ],
-    },
-    "name": "android",
-    "output": Object {
-      "filename": "index.android.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [
-      CaseSensitivePathsPlugin {
-        "fsOperations": 0,
-        "options": Object {},
-        "pathCache": Object {},
-        "primed": false,
-      },
-      ProgressPlugin {
-        "handler": [Function],
-        "profile": undefined,
-      },
-      DefinePlugin {
-        "definitions": Object {
-          "__DEV__": true,
-          "process.env": Object {
-            "NODE_ENV": "\\"development\\"",
-          },
-        },
-      },
-      LoaderOptionsPlugin {
-        "options": Object {
-          "debug": true,
-          "minimize": false,
-          "test": Object {
-            "test": [Function],
-          },
-        },
-      },
-      HotModuleReplacementPlugin {
-        "fullBuildTimeout": 200,
-        "multiStep": undefined,
-        "options": Object {},
-        "requestTimeout": 10000,
-      },
-      EvalSourceMapDevToolPlugin {
-        "options": Object {
-          "module": true,
-        },
-      },
-      NamedModulesPlugin {
-        "options": Object {},
-      },
-    ],
-    "resolve": Object {
-      "alias": Object {
-        "react-proxy": "@zamotany/react-proxy",
-      },
-      "extensions": Array [
-        ".android.js",
-        ".native.js",
-        ".js",
-      ],
-      "mainFields": Array [
-        "react-native",
-        "browser",
-        "main",
-      ],
-      "plugins": Array [
-        HasteResolver {
-          "apply": [Function],
-        },
-        AssetResolver {
-          "apply": [Function],
-        },
-      ],
-    },
-    "target": "webworker",
+  "name": "android",
+  "output": Object {
+    "filename": "index.android.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
   },
-]
+  "plugins": Array [
+    CaseSensitivePathsPlugin {
+      "fsOperations": 0,
+      "options": Object {},
+      "pathCache": Object {},
+      "primed": false,
+    },
+    ProgressPlugin {
+      "handler": [Function],
+      "profile": undefined,
+    },
+    DefinePlugin {
+      "definitions": Object {
+        "__DEV__": true,
+        "process.env": Object {
+          "NODE_ENV": "\\"development\\"",
+        },
+      },
+    },
+    LoaderOptionsPlugin {
+      "options": Object {
+        "debug": true,
+        "minimize": false,
+        "test": Object {
+          "test": [Function],
+        },
+      },
+    },
+    HotModuleReplacementPlugin {
+      "fullBuildTimeout": 200,
+      "multiStep": undefined,
+      "options": Object {},
+      "requestTimeout": 10000,
+    },
+    EvalSourceMapDevToolPlugin {
+      "options": Object {
+        "module": true,
+      },
+    },
+    SourceMapDevToolPlugin {
+      "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
+      "moduleFilenameTemplate": "webpack:///[resourcePath]",
+      "options": Object {
+        "filename": "[file].map",
+        "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+      },
+      "sourceMapFilename": "[file].map",
+      "sourceMappingURLComment": "
+//# sourceMappingURL=[url]",
+    },
+    NamedModulesPlugin {
+      "options": Object {},
+    },
+  ],
+  "resolve": Object {
+    "alias": Object {
+      "react-proxy": "@zamotany/react-proxy",
+    },
+    "extensions": Array [
+      ".android.js",
+      ".native.js",
+      ".js",
+    ],
+    "mainFields": Array [
+      "react-native",
+      "browser",
+      "main",
+    ],
+    "plugins": Array [
+      HasteResolver {
+        "apply": [Function],
+      },
+      AssetResolver {
+        "apply": [Function],
+      },
+    ],
+  },
+  "target": "webworker",
+}
 `;
 
-exports[`creates config from defaults: (platforms) 1`] = `
-Array [
-  "ios",
-  "android",
-]
+exports[`creates config from defaults: ios config 1`] = `
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "./file.js",
+  ],
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
+        },
+      },
+      Object {
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+        "test": /\\\\\\.js\\$/,
+        "use": Array [
+          Object {
+            "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
+          },
+          Object {
+            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+            "options": Object {
+              "cacheDirectory": true,
+              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "plugins": Array [
+                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                "<<REPLACED>>/hot/babelPlugin.js",
+              ],
+            },
+          },
+        ],
+      },
+      Object {
+        "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+        "use": Object {
+          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "query": Object {
+            "bundle": undefined,
+            "platform": "ios",
+            "root": "<<REPLACED>>/utils/__tests__/fixtures",
+          },
+        },
+      },
+    ],
+  },
+  "name": "ios",
+  "output": Object {
+    "filename": "index.ios.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
+  },
+  "plugins": Array [
+    CaseSensitivePathsPlugin {
+      "fsOperations": 0,
+      "options": Object {},
+      "pathCache": Object {},
+      "primed": false,
+    },
+    ProgressPlugin {
+      "handler": [Function],
+      "profile": undefined,
+    },
+    DefinePlugin {
+      "definitions": Object {
+        "__DEV__": true,
+        "process.env": Object {
+          "NODE_ENV": "\\"development\\"",
+        },
+      },
+    },
+    LoaderOptionsPlugin {
+      "options": Object {
+        "debug": true,
+        "minimize": false,
+        "test": Object {
+          "test": [Function],
+        },
+      },
+    },
+    HotModuleReplacementPlugin {
+      "fullBuildTimeout": 200,
+      "multiStep": undefined,
+      "options": Object {},
+      "requestTimeout": 10000,
+    },
+    EvalSourceMapDevToolPlugin {
+      "options": Object {
+        "module": true,
+      },
+    },
+    SourceMapDevToolPlugin {
+      "fallbackModuleFilenameTemplate": "webpack:///[resourcePath]?[hash]",
+      "moduleFilenameTemplate": "webpack:///[resourcePath]",
+      "options": Object {
+        "filename": "[file].map",
+        "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+      },
+      "sourceMapFilename": "[file].map",
+      "sourceMappingURLComment": "
+//# sourceMappingURL=[url]",
+    },
+    NamedModulesPlugin {
+      "options": Object {},
+    },
+  ],
+  "resolve": Object {
+    "alias": Object {
+      "react-proxy": "@zamotany/react-proxy",
+    },
+    "extensions": Array [
+      ".ios.js",
+      ".native.js",
+      ".js",
+    ],
+    "mainFields": Array [
+      "react-native",
+      "browser",
+      "main",
+    ],
+    "plugins": Array [
+      HasteResolver {
+        "apply": [Function],
+      },
+      AssetResolver {
+        "apply": [Function],
+      },
+    ],
+  },
+  "target": "webworker",
+}
 `;
 
 exports[`merges existing config 1`] = `
-Array [
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "/some/file.js",
-    ],
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "/some/file.js",
+  ],
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
         },
-      ],
-    },
-    "name": "ios",
-    "output": Object {
-      "filename": "index.ios.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [],
-    "resolve": Object {},
-    "target": "webworker",
-  },
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "/some/file.js",
+      },
     ],
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
-        },
-      ],
-    },
-    "name": "android",
-    "output": Object {
-      "filename": "index.android.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [],
-    "resolve": Object {},
-    "target": "webworker",
   },
-]
+  "name": "ios",
+  "output": Object {
+    "filename": "index.ios.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
+  },
+  "plugins": Array [],
+  "resolve": Object {},
+  "target": "webworker",
+}
 `;

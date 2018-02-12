@@ -6,18 +6,13 @@
  */
 import type { Command } from '../types';
 
-const webpack = require('webpack');
 const clear = require('clear');
 const inquirer = require('inquirer');
 
 const logger = require('../logger');
 const createServer = require('../server');
-const messages = require('../messages');
-const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
-
-const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
 
 /**
  * Starts development server
@@ -45,81 +40,20 @@ async function start(opts: *) {
 
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
+  const configOptions = {
+    root: directory,
+    dev: opts.dev,
+    minify: opts.minify,
+    port: opts.port,
+  };
 
-  // eslint-disable-next-line prefer-const
-  let [config, platforms] = makeReactNativeConfig(
-    // $FlowFixMe: Dynamic require
-    require(configPath),
-    {
-      root: directory,
-      dev: opts.dev,
-      minify: opts.minify,
-      port: opts.port,
-    }
-  );
+  clear();
+  logger.done(`Haul ready at ${configOptions.port}`);
 
-  if (opts.platform !== 'all' && platforms.includes(opts.platform)) {
-    config = config[platforms.indexOf(opts.platform)];
-  }
-
-  // Run `adb reverse` on Android
-  if (opts.platform === 'android') {
-    const command = `adb reverse tcp:${opts.port} tcp:${opts.port}`;
-
-    try {
-      await exec(command);
-      logger.info(
-        messages.commandSuccess({
-          command,
-        })
-      );
-    } catch (error) {
-      logger.warn(
-        messages.commandFailed({
-          command,
-          error,
-        })
-      );
-    }
-  }
-  logger.info(
-    messages.initialStartInformation({
-      entries: Array.isArray(config) ? config.map(c => c.entry) : config.entry,
-      port: opts.port,
-      isMulti: Array.isArray(config),
-    })
-  );
-
-  const compiler = webpack(config);
-
-  createServer(
-    compiler,
-    didHaveIssues => {
-      clear();
-      if (didHaveIssues) {
-        logger.warn(messages.bundleBuilding(didHaveIssues));
-      } else {
-        logger.info(messages.bundleBuilding(didHaveIssues));
-      }
-    },
-    stats => {
-      clear();
-      if (stats.hasErrors()) {
-        logger.error(
-          messages.bundleFailed({
-            errors: stats.toJson({ errorDetails: true }).errors,
-          })
-        );
-      } else {
-        logger.done(
-          messages.bundleBuilt({
-            stats,
-            platform: opts.platform,
-          })
-        );
-      }
-    }
-  ).listen(opts.port);
+  createServer({
+    configPath,
+    configOptions,
+  }).listen(opts.port);
 }
 
 module.exports = ({
@@ -162,26 +96,6 @@ module.exports = ({
         {
           value: false,
           description: 'Disables minification for the bundle',
-        },
-      ],
-    },
-    {
-      name: 'platform',
-      description: 'Platform to bundle for',
-      example: 'haul start --platform ios',
-      required: true,
-      choices: [
-        {
-          value: 'ios',
-          description: 'Serves iOS bundle',
-        },
-        {
-          value: 'android',
-          description: 'Serves Android bundle',
-        },
-        {
-          value: 'all',
-          description: 'Serves both platforms',
         },
       ],
     },

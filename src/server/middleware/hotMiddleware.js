@@ -7,10 +7,7 @@
  */
 
 const { Observable } = require('rxjs/Rx');
-
-type Compiler = {
-  plugin: (name: string, fn: Function) => void,
-};
+const Compiler = require('../../compiler/Compiler');
 
 type WebSocketProxy = {
   onConnection: (hanlder: Function) => void,
@@ -120,7 +117,7 @@ function createConnectionStream(wsProxy: WebSocketProxy, id: string) {
 
 function createCompilerEventStream(compiler: Compiler) {
   return Observable.create((observer: *) => {
-    compiler.plugin('invalid', () => {
+    compiler.on(Compiler.Events.BUILD_START, () => {
       observer.next({
         target: 'native',
         platform: 'all',
@@ -133,7 +130,7 @@ function createCompilerEventStream(compiler: Compiler) {
       });
     });
 
-    compiler.plugin('done', (stats: Object) => {
+    compiler.on(Compiler.Events.BUILD_FINISHED, ({ platform, stats }) => {
       observer.next({
         target: 'native',
         platform: 'all',
@@ -142,7 +139,7 @@ function createCompilerEventStream(compiler: Compiler) {
       getStatsPayload(stats).forEach(payload => {
         observer.next({
           target: 'haul',
-          platform: payload.name || 'all',
+          platform: platform || 'all',
           body: { action: 'built', ...payload },
         });
       });
@@ -162,7 +159,7 @@ function mergeCompilerEventWithConnection(
 
 function getStatsPayload(stats: Object) {
   // For multi-compiler, stats will be an object with a 'children' array of stats
-  const bundles = extractBundles(stats.toJson({ errorDetails: false }));
+  const bundles = extractBundles(stats);
   return bundles.map(bundleStats => {
     return {
       name: bundleStats.name,

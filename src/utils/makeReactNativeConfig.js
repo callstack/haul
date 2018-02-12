@@ -15,8 +15,6 @@ const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
 const getBabelConfig = require('./getBabelConfig');
 
-const PLATFORMS = ['ios', 'android'];
-
 type ConfigOptions = {
   root: string,
   dev: boolean,
@@ -61,7 +59,7 @@ const getDefaultConfig = ({
     context: root,
     entry: [],
     output: {
-      path: path.join(root, 'dist'),
+      path: path.join(root), // removed 'dist' from path
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port}/`,
     },
@@ -133,6 +131,10 @@ const getDefaultConfig = ({
               new webpack.HotModuleReplacementPlugin(),
               new webpack.EvalSourceMapDevToolPlugin({
                 module: true,
+              }),
+              new webpack.SourceMapDevToolPlugin({
+                test: /\.(js|css|(js)?bundle)($|\?)/i,
+                filename: '[file].map',
               }),
               new webpack.NamedModulesPlugin(),
             ]
@@ -221,27 +223,24 @@ const getDefaultConfig = ({
  */
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
-  options: ConfigOptions
-): [Array<WebpackConfig>, typeof PLATFORMS] {
-  const configs = PLATFORMS.map(platform => {
-    const env = Object.assign({}, options, { platform });
-    const defaultWebpackConfig = getDefaultConfig(env);
-    const polyfillPath = require.resolve('./polyfillEnvironment.js');
+  options: ConfigOptions,
+  platform: 'ios' | 'android'
+) {
+  const env = Object.assign({}, options, { platform });
+  const defaultWebpackConfig = getDefaultConfig(env);
+  const polyfillPath = require.resolve('./polyfillEnvironment.js');
 
-    const userConfig =
-      typeof userWebpackConfig === 'function'
-        ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig;
+  const userConfig =
+    typeof userWebpackConfig === 'function'
+      ? userWebpackConfig(env, defaultWebpackConfig)
+      : userWebpackConfig;
 
-    const config = Object.assign({}, defaultWebpackConfig, userConfig, {
-      entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
-      name: platform,
-    });
-
-    return config;
+  const config = Object.assign({}, defaultWebpackConfig, userConfig, {
+    entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+    name: platform,
   });
 
-  return [configs, PLATFORMS];
+  return config;
 }
 
 /*

@@ -14,6 +14,7 @@ import { Platform } from 'react-native';
 
 export default function resetRedBox() {
   if (Platform.OS === 'ios') {
+    // $FlowFixMe
     const RCTRedBox = require('NativeModules').RedBox;
     RCTRedBox && RCTRedBox.dismiss && RCTRedBox.dismiss();
   } else {

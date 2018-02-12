@@ -5,11 +5,11 @@
  * @flow
  */
 
-const { runHaul, runHaulSync } = require('../runHaul');
-const { cleanup, writeFiles } = require('../utils');
+const { runHaul } = require('../runHaul');
+const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
-const { run } = require('../utils');
+const { run, fetchBundle } = require('../utils');
 const stripAnsi = require('strip-ansi');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
@@ -18,17 +18,32 @@ const TEST_PROJECT_DIR = path.resolve(
   '../../fixtures/react-native-with-haul'
 );
 
-beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
+let haul;
+beforeAll(done => {
+  run('yarn --mutex network', TEST_PROJECT_DIR);
+  haul = runHaul(TEST_PROJECT_DIR, ['start']);
+  const messageBuffer = [];
+
+  haul.stdout.on('data', data => {
+    const message = stripAnsi(data.toString()).trim();
+
+    if (message.length > 0) {
+      messageBuffer.push(message);
+    }
+
+    if (message.match(/ERROR/g)) {
+      done.fail(message);
+    }
+
+    if (message.match('ready')) {
+      done();
+    }
+  });
+});
 beforeEach(() => cleanup(TEMP_DIR));
 afterEach(() => cleanup(TEMP_DIR));
-
-test('start command displays "Select platform" message', () => {
-  writeFiles(TEMP_DIR, {
-    'webpack.haul.js': '{}',
-  });
-
-  const { stdout } = runHaulSync(TEMP_DIR, ['start']);
-  expect(stripAnsi(stdout).trim()).toMatchSnapshot();
+afterAll(() => {
+  haul.kill();
 });
 
 test('starts server and bundling iOS platform', done => {
@@ -40,31 +55,26 @@ test('starts server and bundling Android platform', done => {
 });
 
 test('starts server and bundling all platforms', done => {
-  testPlatform('android', done);
+  let calledTimes = 0;
+  function _done() {
+    calledTimes++;
+    if (calledTimes === 2) {
+      done();
+    }
+  }
+  _done.fail = done.fail;
+
+  testPlatform('ios', _done);
+  testPlatform('android', _done);
 });
 
 function testPlatform(platform, done) {
-  expect.hasAssertions();
-  const messageBuffer = [];
-  const haul = runHaul(TEST_PROJECT_DIR, ['start', '--platform', platform]);
-
-  haul.stdout.on('data', data => {
-    const message = stripAnsi(data.toString()).trim();
-
-    if (message.length > 0) {
-      messageBuffer.push(message);
-    }
-
-    if (message.match(/ERROR/g)) {
-      done.fail(message);
-      haul.kill();
-    }
-
-    if (message.match('bundling your React Native app')) {
-      const stdout = messageBuffer.join('\n');
-      expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
+  fetchBundle(`http://localhost:8081/index.${platform}.bundle`)
+    .then(response => {
+      expect(response).toMatch('__webpack_require__');
       done();
-      haul.kill();
-    }
-  });
+    })
+    .catch(error => {
+      done.fail(error);
+    });
 }
