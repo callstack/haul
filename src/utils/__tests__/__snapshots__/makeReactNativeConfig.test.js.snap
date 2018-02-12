@@ -8,6 +8,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -129,6 +130,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -262,6 +264,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -290,6 +293,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
