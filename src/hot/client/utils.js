@@ -10,15 +10,15 @@
 /* eslint-disable no-unused-expressions */
 
 // $FlowFixMe
-import { Platform } from 'react-native';
+import { Platform, NativeModules } from 'react-native';
 
 export default function resetRedBox() {
   if (Platform.OS === 'ios') {
-    const RCTRedBox = require('NativeModules').RedBox;
+    const RCTRedBox = NativeModules.RedBox;
     RCTRedBox && RCTRedBox.dismiss && RCTRedBox.dismiss();
   } else {
     // $FlowFixMe
-    const RCTExceptionsManager = require('NativeModules').ExceptionsManager;
+    const RCTExceptionsManager = NativeModules.ExceptionsManager;
     RCTExceptionsManager &&
       RCTExceptionsManager.dismissRedbox &&
       RCTExceptionsManager.dismissRedbox();
