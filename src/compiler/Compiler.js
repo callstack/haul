@@ -5,7 +5,7 @@
  * @flow
  */
 
-import type { Platform } from '../types';
+import type { Platform, Logger } from '../types';
 
 const EventEmitter = require('events');
 const Events = require('./events');
@@ -19,11 +19,13 @@ module.exports = class Compiler extends EventEmitter {
 
   forks: Object;
   tasks: TaskQueue;
+  logger: Logger;
 
-  constructor(options: *) {
+  constructor(logger: Logger, options: *) {
     super();
     this.forks = {};
     this.tasks = new TaskQueue();
+    this.logger = logger;
 
     this.on(Events.REQUEST_BUNDLE, ({ platform, filename, callback }) => {
       if (!this.forks[platform]) {
@@ -84,13 +86,17 @@ module.exports = class Compiler extends EventEmitter {
       this.emit(Events.BUILD_FINISHED, { platform, ...payload });
     });
 
+    fork.on(Events.BUILD_PROGRESS, payload => {
+      this.emit(Events.BUILD_PROGRESS, { platform, ...payload });
+    });
+
     return fork;
   }
 
   terminate(error?: Error) {
-    // logger.info('Shutting down Haul.');
+    this.logger.info('Shutting down Haul.');
 
-    // error && logger.error(error.message);
+    error && this.logger.error(error.message);
 
     Object.keys(this.forks).forEach(platform =>
       this.forks[platform].terminate()

@@ -43,6 +43,11 @@ module.exports = function initWorker({
   compiler.on(Events.BUILD_START, () => {
     send(Events.BUILD_START);
   });
+
+  compiler.on(Events.BUILD_PROGRESS, payload => {
+    send(Events.BUILD_PROGRESS, payload);
+  });
+
   compiler.on(Events.BUILD_FINISHED, ({ error, stats }) => {
     send(Events.BUILD_FINISHED, {
       error,

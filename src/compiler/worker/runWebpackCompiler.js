@@ -24,6 +24,17 @@ module.exports = function runWebpackCompiler({
   const { configPath, configOptions } = JSON.parse(options);
   const config = getConfig(configPath, configOptions, platform);
 
+  let lastPercent = -1;
+  config.plugins.push(
+    new webpack.ProgressPlugin(percent => {
+      const newPercent = percent.toFixed(2);
+      if (newPercent !== lastPercent) {
+        lastPercent = newPercent;
+        emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
+      }
+    })
+  );
+
   const compiler = webpack(config);
   // Use memory fs
   compiler.outputFileSystem = fs;

@@ -9,7 +9,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const haulProgressBar = require('./haulProgressBar');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
@@ -54,7 +53,6 @@ const getDefaultConfig = ({
   process.env.NODE_ENV = dev ? 'development' : 'production';
 
   // Getting Minor version
-  const platformProgressBar = haulProgressBar(platform);
   return {
     context: root,
     entry: [],
@@ -105,10 +103,6 @@ const getDefaultConfig = ({
        * This is needed so we can error on incorrect case
        */
       new CaseSensitivePathsPlugin(),
-
-      new webpack.ProgressPlugin(perc => {
-        platformProgressBar(platform, perc);
-      }),
 
       new webpack.DefinePlugin({
         /**

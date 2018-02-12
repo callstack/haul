@@ -11,6 +11,8 @@ const path = require('path');
 const clear = require('clear');
 
 const Compiler = require('../compiler/Compiler');
+const logger = require('../logger');
+const updateProgressBar = require('../utils/haulProgressBar');
 
 /**
  * Custom made middlewares
@@ -65,9 +67,13 @@ function createServer(config: { configPath: string, configOptions: Object }) {
 
   const { configPath, configOptions } = config;
 
-  const compiler = new Compiler({
+  const compiler = new Compiler(logger, {
     configPath,
     configOptions,
+  });
+
+  compiler.on(Compiler.Events.BUILD_PROGRESS, ({ progress, platform }) => {
+    updateProgressBar(platform, progress);
   });
 
   compiler.on(Compiler.Events.BUILD_FINISHED, () => {
