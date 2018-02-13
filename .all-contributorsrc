@@ -358,6 +358,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "czystyl",
+      "name": "Luke Czyszczonik",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10349378?v=4",
+      "profile": "https://github.com/czystyl",
+      "contributions": [
+        "code",
+        "example"
+      ]
     }
   ]
 }
