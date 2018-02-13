@@ -18,7 +18,9 @@ module.exports = function initUI(
 ) {
   const stdout = {
     write: process.stdout.write.bind(process.stdout),
+    // $FlowFixMe
     columns: process.stdout.columns,
+    // $FlowFixMe
     rows: Math.min(20, process.stdout.rows),
   };
 
@@ -46,7 +48,7 @@ function isCompilationInProgress(value) {
   return value >= 0 && value < 1;
 }
 
-class ServerUI extends React.Component {
+class ServerUI extends React.Component<*, *> {
   constructor(props) {
     super(props);
 
@@ -84,14 +86,19 @@ class ServerUI extends React.Component {
       }));
     });
 
-    this.props.compiler.on(Compiler.Events.BUILD_FINISHED, ({ platform }) => {
-      this.setState(state => ({
-        compilationProgress: {
-          ...state.compilationProgress,
-          [platform]: 1,
-        },
-      }));
-    });
+    this.props.compiler.on(
+      Compiler.Events.BUILD_FINISHED,
+      ({ platform, error }) => {
+        const errors = Array.isArray(error) ? error : [error];
+        this.setState(state => ({
+          compilationProgress: {
+            ...state.compilationProgress,
+            [platform]: 1,
+          },
+          errors: error ? errors : [],
+        }));
+      }
+    );
 
     this.props.logs.subscribe(message => {
       this.setState(state => ({
@@ -173,18 +180,7 @@ class ServerUI extends React.Component {
     return (
       <Text>
         <Text style={styles.errorsLabel}>error</Text>
-        {this.state.logs.length === 0 ? (
-          <Text style={{ color: 'ansi-gray', marginLeft: 2 }}>(empty)</Text>
-        ) : null}
-        {this.state.logs.map(item => (
-          <Text style={styles.logItem} key={item.id}>
-            <Text style={styles.logItemStatus(item.status)}>{item.status}</Text>
-            <Text style={styles.logItemMethod}>{item.method}</Text>
-            <Text style={styles.logItemPath}>{item.path}</Text>
-            <Text style={styles.logItemAdditionalInfo}>{item.length}b</Text>
-            <Text style={styles.logItemAdditionalInfo}>{item.time}ms</Text>
-          </Text>
-        ))}
+        <Text>{this.state.errors.join('\n')}</Text>
       </Text>
     );
   }
@@ -198,7 +194,7 @@ class ServerUI extends React.Component {
           {this._makeProgressBar('ios', 'iOS', 4)}
           {this._makeProgressBar('android', 'Android')}
         </Text>
-        {this.state.errors ? this._displayErrors() : this._displayLogs()}
+        {this.state.errors.length ? this._displayErrors() : this._displayLogs()}
       </Text>
     );
   }
