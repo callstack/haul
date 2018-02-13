@@ -8,7 +8,7 @@
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
-const { render, Text, ProgressBar } = require('react-stream-renderer'); // eslint-disable-line
+const { render, Text, ProgressBar } = require('react-stream-renderer');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 
