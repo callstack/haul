@@ -6,7 +6,6 @@
  */
 import type { Command } from '../types';
 
-const clear = require('clear');
 const inquirer = require('inquirer');
 
 const logger = require('../logger');
@@ -46,9 +45,6 @@ async function start(opts: *) {
     minify: opts.minify,
     port: opts.port,
   };
-
-  clear();
-  logger.done(`Haul ready at ${configOptions.port}`);
 
   createServer({
     configPath,

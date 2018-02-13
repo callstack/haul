@@ -50,16 +50,11 @@ module.exports = function runWebpackCompiler({
     emitter.emit(Events.BUILD_START);
     resolveAsync(args);
   });
-  // compiler.plugin('watch-run', (...args) => {
-  //   emitter.emit(Events.BUILD_START);
-  //   resolveAsync(args);
-  // });
-  // compiler.plugin('run', (...args) => {
-  //   emitter.emit(Events.BUILD_START);
-  //   resolveAsync(args);
-  // });
 
-  compiler.watch({}, () => {});
+  emitter.on('start', () => {
+    compiler.watch({}, () => {});
+    emitter.emit(Events.BUILD_START);
+  });
 
   return emitter;
 };

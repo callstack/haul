@@ -8,11 +8,12 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const clear = require('clear');
+// const clear = require('clear');
 
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
-const updateProgressBar = require('../utils/haulProgressBar');
+// const updateProgressBar = require('../utils/haulProgressBar');
+const initUI = require('./ui');
 
 /**
  * Custom made middlewares
@@ -25,7 +26,7 @@ const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
-const loggerMiddleware = require('./middleware/loggerMiddleware');
+// const loggerMiddleware = require('./middleware/loggerMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
@@ -72,13 +73,15 @@ function createServer(config: { configPath: string, configOptions: Object }) {
     configOptions,
   });
 
-  compiler.on(Compiler.Events.BUILD_PROGRESS, ({ progress, platform }) => {
-    updateProgressBar(platform, progress);
-  });
+  // compiler.on(Compiler.Events.BUILD_PROGRESS, ({ progress, platform }) => {
+  //   updateProgressBar(platform, progress);
+  // });
 
-  compiler.on(Compiler.Events.BUILD_FINISHED, () => {
-    clear();
-  });
+  // compiler.on(Compiler.Events.BUILD_FINISHED, () => {
+  //   clear();
+  // });
+
+  const loggerMiddleware = initUI(compiler, configOptions);
 
   process.on('uncaughtException', err => {
     compiler.terminate(err);

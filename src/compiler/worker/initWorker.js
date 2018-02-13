@@ -34,25 +34,29 @@ module.exports = function initWorker({
     );
   }
 
-  const compiler = runWebpackCompiler({
-    platform,
-    options,
-    fs,
-  });
-
-  compiler.on(Events.BUILD_START, () => {
-    send(Events.BUILD_START);
-  });
-
-  compiler.on(Events.BUILD_PROGRESS, payload => {
-    send(Events.BUILD_PROGRESS, payload);
-  });
-
-  compiler.on(Events.BUILD_FINISHED, ({ error, stats }) => {
-    send(Events.BUILD_FINISHED, {
-      error,
-      stats: stats ? stats.toJson() : null,
+  webSocket.on('open', () => {
+    const compiler = runWebpackCompiler({
+      platform,
+      options,
+      fs,
     });
+
+    compiler.on(Events.BUILD_START, () => {
+      send(Events.BUILD_START);
+    });
+
+    compiler.on(Events.BUILD_PROGRESS, payload => {
+      send(Events.BUILD_PROGRESS, payload);
+    });
+
+    compiler.on(Events.BUILD_FINISHED, ({ error, stats }) => {
+      send(Events.BUILD_FINISHED, {
+        error,
+        stats: stats ? stats.toJson() : null,
+      });
+    });
+
+    compiler.emit('start');
   });
 
   webSocket.on('message', data => {
