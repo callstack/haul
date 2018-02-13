@@ -42,7 +42,9 @@ const scriptURL = require('react-native').NativeModules.SourceCode.scriptURL; //
 // or Android device it will be `localhost:<port>` but when using real iOS device
 // it will be `<ip>.xip.io:<port>`. Thus the code below ensure we connect and download
 // manifest/hot-update from a valid origin.
-global.DEV_SERVER_ORIGIN = scriptURL.match(/(^.+)\/index/)[1];
+const match = scriptURL.match(/(^.+)\/index/);
+
+global.DEV_SERVER_ORIGIN = match ? match[1] : null;
 // Webpack's `publicPath` needs to be overwritten with `DEV_SERVER_ORIGIN` otherwise,
 // it would still make requests to (usually) `localhost`.
 __webpack_require__.p = `${global.DEV_SERVER_ORIGIN}/`; // eslint-disable-line no-undef
