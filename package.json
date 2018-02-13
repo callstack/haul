@@ -69,7 +69,7 @@
     "source-map": "^0.5.6",
     "strip-ansi": "^3.0.1",
     "thread-loader": "^1.1.1",
-    "webpack": "3.8.1",
+    "webpack": "^4.0.0-beta.1",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1",
     "ws": "^2.2.2"

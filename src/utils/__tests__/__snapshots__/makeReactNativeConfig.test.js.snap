@@ -8,6 +8,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -19,9 +20,6 @@ Array [
           "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
           "test": /\\\\\\.js\\$/,
           "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
             Object {
               "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
               "options": Object {
@@ -50,6 +48,9 @@ Array [
       ],
     },
     "name": "ios",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -97,6 +98,13 @@ Array [
       NamedModulesPlugin {
         "options": Object {},
       },
+      BannerPlugin {
+        "banner": "if (!this.self) { this.self = this; }",
+        "options": Object {
+          "banner": "if (!this.self) { this.self = this; }",
+          "raw": true,
+        },
+      },
     ],
     "resolve": Object {
       "alias": Object {
@@ -129,6 +137,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "./file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -140,9 +149,6 @@ Array [
           "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
           "test": /\\\\\\.js\\$/,
           "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
-            },
             Object {
               "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
               "options": Object {
@@ -171,6 +177,9 @@ Array [
       ],
     },
     "name": "android",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -218,6 +227,13 @@ Array [
       NamedModulesPlugin {
         "options": Object {},
       },
+      BannerPlugin {
+        "banner": "if (!this.self) { this.self = this; }",
+        "options": Object {
+          "banner": "if (!this.self) { this.self = this; }",
+          "raw": true,
+        },
+      },
     ],
     "resolve": Object {
       "alias": Object {
@@ -262,6 +278,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -272,6 +289,9 @@ Array [
       ],
     },
     "name": "ios",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.ios.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
@@ -287,6 +307,7 @@ Array [
       "<<REPLACED>>/utils/polyfillEnvironment.js",
       "/some/file.js",
     ],
+    "mode": "development",
     "module": Object {
       "rules": Array [
         Object {
@@ -297,6 +318,9 @@ Array [
       ],
     },
     "name": "android",
+    "optimization": Object {
+      "minimize": false,
+    },
     "output": Object {
       "filename": "index.android.bundle",
       "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
