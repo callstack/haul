@@ -5,12 +5,15 @@
  * @flow
  */
 
+const path = require('path');
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
 const { render, Text, ProgressBar } = require('react-stream-renderer');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
+
+const HEIGHT = process.stdout.rows;
 
 module.exports = function initUI(
   compiler: Compiler,
@@ -21,7 +24,7 @@ module.exports = function initUI(
     // $FlowFixMe
     columns: process.stdout.columns,
     // $FlowFixMe
-    rows: Math.min(20, process.stdout.rows),
+    rows: HEIGHT,
   };
 
   const logs = new Subject();
@@ -88,14 +91,13 @@ class ServerUI extends React.Component<*, *> {
 
     this.props.compiler.on(
       Compiler.Events.BUILD_FINISHED,
-      ({ platform, error }) => {
-        const errors = Array.isArray(error) ? error : [error];
+      ({ platform, errors }) => {
         this.setState(state => ({
           compilationProgress: {
             ...state.compilationProgress,
             [platform]: 1,
           },
-          errors: error ? errors : [],
+          errors,
         }));
       }
     );
@@ -163,7 +165,7 @@ class ServerUI extends React.Component<*, *> {
         {this.state.logs.length === 0 ? (
           <Text style={{ color: 'ansi-gray', marginLeft: 2 }}>(empty)</Text>
         ) : null}
-        {this.state.logs.map(item => (
+        {this.state.logs.slice(-HEIGHT + 10).map(item => (
           <Text style={styles.logItem} key={item.id}>
             <Text style={styles.logItemStatus(item.status)}>{item.status}</Text>
             <Text style={styles.logItemMethod}>{item.method}</Text>
@@ -177,10 +179,25 @@ class ServerUI extends React.Component<*, *> {
   }
 
   _displayErrors() {
+    console.log('ERROR', this.state.errors.join('\n'));
+
+    // This way of displaying errors is good enough for now,
+    // later down the road it would be better to create
+    // a scrollable container with fixed height, which will display errors.
+
     return (
       <Text>
         <Text style={styles.errorsLabel}>error</Text>
-        <Text>{this.state.errors.join('\n')}</Text>
+        <Text>
+          {this.state.errors[0]
+            .split('\n')
+            .slice(0, 2)
+            .join('\n')}
+        </Text>
+
+        <Text style={{ marginTop: 1, color: 'ansi-gray' }}>
+          (Full error description can be found in {path.resolve('stdout.log')})
+        </Text>
       </Text>
     );
   }

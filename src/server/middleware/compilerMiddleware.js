@@ -11,7 +11,6 @@ import type { Platform } from '../../types';
 const Compiler = require('../../compiler/Compiler');
 const getRequestDataFromPath = require('../util/getRequestDataFromPath');
 const runAdbReverse = require('../util/runAdbReverse');
-const logger = require('../../logger');
 
 type ConfigOptionsType = {
   root: string,
@@ -35,12 +34,11 @@ module.exports = function createCompilerMiddleware(
   options: MiddlewareOptions
 ) {
   function createCallback(response: $Response) {
-    return ({ error, platform, file, mimeType }) => {
-      if (error) {
-        logger.error(`${platform}:\n`, error);
+    return ({ errors, file, mimeType }) => {
+      if (errors) {
         response.type('text/javascript');
         response.status(500);
-        response.end(error);
+        response.end(errors[0]); // Send only the first error.
       } else {
         response.type(mimeType);
         response.send(file);

@@ -42,9 +42,14 @@ module.exports = class Compiler extends EventEmitter {
       // the bundle is created, otherwise simply request the file. Callback will be then invoked in
       // `FILE_RECEIVED` listener.
       if (this.forks[platform].isProcessing) {
-        this.forks[platform].once(Events.BUILD_FINISHED, ({ error }) => {
-          if (error) {
-            callback(error, platform, null, null);
+        this.forks[platform].once(Events.BUILD_FINISHED, ({ stats }) => {
+          if (stats.errors.length) {
+            callback({
+              errors: stats.errors,
+              platform,
+              mimeType: null,
+              file: null,
+            });
           } else {
             const taskId = this.tasks.add({ callback });
             this.forks[platform].send(Events.REQUEST_FILE, {
@@ -78,7 +83,7 @@ module.exports = class Compiler extends EventEmitter {
     fork.on(Events.FILE_RECEIVED, ({ file, taskId }) => {
       const { callback } = this.tasks.get(taskId);
       callback({
-        error: null,
+        errors: null,
         platform,
         file,
         mimeType: 'application/javascript',
@@ -90,7 +95,11 @@ module.exports = class Compiler extends EventEmitter {
     });
 
     fork.on(Events.BUILD_FINISHED, payload => {
-      this.emit(Events.BUILD_FINISHED, { platform, ...payload });
+      this.emit(Events.BUILD_FINISHED, {
+        platform,
+        ...payload,
+        errors: payload.stats.errors,
+      });
     });
 
     fork.on(Events.BUILD_PROGRESS, payload => {

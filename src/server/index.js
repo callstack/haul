@@ -8,11 +8,9 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-// const clear = require('clear');
 
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
-// const updateProgressBar = require('../utils/haulProgressBar');
 const initUI = require('./ui');
 
 /**
@@ -26,7 +24,6 @@ const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
-// const loggerMiddleware = require('./middleware/loggerMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
@@ -45,26 +42,6 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
  */
 function createServer(config: { configPath: string, configOptions: Object }) {
   const appHandler = express();
-  // const webpackMiddleware = webpackDevMiddleware(compiler, {
-  //   lazy: false,
-  //   noInfo: true,
-  //   reporter: null,
-  //   /**
-  //    * Quiet the default errors, we will handle error by our own
-  //    */
-  //   quiet: true,
-  //   stats: 'errors-only',
-  //   hot: true,
-  //   mimeTypes: { 'application/javascript': ['bundle'] },
-  //   headers: {
-  //     'Content-Type': 'application/javascript',
-  //     'Access-Control-Allow-Origin': '*',
-  //   },
-  //   watchOptions: {
-  //     aggregateTimeout: 300,
-  //     poll: 1000,
-  //   },
-  // });
 
   const { configPath, configOptions } = config;
 
@@ -72,14 +49,6 @@ function createServer(config: { configPath: string, configOptions: Object }) {
     configPath,
     configOptions,
   });
-
-  // compiler.on(Compiler.Events.BUILD_PROGRESS, ({ progress, platform }) => {
-  //   updateProgressBar(platform, progress);
-  // });
-
-  // compiler.on(Compiler.Events.BUILD_FINISHED, () => {
-  //   clear();
-  // });
 
   const loggerMiddleware = initUI(compiler, configOptions);
 

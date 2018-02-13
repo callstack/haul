@@ -41,7 +41,6 @@ module.exports = function runWebpackCompiler({
 
   compiler.plugin('done', stats => {
     emitter.emit(Events.BUILD_FINISHED, {
-      error: stats.hasErrors() ? stats.errors : null,
       stats,
     });
   });
