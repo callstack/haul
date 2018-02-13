@@ -12,3 +12,7 @@ yarn haul
 ```
 
 `yarn haul` command will run local Haul project root directory.
+
+## Building with xcode
+
+For building example with xcode you need to use `yarn link` because xcode get `haul` from local `node_modules` 
