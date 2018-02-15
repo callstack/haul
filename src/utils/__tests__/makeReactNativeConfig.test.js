@@ -13,6 +13,9 @@ import {
 } from '../makeReactNativeConfig';
 
 test('creates config from defaults', () => {
+  // We need to go one level higher because of read polyfills with fs.readFileSync
+  process.chdir(`${__dirname}/..`);
+
   const webpackConfig = require('./fixtures/webpack.config.js');
   const [configs, platforms] = makeReactNativeConfig(webpackConfig, {
     dev: true,
