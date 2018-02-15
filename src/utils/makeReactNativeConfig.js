@@ -128,35 +128,64 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
-    ].concat(
-      dev
-        ? [
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.EvalSourceMapDevToolPlugin({
-              module: true,
-            }),
-            new webpack.BannerPlugin({
-              banner: `
+    ]
+      .concat(
+        dev
+          ? [
+              new webpack.HotModuleReplacementPlugin(),
+              new webpack.EvalSourceMapDevToolPlugin({
+                module: true,
+              }),
+              new webpack.BannerPlugin({
+                banner: `
                 if (this && !this.self) { this.self = this; };
                 ${fs
                   .readFileSync('../../vendor/polyfills/Array.prototype.es6.js')
                   .toString()}
               `,
-              raw: true,
-            }),
-          ]
-        : [
-            /**
+                raw: true,
+              }),
+            ]
+          : [
+              /**
                * By default, sourcemaps are only generated with *.js files
                * We need to use the plugin to configure *.bundle (Android, iOS - development)
                * and *.jsbundle (iOS - production) to emit sourcemap
                */
-            new webpack.SourceMapDevToolPlugin({
-              test: /\.(js|css|(js)?bundle)($|\?)/i,
-              filename: '[file].map',
-            }),
-          ]
-    ),
+              new webpack.SourceMapDevToolPlugin({
+                test: /\.(js|css|(js)?bundle)($|\?)/i,
+                filename: '[file].map',
+              }),
+              new webpack.optimize.ModuleConcatenationPlugin(),
+            ]
+      )
+      .concat(
+        minify
+          ? [
+              new webpack.optimize.UglifyJsPlugin({
+                /**
+                 * By default, uglify only minifies *.js files
+                 * We need to use the plugin to configure *.bundle (Android, iOS - development) 
+                 * and *.jsbundle (iOS - production) to get minified. 
+                 * Also disable IE8 support as we don't need it.
+                 */
+                test: /\.(js|(js)?bundle)($|\?)/i,
+                sourceMap: true,
+                compress: {
+                  screw_ie8: true,
+                  warnings: false,
+                },
+                mangle: {
+                  screw_ie8: true,
+                },
+                output: {
+                  comments: false,
+                  screw_ie8: true,
+                },
+              }),
+            ]
+          : []
+      ),
     resolve: {
       alias:
         process.env.NODE_ENV === 'production'

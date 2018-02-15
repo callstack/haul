@@ -98,6 +98,13 @@ Array [
       NamedModulesPlugin {
         "options": Object {},
       },
+      BannerPlugin {
+        "banner": "if (!this.self) { this.self = this; }",
+        "options": Object {
+          "banner": "if (!this.self) { this.self = this; }",
+          "raw": true,
+        },
+      },
     ],
     "resolve": Object {
       "alias": Object {
@@ -219,6 +226,13 @@ Array [
       },
       NamedModulesPlugin {
         "options": Object {},
+      },
+      BannerPlugin {
+        "banner": "if (!this.self) { this.self = this; }",
+        "options": Object {
+          "banner": "if (!this.self) { this.self = this; }",
+          "raw": true,
+        },
       },
     ],
     "resolve": Object {
