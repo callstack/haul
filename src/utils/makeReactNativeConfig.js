@@ -8,6 +8,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const haulProgressBar = require('./haulProgressBar');
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -38,6 +39,8 @@ type WebpackConfig = {
   plugins: WebpackPlugin[],
   optimization: {
     minimize: boolean,
+    namedModules: boolean,
+    concatenateModules: boolean,
   },
 };
 
@@ -132,9 +135,13 @@ const getDefaultConfig = ({
             new webpack.EvalSourceMapDevToolPlugin({
               module: true,
             }),
-            new webpack.NamedModulesPlugin(),
             new webpack.BannerPlugin({
-              banner: 'if (!this.self) { this.self = this; }',
+              banner: `
+                if (this && !this.self) { this.self = this; };
+                ${fs
+                  .readFileSync('../../vendor/polyfills/Array.prototype.es6.js')
+                  .toString()}
+              `,
               raw: true,
             }),
           ]
@@ -148,7 +155,6 @@ const getDefaultConfig = ({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
             }),
-            new webpack.optimize.ModuleConcatenationPlugin(),
           ]
     ),
     resolve: {
@@ -185,6 +191,8 @@ const getDefaultConfig = ({
     },
     optimization: {
       minimize: !!minify,
+      namedModules: true,
+      concatenateModules: true,
     },
     /**
      * Set target to webworker as it's closer to RN environment than `web`.
