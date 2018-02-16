@@ -1,4 +1,7 @@
-# Configuration
+---
+id: configuration
+title: Configuration
+---
 
 The `webpack.haul.js` file is a webpack configuration used by `Haul`. The simplest config looks like this:
 

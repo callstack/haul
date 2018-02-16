@@ -1,4 +1,7 @@
-# Configuring your project
+---
+id: configuring_your_project
+title: Configuring Your Project
+---
 
 ## Integrating with Xcode
 

@@ -1,4 +1,7 @@
-# Haul HMR API
+---
+id: hmr_api
+title: Haul HMR API
+---
 
 ## Module `haul/hot/patch.js`
 
