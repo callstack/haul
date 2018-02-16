@@ -14,7 +14,8 @@ import {
 
 test('creates config from defaults', () => {
   // We need to go one level higher because of read polyfills with fs.readFileSync
-  process.chdir(`${__dirname}/..`);
+  const orginalPath = __dirname;
+  process.chdir(path.join(__dirname, '..'));
 
   const webpackConfig = require('./fixtures/webpack.config.js');
   const [configs, platforms] = makeReactNativeConfig(webpackConfig, {
@@ -24,9 +25,15 @@ test('creates config from defaults', () => {
 
   expect(replacePathsInObject(configs)).toMatchSnapshot('(configs)');
   expect(platforms).toMatchSnapshot('(platforms)');
+
+  process.chdir(orginalPath);
 });
 
 test('merges existing config', () => {
+  // We need to go one level higher because of read polyfills with fs.readFileSync
+  const orginalPath = __dirname;
+  process.chdir(path.join(__dirname, '..'));
+
   const webpackConfig = require('./fixtures/webpack.custom.config.js');
   const [configs] = makeReactNativeConfig(webpackConfig, {
     dev: true,
@@ -34,6 +41,8 @@ test('merges existing config', () => {
   });
 
   expect(replacePathsInObject(configs)).toMatchSnapshot();
+
+  process.chdir(orginalPath);
 });
 
 describe('injects polyfill into different entries', () => {
