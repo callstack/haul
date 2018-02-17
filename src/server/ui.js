@@ -150,9 +150,9 @@ class ServerUI extends React.Component<*, *> {
             marginLeft: '1',
           }}
         >
-          {isCompilationInProgress(this.state.compilationProgress[platform])
-            ? Math.floor(this.state.compilationProgress[platform] * 100)
-            : '0'}%
+          {Math.floor(
+            Math.max(this.state.compilationProgress[platform], 0) * 100
+          )}%
         </Text>
       </Text>
     );
