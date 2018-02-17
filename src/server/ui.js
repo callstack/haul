@@ -13,6 +13,7 @@ const { render, Text, ProgressBar } = require('react-stream-renderer');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 
+// $FlowFixMe
 const HEIGHT = process.stdout.rows;
 
 module.exports = function initUI(
@@ -23,7 +24,6 @@ module.exports = function initUI(
     write: process.stdout.write.bind(process.stdout),
     // $FlowFixMe
     columns: process.stdout.columns,
-    // $FlowFixMe
     rows: HEIGHT,
   };
 
