@@ -7,6 +7,7 @@
 
 import type { Platform } from '../types';
 
+const fs = require('fs');
 const EventEmitter = require('events');
 const Events = require('./events');
 const createForkProcess = require('./createForkProcess');
@@ -106,6 +107,13 @@ module.exports = class Fork extends EventEmitter {
     this.process.kill();
     if (this.socket) {
       this.socket.close();
+    }
+
+    if (transportServer) {
+      const socketAddress = transportServer.options.server.address();
+      if (fs.existsSync(socketAddress)) {
+        fs.unlinkSync(socketAddress);
+      }
     }
   }
 };

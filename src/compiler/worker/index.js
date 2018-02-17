@@ -20,6 +20,7 @@ const {
 if (
   !HAUL_PLATFORM ||
   !HAUL_OPTIONS ||
+  HAUL_OPTIONS.length <= 2 ||
   !HAUL_DIRECTORY ||
   !HAUL_SOCKET_ADDRESS
 ) {

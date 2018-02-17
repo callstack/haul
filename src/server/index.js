@@ -10,7 +10,6 @@ const http = require('http');
 const path = require('path');
 
 const Compiler = require('../compiler/Compiler');
-const logger = require('../logger');
 const initUI = require('./ui');
 
 /**
@@ -45,7 +44,7 @@ function createServer(config: { configPath: string, configOptions: Object }) {
 
   const { configPath, configOptions } = config;
 
-  const compiler = new Compiler(logger, {
+  const compiler = new Compiler({
     configPath,
     configOptions,
   });
@@ -53,15 +52,18 @@ function createServer(config: { configPath: string, configOptions: Object }) {
   const loggerMiddleware = initUI(compiler, configOptions);
 
   process.on('uncaughtException', err => {
-    compiler.terminate(err);
+    compiler.terminate();
+    throw err;
   });
 
   process.on('SIGINT', () => {
     compiler.terminate();
+    process.exit(0);
   });
 
   process.on('SIGTERM', () => {
     compiler.terminate();
+    process.exit(2);
   });
 
   const compilerMiddleware = createCompilerMiddleware(compiler, {
