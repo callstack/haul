@@ -143,7 +143,6 @@ function create(
     if (!consumer) return next();
 
     // the base directory
-    // $FlowFixMe
     const root = getConfig(configPath, configOptions, platform).context;
 
     // error error on the wall, who's the fairest stack of all?

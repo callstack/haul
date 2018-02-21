@@ -9,6 +9,7 @@ import type { Command } from '../types';
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
+const { DEFAULT_HAUL_CONFIG_FILE } = require('../constants');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
@@ -152,8 +153,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: 'Path to config file, eg. webpack.haul.js',
-      default: 'webpack.haul.js',
+      description: `Path to config file, eg. ${DEFAULT_HAUL_CONFIG_FILE}`,
+      default: DEFAULT_HAUL_CONFIG_FILE,
     },
   ],
 }: Command);

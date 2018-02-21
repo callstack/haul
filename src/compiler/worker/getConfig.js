@@ -16,6 +16,7 @@ module.exports = function getConfig(
 ) {
   let config;
   try {
+    // $FlowFixMe
     config = require(configPath);
   } catch (e) {
     throw new Error(

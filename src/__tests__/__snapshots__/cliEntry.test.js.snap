@@ -9,7 +9,7 @@ Options:
   --port [number]          Port to run your webpack server, 8081 by default
   --dev [true|false]       Whether to build in development mode, true by default
   --minify [true|false]    Whether to minify the bundle, 'true' by default when dev=false
-  --config [string]        Path to config file, eg. webpack.haul.js, webpack.haul.js by default"
+  --config [string]        Path to config file, eg. haul.config.js, haul.config.js by default"
 `;
 
 exports[`display help 1`] = `

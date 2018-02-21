@@ -12,6 +12,7 @@ const logger = require('../logger');
 const createServer = require('../server');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
+const { DEFAULT_HAUL_CONFIG_FILE } = require('../constants');
 
 /**
  * Starts development server
@@ -97,8 +98,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: 'Path to config file, eg. webpack.haul.js',
-      default: 'haul.config.js',
+      description: `Path to config file, eg. ${DEFAULT_HAUL_CONFIG_FILE}`,
+      default: DEFAULT_HAUL_CONFIG_FILE,
     },
   ],
 }: Command);

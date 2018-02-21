@@ -13,7 +13,7 @@ import {
 } from '../makeReactNativeConfig';
 
 test('creates config from defaults', () => {
-  const webpackConfig = require('./fixtures/webpack.config.js');
+  const webpackConfig = require('./fixtures/haul.config.js');
   const iosConfig = makeReactNativeConfig(
     webpackConfig,
     {
@@ -38,7 +38,7 @@ test('creates config from defaults', () => {
 });
 
 test('merges existing config', () => {
-  const webpackConfig = require('./fixtures/webpack.custom.config.js');
+  const webpackConfig = require('./fixtures/haul.config.custom.js');
   const config = makeReactNativeConfig(
     webpackConfig,
     {
