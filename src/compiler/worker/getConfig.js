@@ -14,10 +14,14 @@ module.exports = function getConfig(
   configOptions: any,
   platform: Platform
 ) {
-  return makeReactNativeConfig(
-    // $FlowFixMe
-    require(configPath),
-    configOptions,
-    platform
-  );
+  let config;
+  try {
+    config = require(configPath);
+  } catch (e) {
+    throw new Error(
+      'Haul configuration cannot be loaded. Have you provided valid JS file?'
+    );
+  }
+
+  return makeReactNativeConfig(config, configOptions, platform);
 };

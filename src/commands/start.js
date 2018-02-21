@@ -98,7 +98,7 @@ module.exports = ({
     {
       name: 'config',
       description: 'Path to config file, eg. webpack.haul.js',
-      default: 'webpack.haul.js',
+      default: 'haul.config.js',
     },
   ],
 }: Command);

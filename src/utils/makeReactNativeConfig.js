@@ -224,13 +224,19 @@ function makeReactNativeConfig(
   const defaultWebpackConfig = getDefaultConfig(env);
   const polyfillPath = require.resolve('./polyfillEnvironment.js');
 
-  const userConfig =
-    typeof userWebpackConfig === 'function'
-      ? userWebpackConfig(env, defaultWebpackConfig)
-      : userWebpackConfig;
+  /**
+  * Load config from file. Support both - "module.exports" and "export default {}"
+  */
+  const { webpack: webpackConfigFactory = null /* ...haulConfig */ } =
+    userWebpackConfig.default || userWebpackConfig;
 
-  const config = Object.assign({}, defaultWebpackConfig, userConfig, {
-    entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+  const webpackConfig =
+    typeof webpackConfigFactory === 'string'
+      ? webpackConfigFactory
+      : webpackConfigFactory(env);
+
+  const config = Object.assign({}, defaultWebpackConfig, webpackConfig, {
+    entry: injectPolyfillIntoEntry(webpackConfig.entry, polyfillPath),
     name: platform,
   });
 
@@ -270,4 +276,12 @@ function injectPolyfillIntoEntry(
   return userEntry;
 }
 
-module.exports = { makeReactNativeConfig, injectPolyfillIntoEntry };
+function createWebpackConfig(configBuilder) {
+  return env => configBuilder(env);
+}
+
+module.exports = {
+  makeReactNativeConfig,
+  injectPolyfillIntoEntry,
+  createWebpackConfig,
+};

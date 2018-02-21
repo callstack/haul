@@ -5,6 +5,7 @@
   "bin": {
     "haul": "./bin/cli.js"
   },
+  "main": "src/index.js",
   "scripts": {
     "precommit": "lint-staged",
     "flow": "flow --include-warnings",
