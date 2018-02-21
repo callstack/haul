@@ -8,6 +8,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const merge = require('lodash/merge');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -17,6 +18,9 @@ const getBabelConfig = require('./getBabelConfig');
 type ConfigOptions = {
   root: string,
   dev: boolean,
+  dev: boolean,
+  minify?: boolean,
+  bundle?: boolean,
 };
 
 type WebpackPlugin = {
@@ -35,9 +39,11 @@ type WebpackConfig = {
   plugins: WebpackPlugin[],
 };
 
-type WebpackConfigFactory =
-  | ((ConfigOptions, WebpackConfig) => WebpackConfig)
-  | WebpackConfig;
+type HaulConfig = {
+  webpack: ConfigOptions => WebpackConfig | WebpackConfig,
+};
+
+type WebpackConfigFactory = { default: HaulConfig };
 
 /**
  * Returns default config based on environment
@@ -227,7 +233,7 @@ function makeReactNativeConfig(
   /**
   * Load config from file. Support both - "module.exports" and "export default {}"
   */
-  const { webpack: webpackConfigFactory = null /* ...haulConfig */ } =
+  const { webpack: webpackConfigFactory /* ...haulConfig */ } =
     userWebpackConfig.default || userWebpackConfig;
 
   const webpackConfig =
@@ -235,7 +241,7 @@ function makeReactNativeConfig(
       ? webpackConfigFactory
       : webpackConfigFactory(env);
 
-  const config = Object.assign({}, defaultWebpackConfig, webpackConfig, {
+  const config = merge(defaultWebpackConfig, webpackConfig, {
     entry: injectPolyfillIntoEntry(webpackConfig.entry, polyfillPath),
     name: platform,
   });
@@ -276,8 +282,8 @@ function injectPolyfillIntoEntry(
   return userEntry;
 }
 
-function createWebpackConfig(configBuilder) {
-  return env => configBuilder(env);
+function createWebpackConfig(configBuilder: ConfigOptions => HaulConfig) {
+  return (options: ConfigOptions) => configBuilder(options);
 }
 
 module.exports = {
