@@ -55,7 +55,6 @@
     "image-size": "^0.5.1",
     "inquirer": "^3.0.6",
     "loader-utils": "^1.1.0",
-    "lodash.merge": "^4.6.1",
     "memory-fs": "^0.4.1",
     "minimist": "^1.2.0",
     "morgan": "^1.8.1",
@@ -97,10 +96,7 @@
     "traverse": "^0.6.6"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"]
   },
   "babel": {
     "presets": [
@@ -114,11 +110,7 @@
         }
       ]
     ],
-    "plugins": [
-      "transform-flow-strip-types",
-      "transform-object-rest-spread",
-      "transform-react-jsx"
-    ]
+    "plugins": ["transform-flow-strip-types", "transform-object-rest-spread", "transform-react-jsx"]
   },
   "eslintConfig": {
     "extends": "callstack-io",
@@ -142,9 +134,7 @@
         "import/no-extraneous-dependencies": [
           "error",
           {
-            "devDependencies": [
-              "**/integration_tests/**"
-            ]
+            "devDependencies": ["**/integration_tests/**"]
           }
         ]
       }
@@ -152,14 +142,10 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
-    "testPathIgnorePatterns": [
-      "/integration_tests/.*/__tests__"
-    ],
+    "testPathIgnorePatterns": ["/integration_tests/.*/__tests__"],
     "moduleNameMapper": {
       "^jest/(.*)": "<rootDir>/jest/$1"
     },
-    "testMatch": [
-      "**/*.test.js"
-    ]
+    "testMatch": ["**/*.test.js"]
   }
 }

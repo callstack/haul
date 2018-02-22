@@ -13,8 +13,8 @@ const { DEFAULT_HAUL_CONFIG_FILE } = require('../constants');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
-const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
-const getWebpackConfig = require('../utils/getWebpackConfig');
+const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
+const getConfig = require('../utils/getConfig');
 const logger = require('../logger');
 
 /**
@@ -22,17 +22,11 @@ const logger = require('../logger');
  */
 async function bundle(opts: *) {
   const directory = process.cwd();
-  const configPath = getWebpackConfig(directory, opts.config);
+  const configPath = getWebpackConfigPath(directory, opts.config);
 
-  const config = makeReactNativeConfig(
-    // $FlowFixMe: Dynamic require
-    require(configPath),
-    {
-      root: directory,
-      dev: opts.dev,
-      minify: opts.minify,
-      bundle: true,
-    },
+  const config = getConfig(
+    configPath,
+    { root: directory, dev: opts.dev, minify: opts.minify, bundle: true },
     opts.platform
   );
 

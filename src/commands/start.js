@@ -10,7 +10,7 @@ const inquirer = require('inquirer');
 
 const logger = require('../logger');
 const createServer = require('../server');
-const getWebpackConfig = require('../utils/getWebpackConfig');
+const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
 const { DEFAULT_HAUL_CONFIG_FILE } = require('../constants');
 
@@ -39,7 +39,7 @@ async function start(opts: *) {
   }
 
   const directory = process.cwd();
-  const configPath = getWebpackConfig(directory, opts.config);
+  const configPath = getWebpackConfigPath(directory, opts.config);
   const configOptions = {
     root: directory,
     dev: opts.dev,

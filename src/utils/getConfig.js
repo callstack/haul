@@ -5,9 +5,9 @@
  * @flow
  */
 
-import type { Platform } from '../../types';
+import type { Platform } from '../types';
 
-const { makeReactNativeConfig } = require('../../utils/makeReactNativeConfig');
+const { makeReactNativeConfig } = require('./makeReactNativeConfig');
 
 module.exports = function getConfig(
   configPath: string,
@@ -18,6 +18,7 @@ module.exports = function getConfig(
   try {
     // $FlowFixMe
     config = require(configPath);
+    config = config.__esModule ? config.default : config;
   } catch (e) {
     throw new Error(
       'Haul configuration cannot be loaded. Have you provided valid JS file?'

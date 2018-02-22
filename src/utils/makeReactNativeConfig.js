@@ -8,19 +8,20 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const merge = require('lodash.merge');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
 const getBabelConfig = require('./getBabelConfig');
 
+type Platform = 'ios' | 'android';
+
 type ConfigOptions = {
   root: string,
   dev: boolean,
-  dev: boolean,
   minify?: boolean,
   bundle?: boolean,
+  platform?: Platform,
 };
 
 type WebpackPlugin = {
@@ -224,17 +225,13 @@ const getDefaultConfig = ({
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
-  platform: 'ios' | 'android'
+  platform: Platform
 ) {
-  const env = Object.assign({}, options, { platform });
-  const defaultWebpackConfig = getDefaultConfig(env);
-  const polyfillPath = require.resolve('./polyfillEnvironment.js');
+  const env = { ...options, platform };
 
-  /**
-  * Load config from file. Support both - "module.exports" and "export default {}"
-  */
-  const { webpack: webpackConfigFactory /* ...haulConfig */ } =
-    userWebpackConfig.default || userWebpackConfig;
+  const {
+    webpack: webpackConfigFactory /* , ...haulConfig */,
+  } = userWebpackConfig;
 
   if (
     typeof webpackConfigFactory !== 'function' &&
@@ -248,12 +245,7 @@ function makeReactNativeConfig(
       ? webpackConfigFactory(env)
       : webpackConfigFactory;
 
-  const config = merge(defaultWebpackConfig, webpackConfig, {
-    entry: injectPolyfillIntoEntry(webpackConfig.entry, polyfillPath),
-    name: platform,
-  });
-
-  return config;
+  return webpackConfig;
 }
 
 /*
@@ -290,14 +282,31 @@ function injectPolyfillIntoEntry(
 }
 
 function createWebpackConfig(
-  configBuilder: ConfigOptions => HaulConfig | HaulConfig
+  configBuilder: (ConfigOptions => HaulConfig) | HaulConfig
 ) {
   return (options: ConfigOptions) => {
-    if (typeof configBuilder === 'function') {
-      return configBuilder(options);
-    }
+    const haulWebpackConfiguration =
+      typeof configBuilder === 'function'
+        ? configBuilder(options)
+        : configBuilder;
 
-    return configBuilder;
+    const defaultWebpackConfig = getDefaultConfig(options);
+
+    /** 
+     * Currently we support only "entry" field in config file
+     */
+    const { entry } = haulWebpackConfiguration;
+
+    const config = {
+      ...defaultWebpackConfig,
+      entry: injectPolyfillIntoEntry(
+        entry,
+        require.resolve('./polyfillEnvironment.js')
+      ),
+      name: options.platform,
+    };
+
+    return config;
   };
 }
 

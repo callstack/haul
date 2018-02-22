@@ -27,7 +27,7 @@ const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
 const fetch = require('node-fetch');
 const Compiler = require('../../compiler/Compiler');
-const getConfig = require('../../compiler/worker/getConfig');
+const getConfig = require('../../utils/getConfig');
 const messages = require('../../messages');
 const logger = require('../../logger');
 
