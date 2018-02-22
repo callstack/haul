@@ -236,6 +236,13 @@ function makeReactNativeConfig(
   const { webpack: webpackConfigFactory /* ...haulConfig */ } =
     userWebpackConfig.default || userWebpackConfig;
 
+  if (
+    typeof webpackConfigFactory !== 'function' ||
+    typeof webpackConfigFactory !== 'string'
+  ) {
+    throw new Error('You have provided a wrong Webpack configuration.');
+  }
+
   const webpackConfig =
     typeof webpackConfigFactory === 'string'
       ? webpackConfigFactory
@@ -282,8 +289,16 @@ function injectPolyfillIntoEntry(
   return userEntry;
 }
 
-function createWebpackConfig(configBuilder: ConfigOptions => HaulConfig) {
-  return (options: ConfigOptions) => configBuilder(options);
+function createWebpackConfig(
+  configBuilder: ConfigOptions => HaulConfig | HaulConfig
+) {
+  return (options: ConfigOptions) => {
+    if (typeof configBuilder === 'function') {
+      return configBuilder(options);
+    }
+
+    return configBuilder;
+  };
 }
 
 module.exports = {
