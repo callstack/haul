@@ -102,15 +102,13 @@ const Features = props => (
     {[
       {
         content: 'Replaces React Native packager to bundle your app',
-        // TODO: RN logo
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('react-native-logo.svg'),
         imageAlign: 'top',
         title: 'Drop-In Replacement for Metro',
       },
       {
         content: 'Use Webpack and Babel like you would on the web',
-        // TODO: Webpack + Babel logos
-        image: imgUrl('docusaurus.svg'),
+        image: imgUrl('webpack-logo.png'),
         imageAlign: 'top',
         title: 'Familiar Web Tooling',
       },
@@ -118,64 +116,7 @@ const Features = props => (
   </Block>
 );
 
-const FeatureCallout = props => (
-  <div
-    className="productShowcaseSection paddingBottom"
-    style={{textAlign: 'center'}}>
-    <h2>Feature Callout</h2>
-    <MarkdownBlock>
-      Does markdown work?
-    </MarkdownBlock>
-
-    <MarkdownBlock>
-      ```
-      // TODO: features here
-      ```
-    </MarkdownBlock>
-  </div>
-);
-
-const LearnHow = props => (
-  <Block background="light">
-    {[
-      {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Learn How',
-      },
-    ]}
-  </Block>
-);
-
-const TryOut = props => (
-  <Block id="try">
-    {[
-      {
-        content: 'Talk about trying this out',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'left',
-        title: 'Try it Out',
-      },
-    ]}
-  </Block>
-);
-
-const Description = props => (
-  <Block background="dark">
-    {[
-      {
-        content: 'This is another description of how this project is useful',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Description',
-      },
-    ]}
-  </Block>
-);
-
 const Showcase = props => {
-  // TODO: add... users
   if ((siteConfig.users || []).length === 0) {
     return null;
   }
@@ -214,7 +155,6 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
           <Showcase language={language} />
         </div>
       </div>

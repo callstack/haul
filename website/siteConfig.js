@@ -9,9 +9,15 @@
 const users = [
   {
     caption: 'Callstack',
-    image: '/haul/img/docusaurus.svg',
+    image: '/haul/img/callstack.png',
     infoLink: 'https://blog.callstack.io',
     pinned: true,
+  },
+  {
+    caption: 'Rally Health',
+    image: '/haul/img/rally-logo.svg',
+    infoLink: 'http://engineering.rallyhealth.com/',
+    pinned: false,
   },
 ];
 
@@ -33,8 +39,8 @@ const siteConfig = {
   /* colors for website */
   colors: {
     // TODO: colors
-    primaryColor: '#2E8555',
-    secondaryColor: '#205C3B',
+    primaryColor: '#CC8445',
+    secondaryColor: '#F7BA74',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
   copyright:

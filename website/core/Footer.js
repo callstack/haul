@@ -48,35 +48,24 @@ class Footer extends React.Component {
               User Showcase
             </a>
             <a
-              // TODO: haul tags
-              href="http://stackoverflow.com/questions/tagged/"
+              href="http://stackoverflow.com/questions/tagged/haul"
               target="_blank">
               Stack Overflow
             </a>
-            {
-              // TODO: haul chat?
-            }
-            <a href="https://discordapp.com/">Project Chat</a>
-            {
-              // TODO: haul twitter?
-            }
-            <a href="https://twitter.com/" target="_blank">
+            <a
+              href="https://slack.callstack.com/"
+              target="_blank">
+              Project Chat
+            </a>
+            <a
+              href="https://twitter.com/callstackio"
+              target="_blank">
               Twitter
             </a>
           </div>
           <div>
             <h5>More</h5>
             <a href={this.props.config.repoUrl}>GitHub</a>
-            <a
-              className="github-button"
-              href={this.props.config.repoUrl}
-              data-icon="octicon-star"
-              data-count-href="/facebook/docusaurus/stargazers"
-              data-show-count={true}
-              data-count-aria-label="# stargazers on GitHub"
-              aria-label="Star this project on GitHub">
-              Star
-            </a>
           </div>
         </section>
         <section className="copyright">
