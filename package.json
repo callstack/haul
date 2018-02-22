@@ -55,7 +55,7 @@
     "image-size": "^0.5.1",
     "inquirer": "^3.0.6",
     "loader-utils": "^1.1.0",
-    "lodash": "^4.17.5",
+    "lodash.merge": "^4.6.1",
     "memory-fs": "^0.4.1",
     "minimist": "^1.2.0",
     "morgan": "^1.8.1",

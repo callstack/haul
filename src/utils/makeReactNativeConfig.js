@@ -8,7 +8,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const merge = require('lodash/merge');
+const merge = require('lodash.merge');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -237,16 +237,16 @@ function makeReactNativeConfig(
     userWebpackConfig.default || userWebpackConfig;
 
   if (
-    typeof webpackConfigFactory !== 'function' ||
-    typeof webpackConfigFactory !== 'string'
+    typeof webpackConfigFactory !== 'function' &&
+    typeof webpackConfigFactory !== 'object'
   ) {
     throw new Error('You have provided a wrong Webpack configuration.');
   }
 
   const webpackConfig =
-    typeof webpackConfigFactory === 'string'
-      ? webpackConfigFactory
-      : webpackConfigFactory(env);
+    typeof webpackConfigFactory === 'function'
+      ? webpackConfigFactory(env)
+      : webpackConfigFactory;
 
   const config = merge(defaultWebpackConfig, webpackConfig, {
     entry: injectPolyfillIntoEntry(webpackConfig.entry, polyfillPath),
