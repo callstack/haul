@@ -8,9 +8,8 @@
 const path = require('path');
 const WebSocket = require('ws');
 const MemoryFileSystem = require('memory-fs');
-
-const Events = global.requireWithRootDir('../events');
-const runWebpackCompiler = global.requireWithRootDir('./runWebpackCompiler');
+const Events = require('../events');
+const runWebpackCompiler = require('./runWebpackCompiler');
 
 module.exports = function initWorker({
   platform,

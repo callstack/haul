@@ -7,11 +7,8 @@
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
-
-// TODO: Create better helper function for this case?
 const getConfig = require('../../utils/getConfig');
-
-const Events = global.requireWithRootDir('../events');
+const Events = require('../events');
 
 module.exports = function runWebpackCompiler({
   platform,
