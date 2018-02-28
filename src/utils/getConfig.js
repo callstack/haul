@@ -5,18 +5,19 @@
  * @flow
  */
 
-import type { Platform } from '../types';
+import type { Platform, Logger } from '../types';
 
 const { makeReactNativeConfig } = require('./makeReactNativeConfig');
 
 module.exports = function getConfig(
   configPath: string,
   configOptions: any,
-  platform: Platform
+  platform: Platform,
+  logger: Logger
 ) {
   // $FlowFixMe
   let config = require(configPath);
   config = config.__esModule ? config.default : config;
 
-  return makeReactNativeConfig(config, configOptions, platform);
+  return makeReactNativeConfig(config, configOptions, platform, logger);
 };

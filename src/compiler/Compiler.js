@@ -9,6 +9,7 @@ import type { Platform } from '../types';
 
 const EventEmitter = require('events');
 const Events = require('./events');
+const logger = require('../logger');
 const Fork = require('./Fork');
 const TaskQueue = require('./TaskQueue');
 
@@ -86,6 +87,12 @@ module.exports = class Compiler extends EventEmitter {
         file,
         mimeType: 'application/javascript',
       });
+    });
+
+    fork.on(Events.LOG, ({ message, logger: type }) => {
+      logger[type] && logger[type](message);
+
+      this.emit(Events.BUILD_START, { platform, message, logger });
     });
 
     fork.on(Events.BUILD_START, payload => {
