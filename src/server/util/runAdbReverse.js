@@ -26,7 +26,7 @@ module.exports = function runAdbReverse(port: number) {
       );
       return;
     }
-    logger.info(
+    logger.done(
       messages.commandSuccess({
         command,
       })

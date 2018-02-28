@@ -12,28 +12,45 @@ const { Subject } = require('rxjs');
 const { render, Text, ProgressBar } = require('react-stream-renderer');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
+const logger = require('../logger');
 
 // $FlowFixMe
 const HEIGHT = process.stdout.rows;
 
+/**
+ * Create and render React-powered UI for Haul packager server.
+ * Returns a logger middleware for express.
+ * 
+ * Warning: contains side effects: clears screen and renders an app + overwrites logger.
+ */
 module.exports = function initUI(
   compiler: Compiler,
   { port }: { port: number }
 ) {
-  const stdout = {
-    write: process.stdout.write.bind(process.stdout),
-    // $FlowFixMe
-    columns: process.stdout.columns,
-    rows: HEIGHT,
-  };
-
+  let nextId = 0;
   const logs = new Subject();
 
-  render(<ServerUI port={port} compiler={compiler} logs={logs} />, stdout, {
-    hideCursor: true,
+  // Logger's methods need to be overwriten with custom React-aware implmenetion,
+  // so the logs get nicely displayed in approperiate section.
+  Object.keys(logger).forEach(key => {
+    logger[key] = (...args) => {
+      logs.next({
+        issuer: 'haul',
+        id: nextId++,
+        type: key,
+        body: args,
+      });
+    };
   });
 
-  let nextId = 0;
+  render(
+    <ServerUI port={port} compiler={compiler} logs={logs} />,
+    process.stdout,
+    {
+      hideCursor: true,
+    }
+  );
+
   return morgan((tokens, req, res) => {
     const message = {
       id: nextId++,
@@ -43,7 +60,10 @@ module.exports = function initUI(
       length: tokens.res(req, res, 'content-length'),
       time: tokens['response-time'](req, res),
     };
-    logs.next(message);
+    logs.next({
+      issuer: 'express',
+      body: message,
+    });
   });
 };
 
@@ -102,9 +122,9 @@ class ServerUI extends React.Component<*, *> {
       }
     );
 
-    this.props.logs.subscribe(message => {
+    this.props.logs.subscribe(next => {
       this.setState(state => ({
-        logs: [...state.logs, message],
+        logs: [...state.logs, next],
       }));
     });
   }
@@ -158,6 +178,27 @@ class ServerUI extends React.Component<*, *> {
     );
   }
 
+  _makeExpressLog(body: Object) {
+    return (
+      <Text style={styles.logItem} key={body.id}>
+        <Text style={styles.logItemStatus(body.status)}>{body.status}</Text>
+        <Text style={styles.logItemMethod}>{body.method}</Text>
+        <Text style={styles.logItemPath}>{body.path}</Text>
+        <Text style={styles.logItemAdditionalInfo}>{body.length}b</Text>
+        <Text style={styles.logItemAdditionalInfo}>{body.time}ms</Text>
+      </Text>
+    );
+  }
+
+  _makeHaulLog(type: string, id: number, body: any[]) {
+    return (
+      <Text style={styles.logItem} key={id}>
+        <Text style={styles.haulLogItemType(type)}>{type}</Text>
+        {body.join(' ').replace(/\n$/g, '')}
+      </Text>
+    );
+  }
+
   _displayLogs() {
     return (
       <Text>
@@ -165,15 +206,14 @@ class ServerUI extends React.Component<*, *> {
         {this.state.logs.length === 0 ? (
           <Text style={{ color: 'ansi-gray', marginLeft: 2 }}>(empty)</Text>
         ) : null}
-        {this.state.logs.slice(-HEIGHT + 10).map(item => (
-          <Text style={styles.logItem} key={item.id}>
-            <Text style={styles.logItemStatus(item.status)}>{item.status}</Text>
-            <Text style={styles.logItemMethod}>{item.method}</Text>
-            <Text style={styles.logItemPath}>{item.path}</Text>
-            <Text style={styles.logItemAdditionalInfo}>{item.length}b</Text>
-            <Text style={styles.logItemAdditionalInfo}>{item.time}ms</Text>
-          </Text>
-        ))}
+        {this.state.logs
+          .slice(-HEIGHT + 10)
+          .map(
+            item =>
+              item.issuer === 'express'
+                ? this._makeExpressLog(item.body)
+                : this._makeHaulLog(item.type, item.id, item.body)
+          )}
       </Text>
     );
   }
@@ -245,6 +285,34 @@ const styles = {
   },
   logItem: {
     marginLeft: 2,
+  },
+  haulLogItemType(type) {
+    let color = '';
+    switch (type) {
+      default:
+      case 'info':
+        color = 'ansi-white';
+        break;
+      case 'error':
+        color = 'ansi-red';
+        break;
+      case 'warn':
+        color = 'ansi-yellow';
+        break;
+      case 'done':
+        color = 'ansi-green';
+        break;
+      case 'debug':
+        color = 'ansi-gray';
+        break;
+    }
+
+    return {
+      marginRight: 1,
+      textTransform: 'uppercase',
+      display: 'inline',
+      color,
+    };
   },
   logItemStatus(status) {
     return {
