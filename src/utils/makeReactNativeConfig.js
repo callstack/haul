@@ -268,7 +268,10 @@ function makeReactNativeConfig(
    *   entry: `./index.${platform}.js`,
    * });
    */
-  if (!Object.prototype.hasOwnProperty.call(userWebpackConfig, 'webpack')) {
+  const isLegacy =
+    typeof userWebpackConfig === 'function' || !userWebpackConfig.webpack;
+
+  if (isLegacy) {
     logger.warn(
       'You using deprecated style of the configuration. Please follow the docs to the upgrade.'
     );
