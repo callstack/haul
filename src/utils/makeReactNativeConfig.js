@@ -6,17 +6,16 @@
  */
 /* eslint-disable no-param-reassign */
 
+import type { Platform, Logger } from '../types';
+
 const webpack = require('webpack');
 const path = require('path');
-const logger = require('../logger');
 
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
 const getBabelConfig = require('./getBabelConfig');
-
-type Platform = 'ios' | 'android';
 
 type ConfigOptions = {
   root: string,
@@ -255,7 +254,8 @@ function DEPRECATEDMakeReactNativeConfig(
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
-  platform: Platform
+  platform: Platform,
+  logger: Logger
 ) {
   /**
    * We should support also the old format of config
@@ -273,7 +273,7 @@ function makeReactNativeConfig(
 
   if (isLegacy) {
     logger.warn(
-      'You using deprecated style of the configuration. Please follow the docs to the upgrade.'
+      'You using a deprecated style of the configuration. Please follow the docs for the upgrade.'
     );
 
     return DEPRECATEDMakeReactNativeConfig(
@@ -293,7 +293,9 @@ function makeReactNativeConfig(
     typeof webpackConfigFactory !== 'function' &&
     typeof webpackConfigFactory !== 'object'
   ) {
-    throw new Error('You have provided a wrong Webpack configuration.');
+    throw new Error(
+      'The webpack configuration must be an object or a function returning an object.'
+    );
   }
 
   const webpackConfig =
