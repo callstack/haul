@@ -14,16 +14,9 @@ module.exports = function getConfig(
   configOptions: any,
   platform: Platform
 ) {
-  let config;
-  try {
-    // $FlowFixMe
-    config = require(configPath);
-    config = config.__esModule ? config.default : config;
-  } catch (e) {
-    throw new Error(
-      'Haul configuration cannot be loaded. Have you provided valid JS file?'
-    );
-  }
+  // $FlowFixMe
+  let config = require(configPath);
+  config = config.__esModule ? config.default : config;
 
   return makeReactNativeConfig(config, configOptions, platform);
 };
