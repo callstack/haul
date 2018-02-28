@@ -8,6 +8,8 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const logger = require('../logger');
+
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -218,6 +220,34 @@ const getDefaultConfig = ({
   };
 };
 
+/** 
+ * Return React Native config
+ * 
+ * @deprecated
+*/
+function DEPRECATEDMakeReactNativeConfig(
+  userWebpackConfig: WebpackConfigFactory,
+  options: ConfigOptions,
+  platform: Platform
+) {
+  const env = { ...options, platform };
+
+  const defaultWebpackConfig = getDefaultConfig(env);
+  const polyfillPath = require.resolve('./polyfillEnvironment.js');
+
+  const userConfig =
+    typeof userWebpackConfig === 'function'
+      ? userWebpackConfig(env, defaultWebpackConfig)
+      : userWebpackConfig;
+
+  const config = Object.assign({}, defaultWebpackConfig, userConfig, {
+    entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+    name: platform,
+  });
+
+  return config;
+}
+
 /**
  * Creates an array of configs based on changing `env` for every
  * platform and returns
@@ -227,6 +257,29 @@ function makeReactNativeConfig(
   options: ConfigOptions,
   platform: Platform
 ) {
+  /**
+   * We should support also the old format of config
+   * 
+   * module.exports = {
+   *   entry: './index.js',
+   * };
+   * 
+   * module.exports = ({ platform }) => ({
+   *   entry: `./index.${platform}.js`,
+   * });
+   */
+  if (!Object.prototype.hasOwnProperty.call(userWebpackConfig, 'webpack')) {
+    logger.warn(
+      'You using deprecated style of the configuration. Please follow the docs to the upgrade.'
+    );
+
+    return DEPRECATEDMakeReactNativeConfig(
+      userWebpackConfig,
+      options,
+      platform
+    );
+  }
+
   const env = { ...options, platform };
 
   const {
