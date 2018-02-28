@@ -22,7 +22,24 @@ module.exports = function runWebpackCompiler({
   const emitter = new EventEmitter();
 
   const { configPath, configOptions } = JSON.parse(options);
-  const config = getConfig(configPath, configOptions, platform);
+
+  /**
+   * Proxy based on Logger.js 
+   */
+  const loggerProxy = new Proxy(
+    {},
+    {
+      get: function get(object, logger) {
+        return new Proxy(() => {}, {
+          apply: (target, that, [message]) => {
+            setImmediate(() => emitter.emit(Events.LOG, { message, logger }));
+          },
+        });
+      },
+    }
+  );
+
+  const config = getConfig(configPath, configOptions, platform, loggerProxy);
 
   let lastPercent = -1;
   config.plugins.push(

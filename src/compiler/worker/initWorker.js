@@ -45,6 +45,10 @@ module.exports = function initWorker({
       send(Events.BUILD_START);
     });
 
+    compiler.on(Events.LOG, payload => {
+      send(Events.LOG, payload);
+    });
+
     compiler.on(Events.BUILD_PROGRESS, payload => {
       send(Events.BUILD_PROGRESS, payload);
     });

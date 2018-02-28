@@ -4,17 +4,18 @@
  * 
  * @flow
  */
-import type { Logger } from '../types';
+import type { Platform, Logger } from '../types';
 
 const path = require('path');
 const { createWebpackConfig } = require('../index');
+
 const { makeReactNativeConfig } = require('./makeReactNativeConfig');
 
 module.exports = function getConfig(
   configPath: string,
   configOptions: any,
-  platform: string,
-  logger?: Logger
+  platform: Platform,
+  logger: Logger
 ) {
   let config;
 
