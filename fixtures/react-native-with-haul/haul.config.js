@@ -1,7 +1,7 @@
 import { createWebpackConfig } from 'haul';
 
 export default {
-  webpack: createWebpackConfig(({ platform }) => ({
+  webpack: createWebpackConfig(() => ({
     entry: `./index.js`,
   })),
 };
