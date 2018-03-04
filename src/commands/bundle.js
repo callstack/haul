@@ -9,7 +9,7 @@ import type { Command } from '../types';
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
-const { DEFAULT_HAUL_CONFIG_FILE } = require('../constants');
+const { DEFAULT_CONFIG_FILE_PATH } = require('../constants');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
@@ -27,7 +27,8 @@ async function bundle(opts: *) {
   const config = getConfig(
     configPath,
     { root: directory, dev: opts.dev, minify: opts.minify, bundle: true },
-    opts.platform
+    opts.platform,
+    logger
   );
 
   if (opts.assetsDest) {
@@ -147,8 +148,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: `Path to config file, eg. ${DEFAULT_HAUL_CONFIG_FILE}`,
-      default: DEFAULT_HAUL_CONFIG_FILE,
+      description: `Path to config file, eg. ${DEFAULT_CONFIG_FILE_PATH}`,
+      default: DEFAULT_CONFIG_FILE_PATH,
     },
   ],
 }: Command);

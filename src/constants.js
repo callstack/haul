@@ -1,3 +1,4 @@
 module.exports = {
-  DEFAULT_HAUL_CONFIG_FILE: 'haul.config.js',
+  DEFAULT_CONFIG_FILE_PATH: 'haul.config.js',
+  DEFAULT_PORT: 8081,
 };
