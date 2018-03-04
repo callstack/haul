@@ -143,7 +143,7 @@ function create(
     if (!consumer) return next();
 
     // the base directory
-    const root = getConfig(configPath, configOptions, platform).context;
+    const root = getConfig(configPath, configOptions, platform, logger).context;
 
     // error error on the wall, who's the fairest stack of all?
     const convertedFrames = unconvertedFrames.map(

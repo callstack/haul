@@ -6,7 +6,7 @@
  */
 /* eslint-disable no-param-reassign */
 
-import type { Platform, Logger } from '../types';
+import type { Logger } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -16,14 +16,21 @@ const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('../utils/resolveModule');
 const getBabelConfig = require('./getBabelConfig');
+const loggerUtil = require('../logger');
+const { DEFAULT_PORT } = require('../constants');
 
-type ConfigOptions = {
+type ConfigOptions = {|
   root: string,
   dev: boolean,
   minify?: boolean,
   bundle?: boolean,
-  platform?: Platform,
-};
+  port?: number,
+|};
+
+type EnvOptions = {|
+  ...ConfigOptions,
+  platform: string,
+|};
 
 type WebpackPlugin = {
   apply: (typeof webpack) => void,
@@ -39,13 +46,15 @@ type WebpackConfig = {
   },
   name?: string,
   plugins: WebpackPlugin[],
+  context: string,
 };
 
-type HaulConfig = {
-  webpack: ConfigOptions => WebpackConfig | WebpackConfig,
-};
+type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
 
-type WebpackConfigFactory = { default: HaulConfig };
+type DEPRECATEDWebpackConfigFactory = (
+  EnvOptions,
+  WebpackConfig
+) => WebpackConfig | WebpackConfig;
 
 /**
  * Returns default config based on environment
@@ -67,7 +76,7 @@ const getDefaultConfig = ({
     output: {
       path: path.join(root), // removed 'dist' from path
       filename: `index.${platform}.bundle`,
-      publicPath: `http://localhost:${port}/`,
+      publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },
     module: {
       rules: [
@@ -225,11 +234,20 @@ const getDefaultConfig = ({
  * @deprecated
 */
 function DEPRECATEDMakeReactNativeConfig(
-  userWebpackConfig: WebpackConfigFactory,
+  userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
-  platform: Platform
+  platform: string
 ) {
-  const env = { ...options, platform };
+  const { root, dev, minify, bundle, port } = options;
+
+  const env = {
+    root,
+    dev,
+    minify,
+    platform,
+    bundle,
+    port,
+  };
 
   const defaultWebpackConfig = getDefaultConfig(env);
   const polyfillPath = require.resolve('./polyfillEnvironment.js');
@@ -254,9 +272,9 @@ function DEPRECATEDMakeReactNativeConfig(
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
-  platform: Platform,
-  logger: Logger
-) {
+  platform: string,
+  logger: Logger = loggerUtil
+): WebpackConfig {
   /**
    * We should support also the old format of config
    * 
@@ -283,7 +301,16 @@ function makeReactNativeConfig(
     );
   }
 
-  const env = { ...options, platform };
+  const { root, dev, minify, bundle, port } = options;
+
+  const env = {
+    root,
+    dev,
+    minify,
+    platform,
+    bundle,
+    port,
+  };
 
   const {
     webpack: webpackConfigFactory /* , ...haulConfig */,
@@ -339,10 +366,8 @@ function injectPolyfillIntoEntry(
   return userEntry;
 }
 
-function createWebpackConfig(
-  configBuilder: (ConfigOptions => HaulConfig) | HaulConfig
-) {
-  return (options: ConfigOptions) => {
+function createWebpackConfig(configBuilder: WebpackConfigFactory) {
+  return (options: EnvOptions) => {
     const haulWebpackConfiguration =
       typeof configBuilder === 'function'
         ? configBuilder(options)

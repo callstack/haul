@@ -17,57 +17,67 @@ module.exports = function runWebpackCompiler({
 }: {
   [key: string]: string,
   fs: Object,
+  platform: string,
 }) {
   const emitter = new EventEmitter();
 
   const { configPath, configOptions } = JSON.parse(options);
 
-  /**
-   * Proxy based on Logger.js 
+  function startCompiler() {
+    /**
+   * Proxy based on Logger.js
    */
-  const loggerProxy = new Proxy(
-    {},
-    {
-      get: function get(object, logger) {
-        return new Proxy(() => {}, {
-          apply: (target, that, [message]) => {
-            setImmediate(() => emitter.emit(Events.LOG, { message, logger }));
-          },
-        });
+    const loggerProxy = {
+      info: message => {
+        emitter.emit(Events.LOG, { message, logger: 'info' });
       },
-    }
-  );
+      warn: message => {
+        emitter.emit(Events.LOG, { message, logger: 'warn' });
+      },
+      error: message => {
+        emitter.emit(Events.LOG, { message, logger: 'error' });
+      },
+      done: message => {
+        emitter.emit(Events.LOG, { message, logger: 'done' });
+      },
+      debug: message => {
+        emitter.emit(Events.LOG, { message, logger: 'debug' });
+      },
+    };
 
-  const config = getConfig(configPath, configOptions, platform, loggerProxy);
+    const config = getConfig(configPath, configOptions, platform, loggerProxy);
 
-  let lastPercent = -1;
-  config.plugins.push(
-    new webpack.ProgressPlugin(percent => {
-      const newPercent = percent.toFixed(2);
-      if (newPercent !== lastPercent) {
-        lastPercent = newPercent;
-        emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
-      }
-    })
-  );
+    let lastPercent = -1;
+    config.plugins.push(
+      new webpack.ProgressPlugin(percent => {
+        const newPercent = percent.toFixed(2);
+        if (newPercent !== lastPercent) {
+          lastPercent = newPercent;
+          emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
+        }
+      })
+    );
 
-  const compiler = webpack(config);
-  // Use memory fs
-  compiler.outputFileSystem = fs;
+    const compiler = webpack(config);
+    // Use memory fs
+    compiler.outputFileSystem = fs;
 
-  compiler.plugin('done', stats => {
-    emitter.emit(Events.BUILD_FINISHED, {
-      stats,
+    compiler.plugin('done', stats => {
+      emitter.emit(Events.BUILD_FINISHED, {
+        stats,
+      });
     });
-  });
 
-  compiler.plugin('invalid', (...args) => {
-    emitter.emit(Events.BUILD_START);
-    resolveAsync(args);
-  });
+    compiler.plugin('invalid', (...args) => {
+      emitter.emit(Events.BUILD_START);
+      resolveAsync(args);
+    });
+
+    compiler.watch({}, () => {});
+  }
 
   emitter.on('start', () => {
-    compiler.watch({}, () => {});
+    startCompiler();
     emitter.emit(Events.BUILD_START);
   });
 

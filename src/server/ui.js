@@ -100,6 +100,10 @@ class ServerUI extends React.Component<*, *> {
       }
     );
 
+    this.props.compiler.on(Compiler.Events.LOG, ({ message, logger: type }) => {
+      logger[type] && logger[type](message);
+    });
+
     this.props.compiler.on(Compiler.Events.BUILD_START, ({ platform }) => {
       this.setState(state => ({
         forkStatus: {

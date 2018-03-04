@@ -14,7 +14,7 @@ type Request = {
 
 type Options = {
   test?: RegExp,
-  platform: 'ios' | 'android',
+  platform: string,
 };
 
 type CollectOutput = {
