@@ -8,6 +8,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const haulProgressBar = require('./haulProgressBar');
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -36,6 +37,11 @@ type WebpackConfig = {
   },
   name?: string,
   plugins: WebpackPlugin[],
+  optimization: {
+    minimize: boolean,
+    namedModules: boolean,
+    concatenateModules: boolean,
+  },
 };
 
 type WebpackConfigFactory =
@@ -53,11 +59,10 @@ const getDefaultConfig = ({
   bundle,
   port,
 }): WebpackConfig => {
-  process.env.NODE_ENV = dev ? 'development' : 'production';
-
   // Getting Minor version
   const platformProgressBar = haulProgressBar(platform);
   return {
+    mode: dev ? 'development' : 'production',
     context: root,
     entry: [],
     output: {
@@ -72,9 +77,6 @@ const getDefaultConfig = ({
           test: /\.js$/,
           exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
           use: [
-            {
-              loader: require.resolve('thread-loader'),
-            },
             {
               loader: require.resolve('babel-loader'),
               options: Object.assign({}, getBabelConfig(root), {
@@ -126,56 +128,35 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
-    ]
-      .concat(
-        dev
-          ? [
-              new webpack.HotModuleReplacementPlugin(),
-              new webpack.EvalSourceMapDevToolPlugin({
-                module: true,
-              }),
-              new webpack.NamedModulesPlugin(),
-            ]
-          : [
-              /**
+    ].concat(
+      dev
+        ? [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.EvalSourceMapDevToolPlugin({
+              module: true,
+            }),
+            new webpack.BannerPlugin({
+              banner: `
+                if (this && !this.self) { this.self = this; };
+                ${fs
+                  .readFileSync('../../vendor/polyfills/Array.prototype.es6.js')
+                  .toString()}
+              `,
+              raw: true,
+            }),
+          ]
+        : [
+            /**
                * By default, sourcemaps are only generated with *.js files
                * We need to use the plugin to configure *.bundle (Android, iOS - development)
                * and *.jsbundle (iOS - production) to emit sourcemap
                */
-              new webpack.SourceMapDevToolPlugin({
-                test: /\.(js|css|(js)?bundle)($|\?)/i,
-                filename: '[file].map',
-              }),
-              new webpack.optimize.ModuleConcatenationPlugin(),
-            ]
-      )
-      .concat(
-        minify
-          ? [
-              new webpack.optimize.UglifyJsPlugin({
-                /**
-                 * By default, uglify only minifies *.js files
-                 * We need to use the plugin to configure *.bundle (Android, iOS - development) 
-                 * and *.jsbundle (iOS - production) to get minified. 
-                 * Also disable IE8 support as we don't need it.
-                 */
-                test: /\.(js|(js)?bundle)($|\?)/i,
-                sourceMap: true,
-                compress: {
-                  screw_ie8: true,
-                  warnings: false,
-                },
-                mangle: {
-                  screw_ie8: true,
-                },
-                output: {
-                  comments: false,
-                  screw_ie8: true,
-                },
-              }),
-            ]
-          : []
-      ),
+            new webpack.SourceMapDevToolPlugin({
+              test: /\.(js|css|(js)?bundle)($|\?)/i,
+              filename: '[file].map',
+            }),
+          ]
+    ),
     resolve: {
       alias:
         process.env.NODE_ENV === 'production'
@@ -207,6 +188,11 @@ const getDefaultConfig = ({
        */
       mainFields: ['react-native', 'browser', 'main'],
       extensions: [`.${platform}.js`, '.native.js', '.js'],
+    },
+    optimization: {
+      minimize: !!minify,
+      namedModules: true,
+      concatenateModules: true,
     },
     /**
      * Set target to webworker as it's closer to RN environment than `web`.
