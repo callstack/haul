@@ -110,7 +110,11 @@
         }
       ]
     ],
-    "plugins": ["transform-flow-strip-types", "transform-object-rest-spread", "transform-react-jsx"]
+    "plugins": [
+      "transform-flow-strip-types",
+      "transform-object-rest-spread",
+      "transform-react-jsx"
+    ]
   },
   "eslintConfig": {
     "extends": "callstack-io",
