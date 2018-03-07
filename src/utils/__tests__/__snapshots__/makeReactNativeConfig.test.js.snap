@@ -52,7 +52,7 @@ Object {
   "output": Object {
     "filename": "index.android.bundle",
     "path": "<<REPLACED>>/utils/__tests__/fixtures",
-    "publicPath": "http://localhost:undefined/",
+    "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
     CaseSensitivePathsPlugin {
@@ -183,7 +183,7 @@ Object {
   "output": Object {
     "filename": "index.ios.bundle",
     "path": "<<REPLACED>>/utils/__tests__/fixtures",
-    "publicPath": "http://localhost:undefined/",
+    "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
     CaseSensitivePathsPlugin {
@@ -314,7 +314,7 @@ Object {
   "output": Object {
     "filename": "index.ios.bundle",
     "path": "<<REPLACED>>/utils/__tests__/fixtures",
-    "publicPath": "http://localhost:undefined/",
+    "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
     CaseSensitivePathsPlugin {
