@@ -291,7 +291,7 @@ function makeReactNativeConfig(
 
   if (isLegacy) {
     logger.warn(
-      'You using a deprecated style of the configuration. Please follow the docs for the upgrade.'
+      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
     );
 
     return DEPRECATEDMakeReactNativeConfig(
@@ -321,7 +321,7 @@ function makeReactNativeConfig(
     typeof webpackConfigFactory !== 'object'
   ) {
     throw new Error(
-      'The webpack configuration must be an object or a function returning an object.'
+      'The webpack configuration must be an object or a function returning an object. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
     );
   }
 
