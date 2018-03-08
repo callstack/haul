@@ -14,7 +14,7 @@ export default {
 };
 ```
 
-This works when you have a single `index.js` as the entry point. But when you have more than one entry point like `index.android.js` and `index.ios.js`, or you want to customize the webpack configuration, you can use a function as a argument instead of a plain object.
+This works when you have a single `index.js` as the entry point. But when you have more than one entry point like `index.android.js` and `index.ios.js`, or you want to customize the webpack configuration, you can use a function as an argument instead of a plain object.
 
 The function will receive options as the first parameter.
 
