@@ -91,7 +91,8 @@ async function bundle(opts: *) {
 
 module.exports = ({
   name: 'bundle',
-  description: 'Builds the app bundle for packaging',
+  description:
+    'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   action: bundle,
   options: [
     {
