@@ -16,11 +16,7 @@ export const TEST_PROJECT_DIR = path.resolve(
 );
 
 export function bundleForPlatform(platform: string) {
-  const bundlePath = path.resolve(
-    TEST_PROJECT_DIR,
-    'dist',
-    `index.${platform}.bundle`
-  );
+  const bundlePath = path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle`);
   const { stdout } = runHaulSync(TEST_PROJECT_DIR, [
     'bundle',
     '--platform',
@@ -31,5 +27,5 @@ export function bundleForPlatform(platform: string) {
     throw new Error(stdout);
   }
 
-  expect(fs.existsSync(bundlePath)).toBe(true);
+  expect(fs.existsSync(bundlePath)).toBeTruthy();
 }

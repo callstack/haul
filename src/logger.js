@@ -25,13 +25,28 @@ const log = (...args) => {
   console.log(...args);
 };
 
-const logger: Logger = {
-  info: (...args: any[]) => section(chalk.black.bgCyan(' INFO '), ...args),
-  warn: (...args: any[]) => section(chalk.black.bgYellow(' WARN '), ...args),
-  error: (...args: any[]) => section(chalk.black.bgRed(' ERROR '), ...args),
-  done: (...args: any[]) => section(chalk.black.bgGreen(' DONE '), ...args),
-  debug: (prefix: string, ...args: any[]) =>
-    log(chalk.cyan(prefix.toUpperCase()), ...args.map(str => chalk.grey(str))),
-};
+function reset() {
+  const logger = {
+    info: (...args: any[]) => section(chalk.black.bgCyan(' INFO '), ...args),
+    warn: (...args: any[]) => section(chalk.black.bgYellow(' WARN '), ...args),
+    error: (...args: any[]) => section(chalk.black.bgRed(' ERROR '), ...args),
+    done: (...args: any[]) => section(chalk.black.bgGreen(' DONE '), ...args),
+    debug: (prefix: string, ...args: any[]) =>
+      log(
+        chalk.cyan(prefix.toUpperCase()),
+        ...args.map(str => chalk.grey(str))
+      ),
+    reset,
+  };
+
+  Object.defineProperty(logger, 'reset', {
+    ...Object.getOwnPropertyDescriptor(logger, 'reset').value,
+    writable: false,
+  });
+
+  return logger;
+}
+
+const logger: Logger = reset();
 
 module.exports = logger;

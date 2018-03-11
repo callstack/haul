@@ -6,12 +6,10 @@ Starts a new webpack server
 
 Options:
 
-  --port [number]                 Port to run your webpack server, 8081 by default
-  --dev [true|false]              Whether to build in development mode, true by default
-  --minify [true|false]           Whether to minify the bundle, 'true' by default when dev=false
-  --platform <ios|android|all>    Platform to bundle for
-  --config [string]               Path to config file, eg. webpack.haul.js, webpack.haul.js by
-                                  default"
+  --port [number]          Port to run your webpack server, 8081 by default
+  --dev [true|false]       Whether to build in development mode, true by default
+  --minify [true|false]    Whether to minify the bundle, 'true' by default when dev=false
+  --config [string]        Path to config file, eg. webpack.haul.js, webpack.haul.js by default"
 `;
 
 exports[`display help 1`] = `

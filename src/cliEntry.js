@@ -179,9 +179,9 @@ async function run(args: Array<string>) {
   } catch (error) {
     clear();
     if (error instanceof MessageError) {
-      logger.error(error.message);
+      logger.reset().error(error.message);
     } else {
-      logger.error(
+      logger.reset().error(
         messages.commandFailed({
           command: displayName,
           error,

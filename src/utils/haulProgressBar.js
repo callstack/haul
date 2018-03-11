@@ -13,7 +13,6 @@ const chalk = require('chalk');
 const progressBarFactory = new multiProgress(process.stderr);
 
 const progressBar = {};
-const lastPercent = {};
 const barOptions = {
   complete: chalk.bold('='),
   incomplete: ' ',
@@ -57,20 +56,13 @@ function createBarFormat(platform: string) {
   return `${label}${leftBar}:bar${rightBar} ${percent}`;
 }
 
-module.exports = function createProgressBar(newPlatform: string) {
-  if (!progressBar[newPlatform]) {
-    progressBar[newPlatform] = progressBarFactory.newBar(
-      createBarFormat(newPlatform),
+module.exports = function updateProgressBar(platform: string, percent: number) {
+  if (!progressBar[platform]) {
+    progressBar[platform] = progressBarFactory.newBar(
+      createBarFormat(platform),
       barOptions
     );
-    lastPercent[newPlatform] = 0;
   }
 
-  return function haulProgressBar(platform: string, percent: number) {
-    const newPercent = Math.ceil(percent * barOptions.width);
-    if (newPercent !== lastPercent[platform]) {
-      progressBar[platform].update(percent);
-      lastPercent[platform] = newPercent;
-    }
-  };
+  progressBar[platform].update(percent);
 };
