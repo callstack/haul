@@ -16,11 +16,13 @@ const TEST_PROJECT_DIR = path.resolve(
   '../../fixtures/react-native-clean'
 );
 const CONFIG_FILE_PATH = path.resolve(TEST_PROJECT_DIR, 'webpack.haul.js');
+const GRADLE_PATH = path.resolve(TEST_PROJECT_DIR, 'android/app/build.gradle');
 const ENTER_KEY = '\x0d';
 
 beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
 afterEach(() => rimraf.sync(CONFIG_FILE_PATH));
 beforeEach(() => rimraf.sync(CONFIG_FILE_PATH));
+afterAll(() => run(`git checkout ${GRADLE_PATH}`));
 
 test('init command on react-native project', done => {
   const haul = runHaul(TEST_PROJECT_DIR, ['init']);
