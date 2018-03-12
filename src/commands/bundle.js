@@ -14,6 +14,7 @@ const { MessageError } = require('../errors');
 const messages = require('../messages');
 const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
 const getWebpackConfig = require('../utils/getWebpackConfig');
+const { extraPlatformsDescriptions } = require('../utils/loadRnCli');
 const logger = require('../logger');
 
 /**
@@ -23,10 +24,7 @@ async function bundle(opts: *) {
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
 
-  const [
-    configs,
-    availablePlatforms,
-  ] = makeReactNativeConfig(
+  const [configs, availablePlatforms] = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
@@ -143,6 +141,7 @@ module.exports = ({
           value: 'android',
           description: 'Builds Android bundle',
         },
+        ...extraPlatformsDescriptions(),
       ],
       example: 'haul bundle --platform ios',
     },

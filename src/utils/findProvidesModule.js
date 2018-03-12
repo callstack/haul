@@ -6,6 +6,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { extraPlatforms } = require('./loadRnCli');
 
 const defaultOpts = {
   // An array of folders to ignore when building map of modules
@@ -20,7 +21,7 @@ const defaultOpts = {
   ],
   // An array of platform extensions to look for when locating
   // modules
-  platforms: ['ios', 'android', 'native', 'web'],
+  platforms: ['ios', 'android', 'native', 'web', ...extraPlatforms()],
 };
 
 /**
@@ -82,12 +83,9 @@ function findProvidesModule(directories, opts = {}) {
         return;
       }
 
-      // Throw when duplicated modules are provided from a different
-      // fileName
-      if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
-        throw new Error('Duplicate haste module found');
+      if (!modulesMap[moduleName] || modulesMap[moduleName] === fileName) {
+        modulesMap[moduleName] = fileName;
       }
-      modulesMap[moduleName] = fileName;
     }
   };
 

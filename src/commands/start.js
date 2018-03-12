@@ -16,7 +16,7 @@ const messages = require('../messages');
 const exec = require('../utils/exec');
 const getWebpackConfig = require('../utils/getWebpackConfig');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
-
+const { extraPlatformsDescriptions } = require('../utils/loadRnCli');
 const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
 
 /**
@@ -179,9 +179,10 @@ module.exports = ({
           value: 'android',
           description: 'Serves Android bundle',
         },
+        ...extraPlatformsDescriptions(),
         {
           value: 'all',
-          description: 'Serves both platforms',
+          description: 'Serves all platforms',
         },
       ],
     },
