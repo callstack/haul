@@ -42,6 +42,9 @@ if (process.env.NODE_ENV !== 'production') {
 
   // If remote debugger is attached, we have access to `window` object
   // from which we can get `protocol` and `origin` of dev server.
+  // This is a prefered way in remote debugger, otherwise it would
+  // fail due to CSP errors because of making requests to eg `10.0.2.2`
+  // from `localhost`.
   if (typeof window !== 'undefined' && window.location) {
     protocol = window.location.protocol;
     origin = window.location.host;
