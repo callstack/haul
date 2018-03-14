@@ -139,7 +139,12 @@ const getDefaultConfig = ({
               banner: `
                 if (this && !this.self) { this.self = this; };
                 ${fs
-                  .readFileSync('../../vendor/polyfills/Array.prototype.es6.js')
+                  .readFileSync(
+                    path.join(
+                      __dirname,
+                      '../../vendor/polyfills/Array.prototype.es6.js'
+                    )
+                  )
                   .toString()}
               `,
               raw: true,
