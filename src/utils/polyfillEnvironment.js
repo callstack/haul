@@ -6,6 +6,7 @@
  *
  * This file is loaded as a part of user bundle
  */
+import { NativeModules } from 'react-native';
 
 /* eslint-disable import/no-extraneous-dependencies */
 require('../../vendor/polyfills/console.js')(global);
@@ -32,7 +33,7 @@ if (!global.self) {
   global.self = global; /* eslint-disable-line */
 }
 
-require('InitializeCore'); // eslint-disable-line import/no-unresolved
+require('react-native/Libraries/Core/InitializeCore');
 
 require('../hot/client/importScriptsPolyfill');
 
@@ -53,7 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
     // from URL from which the bundle was loaded. When using iOS simulator/Android emulator
     // or Android device it will be `localhost:<port>` but when using real iOS device
     // it will be `<ip>.xip.io:<port>`.
-    const { scriptURL } = require('react-native').NativeModules.SourceCode; // eslint-disable-line import/no-unresolved
+    const { scriptURL } = NativeModules.SourceCode;
     if (scriptURL) {
       [protocol, , origin] = scriptURL.split('/');
     }
