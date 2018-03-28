@@ -62,7 +62,7 @@ const getDefaultConfig = ({
     context: root,
     entry: [],
     output: {
-      path: path.join(root), // removed 'dist' from path
+      path: path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port}/`,
     },
@@ -105,7 +105,6 @@ const getDefaultConfig = ({
        * This is needed so we can error on incorrect case
        */
       new CaseSensitivePathsPlugin(),
-
       new webpack.DefinePlugin({
         /**
          * Various libraries like React rely on `process.env.NODE_ENV`
@@ -131,7 +130,12 @@ const getDefaultConfig = ({
               banner: `
                 if (this && !this.self) { this.self = this; };
                 ${fs
-                  .readFileSync('../../vendor/polyfills/Array.prototype.es6.js')
+                  .readFileSync(
+                    path.join(
+                      __dirname,
+                      '../../vendor/polyfills/Array.prototype.es6.js'
+                    )
+                  )
                   .toString()}
               `,
               raw: true,

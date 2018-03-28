@@ -47,35 +47,21 @@ afterAll(() => {
   haul.kill();
 });
 
-test('starts server and bundling iOS platform', done => {
-  testPlatform('ios', done);
+test('starts server and bundling iOS platform', async () => {
+  await testPlatform('ios');
 });
 
-test('starts server and bundling Android platform', done => {
-  testPlatform('android', done);
+test('starts server and bundling Android platform', async () => {
+  await testPlatform('android');
 });
 
-test('starts server and bundling all platforms', done => {
-  let calledTimes = 0;
-  function _done() {
-    calledTimes++;
-    if (calledTimes === 2) {
-      done();
-    }
-  }
-  _done.fail = done.fail;
-
-  testPlatform('ios', _done);
-  testPlatform('android', _done);
+test('starts server and bundling all platforms', async () => {
+  await testPlatform('ios');
+  await testPlatform('android');
 });
 
-async function testPlatform(platform, done) {
-  try {
-    const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
-    const bundle = await res.text();
-    expect(bundle).toMatch('__webpack_require__');
-    done();
-  } catch (error) {
-    done.fail(error);
-  }
+async function testPlatform(platform) {
+  const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
+  const bundle = await res.text();
+  expect(bundle).toMatch('__webpack_require__');
 }
