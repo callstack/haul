@@ -38,6 +38,7 @@ function devToolsMiddleware(debuggerProxy) {
       /**
        * Request for the debugger frontend
        */
+      case '/debugger-ui/':
       case '/debugger-ui': {
         const readStream = fs.createReadStream(
           path.join(__dirname, '../assets/debugger.html')
