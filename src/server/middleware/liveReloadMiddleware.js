@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+const removeSlashFromTheEndOfPath = require('../util/removeSlashFromTheEndOfPath');
+
 /**
  * Live reload middleware
  */
@@ -22,11 +24,13 @@ function liveReloadMiddleware(compiler) {
   }
 
   return (req, res, next) => {
+    const path = removeSlashFromTheEndOfPath(req.path);
+
     /**
      * React Native client opens connection at `/onchange`
      * and awaits reload signal (http status code - 205)
      */
-    if (req.path === '/onchange') {
+    if (path === '/onchange') {
       const watcher = { req, res };
 
       watchers.push(watcher);
@@ -38,7 +42,7 @@ function liveReloadMiddleware(compiler) {
       return;
     }
 
-    if (req.path === '/reloadapp') {
+    if (path === '/reloadapp') {
       notifyAllWatchers();
       res.end();
       return;
