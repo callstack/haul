@@ -41,7 +41,9 @@ module.exports = function createCompilerMiddleware(
         response.end(errors[0]); // Send only the first error.
       } else {
         response.type(mimeType);
-        response.send(file);
+        response
+          .status(200)
+          .send(file.type === 'Buffer' ? Buffer.from(file.data) : file);
       }
     };
   }

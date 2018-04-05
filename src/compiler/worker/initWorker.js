@@ -8,6 +8,7 @@
 const path = require('path');
 const WebSocket = require('ws');
 const MemoryFileSystem = require('memory-fs');
+const mime = require('mime-types');
 
 const Events = global.requireWithRootDir('../events');
 const runWebpackCompiler = global.requireWithRootDir('./runWebpackCompiler');
@@ -67,7 +68,8 @@ module.exports = function initWorker({
       if (fs.existsSync(filename)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,
-          file: fs.readFileSync(filename).toString(),
+          file: fs.readFileSync(filename),
+          mimeType: mime.lookup(payload.filename) || 'text/javascript',
         });
       }
     } else {

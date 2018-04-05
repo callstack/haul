@@ -39,15 +39,18 @@ module.exports = function runWebpackCompiler({
   // Use memory fs
   compiler.outputFileSystem = fs;
 
-  compiler.plugin('done', stats => {
-    emitter.emit(Events.BUILD_FINISHED, {
-      stats,
-    });
+  compiler.hooks.done.intercept({
+    call(stats) {
+      emitter.emit(Events.BUILD_FINISHED, {
+        stats,
+      });
+    },
   });
 
-  compiler.plugin('invalid', (...args) => {
-    emitter.emit(Events.BUILD_START);
-    resolveAsync(args);
+  compiler.hooks.invalid.intercept({
+    tap() {
+      emitter.emit(Events.BUILD_START);
+    },
   });
 
   emitter.on('start', () => {
@@ -57,10 +60,3 @@ module.exports = function runWebpackCompiler({
 
   return emitter;
 };
-
-function resolveAsync(args) {
-  if (args.length === 2 && typeof args[1] === 'function') {
-    const callback = args[1];
-    callback();
-  }
-}

@@ -78,13 +78,13 @@ module.exports = class Compiler extends EventEmitter {
   initFork({ platform, options }: { platform: Platform, options: * }) {
     const fork = new Fork({ platform, options });
 
-    fork.on(Events.FILE_RECEIVED, ({ file, taskId }) => {
+    fork.on(Events.FILE_RECEIVED, ({ file, taskId, mimeType }) => {
       const { callback } = this.tasks.pop(taskId);
       callback({
         errors: null,
         platform,
         file,
-        mimeType: 'application/javascript',
+        mimeType,
       });
     });
 

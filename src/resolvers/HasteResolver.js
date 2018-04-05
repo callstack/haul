@@ -21,9 +21,9 @@ function HasteResolver(options: Options) {
   const hasteMap = findProvidesModule(options.directories);
 
   this.apply = resolver => {
-    resolver.plugin(
+    resolver.hooks.resolve.tapAsync(
       'described-resolve',
-      (request: Request, callback: Function) => {
+      (request: Request, context: *, callback: Function) => {
         const innerRequest = request.request;
 
         if (!innerRequest || !hasteMap[innerRequest]) {
@@ -35,11 +35,12 @@ function HasteResolver(options: Options) {
         });
 
         return resolver.doResolve(
-          'resolve',
+          resolver.hooks.resolve,
           obj,
           `Aliased ${innerRequest} with haste mapping: ${hasteMap[
             innerRequest
           ]}`,
+          context,
           callback
         );
       }
