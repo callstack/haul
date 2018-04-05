@@ -12,6 +12,7 @@ const os = require('os');
 const { run } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
+const { isPortTaken } = require('../../src/utils/haulPortHandler');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
@@ -21,12 +22,14 @@ const TEST_PROJECT_DIR = path.resolve(
 
 let haul;
 beforeAll(async done => {
-  run('yarn --mutex network', TEST_PROJECT_DIR);
-  try {
-    haul = await runHaul(TEST_PROJECT_DIR, ['start']);
-  } catch (error) {
-    done.fail(error);
+  const isTaken = await isPortTaken(8081);
+  if (isTaken) {
+    done.fail('Port is already in use. Cannot run Haul in test env');
   }
+
+  run('yarn --mutex network', TEST_PROJECT_DIR);
+  haul = runHaul(TEST_PROJECT_DIR, ['start']);
+
   const messageBuffer = [];
 
   haul.stdout.on('data', data => {
@@ -51,18 +54,13 @@ afterAll(() => {
   haul.kill();
 });
 
-test('starts server and bundling iOS platform', async () => {
-  await testPlatform('ios');
-});
+test('starts server and bundling iOS platform', () => testPlatform('ios'));
 
-test('starts server and bundling Android platform', async () => {
-  await testPlatform('android');
-});
+test('starts server and bundling Android platform', () =>
+  testPlatform('android'));
 
-test('starts server and bundling all platforms', async () => {
-  await testPlatform('ios');
-  await testPlatform('android');
-});
+test('starts server and bundling all platforms', () =>
+  Promise.all([testPlatform('ios'), testPlatform('android')]));
 
 async function testPlatform(platform) {
   const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
