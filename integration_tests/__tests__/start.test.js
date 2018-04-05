@@ -20,9 +20,13 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 let haul;
-beforeAll(done => {
+beforeAll(async done => {
   run('yarn --mutex network', TEST_PROJECT_DIR);
-  haul = runHaul(TEST_PROJECT_DIR, ['start']);
+  try {
+    haul = await runHaul(TEST_PROJECT_DIR, ['start']);
+  } catch (error) {
+    done.fail(error);
+  }
   const messageBuffer = [];
 
   haul.stdout.on('data', data => {

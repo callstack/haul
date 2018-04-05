@@ -41,6 +41,7 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
  */
 function createServer(config: { configPath: string, configOptions: Object }) {
   const appHandler = express();
+  appHandler.disable('etag');
 
   const { configPath, configOptions } = config;
 

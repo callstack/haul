@@ -9,6 +9,7 @@
 
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
+const { isPortTaken } = require('../src/utils/haulPortHandler');
 
 const BIN_PATH = path.resolve(__dirname, '../bin/cli.js');
 
@@ -40,11 +41,16 @@ function runHaulSync(
   return result;
 }
 
-function runHaul(
+async function runHaul(
   dir: string,
   args?: Array<string>,
   options: RunHaulOptions = {}
 ) {
+  const isTaken = await isPortTaken(8081);
+  if (isTaken) {
+    throw new Error('Port is already in use. Cannot run Haul in test env');
+  }
+
   let cwd = dir;
   const isRelative = cwd[0] !== '/';
 
