@@ -16,7 +16,7 @@ Array [
           },
         },
         Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
           "test": /\\\\\\.js\\$/,
           "use": Array [
             Object {
@@ -137,7 +137,7 @@ Array [
           },
         },
         Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
           "test": /\\\\\\.js\\$/,
           "use": Array [
             Object {
