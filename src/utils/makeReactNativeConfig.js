@@ -75,7 +75,7 @@ const getDefaultConfig = ({
         { parser: { requireEnsure: false } },
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
+          exclude: /node_modules\/(?!react|@expo|pretty-format|haul|metro)/,
           use: [
             {
               loader: require.resolve('babel-loader'),
