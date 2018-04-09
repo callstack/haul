@@ -16,7 +16,7 @@ Object {
         },
       },
       Object {
-        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
         "test": /\\\\\\.js\\$/,
         "use": Array [
           Object {
@@ -337,21 +337,21 @@ Object {
         "parser": Object {
           "requireEnsure": false,
         },
-      },
-      Object {
-        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
-        "test": /\\\\\\.js\\$/,
-        "use": Array [
-          Object {
-            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-            "options": Object {
-              "cacheDirectory": true,
-              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-              "plugins": Array [
-                "<<REPLACED>>/utils/fixRequireIssues.js",
-                "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                "<<REPLACED>>/hot/babelPlugin.js",
-              ],
+        Object {
+          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\)/,
+          "test": /\\\\\\.js\\$/,
+          "use": Array [
+            Object {
+              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+              "options": Object {
+                "cacheDirectory": true,
+                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+                "plugins": Array [
+                  "<<REPLACED>>/utils/fixRequireIssues.js",
+                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                  "<<REPLACED>>/hot/babelPlugin.js",
+                ],
+              },
             },
           },
         ],
