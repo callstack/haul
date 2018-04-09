@@ -71,6 +71,10 @@ module.exports = function initWorker({
           file: fs.readFileSync(filename),
           mimeType: mime.lookup(payload.filename) || 'text/javascript',
         });
+      } else {
+        send(Events.FILE_NOT_FOUND, {
+          taskId: payload.taskId,
+        });
       }
     } else {
       console.log(`Unknown event ${JSON.stringify(type)}`);

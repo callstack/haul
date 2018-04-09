@@ -39,11 +39,13 @@ module.exports = function createCompilerMiddleware(
         response.type('text/javascript');
         response.status(500);
         response.end(errors[0]); // Send only the first error.
-      } else {
+      } else if (file) {
         response.type(mimeType);
         response
           .status(200)
           .send(file.type === 'Buffer' ? Buffer.from(file.data) : file);
+      } else {
+        response.sendStatus(404);
       }
     };
   }

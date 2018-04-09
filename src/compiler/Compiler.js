@@ -63,9 +63,24 @@ module.exports = class Compiler extends EventEmitter {
     });
 
     this.on(Events.REQUEST_FILE, ({ filename, callback }) => {
-      // Callback will be invoked on `FILE_RECEIVED` event.
-      const taskId = this.tasks.add({ callback });
-      // We cannot know in which fork the file is stored.
+      // If there are no forks spawned, execute callback immediately
+      // with null.
+      if (!Object.keys(this.forks).length) {
+        callback({
+          errors: null,
+          platform: null,
+          file: null,
+          mimeType: null,
+        });
+      }
+
+      // Callback will be invoked on `FILE_RECEIVED` event or on `FILE_NOT_FOUND`.
+      const taskId = this.tasks.add({
+        callback,
+        awaitingCount: Object.keys(this.forks).length,
+      });
+      // We cannot know in which fork the file is stored, so we send event to all
+      // of them and keep count of how many of them responded with `FILE_NOT_FOUND`.
       Object.keys(this.forks).forEach(platform => {
         this.forks[platform].send(Events.REQUEST_FILE, { filename, taskId });
       });
@@ -77,6 +92,23 @@ module.exports = class Compiler extends EventEmitter {
    */
   initFork({ platform, options }: { platform: Platform, options: * }) {
     const fork = new Fork({ platform, options });
+
+    fork.on(Events.FILE_NOT_FOUND, ({ taskId }) => {
+      const { callback, awaitingCount } = this.tasks.pop(taskId);
+
+      // If the value is more than 1, it means that we are still awaiting
+      // responses, so we put the task back with the same ID and decremented count.
+      if (awaitingCount > 1) {
+        this.tasks.set(taskId, { callback, awaitingCount: awaitingCount - 1 });
+      } else {
+        callback({
+          errors: null,
+          platform,
+          file: null,
+          mimeType: null,
+        });
+      }
+    });
 
     fork.on(Events.FILE_RECEIVED, ({ file, taskId, mimeType }) => {
       const { callback } = this.tasks.pop(taskId);
