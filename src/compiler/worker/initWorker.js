@@ -15,7 +15,6 @@ const runWebpackCompiler = global.requireWithRootDir('./runWebpackCompiler');
 
 module.exports = function initWorker({
   platform,
-  // fileOutput,
   options,
   socketAddress,
 }: {
