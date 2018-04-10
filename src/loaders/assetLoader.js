@@ -27,11 +27,9 @@ module.exports = async function assetLoader() {
   const callback = this.async();
 
   const query = utils.getOptions(this) || {};
-  const options = this.options[query.config] || {};
   const config: Config = Object.assign(
     {},
     { platform: 'ios', root: process.cwd() },
-    options,
     query
   );
 

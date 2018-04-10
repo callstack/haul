@@ -4,26 +4,25 @@
  *
  * @flow
  */
-import type { WebpackStats } from '../types';
 
 const express = require('express');
 const http = require('http');
 const path = require('path');
 
-type InvalidCallback = (compilingAfterError: boolean) => void;
-type CompileCallback = (stats: WebpackStats) => void;
+const Compiler = require('../compiler/Compiler');
+const initUI = require('./ui');
 
 /**
  * Custom made middlewares
  */
-const webpackDevMiddleware = require('webpack-dev-middleware');
+
+const createCompilerMiddleware = require('./middleware/compilerMiddleware.js');
 const hotMiddleware = require('./middleware/hotMiddleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
 const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
-const loggerMiddleware = require('./middleware/loggerMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
@@ -40,31 +39,37 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
 /**
  * Packager-like Server running on top of Webpack
  */
-function createServer(
-  compiler: any,
-  onInvalid: InvalidCallback,
-  onCompile: CompileCallback
-) {
+function createServer(config: { configPath: string, configOptions: Object }) {
   const appHandler = express();
-  const webpackMiddleware = webpackDevMiddleware(compiler, {
-    lazy: false,
-    noInfo: true,
-    reporter: null,
-    /**
-     * Quiet the default errors, we will handle error by our own
-     */
-    quiet: true,
-    stats: 'errors-only',
-    hot: true,
-    mimeTypes: { 'application/javascript': ['bundle'] },
-    headers: {
-      'Content-Type': 'application/javascript',
-      'Access-Control-Allow-Origin': '*',
-    },
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
-    },
+  appHandler.disable('etag');
+
+  const { configPath, configOptions } = config;
+
+  const compiler = new Compiler({
+    configPath,
+    configOptions,
+  });
+
+  const loggerMiddleware = initUI(compiler, configOptions);
+
+  process.on('uncaughtException', err => {
+    compiler.terminate();
+    throw err;
+  });
+
+  process.on('SIGINT', () => {
+    compiler.terminate();
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', () => {
+    compiler.terminate();
+    process.exit(2);
+  });
+
+  const compilerMiddleware = createCompilerMiddleware(compiler, {
+    configPath,
+    configOptions,
   });
 
   const httpServer = http.createServer(appHandler);
@@ -86,31 +91,18 @@ function createServer(
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
-    .use(symbolicateMiddleware(compiler))
+    .use(
+      symbolicateMiddleware(compiler, {
+        configPath,
+        configOptions,
+      })
+    )
     .use(openInEditorMiddleware())
     .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
     .use(requestChangeMiddleware)
-    .use(webpackMiddleware)
+    .use(compilerMiddleware)
     .use(missingBundleMiddleware);
-
-  // Handle callbacks
-  let didHaveIssues = false;
-  compiler.plugin('done', (stats: WebpackStats) => {
-    const hasIssues = stats.hasErrors() || stats.hasWarnings();
-
-    if (hasIssues) {
-      didHaveIssues = true;
-    } else {
-      didHaveIssues = false;
-    }
-
-    onCompile(stats);
-  });
-
-  compiler.plugin('invalid', () => {
-    onInvalid(didHaveIssues);
-  });
 
   return httpServer;
 }

@@ -23,10 +23,7 @@ async function bundle(opts: *) {
   const directory = process.cwd();
   const configPath = getWebpackConfig(directory, opts.config);
 
-  const [
-    configs,
-    availablePlatforms,
-  ] = makeReactNativeConfig(
+  const config = makeReactNativeConfig(
     // $FlowFixMe: Dynamic require
     require(configPath),
     {
@@ -34,10 +31,9 @@ async function bundle(opts: *) {
       dev: opts.dev,
       minify: opts.minify,
       bundle: true,
-    }
+    },
+    opts.platform
   );
-
-  const config = configs[availablePlatforms.indexOf(opts.platform)];
 
   if (opts.assetsDest) {
     config.output.path = path.isAbsolute(opts.assetsDest)
@@ -95,7 +91,8 @@ async function bundle(opts: *) {
 
 module.exports = ({
   name: 'bundle',
-  description: 'Builds the app bundle for packaging',
+  description:
+    'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   action: bundle,
   options: [
     {

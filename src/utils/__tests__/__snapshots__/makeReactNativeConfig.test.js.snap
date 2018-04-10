@@ -1,103 +1,198 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates config from defaults: (configs) 1`] = `
-Array [
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "./file.js",
+exports[`creates config from defaults: android config 1`] = `
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "./file.js",
+  ],
+  "mode": "development",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
+        },
+      },
+      Object {
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
+        "test": /\\\\\\.js\\$/,
+        "use": Array [
+          Object {
+            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+            "options": Object {
+              "cacheDirectory": true,
+              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "plugins": Array [
+                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                "<<REPLACED>>/hot/babelPlugin.js",
+              ],
+            },
+          },
+        ],
+      },
+      Object {
+        "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+        "use": Object {
+          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "query": Object {
+            "bundle": undefined,
+            "platform": "android",
+            "root": "<<REPLACED>>/utils/__tests__/fixtures",
+          },
+        },
+      },
     ],
-    "mode": "development",
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
-        },
-        Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
-          "test": /\\\\\\.js\\$/,
-          "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "options": Object {
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-        },
-        Object {
-          "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
-          "use": Object {
-            "loader": "<<REPLACED>>/loaders/assetLoader.js",
-            "query": Object {
-              "bundle": undefined,
-              "platform": "ios",
-              "root": "<<REPLACED>>/utils/__tests__/fixtures",
-            },
-          },
-        },
-      ],
+  },
+  "name": "android",
+  "optimization": Object {
+    "concatenateModules": true,
+    "minimize": false,
+    "namedModules": true,
+  },
+  "output": Object {
+    "filename": "index.android.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
+  },
+  "plugins": Array [
+    CaseSensitivePathsPlugin {
+      "fsOperations": 0,
+      "options": Object {},
+      "pathCache": Object {},
+      "primed": false,
     },
-    "name": "ios",
-    "optimization": Object {
-      "concatenateModules": true,
-      "minimize": false,
-      "namedModules": true,
+    DefinePlugin {
+      "definitions": Object {
+        "__DEV__": true,
+        "process.env": Object {
+          "NODE_ENV": "\\"development\\"",
+        },
+      },
     },
-    "output": Object {
-      "filename": "index.ios.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
+    LoaderOptionsPlugin {
+      "options": Object {
+        "debug": true,
+        "minimize": false,
+        "test": Object {
+          "test": [Function],
+        },
+      },
     },
-    "plugins": Array [
-      CaseSensitivePathsPlugin {
-        "fsOperations": 0,
-        "options": Object {},
-        "pathCache": Object {},
-        "primed": false,
+    HotModuleReplacementPlugin {
+      "fullBuildTimeout": 200,
+      "multiStep": undefined,
+      "options": Object {},
+      "requestTimeout": 10000,
+    },
+    EvalSourceMapDevToolPlugin {
+      "options": Object {
+        "module": true,
       },
-      ProgressPlugin {
-        "handler": [Function],
-        "profile": undefined,
-      },
-      DefinePlugin {
-        "definitions": Object {
-          "__DEV__": true,
-          "process.env": Object {
-            "NODE_ENV": "\\"development\\"",
-          },
-        },
-      },
-      LoaderOptionsPlugin {
-        "options": Object {
-          "debug": true,
-          "minimize": false,
-          "test": Object {
-            "test": [Function],
-          },
-        },
-      },
-      HotModuleReplacementPlugin {
-        "fullBuildTimeout": 200,
-        "multiStep": undefined,
-        "options": Object {},
-        "requestTimeout": 10000,
-      },
-      EvalSourceMapDevToolPlugin {
-        "options": Object {
-          "module": true,
-        },
-      },
-      BannerPlugin {
+    },
+    BannerPlugin {
+      "banner": "
+                if (this && !this.self) { this.self = this; };
+                /**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @polyfill
+ */
+
+/* eslint-disable */
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+function findIndex(predicate, context) {
+  if (this == null) {
+    throw new TypeError(
+      'Array.prototype.findIndex called on null or undefined'
+    );
+  }
+  if (typeof predicate !== 'function') {
+    throw new TypeError('predicate must be a function');
+  }
+  var list = Object(this);
+  var length = list.length >>> 0;
+  for (var i = 0; i < length; i++) {
+    if (predicate.call(context, list[i], i, list)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+if (!Array.prototype.findIndex) {
+  Object.defineProperty(Array.prototype, 'findIndex', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: findIndex
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+if (!Array.prototype.find) {
+  Object.defineProperty(Array.prototype, 'find', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function(predicate, context) {
+      if (this == null) {
+        throw new TypeError(
+          'Array.prototype.find called on null or undefined'
+        );
+      }
+      var index = findIndex.call(this, predicate, context);
+      return index === -1 ? undefined : this[index];
+    }
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function (searchElement) {
+      var O = Object(this);
+      var len = parseInt(O.length) || 0;
+      if (len === 0) {
+        return false;
+      }
+      var n = parseInt(arguments[1]) || 0;
+      var k;
+      if (n >= 0) {
+        k = n;
+      } else {
+        k = len + n;
+        if (k < 0) {
+          k = 0;
+        }
+      }
+      var currentElement;
+      while (k < len) {
+        currentElement = O[k];
+        if (searchElement === currentElement ||
+          (searchElement !== searchElement && currentElement !== currentElement)) {
+          return true;
+        }
+        k++;
+      }
+      return false;
+    }
+  });
+}
+
+              ",
+      "options": Object {
         "banner": "
                 if (this && !this.self) { this.self = this; };
                 /**
@@ -197,532 +292,390 @@ if (!Array.prototype.includes) {
 }
 
               ",
-        "options": Object {
-          "banner": "
-                if (this && !this.self) { this.self = this; };
-                /**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @polyfill
- */
-
-/* eslint-disable */
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-function findIndex(predicate, context) {
-  if (this == null) {
-    throw new TypeError(
-      'Array.prototype.findIndex called on null or undefined'
-    );
-  }
-  if (typeof predicate !== 'function') {
-    throw new TypeError('predicate must be a function');
-  }
-  var list = Object(this);
-  var length = list.length >>> 0;
-  for (var i = 0; i < length; i++) {
-    if (predicate.call(context, list[i], i, list)) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-if (!Array.prototype.findIndex) {
-  Object.defineProperty(Array.prototype, 'findIndex', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: findIndex
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-if (!Array.prototype.find) {
-  Object.defineProperty(Array.prototype, 'find', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function(predicate, context) {
-      if (this == null) {
-        throw new TypeError(
-          'Array.prototype.find called on null or undefined'
-        );
-      }
-      var index = findIndex.call(this, predicate, context);
-      return index === -1 ? undefined : this[index];
-    }
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, 'includes', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function (searchElement) {
-      var O = Object(this);
-      var len = parseInt(O.length) || 0;
-      if (len === 0) {
-        return false;
-      }
-      var n = parseInt(arguments[1]) || 0;
-      var k;
-      if (n >= 0) {
-        k = n;
-      } else {
-        k = len + n;
-        if (k < 0) {
-          k = 0;
-        }
-      }
-      var currentElement;
-      while (k < len) {
-        currentElement = O[k];
-        if (searchElement === currentElement ||
-          (searchElement !== searchElement && currentElement !== currentElement)) {
-          return true;
-        }
-        k++;
-      }
-      return false;
-    }
-  });
-}
-
-              ",
-          "raw": true,
-        },
+        "raw": true,
       },
+    },
+  ],
+  "resolve": Object {
+    "alias": Object {
+      "react-proxy": "@zamotany/react-proxy",
+    },
+    "extensions": Array [
+      ".android.js",
+      ".native.js",
+      ".js",
     ],
-    "resolve": Object {
-      "alias": Object {
-        "react-proxy": "@zamotany/react-proxy",
-      },
-      "extensions": Array [
-        ".ios.js",
-        ".native.js",
-        ".js",
-      ],
-      "mainFields": Array [
-        "react-native",
-        "browser",
-        "main",
-      ],
-      "plugins": Array [
-        HasteResolver {
-          "apply": [Function],
-        },
-        AssetResolver {
-          "apply": [Function],
-        },
-      ],
-    },
-    "target": "webworker",
-  },
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "./file.js",
+    "mainFields": Array [
+      "react-native",
+      "browser",
+      "main",
     ],
-    "mode": "development",
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
-        },
-        Object {
-          "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
-          "test": /\\\\\\.js\\$/,
-          "use": Array [
-            Object {
-              "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
-              "options": Object {
-                "cacheDirectory": true,
-                "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
-                "plugins": Array [
-                  "<<REPLACED>>/utils/fixRequireIssues.js",
-                  "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                  "<<REPLACED>>/hot/babelPlugin.js",
-                ],
-              },
-            },
-          ],
-        },
-        Object {
-          "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
-          "use": Object {
-            "loader": "<<REPLACED>>/loaders/assetLoader.js",
-            "query": Object {
-              "bundle": undefined,
-              "platform": "android",
-              "root": "<<REPLACED>>/utils/__tests__/fixtures",
-            },
-          },
-        },
-      ],
-    },
-    "name": "android",
-    "optimization": Object {
-      "concatenateModules": true,
-      "minimize": false,
-      "namedModules": true,
-    },
-    "output": Object {
-      "filename": "index.android.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
     "plugins": Array [
-      CaseSensitivePathsPlugin {
-        "fsOperations": 0,
-        "options": Object {},
-        "pathCache": Object {},
-        "primed": false,
+      HasteResolver {
+        "apply": [Function],
       },
-      ProgressPlugin {
-        "handler": [Function],
-        "profile": undefined,
-      },
-      DefinePlugin {
-        "definitions": Object {
-          "__DEV__": true,
-          "process.env": Object {
-            "NODE_ENV": "\\"development\\"",
-          },
-        },
-      },
-      LoaderOptionsPlugin {
-        "options": Object {
-          "debug": true,
-          "minimize": false,
-          "test": Object {
-            "test": [Function],
-          },
-        },
-      },
-      HotModuleReplacementPlugin {
-        "fullBuildTimeout": 200,
-        "multiStep": undefined,
-        "options": Object {},
-        "requestTimeout": 10000,
-      },
-      EvalSourceMapDevToolPlugin {
-        "options": Object {
-          "module": true,
-        },
-      },
-      BannerPlugin {
-        "banner": "
-                if (this && !this.self) { this.self = this; };
-                /**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @polyfill
- */
-
-/* eslint-disable */
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-function findIndex(predicate, context) {
-  if (this == null) {
-    throw new TypeError(
-      'Array.prototype.findIndex called on null or undefined'
-    );
-  }
-  if (typeof predicate !== 'function') {
-    throw new TypeError('predicate must be a function');
-  }
-  var list = Object(this);
-  var length = list.length >>> 0;
-  for (var i = 0; i < length; i++) {
-    if (predicate.call(context, list[i], i, list)) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-if (!Array.prototype.findIndex) {
-  Object.defineProperty(Array.prototype, 'findIndex', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: findIndex
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-if (!Array.prototype.find) {
-  Object.defineProperty(Array.prototype, 'find', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function(predicate, context) {
-      if (this == null) {
-        throw new TypeError(
-          'Array.prototype.find called on null or undefined'
-        );
-      }
-      var index = findIndex.call(this, predicate, context);
-      return index === -1 ? undefined : this[index];
-    }
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, 'includes', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function (searchElement) {
-      var O = Object(this);
-      var len = parseInt(O.length) || 0;
-      if (len === 0) {
-        return false;
-      }
-      var n = parseInt(arguments[1]) || 0;
-      var k;
-      if (n >= 0) {
-        k = n;
-      } else {
-        k = len + n;
-        if (k < 0) {
-          k = 0;
-        }
-      }
-      var currentElement;
-      while (k < len) {
-        currentElement = O[k];
-        if (searchElement === currentElement ||
-          (searchElement !== searchElement && currentElement !== currentElement)) {
-          return true;
-        }
-        k++;
-      }
-      return false;
-    }
-  });
-}
-
-              ",
-        "options": Object {
-          "banner": "
-                if (this && !this.self) { this.self = this; };
-                /**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @polyfill
- */
-
-/* eslint-disable */
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-function findIndex(predicate, context) {
-  if (this == null) {
-    throw new TypeError(
-      'Array.prototype.findIndex called on null or undefined'
-    );
-  }
-  if (typeof predicate !== 'function') {
-    throw new TypeError('predicate must be a function');
-  }
-  var list = Object(this);
-  var length = list.length >>> 0;
-  for (var i = 0; i < length; i++) {
-    if (predicate.call(context, list[i], i, list)) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-if (!Array.prototype.findIndex) {
-  Object.defineProperty(Array.prototype, 'findIndex', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: findIndex
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-if (!Array.prototype.find) {
-  Object.defineProperty(Array.prototype, 'find', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function(predicate, context) {
-      if (this == null) {
-        throw new TypeError(
-          'Array.prototype.find called on null or undefined'
-        );
-      }
-      var index = findIndex.call(this, predicate, context);
-      return index === -1 ? undefined : this[index];
-    }
-  });
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, 'includes', {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value: function (searchElement) {
-      var O = Object(this);
-      var len = parseInt(O.length) || 0;
-      if (len === 0) {
-        return false;
-      }
-      var n = parseInt(arguments[1]) || 0;
-      var k;
-      if (n >= 0) {
-        k = n;
-      } else {
-        k = len + n;
-        if (k < 0) {
-          k = 0;
-        }
-      }
-      var currentElement;
-      while (k < len) {
-        currentElement = O[k];
-        if (searchElement === currentElement ||
-          (searchElement !== searchElement && currentElement !== currentElement)) {
-          return true;
-        }
-        k++;
-      }
-      return false;
-    }
-  });
-}
-
-              ",
-          "raw": true,
-        },
+      AssetResolver {
+        "apply": [Function],
       },
     ],
-    "resolve": Object {
-      "alias": Object {
-        "react-proxy": "@zamotany/react-proxy",
-      },
-      "extensions": Array [
-        ".android.js",
-        ".native.js",
-        ".js",
-      ],
-      "mainFields": Array [
-        "react-native",
-        "browser",
-        "main",
-      ],
-      "plugins": Array [
-        HasteResolver {
-          "apply": [Function],
-        },
-        AssetResolver {
-          "apply": [Function],
-        },
-      ],
-    },
-    "target": "webworker",
   },
-]
+  "target": "webworker",
+}
 `;
 
-exports[`creates config from defaults: (platforms) 1`] = `
-Array [
-  "ios",
-  "android",
-]
+exports[`creates config from defaults: ios config 1`] = `
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "./file.js",
+  ],
+  "mode": "development",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
+        },
+      },
+      Object {
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
+        "test": /\\\\\\.js\\$/,
+        "use": Array [
+          Object {
+            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+            "options": Object {
+              "cacheDirectory": true,
+              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "plugins": Array [
+                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                "<<REPLACED>>/hot/babelPlugin.js",
+              ],
+            },
+          },
+        ],
+      },
+      Object {
+        "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+        "use": Object {
+          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "query": Object {
+            "bundle": undefined,
+            "platform": "ios",
+            "root": "<<REPLACED>>/utils/__tests__/fixtures",
+          },
+        },
+      },
+    ],
+  },
+  "name": "ios",
+  "optimization": Object {
+    "concatenateModules": true,
+    "minimize": false,
+    "namedModules": true,
+  },
+  "output": Object {
+    "filename": "index.ios.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
+  },
+  "plugins": Array [
+    CaseSensitivePathsPlugin {
+      "fsOperations": 0,
+      "options": Object {},
+      "pathCache": Object {},
+      "primed": false,
+    },
+    DefinePlugin {
+      "definitions": Object {
+        "__DEV__": true,
+        "process.env": Object {
+          "NODE_ENV": "\\"development\\"",
+        },
+      },
+    },
+    LoaderOptionsPlugin {
+      "options": Object {
+        "debug": true,
+        "minimize": false,
+        "test": Object {
+          "test": [Function],
+        },
+      },
+    },
+    HotModuleReplacementPlugin {
+      "fullBuildTimeout": 200,
+      "multiStep": undefined,
+      "options": Object {},
+      "requestTimeout": 10000,
+    },
+    EvalSourceMapDevToolPlugin {
+      "options": Object {
+        "module": true,
+      },
+    },
+    BannerPlugin {
+      "banner": "
+                if (this && !this.self) { this.self = this; };
+                /**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @polyfill
+ */
+
+/* eslint-disable */
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+function findIndex(predicate, context) {
+  if (this == null) {
+    throw new TypeError(
+      'Array.prototype.findIndex called on null or undefined'
+    );
+  }
+  if (typeof predicate !== 'function') {
+    throw new TypeError('predicate must be a function');
+  }
+  var list = Object(this);
+  var length = list.length >>> 0;
+  for (var i = 0; i < length; i++) {
+    if (predicate.call(context, list[i], i, list)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+if (!Array.prototype.findIndex) {
+  Object.defineProperty(Array.prototype, 'findIndex', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: findIndex
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+if (!Array.prototype.find) {
+  Object.defineProperty(Array.prototype, 'find', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function(predicate, context) {
+      if (this == null) {
+        throw new TypeError(
+          'Array.prototype.find called on null or undefined'
+        );
+      }
+      var index = findIndex.call(this, predicate, context);
+      return index === -1 ? undefined : this[index];
+    }
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function (searchElement) {
+      var O = Object(this);
+      var len = parseInt(O.length) || 0;
+      if (len === 0) {
+        return false;
+      }
+      var n = parseInt(arguments[1]) || 0;
+      var k;
+      if (n >= 0) {
+        k = n;
+      } else {
+        k = len + n;
+        if (k < 0) {
+          k = 0;
+        }
+      }
+      var currentElement;
+      while (k < len) {
+        currentElement = O[k];
+        if (searchElement === currentElement ||
+          (searchElement !== searchElement && currentElement !== currentElement)) {
+          return true;
+        }
+        k++;
+      }
+      return false;
+    }
+  });
+}
+
+              ",
+      "options": Object {
+        "banner": "
+                if (this && !this.self) { this.self = this; };
+                /**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @polyfill
+ */
+
+/* eslint-disable */
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+function findIndex(predicate, context) {
+  if (this == null) {
+    throw new TypeError(
+      'Array.prototype.findIndex called on null or undefined'
+    );
+  }
+  if (typeof predicate !== 'function') {
+    throw new TypeError('predicate must be a function');
+  }
+  var list = Object(this);
+  var length = list.length >>> 0;
+  for (var i = 0; i < length; i++) {
+    if (predicate.call(context, list[i], i, list)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+if (!Array.prototype.findIndex) {
+  Object.defineProperty(Array.prototype, 'findIndex', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: findIndex
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+if (!Array.prototype.find) {
+  Object.defineProperty(Array.prototype, 'find', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function(predicate, context) {
+      if (this == null) {
+        throw new TypeError(
+          'Array.prototype.find called on null or undefined'
+        );
+      }
+      var index = findIndex.call(this, predicate, context);
+      return index === -1 ? undefined : this[index];
+    }
+  });
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    enumerable: false,
+    writable: true,
+    configurable: true,
+    value: function (searchElement) {
+      var O = Object(this);
+      var len = parseInt(O.length) || 0;
+      if (len === 0) {
+        return false;
+      }
+      var n = parseInt(arguments[1]) || 0;
+      var k;
+      if (n >= 0) {
+        k = n;
+      } else {
+        k = len + n;
+        if (k < 0) {
+          k = 0;
+        }
+      }
+      var currentElement;
+      while (k < len) {
+        currentElement = O[k];
+        if (searchElement === currentElement ||
+          (searchElement !== searchElement && currentElement !== currentElement)) {
+          return true;
+        }
+        k++;
+      }
+      return false;
+    }
+  });
+}
+
+              ",
+        "raw": true,
+      },
+    },
+  ],
+  "resolve": Object {
+    "alias": Object {
+      "react-proxy": "@zamotany/react-proxy",
+    },
+    "extensions": Array [
+      ".ios.js",
+      ".native.js",
+      ".js",
+    ],
+    "mainFields": Array [
+      "react-native",
+      "browser",
+      "main",
+    ],
+    "plugins": Array [
+      HasteResolver {
+        "apply": [Function],
+      },
+      AssetResolver {
+        "apply": [Function],
+      },
+    ],
+  },
+  "target": "webworker",
+}
 `;
 
 exports[`merges existing config 1`] = `
-Array [
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "/some/file.js",
-    ],
-    "mode": "development",
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "/some/file.js",
+  ],
+  "mode": "development",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
         },
-      ],
-    },
-    "name": "ios",
-    "optimization": Object {
-      "concatenateModules": true,
-      "minimize": false,
-      "namedModules": true,
-    },
-    "output": Object {
-      "filename": "index.ios.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [],
-    "resolve": Object {},
-    "target": "webworker",
-  },
-  Object {
-    "context": "<<REPLACED>>/utils/__tests__/fixtures",
-    "entry": Array [
-      "<<REPLACED>>/utils/polyfillEnvironment.js",
-      "/some/file.js",
+      },
     ],
-    "mode": "development",
-    "module": Object {
-      "rules": Array [
-        Object {
-          "parser": Object {
-            "requireEnsure": false,
-          },
-        },
-      ],
-    },
-    "name": "android",
-    "optimization": Object {
-      "concatenateModules": true,
-      "minimize": false,
-      "namedModules": true,
-    },
-    "output": Object {
-      "filename": "index.android.bundle",
-      "path": "<<REPLACED>>/utils/__tests__/fixtures/dist",
-      "publicPath": "http://localhost:undefined/",
-    },
-    "plugins": Array [],
-    "resolve": Object {},
-    "target": "webworker",
   },
-]
+  "name": "ios",
+  "optimization": Object {
+    "concatenateModules": true,
+    "minimize": false,
+    "namedModules": true,
+  },
+  "output": Object {
+    "filename": "index.ios.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:undefined/",
+  },
+  "plugins": Array [],
+  "resolve": Object {},
+  "target": "webworker",
+}
 `;

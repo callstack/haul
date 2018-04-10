@@ -18,13 +18,25 @@ test('creates config from defaults', () => {
   process.chdir(path.join(__dirname, '..'));
 
   const webpackConfig = require('./fixtures/webpack.config.js');
-  const [configs, platforms] = makeReactNativeConfig(webpackConfig, {
-    dev: true,
-    root: path.resolve(__dirname, 'fixtures'),
-  });
+  const iosConfig = makeReactNativeConfig(
+    webpackConfig,
+    {
+      dev: true,
+      root: path.resolve(__dirname, 'fixtures'),
+    },
+    'ios'
+  );
+  const androidConfig = makeReactNativeConfig(
+    webpackConfig,
+    {
+      dev: true,
+      root: path.resolve(__dirname, 'fixtures'),
+    },
+    'android'
+  );
 
-  expect(replacePathsInObject(configs)).toMatchSnapshot('(configs)');
-  expect(platforms).toMatchSnapshot('(platforms)');
+  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
+  expect(replacePathsInObject(androidConfig)).toMatchSnapshot('android config');
 
   process.chdir(orginalPath);
 });
@@ -35,12 +47,16 @@ test('merges existing config', () => {
   process.chdir(path.join(__dirname, '..'));
 
   const webpackConfig = require('./fixtures/webpack.custom.config.js');
-  const [configs] = makeReactNativeConfig(webpackConfig, {
-    dev: true,
-    root: path.resolve(__dirname, 'fixtures'),
-  });
+  const config = makeReactNativeConfig(
+    webpackConfig,
+    {
+      dev: true,
+      root: path.resolve(__dirname, 'fixtures'),
+    },
+    'ios'
+  );
 
-  expect(replacePathsInObject(configs)).toMatchSnapshot();
+  expect(replacePathsInObject(config)).toMatchSnapshot();
 
   process.chdir(orginalPath);
 });
