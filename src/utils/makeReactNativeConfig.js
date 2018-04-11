@@ -218,9 +218,9 @@ const getDefaultConfig = ({
   };
 };
 
-/** 
+/**
  * Return React Native config
- * 
+ *
  * @deprecated
 */
 function DEPRECATEDMakeReactNativeConfig(
@@ -267,11 +267,11 @@ function makeReactNativeConfig(
 ): WebpackConfig {
   /**
    * We should support also the old format of config
-   * 
+   *
    * module.exports = {
    *   entry: './index.js',
    * };
-   * 
+   *
    * module.exports = ({ platform }) => ({
    *   entry: `./index.${platform}.js`,
    * });
@@ -365,7 +365,7 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
 
     const defaultWebpackConfig = getDefaultConfig(options);
 
-    /** 
+    /**
      * Currently we support only "entry" field in config file
      */
     const { entry } = haulWebpackConfiguration;
