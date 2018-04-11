@@ -9,13 +9,16 @@ const path = require('path');
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
-const { render, Text, ProgressBar } = require('react-stream-renderer');
+const {
+  render,
+  makeTTYAdapter,
+  makeTestAdapter,
+  Text,
+  ProgressBar,
+} = require('react-stream-renderer');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
-
-// $FlowFixMe
-const HEIGHT = process.stdout.rows;
 
 /**
  * Create and render React-powered UI for Haul packager server.
@@ -30,22 +33,43 @@ module.exports = function initUI(
   let nextId = 0;
   const logs = new Subject();
 
-  // Logger's methods need to be overwriten with custom React-aware implmenetion,
-  // so the logs get nicely displayed in approperiate section.
+  // Logger's methods need to be overwritten with custom React-aware implementation,
+  // so the logs get nicely displayed in appropriate section.
   Object.keys(logger).forEach(key => {
-    logger[key] = (...args) => {
-      logs.next({
-        issuer: 'haul',
-        id: nextId++,
-        type: key,
-        body: args,
-      });
-    };
+    if (key !== 'reset') {
+      logger[key] = (...args) => {
+        logs.next({
+          issuer: 'haul',
+          id: nextId++,
+          type: key,
+          body: args,
+        });
+      };
+    }
   });
 
+  const streamAdapter =
+    process.env.NODE_ENV === 'test'
+      ? makeTestAdapter({
+          height: 40,
+          width: 80,
+          onPrint(data) {
+            process.stdout.write(data);
+          },
+        })
+      : makeTTYAdapter(process.stdout)
+          .withCustomConsole({ outStream: true, errStream: true })
+          .hideCursor()
+          .makeEffects();
+
   render(
-    <ServerUI port={port} compiler={compiler} logs={logs} />,
-    process.stdout,
+    <ServerUI
+      port={port}
+      compiler={compiler}
+      logs={logs}
+      height={streamAdapter.getSize().height}
+    />,
+    streamAdapter,
     {
       hideCursor: true,
     }
@@ -99,10 +123,6 @@ class ServerUI extends React.Component<*, *> {
         }));
       }
     );
-
-    this.props.compiler.on(Compiler.Events.LOG, ({ message, logger: type }) => {
-      logger[type] && logger[type](message);
-    });
 
     this.props.compiler.on(Compiler.Events.BUILD_START, ({ platform }) => {
       this.setState(state => ({
@@ -211,7 +231,7 @@ class ServerUI extends React.Component<*, *> {
           <Text style={{ color: 'ansi-gray', marginLeft: 2 }}>(empty)</Text>
         ) : null}
         {this.state.logs
-          .slice(-HEIGHT + 10)
+          .slice(-this.props.height + 10)
           .map(
             item =>
               item.issuer === 'express'

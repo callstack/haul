@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Babel config is stored in `package.json` so that
  * Jest can read it.

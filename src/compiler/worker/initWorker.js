@@ -8,12 +8,13 @@
 const path = require('path');
 const WebSocket = require('ws');
 const MemoryFileSystem = require('memory-fs');
+const mime = require('mime-types');
+
 const Events = require('../events');
 const runWebpackCompiler = require('./runWebpackCompiler');
 
 module.exports = function initWorker({
   platform,
-  // fileOutput,
   options,
   socketAddress,
 }: {
@@ -44,10 +45,6 @@ module.exports = function initWorker({
       send(Events.BUILD_START);
     });
 
-    compiler.on(Events.LOG, payload => {
-      send(Events.LOG, payload);
-    });
-
     compiler.on(Events.BUILD_PROGRESS, payload => {
       send(Events.BUILD_PROGRESS, payload);
     });
@@ -70,7 +67,12 @@ module.exports = function initWorker({
       if (fs.existsSync(filename)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,
-          file: fs.readFileSync(filename).toString(),
+          file: fs.readFileSync(filename),
+          mimeType: mime.lookup(payload.filename) || 'text/javascript',
+        });
+      } else {
+        send(Events.FILE_NOT_FOUND, {
+          taskId: payload.taskId,
         });
       }
     } else {

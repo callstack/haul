@@ -105,15 +105,17 @@ module.exports = class Fork extends EventEmitter {
 
   terminate() {
     this.process.kill();
+    delete forks[this.platform];
     if (this.socket) {
       this.socket.close();
     }
 
-    if (transportServer) {
+    if (transportServer && !Object.keys(forks).length) {
       const socketAddress = transportServer.options.server.address();
       if (fs.existsSync(socketAddress)) {
         fs.unlinkSync(socketAddress);
       }
+      transportServer.close();
     }
   }
 };

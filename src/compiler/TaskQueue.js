@@ -20,6 +20,10 @@ module.exports = class TaskQueue {
     return id;
   }
 
+  set(id: number, item: any) {
+    this.queue.splice(id, 0, { id, item });
+  }
+
   pop(id: number) {
     const index = this.queue.findIndex(task => task.id === id);
     const { item } = this.queue[index];

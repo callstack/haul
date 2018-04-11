@@ -8,7 +8,7 @@
 
 const { runHaulSync } = require('../../runHaul');
 const path = require('path');
-const fs = require('fs');
+const rimraf = require('rimraf');
 
 export const TEST_PROJECT_DIR = path.resolve(
   __dirname,
@@ -27,5 +27,10 @@ export function bundleForPlatform(platform: string) {
     throw new Error(stdout);
   }
 
-  expect(fs.existsSync(bundlePath)).toBeTruthy();
+  return bundlePath;
+}
+
+export function cleanup(platform: 'ios' | 'android') {
+  rimraf.sync(path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle`));
+  rimraf.sync(path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle.map`));
 }

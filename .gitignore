@@ -21,5 +21,4 @@ yarn-debug.log
 .idea
 .gradle
 
-dist/
 coverage/

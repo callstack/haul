@@ -10,7 +10,7 @@ import type { Logger } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
-
+const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -19,13 +19,13 @@ const getBabelConfig = require('./getBabelConfig');
 const loggerUtil = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
 
-type ConfigOptions = {|
+type ConfigOptions = {
   root: string,
   dev: boolean,
   minify?: boolean,
   bundle?: boolean,
   port?: number,
-|};
+};
 
 type EnvOptions = {|
   ...ConfigOptions,
@@ -47,6 +47,11 @@ type WebpackConfig = {
   name?: string,
   plugins: WebpackPlugin[],
   context: string,
+  optimization: {
+    minimize: boolean,
+    namedModules: boolean,
+    concatenateModules: boolean,
+  },
 };
 
 type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
@@ -67,14 +72,13 @@ const getDefaultConfig = ({
   bundle,
   port,
 }): WebpackConfig => {
-  process.env.NODE_ENV = dev ? 'development' : 'production';
-
   // Getting Minor version
   return {
+    mode: dev ? 'development' : 'production',
     context: root,
     entry: [],
     output: {
-      path: path.join(root), // removed 'dist' from path
+      path: path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },
@@ -83,11 +87,8 @@ const getDefaultConfig = ({
         { parser: { requireEnsure: false } },
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!react|@expo|pretty-format|haul)/,
+          exclude: /node_modules\/(?!react|@expo|pretty-format|haul|metro)/,
           use: [
-            {
-              loader: require.resolve('thread-loader'),
-            },
             {
               loader: require.resolve('babel-loader'),
               options: Object.assign({}, getBabelConfig(root), {
@@ -120,7 +121,6 @@ const getDefaultConfig = ({
        * This is needed so we can error on incorrect case
        */
       new CaseSensitivePathsPlugin(),
-
       new webpack.DefinePlugin({
         /**
          * Various libraries like React rely on `process.env.NODE_ENV`
@@ -135,60 +135,45 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
-    ]
-      .concat(
-        dev
-          ? [
-              new webpack.HotModuleReplacementPlugin(),
-              new webpack.EvalSourceMapDevToolPlugin({
-                module: true,
-              }),
-              new webpack.SourceMapDevToolPlugin({
-                test: /\.(js|css|(js)?bundle)($|\?)/i,
-                filename: '[file].map',
-              }),
-              new webpack.NamedModulesPlugin(),
-            ]
-          : [
-              /**
+    ].concat(
+      dev
+        ? [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.EvalSourceMapDevToolPlugin({
+              module: true,
+            }),
+            new webpack.NamedModulesPlugin(),
+            new webpack.SourceMapDevToolPlugin({
+              test: /\.(js|css|(js)?bundle)($|\?)/i,
+              filename: '[file].map',
+            }),
+            new webpack.BannerPlugin({
+              banner: `
+                if (this && !this.self) { this.self = this; };
+                ${fs
+                  .readFileSync(
+                    path.join(
+                      __dirname,
+                      '../../vendor/polyfills/Array.prototype.es6.js'
+                    )
+                  )
+                  .toString()}
+              `,
+              raw: true,
+            }),
+          ]
+        : [
+            /**
                * By default, sourcemaps are only generated with *.js files
                * We need to use the plugin to configure *.bundle (Android, iOS - development)
                * and *.jsbundle (iOS - production) to emit sourcemap
                */
-              new webpack.SourceMapDevToolPlugin({
-                test: /\.(js|css|(js)?bundle)($|\?)/i,
-                filename: '[file].map',
-              }),
-              new webpack.optimize.ModuleConcatenationPlugin(),
-            ]
-      )
-      .concat(
-        minify
-          ? [
-              new webpack.optimize.UglifyJsPlugin({
-                /**
-                 * By default, uglify only minifies *.js files
-                 * We need to use the plugin to configure *.bundle (Android, iOS - development) 
-                 * and *.jsbundle (iOS - production) to get minified. 
-                 * Also disable IE8 support as we don't need it.
-                 */
-                test: /\.(js|(js)?bundle)($|\?)/i,
-                sourceMap: true,
-                compress: {
-                  screw_ie8: true,
-                  warnings: false,
-                },
-                mangle: {
-                  screw_ie8: true,
-                },
-                output: {
-                  comments: false,
-                  screw_ie8: true,
-                },
-              }),
-            ]
-          : []
-      ),
+            new webpack.SourceMapDevToolPlugin({
+              test: /\.(js|css|(js)?bundle)($|\?)/i,
+              filename: '[file].map',
+            }),
+          ]
+    ),
     resolve: {
       alias:
         process.env.NODE_ENV === 'production'
@@ -220,6 +205,11 @@ const getDefaultConfig = ({
        */
       mainFields: ['react-native', 'browser', 'main'],
       extensions: [`.${platform}.js`, '.native.js', '.js'],
+    },
+    optimization: {
+      minimize: !!minify,
+      namedModules: true,
+      concatenateModules: true,
     },
     /**
      * Set target to webworker as it's closer to RN environment than `web`.

@@ -26,6 +26,7 @@ if (
 }
 
 require('../../babelRegister');
+
 require('./initWorker')({
   platform: HAUL_PLATFORM,
   options: HAUL_OPTIONS,

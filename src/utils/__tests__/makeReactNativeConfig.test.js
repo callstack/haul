@@ -13,6 +13,10 @@ import {
 } from '../makeReactNativeConfig';
 
 test('creates config from defaults', () => {
+  // We need to go one level higher because of read polyfills with fs.readFileSync
+  const orginalPath = __dirname;
+  process.chdir(path.join(__dirname, '..'));
+
   const webpackConfig = require('./fixtures/haul.config.js');
   const iosConfig = makeReactNativeConfig(
     webpackConfig,
@@ -22,9 +26,6 @@ test('creates config from defaults', () => {
     },
     'ios'
   );
-
-  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
-
   const androidConfig = makeReactNativeConfig(
     webpackConfig,
     {
@@ -34,10 +35,17 @@ test('creates config from defaults', () => {
     'android'
   );
 
+  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
   expect(replacePathsInObject(androidConfig)).toMatchSnapshot('android config');
+
+  process.chdir(orginalPath);
 });
 
 test('merges existing config', () => {
+  // We need to go one level higher because of read polyfills with fs.readFileSync
+  const orginalPath = __dirname;
+  process.chdir(path.join(__dirname, '..'));
+
   const webpackConfig = require('./fixtures/haul.config.custom.js');
   const config = makeReactNativeConfig(
     webpackConfig,
@@ -49,6 +57,8 @@ test('merges existing config', () => {
   );
 
   expect(replacePathsInObject(config)).toMatchSnapshot();
+
+  process.chdir(orginalPath);
 });
 
 describe('injects polyfill into different entries', () => {

@@ -30,7 +30,7 @@ module.exports = function createForkProcess(
   options: Options
 ) {
   const workerPath = path.resolve(rootDir, 'worker/index.js');
-  const child = spawn(process.execPath, [workerPath], {
+  const child = spawn(process.execPath, ['--trace-warnings', workerPath], {
     cwd: process.cwd(),
     env: {
       HAUL_PLATFORM: platform,
@@ -38,7 +38,15 @@ module.exports = function createForkProcess(
       HAUL_OPTIONS: JSON.stringify(options),
       HAUL_SOCKET_ADDRESS: address,
     },
-    stdio: [0, 1, 2],
+    stdio: 'pipe',
+  });
+
+  child.stdout.on('data', data => {
+    console.log(data.toString());
+  });
+
+  child.stderr.on('data', data => {
+    console.error(data.toString());
   });
 
   child.on('error', error => {

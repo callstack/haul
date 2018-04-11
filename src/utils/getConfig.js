@@ -14,7 +14,7 @@ module.exports = function getConfig(
   configPath: string,
   configOptions: any,
   platform: string,
-  logger: Logger
+  logger?: Logger
 ) {
   let config;
 

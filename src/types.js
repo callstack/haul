@@ -42,6 +42,7 @@ export type Logger = {
   error: LoggerPrint,
   done: LoggerPrint,
   debug: LoggerPrint,
+  reset: () => Logger,
 };
 
 export type ReactNativeStackFrame = {

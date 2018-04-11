@@ -9,8 +9,10 @@ const { runHaul } = require('../runHaul');
 const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
-const { run, fetchBundle } = require('../utils');
+const { run } = require('../utils');
+const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
+const { isPortTaken } = require('../../src/utils/haulPortHandler');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
@@ -19,9 +21,15 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 let haul;
-beforeAll(done => {
+beforeAll(async done => {
+  const isTaken = await isPortTaken(8081);
+  if (isTaken) {
+    done.fail('Port is already in use. Cannot run Haul in test env');
+  }
+
   run('yarn --mutex network', TEST_PROJECT_DIR);
   haul = runHaul(TEST_PROJECT_DIR, ['start']);
+
   const messageBuffer = [];
 
   haul.stdout.on('data', data => {
@@ -35,7 +43,7 @@ beforeAll(done => {
       done.fail(message);
     }
 
-    if (message.match('ready')) {
+    if (message.match('running')) {
       done();
     }
   });
@@ -46,35 +54,16 @@ afterAll(() => {
   haul.kill();
 });
 
-test('starts server and bundling iOS platform', done => {
-  testPlatform('ios', done);
-});
+test('starts server and bundling iOS platform', () => testPlatform('ios'));
 
-test('starts server and bundling Android platform', done => {
-  testPlatform('android', done);
-});
+test('starts server and bundling Android platform', () =>
+  testPlatform('android'));
 
-test('starts server and bundling all platforms', done => {
-  let calledTimes = 0;
-  function _done() {
-    calledTimes++;
-    if (calledTimes === 2) {
-      done();
-    }
-  }
-  _done.fail = done.fail;
+test('starts server and bundling all platforms', () =>
+  Promise.all([testPlatform('ios'), testPlatform('android')]));
 
-  testPlatform('ios', _done);
-  testPlatform('android', _done);
-});
-
-function testPlatform(platform, done) {
-  fetchBundle(`http://localhost:8081/index.${platform}.bundle`)
-    .then(response => {
-      expect(response).toMatch('__webpack_require__');
-      done();
-    })
-    .catch(error => {
-      done.fail(error);
-    });
+async function testPlatform(platform) {
+  const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
+  const bundle = await res.text();
+  expect(bundle).toMatch('__webpack_require__');
 }
