@@ -6,6 +6,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
@@ -48,6 +49,15 @@ module.exports = function initUI(
     }
   });
 
+  const outStream = 'node_modules/.haul-artifacts/stdout.log';
+  const errStream = 'node_modules/.haul-artifacts/stderr.log';
+  if (
+    process.env.NODE_ENV !== 'test' &&
+    !fs.existsSync(path.dirname(path.resolve(outStream)))
+  ) {
+    fs.mkdirSync(path.dirname(path.resolve(outStream)));
+  }
+
   const streamAdapter =
     process.env.NODE_ENV === 'test'
       ? makeTestAdapter({
@@ -58,7 +68,10 @@ module.exports = function initUI(
           },
         })
       : makeTTYAdapter(process.stdout)
-          .withCustomConsole({ outStream: true, errStream: true })
+          .withCustomConsole({
+            outStream,
+            errStream,
+          })
           .hideCursor()
           .makeEffects();
 
