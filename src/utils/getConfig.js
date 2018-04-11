@@ -15,7 +15,7 @@ module.exports = function getConfig(
   configPath: string,
   configOptions: any,
   platform: Platform,
-  logger: Logger
+  logger?: Logger
 ) {
   let config;
 
@@ -24,6 +24,7 @@ module.exports = function getConfig(
    * we will use default configuration based on main file from package.json
    */
   if (configPath === null) {
+    // $FlowFixMe
     let entry = require(path.resolve(process.cwd(), 'package.json')).main;
 
     if (!entry) entry = 'index.js';
@@ -42,5 +43,6 @@ module.exports = function getConfig(
     config = config.__esModule ? config.default : config;
   }
 
+  // $FlowFixMe
   return makeReactNativeConfig(config, configOptions, platform, logger);
 };

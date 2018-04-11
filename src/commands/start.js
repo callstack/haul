@@ -40,6 +40,9 @@ async function start(opts: *) {
 
   const directory = process.cwd();
   const configPath = getWebpackConfigPath(directory, opts.config);
+
+  if (!configPath) return;
+
   const configOptions = {
     root: directory,
     dev: opts.dev,

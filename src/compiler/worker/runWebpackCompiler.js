@@ -4,6 +4,7 @@
  * 
  * @flow
  */
+import type { Logger, Platform } from '../../types';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
@@ -39,7 +40,14 @@ module.exports = function runWebpackCompiler({
     }
   );
 
-  const config = getConfig(configPath, configOptions, platform, loggerProxy);
+  const config = getConfig(
+    configPath,
+    configOptions,
+    // $FlowFixMe
+    (platform: Platform),
+    // $FlowFixMe
+    (loggerProxy: Logger)
+  );
 
   let lastPercent = -1;
   config.plugins.push(

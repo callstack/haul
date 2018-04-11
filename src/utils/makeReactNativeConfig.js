@@ -19,13 +19,13 @@ const getBabelConfig = require('./getBabelConfig');
 const loggerUtil = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
 
-type ConfigOptions = {
+type ConfigOptions = {|
   root: string,
   dev: boolean,
   minify?: boolean,
   bundle?: boolean,
   port?: number,
-};
+|};
 
 type EnvOptions = {|
   ...ConfigOptions,
