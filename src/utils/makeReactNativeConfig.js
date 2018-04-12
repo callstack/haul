@@ -291,6 +291,10 @@ function makeReactNativeConfig(
     );
   }
 
+  // TODO @zamotany
+
+  // throw new Error('lol');
+
   const { root, dev, minify, bundle, port } = options;
 
   const env = {
@@ -310,7 +314,7 @@ function makeReactNativeConfig(
     typeof webpackConfigFactory !== 'function' &&
     typeof webpackConfigFactory !== 'object'
   ) {
-    throw new Error(
+    logger.error(
       'The webpack configuration must be an object or a function returning an object. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
     );
   }
@@ -321,22 +325,30 @@ function makeReactNativeConfig(
       : webpackConfigFactory;
 
   if (typeof webpackConfig !== 'object' || webpackConfig === null) {
-    throw new Error(
+    logger.error(
       `The arguments passed to 'createWebpackConfig' must be an object or a function returning an object.`
     );
   }
 
-  if (typeof webpackConfig.entry !== 'string') {
-    throw new Error(
-      `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
-    );
+  let entries = webpackConfig.entry;
+
+  if (typeof entries === 'string') {
+    entries = [entries];
   }
 
-  if (!fs.existsSync(path.resolve(process.cwd(), webpackConfig.entry))) {
-    throw new Error(
-      `The file '${webpackConfig.entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
-    );
-  }
+  entries.forEach(entry => {
+    if (typeof entry !== 'string') {
+      logger.error(
+        `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
+      );
+    }
+
+    if (!fs.existsSync(path.resolve(process.cwd(), entry))) {
+      logger.error(
+        `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
+      );
+    }
+  });
 
   return webpackConfig;
 }
