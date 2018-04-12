@@ -320,6 +320,24 @@ function makeReactNativeConfig(
       ? webpackConfigFactory(env)
       : webpackConfigFactory;
 
+  if (typeof webpackConfig !== 'object' || webpackConfig === null) {
+    throw new Error(
+      `The arguments passed to 'createWebpackConfig' must be an object or a function returning an object.`
+    );
+  }
+
+  if (typeof webpackConfig.entry !== 'string') {
+    throw new Error(
+      `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
+    );
+  }
+
+  if (!fs.existsSync(path.resolve(process.cwd(), webpackConfig.entry))) {
+    throw new Error(
+      `The file '${webpackConfig.entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
+    );
+  }
+
   return webpackConfig;
 }
 
