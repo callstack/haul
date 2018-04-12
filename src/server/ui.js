@@ -21,6 +21,9 @@ const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
 
+const outStream = 'node_modules/.haul-artifacts/stdout.log';
+const errStream = 'node_modules/.haul-artifacts/stderr.log';
+
 /**
  * Create and render React-powered UI for Haul packager server.
  * Returns a logger middleware for express.
@@ -49,8 +52,6 @@ module.exports = function initUI(
     }
   });
 
-  const outStream = 'node_modules/.haul-artifacts/stdout.log';
-  const errStream = 'node_modules/.haul-artifacts/stderr.log';
   if (
     process.env.NODE_ENV !== 'test' &&
     !fs.existsSync(path.dirname(path.resolve(outStream)))
@@ -273,7 +274,7 @@ class ServerUI extends React.Component<*, *> {
         </Text>
 
         <Text style={{ marginTop: 1, color: 'ansi-gray' }}>
-          (Full error description can be found in {path.resolve('stdout.log')})
+          (Full error description can be found in {path.resolve(outStream)})
         </Text>
       </Text>
     );
