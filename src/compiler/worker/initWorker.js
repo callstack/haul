@@ -35,11 +35,18 @@ module.exports = function initWorker({
   }
 
   webSocket.on('open', () => {
-    const compiler = runWebpackCompiler({
-      platform,
-      options,
-      fs,
-    });
+    let compiler;
+
+    try {
+      compiler = runWebpackCompiler({
+        platform,
+        options,
+        fs,
+      });
+    } catch (e) {
+      send(Events.BUILD_FAILED, { message: e.message });
+      throw e;
+    }
 
     compiler.on(Events.BUILD_START, () => {
       send(Events.BUILD_START);

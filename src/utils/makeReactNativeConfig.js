@@ -314,7 +314,7 @@ function makeReactNativeConfig(
     typeof webpackConfigFactory !== 'function' &&
     typeof webpackConfigFactory !== 'object'
   ) {
-    logger.error(
+    throw new Error(
       'The webpack configuration must be an object or a function returning an object. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
     );
   }
@@ -325,7 +325,7 @@ function makeReactNativeConfig(
       : webpackConfigFactory;
 
   if (typeof webpackConfig !== 'object' || webpackConfig === null) {
-    logger.error(
+    throw new Error(
       `The arguments passed to 'createWebpackConfig' must be an object or a function returning an object.`
     );
   }
@@ -338,13 +338,13 @@ function makeReactNativeConfig(
 
   entries.forEach(entry => {
     if (typeof entry !== 'string') {
-      logger.error(
+      throw new Error(
         `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
       );
     }
 
     if (!fs.existsSync(path.resolve(process.cwd(), entry))) {
-      logger.error(
+      throw new Error(
         `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
       );
     }

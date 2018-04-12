@@ -4,6 +4,7 @@
  *
  * @flow
  */
+import type { Platform } from '../types';
 
 const path = require('path');
 const fs = require('fs');
@@ -109,7 +110,33 @@ function isCompilationInProgress(value) {
   return value >= 0 && value < 1;
 }
 
-class ServerUI extends React.Component<*, *> {
+type ServerPropsType = {
+  port: number,
+  compiler: Compiler,
+  logs: Subject,
+  height: number,
+};
+
+type forkStatusType = 'cold' | 'hot' | 'error';
+
+type ServerStateType = {
+  compilationProgress: {
+    ios: number,
+    android: number,
+  },
+  forkStatus: {
+    ios: forkStatusType,
+    android: forkStatusType,
+  },
+  logs: Array<{
+    body: any,
+    type: string,
+    id: number,
+  }>,
+  errors: Array<String>,
+};
+
+class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
   constructor(props) {
     super(props);
 
@@ -148,6 +175,19 @@ class ServerUI extends React.Component<*, *> {
     });
 
     this.props.compiler.on(
+      Compiler.Events.BUILD_FAILED,
+      ({ platform, message }) => {
+        this.setState(state => ({
+          errors: [...state.errors, message],
+          forkStatus: {
+            ...state.forkStatus,
+            [platform]: 'error',
+          },
+        }));
+      }
+    );
+
+    this.props.compiler.on(
       Compiler.Events.BUILD_FINISHED,
       ({ platform, errors }) => {
         this.setState(state => ({
@@ -167,7 +207,7 @@ class ServerUI extends React.Component<*, *> {
     });
   }
 
-  _makeProgressBar(platform, label, marginLeft = 0) {
+  _makeProgressBar(platform: Platform, label, marginLeft = 0) {
     return (
       <Text>
         <Text
@@ -185,7 +225,11 @@ class ServerUI extends React.Component<*, *> {
         </Text>
         <Text style={{ margin: '0 2 0 1', display: 'inline' }}>
           {emoji.get(
-            this.state.forkStatus[platform] === 'hot' ? 'fire' : 'zzz'
+            {
+              hot: 'fire',
+              cold: 'zzz',
+              error: 'warning',
+            }[this.state.forkStatus[platform]]
           )}
         </Text>
         <ProgressBar

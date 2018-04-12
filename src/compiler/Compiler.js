@@ -143,6 +143,10 @@ module.exports = class Compiler extends EventEmitter {
       this.emit(Events.BUILD_PROGRESS, { platform, ...payload });
     });
 
+    fork.on(Events.BUILD_FAILED, payload => {
+      this.emit(Events.BUILD_FAILED, { platform, ...payload });
+    });
+
     return fork;
   }
 
