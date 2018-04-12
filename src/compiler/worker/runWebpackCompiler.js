@@ -50,17 +50,24 @@ module.exports = function runWebpackCompiler({
   );
 
   let lastPercent = -1;
-  config.plugins.push(
-    new webpack.ProgressPlugin(percent => {
-      const newPercent = percent.toFixed(2);
-      if (newPercent !== lastPercent) {
-        lastPercent = newPercent;
-        emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
-      }
-    })
-  );
 
-  const compiler = webpack(config);
+  /**
+   * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
+   */
+  const compiler = webpack({
+    ...config,
+    plugins: [
+      ...config.plugins,
+      new webpack.ProgressPlugin(percent => {
+        const newPercent = percent.toFixed(2);
+        if (newPercent !== lastPercent) {
+          lastPercent = newPercent;
+          emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
+        }
+      }),
+    ],
+  });
+
   // Use memory fs
   compiler.outputFileSystem = fs;
 
