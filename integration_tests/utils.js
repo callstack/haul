@@ -12,7 +12,6 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
-const http = require('http');
 
 const run = (cmd: string, cwd?: string) => {
   const args = cmd.split(/\s/).slice(1);
@@ -110,25 +109,6 @@ function replaceTestPath(string: string) {
   return string.replace(/^\W+(.*)integration_tests/gm, '<<REPLACED>>');
 }
 
-function fetchBundle(url: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    http.get(url, response => {
-      if (response.statusCode !== 200) {
-        reject(response.statusCode);
-      } else {
-        let body = '';
-        response.setEncoding('utf8');
-        response.on('data', chunk => {
-          body += chunk;
-        });
-        response.on('end', () => {
-          resolve(body);
-        });
-      }
-    });
-  });
-}
-
 module.exports = {
   cleanup,
   copyDir,
@@ -137,5 +117,4 @@ module.exports = {
   run,
   writeFiles,
   replaceTestPath,
-  fetchBundle,
 };
