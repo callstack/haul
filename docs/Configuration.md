@@ -63,4 +63,4 @@ export default {
 };
 ```
 
-With this approach wou can also take advantage from [webpack-merge](https://github.com/survivejs/webpack-merge). See the [Webpack website](https://webpack.js.org/) to learn more about configuring Webpack.
+With this approach wou can also take advantage of [webpack-merge](https://github.com/survivejs/webpack-merge). See the [Webpack website](https://webpack.js.org/) to learn more about configuring Webpack.
