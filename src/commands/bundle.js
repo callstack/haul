@@ -24,8 +24,6 @@ async function bundle(opts: *) {
   const directory = process.cwd();
   const configPath = getWebpackConfigPath(directory, opts.config);
 
-  if (!configPath) return;
-
   const config = getConfig(
     configPath,
     { root: directory, dev: opts.dev, minify: opts.minify, bundle: true },

@@ -21,7 +21,7 @@ type ConfigOptionsType = {
 };
 
 type MiddlewareOptions = {
-  configPath: string,
+  configPath: ?string,
   configOptions: ConfigOptionsType,
 };
 

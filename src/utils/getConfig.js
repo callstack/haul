@@ -12,7 +12,7 @@ const { createWebpackConfig } = require('../index');
 const { makeReactNativeConfig } = require('./makeReactNativeConfig');
 
 module.exports = function getConfig(
-  configPath: string,
+  configPath: ?string,
   configOptions: any,
   platform: Platform,
   logger?: Logger
