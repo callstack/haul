@@ -6,6 +6,7 @@
  */
 
 import path from 'path';
+import snapshotDiff from 'snapshot-diff';
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import {
   makeReactNativeConfig,
@@ -32,10 +33,12 @@ describe('makeReactNativeConfig', () => {
       'android'
     );
 
-    expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
-    expect(replacePathsInObject(androidConfig)).toMatchSnapshot(
-      'android config'
-    );
+    expect(
+      snapshotDiff(
+        replacePathsInObject(iosConfig),
+        replacePathsInObject(androidConfig)
+      )
+    ).toMatchSnapshot('diff ios/android config');
   });
 
   it('merges existing config', () => {
@@ -49,7 +52,12 @@ describe('makeReactNativeConfig', () => {
       'ios'
     );
 
-    expect(replacePathsInObject(config)).toMatchSnapshot();
+    expect(config.entry).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/polyfillEnvironment\.js/),
+        './index.js',
+      ])
+    );
   });
 });
 

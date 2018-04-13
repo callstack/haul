@@ -1,5 +1,7 @@
+/* @flow */
 import path from 'path';
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
+import snapshotDiff from 'snapshot-diff';
 import getConfig from '../getConfig';
 
 const cwd = process.cwd();
@@ -12,7 +14,6 @@ describe('zero config', () => {
 
   afterEach(() => {
     // $FlowFixMe
-
     process.cwd = () => cwd;
   });
 
@@ -26,7 +27,23 @@ describe('zero config', () => {
       'ios'
     );
 
-    expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
+    expect(iosConfig).toMatchObject({
+      mode: 'development',
+      context: expect.any(String),
+      entry: expect.any(Array),
+      output: expect.objectContaining({
+        path: expect.any(String),
+        filename: 'index.ios.bundle',
+        publicPath: expect.any(String),
+      }),
+      module: {
+        rules: expect.any(Array),
+      },
+      plugins: expect.any(Array),
+      optimization: expect.objectContaining({}),
+      target: 'webworker',
+      name: 'ios',
+    });
   });
 
   it('zero config - android', () => {
@@ -39,9 +56,23 @@ describe('zero config', () => {
       'android'
     );
 
-    expect(replacePathsInObject(androidConfig)).toMatchSnapshot(
-      'android config'
-    );
+    expect(androidConfig).toMatchObject({
+      mode: 'development',
+      context: expect.any(String),
+      entry: expect.any(Array),
+      output: expect.objectContaining({
+        path: expect.any(String),
+        filename: 'index.android.bundle',
+        publicPath: expect.any(String),
+      }),
+      module: {
+        rules: expect.any(Array),
+      },
+      plugins: expect.any(Array),
+      optimization: expect.objectContaining({}),
+      target: 'webworker',
+      name: 'android',
+    });
   });
 });
 
@@ -66,5 +97,11 @@ it('creates config', () => {
   );
 
   expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
-  expect(replacePathsInObject(androidConfig)).toMatchSnapshot('android config');
+
+  expect(
+    snapshotDiff(
+      replacePathsInObject(iosConfig),
+      replacePathsInObject(androidConfig)
+    )
+  ).toMatchSnapshot('diff ios/android config');
 });
