@@ -12,41 +12,45 @@ import {
   injectPolyfillIntoEntry,
 } from '../makeReactNativeConfig';
 
-test('creates config from defaults', () => {
-  const webpackConfig = require('./fixtures/haul.config.js');
-  const iosConfig = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'ios'
-  );
-  const androidConfig = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'android'
-  );
+describe('makeReactNativeConfig', () => {
+  it('creates config from defaults', () => {
+    const webpackConfig = require('./fixtures/haul.config.js');
+    const iosConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    const androidConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'android'
+    );
 
-  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
-  expect(replacePathsInObject(androidConfig)).toMatchSnapshot('android config');
-});
+    expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
+    expect(replacePathsInObject(androidConfig)).toMatchSnapshot(
+      'android config'
+    );
+  });
 
-test('merges existing config', () => {
-  const webpackConfig = require('./fixtures/haul.config.custom.js');
-  const config = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'ios'
-  );
+  it('merges existing config', () => {
+    const webpackConfig = require('./fixtures/haul.config.custom.js');
+    const config = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
 
-  expect(replacePathsInObject(config)).toMatchSnapshot();
+    expect(replacePathsInObject(config)).toMatchSnapshot();
+  });
 });
 
 describe('injects polyfill into different entries', () => {

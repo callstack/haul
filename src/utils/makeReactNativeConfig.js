@@ -291,10 +291,6 @@ function makeReactNativeConfig(
     );
   }
 
-  // TODO @zamotany
-
-  // throw new Error('lol');
-
   const { root, dev, minify, bundle, port } = options;
 
   const env = {
@@ -343,7 +339,7 @@ function makeReactNativeConfig(
       );
     }
 
-    if (!fs.existsSync(path.resolve(process.cwd(), entry))) {
+    if (!fs.existsSync(path.resolve(root, entry))) {
       throw new Error(
         `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
       );
