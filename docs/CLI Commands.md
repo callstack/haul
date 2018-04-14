@@ -1,4 +1,7 @@
-# CLI Commands
+---
+id: cli
+title: CLI Commands
+---
 
 ## `haul init`
 

@@ -1,4 +1,7 @@
-# Haul HMR API
+---
+id: hmr_api
+title: Haul HMR API
+---
 
 ## Module `haul/hot/patch.js`
 
@@ -16,7 +19,7 @@ require('haul/hot/patch');
   does nothing.
 
 * In development (`NODE_ENV !== 'production'`):
-  
+
   Patches React's `createElement` and `createFactory`, so that they use `react-proxy` and return a proxied component. Those components behave like the normal ones, but have their state persisted between updates.
 
   This file __must be imported/required in the root file / entry file before anything else__, since the code must be executed at the very beginning.

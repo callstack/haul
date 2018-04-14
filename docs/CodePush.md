@@ -1,5 +1,7 @@
-# Integrating Haul with CodePush
-
+---
+id: codepush
+title: Integrating Haul with CodePush
+---
 
 ## What is CodePush?
 
