@@ -7,19 +7,18 @@
 
 const React = require('react');
 
-class Footer extends React.Component {
+class Footer extends React.Component<*> {
   docUrl(doc, language) {
     const baseUrl = this.props.config.baseUrl;
-    return baseUrl + 'docs/' + (language ? language + '/' : '') + doc;
+    return `${baseUrl}docs/${language ? `${language}/` : ''}${doc}`;
   }
 
   pageUrl(doc, language) {
     const baseUrl = this.props.config.baseUrl;
-    return baseUrl + (language ? language + '/' : '') + doc;
+    return baseUrl + (language ? `${language}/` : '') + doc;
   }
 
   render() {
-    const currentYear = new Date().getFullYear();
     return (
       <footer className="nav-footer" id="footer">
         <section className="sitemap">
@@ -38,9 +37,7 @@ class Footer extends React.Component {
             <a href={this.docUrl('getting_started.html', this.props.language)}>
               Getting Started
             </a>
-            <a href={this.docUrl('cli.html', this.props.language)}>
-              Guides
-            </a>
+            <a href={this.docUrl('cli.html', this.props.language)}>Guides</a>
           </div>
           <div>
             <h5>Community</h5>
@@ -49,17 +46,23 @@ class Footer extends React.Component {
             </a>
             <a
               href="http://stackoverflow.com/questions/tagged/haul"
-              target="_blank">
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               Stack Overflow
             </a>
             <a
               href="https://slack.callstack.com/"
-              target="_blank">
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               Project Chat
             </a>
             <a
               href="https://twitter.com/callstackio"
-              target="_blank">
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               Twitter
             </a>
           </div>
@@ -68,9 +71,7 @@ class Footer extends React.Component {
             <a href={this.props.config.repoUrl}>GitHub</a>
           </div>
         </section>
-        <section className="copyright">
-          {this.props.config.copyright}
-        </section>
+        <section className="copyright">{this.props.config.copyright}</section>
       </footer>
     );
   }

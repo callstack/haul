@@ -28,9 +28,9 @@ const siteConfig = {
   baseUrl: '/haul/' /* base url for your project */,
   projectName: 'haul',
   headerLinks: [
-    {doc: 'getting_started', label: 'Docs'},
-    {doc: 'cli', label: 'CLI'},
-    {href: 'https://github.com/callstack/haul', label: 'GitHub'},
+    { doc: 'getting_started', label: 'Docs' },
+    { doc: 'cli', label: 'CLI' },
+    { href: 'https://github.com/callstack/haul', label: 'GitHub' },
   ],
   users,
   /* path to images for header/footer */
@@ -43,12 +43,8 @@ const siteConfig = {
     secondaryColor: '#F7BA74',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
-  copyright:
-    'Copyright © ' +
-    new Date().getFullYear() +
-    ' Callstack.io',
+  copyright: `Copyright © ${new Date().getFullYear()} Callstack.io`,
   // organizationName: 'deltice', // or set an env variable ORGANIZATION_NAME
-  projectName: 'haul', // or set an env variable PROJECT_NAME
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'default',

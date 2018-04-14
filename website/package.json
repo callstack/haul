@@ -10,5 +10,12 @@
   },
   "devDependencies": {
     "docusaurus": "^1.0.5"
+  },
+  "eslintConfig": {
+    "rules": {
+      "react/no-multi-comp": 0,
+      "import/no-unresolved": 0,
+      "import/no-extraneous-dependencies": 0
+    }
   }
 }

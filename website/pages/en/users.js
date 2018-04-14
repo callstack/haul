@@ -6,18 +6,18 @@
  */
 
 const React = require('react');
-
 const CompLibrary = require('../../core/CompLibrary.js');
+
 const Container = CompLibrary.Container;
 
-const siteConfig = require(process.cwd() + '/siteConfig.js');
+const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
 class Users extends React.Component {
   render() {
-    const showcase = siteConfig.users.map((user, i) => {
+    const showcase = siteConfig.users.map(user => {
       return (
-        <a href={user.infoLink} key={i}>
-          <img src={user.image} title={user.caption} />
+        <a href={user.infoLink} key={user.infoLink}>
+          <img src={user.image} title={user.caption} alt={user.caption} />
         </a>
       );
     });
@@ -27,7 +27,7 @@ class Users extends React.Component {
         <Container padding={['bottom']}>
           <div className="showcaseSection">
             <div className="prose">
-              <h1>Who's Using This?</h1>
+              <h1>Who&#x27;s Using This?</h1>
               <p>This project is used by many folks</p>
             </div>
             <div className="logos">{showcase}</div>
@@ -36,7 +36,8 @@ class Users extends React.Component {
             </div>
             <a
               href="https://github.com/callstack/haul/edit/master/website/siteConfig.js"
-              className="button">
+              className="button"
+            >
               Add your company
             </a>
           </div>
