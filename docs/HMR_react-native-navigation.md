@@ -1,6 +1,7 @@
-# HMR setup with `react-native-navigation`
-
-> Navigate to: [API docs](../API.md)
+---
+id: hmr_react_native_navigation
+title: HMR setup with `react-native-navigation`
+---
 
 Since we don't know how your project looks like, we will use one of the possible setups. If your project is structured differently, please __tweak this guide according to your needs__.
 

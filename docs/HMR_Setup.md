@@ -1,4 +1,7 @@
-# Hot Module Replacement setup
+---
+id: hmr_setup
+title: Hot Module Replacement setup
+---
 
 For projects created before version 0.49.0, use [this guide](https://github.com/callstack/haul/blob/740b6c3cfb51d3919c69e37935d69a4c96dec94e/docs/hmr/Setup.md).
 

@@ -1,4 +1,7 @@
-# Configuration
+---
+id: configuration
+title: Configuration
+---
 
 > You can use Haul also without any configuration. If you don't have in you project file named `haul.config.js` and you don't specify custom one it will be used the default Haul configuration with entry point from you `package.json`
 
