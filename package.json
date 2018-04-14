@@ -25,14 +25,14 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack-io/haul/issues",
   "peerDependencies": {
-    "babel-preset-react-native": "^2.0.0",
+    "babel-preset-react-native": "^2.0.0 || ^3.0.0 || ^4.0.0",
     "react": "*",
     "react-native": "*"
   },
   "dependencies": {
     "@zamotany/react-proxy": "3.0.0-alpha.4",
     "babel-core": "^6.24.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.2.2",
@@ -68,7 +68,7 @@
     "semver": "^5.5.0",
     "source-map": "^0.5.6",
     "strip-ansi": "^3.0.1",
-    "thread-loader": "^1.1.1",
+    "thread-loader": "^1.1.5",
     "webpack": "^4.1.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1",
