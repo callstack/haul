@@ -6,7 +6,7 @@
  */
 /* eslint-disable no-param-reassign */
 
-import type { Logger } from '../types';
+import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -29,7 +29,7 @@ type ConfigOptions = {|
 
 type EnvOptions = {|
   ...ConfigOptions,
-  platform: string,
+  platform: Platform,
 |};
 
 type WebpackPlugin = {
@@ -226,7 +226,7 @@ const getDefaultConfig = ({
 function DEPRECATEDMakeReactNativeConfig(
   userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
-  platform: string
+  platform: Platform
 ) {
   const { root, dev, minify, bundle, port } = options;
 
@@ -262,7 +262,7 @@ function DEPRECATEDMakeReactNativeConfig(
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
-  platform: string,
+  platform: Platform,
   logger: Logger = loggerUtil
 ): WebpackConfig {
   /**
