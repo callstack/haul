@@ -1,0 +1,50 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Configuration · Haul</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Configuration · Haul"/><meta property="og:type" content="website"/><meta property="og:url" content="https://facebook.github.io/haul/index.html"/><meta property="og:description" content="The `webpack.haul.js` file is a webpack configuration used by `Haul`. The simplest config looks like this:"/><link rel="shortcut icon" href="/haul/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/haul/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/haul/"><img class="logo" src="/haul/img/haul_logo_box_only.png"/><h2 class="headerTitle">Haul</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/haul/docs/getting_started.html" target="_self">Docs</a></li><li><a href="/haul/docs/cli.html" target="_self">CLI</a></li><li><a href="https://github.com/callstack/haul" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Getting Started</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/getting_started.html">Add Haul to your project</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/haul/docs/configuration.html">Configuration</a></li></ul></div><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/cli.html">CLI Commands</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/recipes.html">Recipes</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/codepush.html">Integrating Haul with CodePush</a></li></ul></div><div class="navGroup navGroupActive"><h3>Hot Module Reloading</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_setup.html">Hot Module Replacement setup</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_api.html">Haul HMR API</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_navigation.html">HMR setup with `react-navigation`</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_native_navigation.html">HMR setup with `react-native-navigation`</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Configuration</h1></header><article><div><span><p>The <code>webpack.haul.js</code> file is a webpack configuration used by <code>Haul</code>. The simplest config looks like this:</p>
+<pre><code class="hljs css js"><span class="hljs-built_in">module</span>.exports = {
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">'./index.js'</span>,
+};
+</code></pre>
+<p>This works when you have a single <code>index.js</code> as the entry point. But when you have more than one entry point like <code>index.android.js</code> and <code>index.ios.js</code>, or you want to customize the webpack configuration, you can export a function instead of a plain object.</p>
+<p>The function will receive options as the first parameter, and the configuration used by <code>Haul</code> as the second parameter.</p>
+<p>Options is an object with the following shape:</p>
+<pre><code class="hljs css js">type Options = {
+  <span class="hljs-attr">platform</span>: <span class="hljs-string">'ios'</span> | <span class="hljs-string">'android'</span>, <span class="hljs-comment">// Current platform</span>
+  dev: boolean, <span class="hljs-comment">// Whether to build for development</span>
+  minify: boolean, <span class="hljs-comment">// Whether to minify the bundle</span>
+  bundle: boolean, <span class="hljs-comment">// Whether building the bundle for packaging</span>
+  root: string, <span class="hljs-comment">// Absolute path to the project root</span>
+}
+</code></pre>
+<p>You should return the final configuration object to be used by <code>Haul</code> based on the arguments.</p>
+<p>For example, to configure your entry point according to the platform, you can do the following:</p>
+<pre><code class="hljs css js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">{ platform }</span>) =&gt;</span> ({
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">`./index.<span class="hljs-subst">${platform}</span>.js`</span>,
+});
+</code></pre>
+<p>If you are want to customize the webpack configuration, like <code>loaders</code> etc., define them as usual, and merge the passed configuration in:</p>
+<pre><code class="hljs css js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">{ platform }, defaults</span>) =&gt;</span> ({
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">`./index.<span class="hljs-subst">${platform}</span>.js`</span>,
+  <span class="hljs-attr">module</span>: {
+    ...defaults.module,
+    <span class="hljs-attr">rules</span>: [
+      ...defaults.module.rules,
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.js$/</span>,
+        <span class="hljs-attr">use</span>: <span class="hljs-string">'custom-loader'</span>,
+      }
+    ],
+  },
+  <span class="hljs-attr">resolve</span>: {
+    ...defaults.resolve,
+    <span class="hljs-attr">plugins</span>: [...defaults.resolve.plugins, <span class="hljs-keyword">new</span> CustomPlugin()],
+    <span class="hljs-attr">modules</span>: [<span class="hljs-string">'src'</span>],
+  },
+});
+</code></pre>
+<p>See the <a href="https://webpack.js.org/">Webpack website</a> to learn more about configuring Webpack.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="getting_started.html">← Getting Started</a><a class="docs-next button" href="cli.html">CLI Commands →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/haul/" class="nav-home"></a><div><h5>Docs</h5><a href="/haul/docs/en/getting_started.html">Getting Started</a><a href="/haul/docs/en/cli.html">Guides</a></div><div><h5>Community</h5><a href="/haul/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/haul" rel="noopener noreferrer" target="_blank">Stack Overflow</a><a href="https://slack.callstack.com/" rel="noopener noreferrer" target="_blank">Project Chat</a><a href="https://twitter.com/callstackio" rel="noopener noreferrer" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/callstack/haul">GitHub</a></div></section><section class="copyright">Copyright © 2018 Callstack.io</section></footer></div></body></html>

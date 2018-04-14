@@ -1,0 +1,64 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>HMR setup with `react-native-navigation` · Haul</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="HMR setup with `react-native-navigation` · Haul"/><meta property="og:type" content="website"/><meta property="og:url" content="https://facebook.github.io/haul/index.html"/><meta property="og:description" content="Since we don&#x27;t know how your project looks like, we will use one of the possible setups. If your project is structured differently, please __tweak this guide according to your needs__."/><link rel="shortcut icon" href="/haul/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/haul/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/haul/"><img class="logo" src="/haul/img/haul_logo_box_only.png"/><h2 class="headerTitle">Haul</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/haul/docs/getting_started.html" target="_self">Docs</a></li><li><a href="/haul/docs/cli.html" target="_self">CLI</a></li><li><a href="https://github.com/callstack/haul" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Hot Module Reloading</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/getting_started.html">Add Haul to your project</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/configuration.html">Configuration</a></li></ul></div><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/cli.html">CLI Commands</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/recipes.html">Recipes</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/codepush.html">Integrating Haul with CodePush</a></li></ul></div><div class="navGroup navGroupActive"><h3>Hot Module Reloading</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_setup.html">Hot Module Replacement setup</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_api.html">Haul HMR API</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_navigation.html">HMR setup with `react-navigation`</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/haul/docs/hmr_react_native_navigation.html">HMR setup with `react-native-navigation`</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>HMR setup with `react-native-navigation`</h1></header><article><div><span><p>Since we don't know how your project looks like, we will use one of the possible setups. If your project is structured differently, please <strong>tweak this guide according to your needs</strong>.</p>
+<hr>
+<p>Let's assume you have <code>index.js</code> file which imports your screens and bootstraps the navigation. Add <code>import 'haul/hot/patch';</code> at the beginning:</p>
+<pre><code class="hljs css diff">// index.js
+<span class="hljs-addition">+ import 'haul/hot/patch';</span>
+import { Navigation } from 'react-native-navigation';
+
+// Screens
+import Calendar from './Calendar';
+import Localization from './Localization';
+import Information from './Information';
+
+Navigation.registerComponent('Calendar', () =&gt; Calendar);
+Navigation.registerComponent('Localization', () =&gt; Localization);
+Navigation.registerComponent('Information',() =&gt; Information);
+</code></pre>
+<p><code>import 'haul/hot/patch';</code> should be placed in the root file / entry file, since <strong>the code from this file must be executed before anything else!</strong></p>
+<p>Now, make the following changes:</p>
+<pre><code class="hljs css diff">// index.js
+import 'haul/hot/patch';
+import { Navigation } from 'react-native-navigation';
+<span class="hljs-addition">+ import {</span>
+<span class="hljs-addition">+   makeHot,</span>
+<span class="hljs-addition">+   redraw,</span>
+<span class="hljs-addition">+   callOnce,</span>
+<span class="hljs-addition">+   clearCacheFor</span>
+<span class="hljs-addition">+ } from 'haul/hot';</span>
+
+// Screens
+import Calendar from './Calendar';
+import Localization from './Localization';
+import Information from './Information';
+
+<span class="hljs-deletion">- Navigation.registerComponent('Calendar', () =&gt; Calendar);</span>
+<span class="hljs-addition">+ Navigation.registerComponent('Calendar', makeHot(() =&gt; Calendar, 'Calendar');</span>
+<span class="hljs-deletion">- Navigation.registerComponent('Localization', () =&gt; Localization);</span>
+<span class="hljs-addition">+ Navigation.registerComponent('Localization', makeHot(() =&gt; Localization, 'Localization');</span>
+<span class="hljs-deletion">- Navigation.registerComponent('Information',() =&gt; Information);</span>
+<span class="hljs-addition">+ Navigation.registerComponent('Information', makeHot(() =&gt; Information, 'Information');</span>
+
+<span class="hljs-addition">+ if (module.hot) {</span>
+<span class="hljs-addition">+   module.hot.accept('./Calendar.js', () =&gt; {</span>
+<span class="hljs-addition">+     clearCacheFor(require.resolve('./Calendar.js'));</span>
+<span class="hljs-addition">+     redraw(() =&gt; require('./Calendar.js').default, 'Calendar');</span>
+<span class="hljs-addition">+   });</span>
+<span class="hljs-addition">+   module.hot.accept('./Localization.js', () =&gt; {</span>
+<span class="hljs-addition">+     clearCacheFor(require.resolve('./index.js'));</span>
+<span class="hljs-addition">+     redraw(() =&gt; require('./Localization.js').default, 'Localization');</span>
+<span class="hljs-addition">+   });</span>
+<span class="hljs-addition">+   module.hot.accept('./Information.js', () =&gt; {</span>
+<span class="hljs-addition">+     clearCacheFor(require.resolve('./index.js'));</span>
+<span class="hljs-addition">+     redraw(() =&gt; require('./Information.js').default, 'Information');</span>
+<span class="hljs-addition">+   });</span>
+<span class="hljs-addition">+ }</span>
+</code></pre>
+<p>You may need to tweak the paths according to your project structure.</p>
+<p>Now, enable HMR from <em>Developer menu</em> by taping <em>Enable Hot Reloading</em>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="hmr_react_navigation.html">← HMR setup with `react-navigation`</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/haul/" class="nav-home"></a><div><h5>Docs</h5><a href="/haul/docs/en/getting_started.html">Getting Started</a><a href="/haul/docs/en/cli.html">Guides</a></div><div><h5>Community</h5><a href="/haul/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/haul" rel="noopener noreferrer" target="_blank">Stack Overflow</a><a href="https://slack.callstack.com/" rel="noopener noreferrer" target="_blank">Project Chat</a><a href="https://twitter.com/callstackio" rel="noopener noreferrer" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/callstack/haul">GitHub</a></div></section><section class="copyright">Copyright © 2018 Callstack.io</section></footer></div></body></html>

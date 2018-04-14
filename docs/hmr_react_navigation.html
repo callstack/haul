@@ -1,0 +1,127 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>HMR setup with `react-navigation` · Haul</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="HMR setup with `react-navigation` · Haul"/><meta property="og:type" content="website"/><meta property="og:url" content="https://facebook.github.io/haul/index.html"/><meta property="og:description" content="Since we don&#x27;t know how your project looks like, we will use one of the possible setups. If your project is structured differently, please __tweak this guide according to your needs__."/><link rel="shortcut icon" href="/haul/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/haul/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/haul/"><img class="logo" src="/haul/img/haul_logo_box_only.png"/><h2 class="headerTitle">Haul</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/haul/docs/getting_started.html" target="_self">Docs</a></li><li><a href="/haul/docs/cli.html" target="_self">CLI</a></li><li><a href="https://github.com/callstack/haul" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Hot Module Reloading</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/getting_started.html">Add Haul to your project</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/configuration.html">Configuration</a></li></ul></div><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/cli.html">CLI Commands</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/recipes.html">Recipes</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/codepush.html">Integrating Haul with CodePush</a></li></ul></div><div class="navGroup navGroupActive"><h3>Hot Module Reloading</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_setup.html">Hot Module Replacement setup</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_api.html">Haul HMR API</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/haul/docs/hmr_react_navigation.html">HMR setup with `react-navigation`</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_native_navigation.html">HMR setup with `react-native-navigation`</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>HMR setup with `react-navigation`</h1></header><article><div><span><p>Since we don't know how your project looks like, we will use one of the possible setups. If your project is structured differently, please <strong>tweak this guide according to your needs</strong>.</p>
+<hr>
+<p>Let's assume you have <code>index.js</code> file which imports your screens:</p>
+<pre><code class="hljs css javascript"><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">import</span> {
+  AppRegistry,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
+<span class="hljs-keyword">import</span> { StackNavigator } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-navigation'</span>;
+
+<span class="hljs-keyword">import</span> HomeScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./src/HomeScreen'</span>;
+<span class="hljs-keyword">import</span> SecondScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./src/SecondScreen'</span>;
+
+<span class="hljs-keyword">const</span> MyApp = StackNavigator({
+  <span class="hljs-attr">Home</span>: { <span class="hljs-attr">screen</span>: HomeScreen },
+  <span class="hljs-attr">Second</span>: { <span class="hljs-attr">screen</span>: SecondScreen },
+});
+
+AppRegistry.registerComponent(<span class="hljs-string">'MyApp'</span>, () =&gt; MyApp);
+</code></pre>
+<p>First thing you need to do is to add the following code snipped at the top of <code>App.js</code> file:</p>
+<pre><code class="hljs css diff">// index.js
+<span class="hljs-addition">+ import 'haul/hot/patch';</span>
+<span class="hljs-addition">+ import { makeHot, clearCacheFor, redraw } from 'haul/hot';</span>
+import {
+  AppRegistry,
+} from 'react-native';
+import { StackNavigator } from 'react-navigation';
+
+import HomeScreen from './src/HomeScreen';
+import SecondScreen from './src/SecondScreen';
+
+const MyApp = StackNavigator({
+  Home: { screen: HomeScreen },
+  Second: { screen: SecondScreen },
+});
+
+AppRegistry.registerComponent('MyApp', () =&gt; MyApp);
+</code></pre>
+<p><code>import 'haul/hot/patch'</code> must be placed before anything else, since <strong>the code in that file must be executed at the very beginning!</strong></p>
+<hr>
+<p>Now, if you're defining your screens using <code>screen</code> property, you must replace it with <code>getScreen</code> and convert the value to a function:</p>
+<pre><code class="hljs css diff">// index.js
+import 'haul/hot/patch';
+import { makeHot, clearCacheFor, redraw } from 'haul/hot';
+import {
+  AppRegistry,
+} from 'react-native';
+import { StackNavigator } from 'react-navigation';
+
+import HomeScreen from './src/HomeScreen';
+import SecondScreen from './src/SecondScreen';
+
+const MyApp = StackNavigator({
+<span class="hljs-deletion">-   Home: { screen: HomeScreen },</span>
+<span class="hljs-deletion">-   Second: { screen: SecondScreen },</span>
+<span class="hljs-addition">+   Home: { getScreen: () =&gt; HomeScreen },</span>
+<span class="hljs-addition">+   Second: { getScreen: () =&gt; SecondScreen },</span>
+});
+
+AppRegistry.registerComponent('MyApp', () =&gt; MyApp);
+</code></pre>
+<p>Then, wrap those screen factories with <code>makeHot</code> call and pass the name of the screen as a second argument:</p>
+<pre><code class="hljs css diff">// index.js
+import 'haul/hot/patch';
+import { makeHot, clearCacheFor, redraw } from 'haul/hot';
+import {
+  AppRegistry,
+} from 'react-native';
+import { StackNavigator } from 'react-navigation';
+
+import HomeScreen from './src/HomeScreen';
+import SecondScreen from './src/SecondScreen';
+
+const MyApp = StackNavigator({
+<span class="hljs-deletion">-   Home: { getScreen: () =&gt; HomeScreen },</span>
+<span class="hljs-deletion">-   Second: { getScreen: () =&gt; SecondScreen },</span>
+<span class="hljs-addition">+   Home: { getScreen: makeHot(() =&gt; HomeScreen, 'Home') },</span>
+<span class="hljs-addition">+   Second: { getScreen: makeHot(() =&gt; SecondScreen, 'Second') },</span>
+});
+
+AppRegistry.registerComponent('MyApp', () =&gt; MyApp);
+</code></pre>
+<hr>
+<p>Now, the screens can be updated upon hot update by calling <code>redraw</code>.
+Place the following code snipped at the end of the file:</p>
+<pre><code class="hljs css diff">// index.js
+import 'haul/hot/patch';
+import { makeHot, clearCacheFor, redraw } from 'haul/hot';
+import {
+  AppRegistry,
+} from 'react-native';
+import { StackNavigator } from 'react-navigation';
+
+import HomeScreen from './src/HomeScreen';
+import SecondScreen from './src/SecondScreen';
+
+const MyApp = StackNavigator({
+  Home: { getScreen: makeHot(() =&gt; HomeScreen, 'Home') },
+  Second: { getScreen: makeHot(() =&gt; SecondScreen, 'Second') },
+});
+
+AppRegistry.registerComponent('MyApp', () =&gt; MyApp);
+
+<span class="hljs-addition">+ if (module.hot) {</span>
+<span class="hljs-addition">+   module.hot.accept('./src/HomeScreen.js', () =&gt; {</span>
+<span class="hljs-addition">+     clearCacheFor(require.resolve('./src/HomeScreen'));</span>
+<span class="hljs-addition">+     redraw(() =&gt; require('./src/HomeScreen').default, 'Home');</span>
+<span class="hljs-addition">+   });</span>
+<span class="hljs-addition">+   module.hot.accept('./src/SecondScreen.js', () =&gt; {</span>
+<span class="hljs-addition">+     clearCacheFor(require.resolve('./src/SecondScreen'));</span>
+<span class="hljs-addition">+     redraw(() =&gt; require('./src/SecondScreen').default, 'Second');</span>
+<span class="hljs-addition">+   });</span>
+<span class="hljs-addition">+ }</span>
+</code></pre>
+<p>Each screen must have a separate <code>module.hot.accept</code> call with first argument being a path to the file with the screen.
+Usually you can just copy the path from <code>import</code> statement.</p>
+<p>Inside each <code>module.hot.accept</code>'s second argument (which is a function), you need to call <code>clearCacheFor</code> with <code>require.resolve</code> and the path to a screen.
+Finally, you need to call <code>redraw</code> function and pass screen factory method, which must return an updated screen component (the best way to do it, is to <code>require</code> it)
+and the name of the screen - the same one as in <code>makeHot</code>.</p>
+<p>Now, enable HMR from <em>Developer menu</em> by taping <em>Enable Hot Reloading</em>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="hmr_api.html">← Haul HMR API</a><a class="docs-next button" href="hmr_react_native_navigation.html">HMR setup with `react-native-navigation` →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/haul/" class="nav-home"></a><div><h5>Docs</h5><a href="/haul/docs/en/getting_started.html">Getting Started</a><a href="/haul/docs/en/cli.html">Guides</a></div><div><h5>Community</h5><a href="/haul/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/haul" rel="noopener noreferrer" target="_blank">Stack Overflow</a><a href="https://slack.callstack.com/" rel="noopener noreferrer" target="_blank">Project Chat</a><a href="https://twitter.com/callstackio" rel="noopener noreferrer" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/callstack/haul">GitHub</a></div></section><section class="copyright">Copyright © 2018 Callstack.io</section></footer></div></body></html>

@@ -1,0 +1,174 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Hot Module Replacement setup · Haul</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Hot Module Replacement setup · Haul"/><meta property="og:type" content="website"/><meta property="og:url" content="https://facebook.github.io/haul/index.html"/><meta property="og:description" content="For projects created before version 0.49.0, use [this guide](https://github.com/callstack/haul/blob/740b6c3cfb51d3919c69e37935d69a4c96dec94e/docs/hmr/Setup.md)."/><link rel="shortcut icon" href="/haul/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/haul/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/haul/"><img class="logo" src="/haul/img/haul_logo_box_only.png"/><h2 class="headerTitle">Haul</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/haul/docs/getting_started.html" target="_self">Docs</a></li><li><a href="/haul/docs/cli.html" target="_self">CLI</a></li><li><a href="https://github.com/callstack/haul" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Hot Module Reloading</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/getting_started.html">Add Haul to your project</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/configuration.html">Configuration</a></li></ul></div><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/haul/docs/cli.html">CLI Commands</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/recipes.html">Recipes</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/codepush.html">Integrating Haul with CodePush</a></li></ul></div><div class="navGroup navGroupActive"><h3>Hot Module Reloading</h3><ul><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/haul/docs/hmr_setup.html">Hot Module Replacement setup</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_api.html">Haul HMR API</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_navigation.html">HMR setup with `react-navigation`</a></li><li class="navListItem"><a class="navItem" href="/haul/docs/hmr_react_native_navigation.html">HMR setup with `react-native-navigation`</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Hot Module Replacement setup</h1></header><article><div><span><p>For projects created before version 0.49.0, use <a href="https://github.com/callstack/haul/blob/740b6c3cfb51d3919c69e37935d69a4c96dec94e/docs/hmr/Setup.md">this guide</a>.</p>
+<p><strong>The instructions below assume you're running RN 0.49.0 or newer.</strong></p>
+<blockquote>
+<p>Jump to: <a href="#automatic-setup">Automatic setup</a> | <a href="#manual-setup">Manual setup</a></p>
+</blockquote>
+<p>For smaller projects, we provide automatic option for setting up Hot Module Replacement. If your project meets the following criteria, you can use our one-line setup for HMR:</p>
+<ul>
+<li>Single root component exported from <code>App.js</code> file with <code>default</code> keyword (<code>export default</code>)</li>
+<li>Single <code>AppRegistry.registerComponent</code> call in <code>index.js</code></li>
+</ul>
+<p>So, <code>index.js</code> file should look more or less like this:</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">import</span> { AppRegistry } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">'./App'</span>;
+
+AppRegistry.registerComponent(<span class="hljs-string">'MyProject'</span>, () =&gt; App);
+</code></pre>
+<p>All <strong>default</strong> <code>index.js</code> and <code>App.js</code> files created by <code>react-native init</code> work with the automatic setup out of the box.</p>
+<h2><a class="anchor" aria-hidden="true" name="automatic-setup"></a><a href="#automatic-setup" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Automatic setup</h2>
+<p>In order to enable HMR add <code>import 'haul/hot';</code> at the top of the <code>index.js</code> file. Then, from within <em>Developer menu</em> tap <em>Enable Hot Reloading</em>.</p>
+<h2><a class="anchor" aria-hidden="true" name="manual-setup"></a><a href="#manual-setup" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Manual setup</h2>
+<blockquote>
+<p>Navigate to: <a href="./API.md">API docs</a></p>
+</blockquote>
+<blockquote>
+<p>Jump to: <a href="#examples">Examples</a></p>
+</blockquote>
+<p>For advanced projects or the ones with different structure, we provide our own HMR API, which allows you to enable HMR regardless of which navigation library you use and how you structure your code.</p>
+<p>This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following navigation libraries, please refer to associated guide:</p>
+<ul>
+<li><a href="./guides/react-navigation.md"><code>react-navigation</code></a></li>
+<li><a href="./guides/react-native-navigation.md"><code>react-native-navigation</code></a></li>
+</ul>
+<hr>
+<p>Haul uses <code>react-hot-loader</code> to support HMR, so the first step is to <em>patch</em> React's <code>createElement</code> and <code>createFactory</code> functions to use <code>react-proxy</code>. Proxied component can be updated with a new implementation but it's state is persisted between updates.
+In order to do that, add the following line to <code>__the root file__</code> - the one that is used as an entrypoint, before any other code:</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">import</span> <span class="hljs-string">'haul/hot/patch'</span>;
+</code></pre>
+<p>It's important that <strong>the code from <code>haul/hot/patch</code> is evaluated before anything else!</strong></p>
+<p>Now, we need to wrap the <strong>root component factories</strong> using <code>makeHot</code> function. Root component factory is a function that returns a <strong>root component</strong>:</p>
+<pre><code class="hljs css javascript">() =&gt; RootComponent
+</code></pre>
+<p>You can encounter those in <code>AppRegistry.registerComponent</code> or <code>Navigation.registerComponent</code> calls:</p>
+<pre><code class="hljs css javascript">AppRegistry.registerComponent(<span class="hljs-string">'MyApp'</span>, () =&gt; MyApp);
+<span class="hljs-comment">// or</span>
+Navigation.registerComponent(<span class="hljs-string">'MyScreen'</span>, () =&gt; MyScreen);
+</code></pre>
+<p>After wrapping those with <code>makeHot</code> it should look like this:</p>
+<pre><code class="hljs css javascript">AppRegistry.registerComponent(<span class="hljs-string">'MyApp'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> MyApp));
+<span class="hljs-comment">// or</span>
+Navigation.registerComponent(<span class="hljs-string">'MyScreen'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> MyScreen));
+</code></pre>
+<p>If your app has <strong>multiple root components</strong> (usually they're treated as screens), you need to pass the second argument to <code>makeHot</code> call, which is a <code>id</code> of the component factory. It will be used later to tell which component needs to be redrawn:</p>
+<pre><code class="hljs css javascript">Navigation.registerComponent(<span class="hljs-string">'MyScreen1'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> MyScreen1, <span class="hljs-string">'MyScreen1'</span>));
+Navigation.registerComponent(<span class="hljs-string">'MyScreen2'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> MyScreen2, <span class="hljs-string">'MyScreen2'</span>));
+Navigation.registerComponent(<span class="hljs-string">'MyScreen3'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> MyScreen3, <span class="hljs-string">'MyScreen3'</span>));
+</code></pre>
+<p>All of the functions we use in this guide can be imported from <code>haul/hot</code>:</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">import</span> {
+  makeHot,
+  tryUpdateSelf,
+  callOnce,
+  clearCacheFor,
+  redraw
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'haul/hot'</span>;
+</code></pre>
+<p>The last thing is to acually tell the Webpack which modules we want to accept and how to update them. You can safely copy-pase the following snippet:</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">''</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">''</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">''</span>).default);
+  });
+}
+</code></pre>
+<p>Now, you need to replace empty strings with the paths according to the following rules:</p>
+<ul>
+<li>If you have a <strong>single root component</strong>, it's better to extract the <code>module.hot.accept</code> logic to a parent file (the one that imports the <strong>root component</strong>), then you can replace all of the empty strings with path to that component:
+<pre><code class="hljs css javascript"><span class="hljs-comment">// file: index.js</span>
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">'./App'</span>;
+
+<span class="hljs-comment">/* ... */</span>
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {})
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./App'</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./App'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./App'</span>).default);
+  });
+}
+</code></pre></li>
+<li>If you have a <strong>multi root component</strong>, all of the paths should point to the root component and each of the root components should have a separate <code>module.hot.accept</code> call:
+<pre><code class="hljs css javascript"><span class="hljs-comment">// file: index.js</span>
+<span class="hljs-keyword">import</span> Screen1 <span class="hljs-keyword">from</span> <span class="hljs-string">'./Screen1'</span>;
+<span class="hljs-keyword">import</span> Screen2 <span class="hljs-keyword">from</span> <span class="hljs-string">'./Screen2'</span>;
+
+<span class="hljs-comment">/* ... */</span>
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {})
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./Screen1'</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./Screen1'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./Screen1'</span>).default, <span class="hljs-string">'Screen1'</span>);
+  });
+
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./Screen2'</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./Screen2'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./Screen2'</span>).default, <span class="hljs-string">'Screen2'</span>);
+  });
+}
+</code></pre></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" name="examples"></a><a href="#examples" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Examples</h2>
+<h3><a class="anchor" aria-hidden="true" name="single-root-component-in-a-entry-file"></a><a href="#single-root-component-in-a-entry-file" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Single root component in a entry file</h3>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">import</span> <span class="hljs-string">'haul/hot/patch'</span>;
+<span class="hljs-keyword">import</span> {
+  makeHot,
+  tryUpdateSelf,
+  callOnce,
+  clearCacheFor,
+  redraw
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'haul/hot'</span>;
+<span class="hljs-keyword">import</span> {
+  AppRegistry,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">'./App'</span>;
+
+AppRegistry.registerComponent(<span class="hljs-string">'MyApp'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> App));
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {})
+  <span class="hljs-built_in">module</span>.hot.accept([<span class="hljs-string">'./App'</span>], () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./App'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./App'</span>).default);
+  });
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" name="multi-root-component"></a><a href="#multi-root-component" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Multi root component</h3>
+<pre><code class="hljs css javascript"><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'haul/hot/patch'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'./screens'</span>;
+</code></pre>
+<pre><code class="hljs css javascript"><span class="hljs-comment">// screens.js</span>
+<span class="hljs-keyword">import</span> {
+  makeHot,
+  tryUpdateSelf,
+  callOnce,
+  clearCacheFor,
+  redraw
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'haul/hot'</span>;
+<span class="hljs-keyword">import</span> Navigation <span class="hljs-keyword">from</span> <span class="hljs-string">'some-naviagtion-lib'</span>;
+
+<span class="hljs-keyword">import</span> Calendar <span class="hljs-keyword">from</span> <span class="hljs-string">'./Calendar'</span>;
+<span class="hljs-keyword">import</span> Location <span class="hljs-keyword">from</span> <span class="hljs-string">'./Location'</span>;
+
+Navigation.registerComponent(<span class="hljs-string">'Calendar'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Calendar, <span class="hljs-string">'Calendar'</span>));
+Navigation.registerComponent(<span class="hljs-string">'Location'</span>, makeHot(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Location, <span class="hljs-string">'Location'</span>));
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./Calendar'</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./Calendar'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./Calendar'</span>).default, <span class="hljs-string">'Calendar'</span>);
+  });
+  <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./Location'</span>, () =&gt; {
+    clearCacheFor(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'./Location'</span>));
+    redraw(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'./Location'</span>).default, <span class="hljs-string">'Location'</span>);
+  });
+}
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="codepush.html">← Integrating Haul with CodePush</a><a class="docs-next button" href="hmr_api.html">Haul HMR API →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/haul/" class="nav-home"></a><div><h5>Docs</h5><a href="/haul/docs/en/getting_started.html">Getting Started</a><a href="/haul/docs/en/cli.html">Guides</a></div><div><h5>Community</h5><a href="/haul/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/haul" rel="noopener noreferrer" target="_blank">Stack Overflow</a><a href="https://slack.callstack.com/" rel="noopener noreferrer" target="_blank">Project Chat</a><a href="https://twitter.com/callstackio" rel="noopener noreferrer" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/callstack/haul">GitHub</a></div></section><section class="copyright">Copyright © 2018 Callstack.io</section></footer></div></body></html>
