@@ -39,7 +39,7 @@ const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy');
 /**
  * Packager-like Server running on top of Webpack
  */
-function createServer(config: { configPath: string, configOptions: Object }) {
+function createServer(config: { configPath: ?string, configOptions: Object }) {
   const appHandler = express();
   appHandler.disable('etag');
 

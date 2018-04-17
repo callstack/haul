@@ -26,8 +26,8 @@ import type {
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
 const fetch = require('node-fetch');
+const getConfig = require('../../utils/getConfig');
 const Compiler = require('../../compiler/Compiler');
-const getConfig = require('../../compiler/worker/getConfig');
 const messages = require('../../messages');
 const logger = require('../../logger');
 
@@ -143,7 +143,6 @@ function create(
     if (!consumer) return next();
 
     // the base directory
-    // $FlowFixMe
     const root = getConfig(configPath, configOptions, platform).context;
 
     // error error on the wall, who's the fairest stack of all?

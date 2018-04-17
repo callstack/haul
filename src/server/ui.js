@@ -4,8 +4,10 @@
  *
  * @flow
  */
+import type { Platform } from '../types';
 
 const path = require('path');
+const fs = require('fs');
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
@@ -19,6 +21,9 @@ const {
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
+
+const outStream = 'node_modules/.haul-artifacts/stdout.log';
+const errStream = 'node_modules/.haul-artifacts/stderr.log';
 
 /**
  * Create and render React-powered UI for Haul packager server.
@@ -48,6 +53,13 @@ module.exports = function initUI(
     }
   });
 
+  if (
+    process.env.NODE_ENV !== 'test' &&
+    !fs.existsSync(path.dirname(path.resolve(outStream)))
+  ) {
+    fs.mkdirSync(path.dirname(path.resolve(outStream)));
+  }
+
   const streamAdapter =
     process.env.NODE_ENV === 'test'
       ? makeTestAdapter({
@@ -58,7 +70,10 @@ module.exports = function initUI(
           },
         })
       : makeTTYAdapter(process.stdout)
-          .withCustomConsole({ outStream: true, errStream: true })
+          .withCustomConsole({
+            outStream,
+            errStream,
+          })
           .hideCursor()
           .makeEffects();
 
@@ -95,7 +110,33 @@ function isCompilationInProgress(value) {
   return value >= 0 && value < 1;
 }
 
-class ServerUI extends React.Component<*, *> {
+type ServerPropsType = {
+  port: number,
+  compiler: Compiler,
+  logs: Subject,
+  height: number,
+};
+
+type forkStatusType = 'cold' | 'hot' | 'error';
+
+type ServerStateType = {
+  compilationProgress: {
+    ios: number,
+    android: number,
+  },
+  forkStatus: {
+    ios: forkStatusType,
+    android: forkStatusType,
+  },
+  logs: Array<{
+    body: any,
+    type: string,
+    id: number,
+  }>,
+  errors: Array<String>,
+};
+
+class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
   constructor(props) {
     super(props);
 
@@ -134,6 +175,19 @@ class ServerUI extends React.Component<*, *> {
     });
 
     this.props.compiler.on(
+      Compiler.Events.BUILD_FAILED,
+      ({ platform, message }) => {
+        this.setState(state => ({
+          errors: [...state.errors, message],
+          forkStatus: {
+            ...state.forkStatus,
+            [platform]: 'error',
+          },
+        }));
+      }
+    );
+
+    this.props.compiler.on(
       Compiler.Events.BUILD_FINISHED,
       ({ platform, errors }) => {
         this.setState(state => ({
@@ -153,7 +207,7 @@ class ServerUI extends React.Component<*, *> {
     });
   }
 
-  _makeProgressBar(platform, label, marginLeft = 0) {
+  _makeProgressBar(platform: Platform, label, marginLeft = 0) {
     return (
       <Text>
         <Text
@@ -171,7 +225,11 @@ class ServerUI extends React.Component<*, *> {
         </Text>
         <Text style={{ margin: '0 2 0 1', display: 'inline' }}>
           {emoji.get(
-            this.state.forkStatus[platform] === 'hot' ? 'fire' : 'zzz'
+            {
+              hot: 'fire',
+              cold: 'zzz',
+              error: 'warning',
+            }[this.state.forkStatus[platform]]
           )}
         </Text>
         <ProgressBar
@@ -260,7 +318,7 @@ class ServerUI extends React.Component<*, *> {
         </Text>
 
         <Text style={{ marginTop: 1, color: 'ansi-gray' }}>
-          (Full error description can be found in {path.resolve('stdout.log')})
+          (Full error description can be found in {path.resolve(outStream)})
         </Text>
       </Text>
     );

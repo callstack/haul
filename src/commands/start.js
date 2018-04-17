@@ -10,8 +10,9 @@ const inquirer = require('inquirer');
 
 const logger = require('../logger');
 const createServer = require('../server');
-const getWebpackConfig = require('../utils/getWebpackConfig');
+const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
+const { DEFAULT_CONFIG_FILE_PATH, DEFAULT_PORT } = require('../constants');
 
 /**
  * Starts development server
@@ -38,7 +39,8 @@ async function start(opts: *) {
   }
 
   const directory = process.cwd();
-  const configPath = getWebpackConfig(directory, opts.config);
+  const configPath = getWebpackConfigPath(directory, opts.config);
+
   const configOptions = {
     root: directory,
     dev: opts.dev,
@@ -60,7 +62,7 @@ module.exports = ({
     {
       name: 'port',
       description: 'Port to run your webpack server',
-      default: 8081,
+      default: DEFAULT_PORT,
       parse: Number,
     },
     {
@@ -97,8 +99,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: 'Path to config file, eg. webpack.haul.js',
-      default: 'webpack.haul.js',
+      description: `Path to config file, eg. ${DEFAULT_CONFIG_FILE_PATH}`,
+      default: DEFAULT_CONFIG_FILE_PATH,
     },
   ],
 }: Command);

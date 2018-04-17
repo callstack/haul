@@ -4,12 +4,13 @@
  * 
  * @flow
  */
+import type { Logger, Platform } from '../../types';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
 
-const getConfig = global.requireWithRootDir('./getConfig');
-const Events = global.requireWithRootDir('../events');
+const getConfig = require('../../utils/getConfig');
+const Events = require('../events');
 
 module.exports = function runWebpackCompiler({
   platform,
@@ -22,20 +23,51 @@ module.exports = function runWebpackCompiler({
   const emitter = new EventEmitter();
 
   const { configPath, configOptions } = JSON.parse(options);
-  const config = getConfig(configPath, configOptions, platform);
 
-  let lastPercent = -1;
-  config.plugins.push(
-    new webpack.ProgressPlugin(percent => {
-      const newPercent = percent.toFixed(2);
-      if (newPercent !== lastPercent) {
-        lastPercent = newPercent;
-        emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
-      }
-    })
+  /**
+   * Proxy based on Logger.js 
+   */
+  const loggerProxy = new Proxy(
+    {},
+    {
+      get: function get(object, logger) {
+        return new Proxy(() => {}, {
+          apply: (target, that, [message]) => {
+            setImmediate(() => emitter.emit(Events.LOG, { message, logger }));
+          },
+        });
+      },
+    }
   );
 
-  const compiler = webpack(config);
+  const config = getConfig(
+    configPath,
+    configOptions,
+    // $FlowFixMe
+    (platform: Platform),
+    // $FlowFixMe
+    (loggerProxy: Logger)
+  );
+
+  let lastPercent = -1;
+
+  /**
+   * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
+   */
+  const compiler = webpack({
+    ...config,
+    plugins: [
+      ...config.plugins,
+      new webpack.ProgressPlugin(percent => {
+        const newPercent = percent.toFixed(2);
+        if (newPercent !== lastPercent) {
+          lastPercent = newPercent;
+          emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
+        }
+      }),
+    ],
+  });
+
   // Use memory fs
   compiler.outputFileSystem = fs;
 

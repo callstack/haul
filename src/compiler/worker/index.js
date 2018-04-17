@@ -5,8 +5,6 @@
  * @flow
  */
 
-const path = require('path');
-
 /**
  * Get env vars
  */
@@ -27,13 +25,9 @@ if (
   throw new Error('Unable to create worker due to missing env variables');
 }
 
-global.requireWithRootDir = function requireWithRootDir(moduleId) {
-  // $FlowFixMe
-  return require(path.resolve(HAUL_DIRECTORY, moduleId));
-};
+require('../../babelRegister');
 
-global.requireWithRootDir(path.join(HAUL_DIRECTORY, '../../babelRegister'));
-global.requireWithRootDir(path.join(HAUL_DIRECTORY, './initWorker'))({
+require('./initWorker')({
   platform: HAUL_PLATFORM,
   options: HAUL_OPTIONS,
   socketAddress: HAUL_SOCKET_ADDRESS,

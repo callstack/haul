@@ -9,6 +9,7 @@ import type { Platform } from '../types';
 
 const EventEmitter = require('events');
 const Events = require('./events');
+const logger = require('../logger');
 const Fork = require('./Fork');
 const TaskQueue = require('./TaskQueue');
 
@@ -120,6 +121,12 @@ module.exports = class Compiler extends EventEmitter {
       });
     });
 
+    fork.on(Events.LOG, ({ message, logger: type }) => {
+      logger[type] && logger[type](message);
+
+      this.emit(Events.BUILD_START, { platform, message, logger });
+    });
+
     fork.on(Events.BUILD_START, payload => {
       this.emit(Events.BUILD_START, { platform, ...payload });
     });
@@ -134,6 +141,10 @@ module.exports = class Compiler extends EventEmitter {
 
     fork.on(Events.BUILD_PROGRESS, payload => {
       this.emit(Events.BUILD_PROGRESS, { platform, ...payload });
+    });
+
+    fork.on(Events.BUILD_FAILED, payload => {
+      this.emit(Events.BUILD_FAILED, { platform, ...payload });
     });
 
     return fork;

@@ -1,27 +1,33 @@
 # Configuration
 
-The `webpack.haul.js` file is a webpack configuration used by `Haul`. The simplest config looks like this:
+> You can use Haul also without any configuration. If you don't have in you project file named `haul.config.js` and you don't specify custom one it will be used the default Haul configuration with entry point from you `package.json`
+
+The `haul.config.js` file is a configuration used by `Haul`. The simplest config looks like this:
 
 ```js
-module.exports = {
-  entry: './index.js',
+import { createWebpackConfig } from "haul";
+
+export default {
+  webpack: createWebpackConfig({
+    entry: `./index.js`
+  })
 };
 ```
 
-This works when you have a single `index.js` as the entry point. But when you have more than one entry point like `index.android.js` and `index.ios.js`, or you want to customize the webpack configuration, you can export a function instead of a plain object.
+This works when you have a single `index.js` as the entry point. But when you have more than one entry point like `index.android.js` and `index.ios.js`, or you want to customize the webpack configuration, you can use a function as an argument instead of a plain object.
 
-The function will receive options as the first parameter, and the configuration used by `Haul` as the second parameter.
+The function will receive options as the first parameter.
 
 Options is an object with the following shape:
 
 ```js
 type Options = {
-  platform: 'ios' | 'android', // Current platform
+  platform: "ios" | "android", // Current platform
   dev: boolean, // Whether to build for development
   minify: boolean, // Whether to minify the bundle
   bundle: boolean, // Whether building the bundle for packaging
-  root: string, // Absolute path to the project root
-}
+  root: string // Absolute path to the project root
+};
 ```
 
 You should return the final configuration object to be used by `Haul` based on the arguments.
@@ -29,32 +35,32 @@ You should return the final configuration object to be used by `Haul` based on t
 For example, to configure your entry point according to the platform, you can do the following:
 
 ```js
-module.exports = ({ platform }) => ({
-  entry: `./index.${platform}.js`,
-});
+import { createWebpackConfig } from "haul";
+
+export default {
+  webpack: createWebpackConfig(({ platform }) => ({
+    entry: `./index.${platform}.js`
+  }))
+};
 ```
 
 If you are want to customize the webpack configuration, like `loaders` etc., define them as usual, and merge the passed configuration in:
 
 ```js
-module.exports = ({ platform }, defaults) => ({
-  entry: `./index.${platform}.js`,
-  module: {
-    ...defaults.module,
-    rules: [
-      ...defaults.module.rules,
-      {
-        test: /\.js$/,
-        use: 'custom-loader',
-      }
-    ],
-  },
-  resolve: {
-    ...defaults.resolve,
-    plugins: [...defaults.resolve.plugins, new CustomPlugin()],
-    modules: ['src'],
-  },
-});
+import { createWebpackConfig } from "haul";
+
+export default {
+  webpack: env => {
+    const config = createWebpackConfig({
+      entry: `./index.js`,
+      include: /node_modules/
+    })(env);
+
+    config.plugins.push(new CaseSensitivePathsPlugin());
+
+    return config;
+  }
+};
 ```
 
-See the [Webpack website](https://webpack.js.org/) to learn more about configuring Webpack.
+With this approach wou can also take advantage of [webpack-merge](https://github.com/survivejs/webpack-merge). See the [Webpack website](https://webpack.js.org/) to learn more about configuring Webpack.

@@ -19,5 +19,7 @@ module.exports = {
 
   LIVE_RELOAD: 'LIVE_RELOAD',
 
+  LOG: 'LOG',
+
   COMMUNICATION_ERROR: 'COMMUNICATION_ERROR',
 };

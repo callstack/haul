@@ -6,59 +6,59 @@
  */
 
 import path from 'path';
+import snapshotDiff from 'snapshot-diff';
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import {
   makeReactNativeConfig,
   injectPolyfillIntoEntry,
 } from '../makeReactNativeConfig';
 
-test('creates config from defaults', () => {
-  // We need to go one level higher because of read polyfills with fs.readFileSync
-  const orginalPath = __dirname;
-  process.chdir(path.join(__dirname, '..'));
+describe('makeReactNativeConfig', () => {
+  it('creates config from defaults', () => {
+    const webpackConfig = require('./fixtures/haul.config.js');
+    const iosConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    const androidConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'android'
+    );
 
-  const webpackConfig = require('./fixtures/webpack.config.js');
-  const iosConfig = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'ios'
-  );
-  const androidConfig = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'android'
-  );
+    expect(
+      snapshotDiff(
+        replacePathsInObject(iosConfig),
+        replacePathsInObject(androidConfig)
+      )
+    ).toMatchSnapshot('diff ios/android config');
+  });
 
-  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
-  expect(replacePathsInObject(androidConfig)).toMatchSnapshot('android config');
+  it('merges existing config', () => {
+    const webpackConfig = require('./fixtures/haul.config.custom.js');
+    const config = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
 
-  process.chdir(orginalPath);
-});
-
-test('merges existing config', () => {
-  // We need to go one level higher because of read polyfills with fs.readFileSync
-  const orginalPath = __dirname;
-  process.chdir(path.join(__dirname, '..'));
-
-  const webpackConfig = require('./fixtures/webpack.custom.config.js');
-  const config = makeReactNativeConfig(
-    webpackConfig,
-    {
-      dev: true,
-      root: path.resolve(__dirname, 'fixtures'),
-    },
-    'ios'
-  );
-
-  expect(replacePathsInObject(config)).toMatchSnapshot();
-
-  process.chdir(orginalPath);
+    expect(config.entry).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/polyfillEnvironment\.js/),
+        './index.js',
+      ])
+    );
+  });
 });
 
 describe('injects polyfill into different entries', () => {

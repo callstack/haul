@@ -10,8 +10,8 @@ const WebSocket = require('ws');
 const MemoryFileSystem = require('memory-fs');
 const mime = require('mime-types');
 
-const Events = global.requireWithRootDir('../events');
-const runWebpackCompiler = global.requireWithRootDir('./runWebpackCompiler');
+const Events = require('../events');
+const runWebpackCompiler = require('./runWebpackCompiler');
 
 module.exports = function initWorker({
   platform,
@@ -35,14 +35,25 @@ module.exports = function initWorker({
   }
 
   webSocket.on('open', () => {
-    const compiler = runWebpackCompiler({
-      platform,
-      options,
-      fs,
-    });
+    let compiler;
+
+    try {
+      compiler = runWebpackCompiler({
+        platform,
+        options,
+        fs,
+      });
+    } catch (e) {
+      send(Events.BUILD_FAILED, { message: e.message });
+      throw e;
+    }
 
     compiler.on(Events.BUILD_START, () => {
       send(Events.BUILD_START);
+    });
+
+    compiler.on(Events.LOG, payload => {
+      send(Events.LOG, payload);
     });
 
     compiler.on(Events.BUILD_PROGRESS, payload => {
