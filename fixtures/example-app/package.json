@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
-    "haul": "../../bin/cli.js",
-    "haul-local": "haul"
+    "test": "jest"
   },
   "dependencies": {
     "react": "16.2.0",
@@ -15,7 +13,7 @@
   "devDependencies": {
     "babel-jest": "22.2.2",
     "babel-preset-react-native": "4.0.0",
-    "haul": "1.0.0-beta.13",
+    "haul": "../..",
     "jest": "22.2.2",
     "react-test-renderer": "16.2.0"
   },
