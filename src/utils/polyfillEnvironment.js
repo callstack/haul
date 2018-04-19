@@ -6,6 +6,7 @@
  *
  * This file is loaded as a part of user bundle
  */
+import { NativeModules } from 'react-native';
 
 /* eslint-disable import/no-extraneous-dependencies */
 require('../../vendor/polyfills/console.js')(global);
@@ -32,25 +33,38 @@ if (!global.self) {
   global.self = global; /* eslint-disable-line */
 }
 
-require('InitializeCore'); // eslint-disable-line import/no-unresolved
+require('react-native/Libraries/Core/InitializeCore');
 
 require('../hot/client/importScriptsPolyfill');
 
-const scriptURL = require('react-native').NativeModules.SourceCode.scriptURL; // eslint-disable-line import/no-unresolved
-// In order to ensure hot client has a valid URL we need to get a valid origin
-// from URL from which the bundle was loaded. When using iOS simulator/Android emulator
-// or Android device it will be `localhost:<port>` but when using real iOS device
-// it will be `<ip>.xip.io:<port>`. Thus the code below ensure we connect and download
-// manifest/hot-update from a valid origin.
-let devServerOrigin = null;
+if (process.env.NODE_ENV !== 'production') {
+  let protocol;
+  let origin;
 
-if (scriptURL) {
-  const [protocol, , origin] = scriptURL.split('/');
-  devServerOrigin = `${protocol}//${origin}`;
+  // If remote debugger is attached, we have access to `window` object
+  // from which we can get `protocol` and `origin` of dev server.
+  // This is a prefered way in remote debugger, otherwise it would
+  // fail due to CSP errors because of making requests to eg `10.0.2.2`
+  // from `localhost`.
+  if (typeof window !== 'undefined' && window.location) {
+    protocol = window.location.protocol;
+    origin = window.location.host;
+  } else {
+    // In order to ensure hot client has a valid URL we need to get a valid origin
+    // from URL from which the bundle was loaded. When using iOS simulator/Android emulator
+    // or Android device it will be `localhost:<port>` but when using real iOS device
+    // it will be `<ip>.xip.io:<port>`.
+    const { scriptURL } = NativeModules.SourceCode;
+    if (scriptURL) {
+      [protocol, , origin] = scriptURL.split('/');
+    }
+  }
+
+  if (protocol && origin) {
+    global.DEV_SERVER_ORIGIN = `${protocol}//${origin}`;
+
+    // Webpack's `publicPath` needs to be overwritten with `DEV_SERVER_ORIGIN` otherwise,
+    // it would still make requests to (usually) `localhost`.
+    __webpack_require__.p = `${global.DEV_SERVER_ORIGIN}/`; // eslint-disable-line no-undef
+  }
 }
-
-global.DEV_SERVER_ORIGIN = devServerOrigin;
-
-// Webpack's `publicPath` needs to be overwritten with `DEV_SERVER_ORIGIN` otherwise,
-// it would still make requests to (usually) `localhost`.
-__webpack_require__.p = `${global.DEV_SERVER_ORIGIN}/`; // eslint-disable-line no-undef

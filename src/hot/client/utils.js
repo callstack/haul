@@ -17,7 +17,6 @@ export default function resetRedBox() {
     const RCTRedBox = NativeModules.RedBox;
     RCTRedBox && RCTRedBox.dismiss && RCTRedBox.dismiss();
   } else {
-    // $FlowFixMe
     const RCTExceptionsManager = NativeModules.ExceptionsManager;
     RCTExceptionsManager &&
       RCTExceptionsManager.dismissRedbox &&

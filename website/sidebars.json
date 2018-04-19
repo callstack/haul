@@ -1,0 +1,19 @@
+{
+  "docs": {
+    "Getting Started": [
+      "getting_started",
+      "configuration"
+    ],
+    "Guides": [
+      "cli",
+      "recipes",
+      "codepush"
+    ],
+    "Hot Module Reloading": [
+      "hmr_setup",
+      "hmr_api",
+      "hmr_react_navigation",
+      "hmr_react_native_navigation"
+    ]
+  }
+}
