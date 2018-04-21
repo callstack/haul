@@ -62,22 +62,30 @@ describe('makeReactNativeConfig', () => {
 });
 
 describe('injects polyfill into different entries', () => {
-  const fakePolyfillPath = 'path/to/polyfill.js';
-
   test('entry is a string', () => {
     const userEntry = './src/index.js';
-    const generatedEntry = injectPolyfillIntoEntry(userEntry, fakePolyfillPath);
+    const generatedEntry = injectPolyfillIntoEntry({
+      entry: userEntry,
+      root: './__tests__/fixtures',
+    });
 
-    expect(generatedEntry.length).toBe(2);
-    expect(generatedEntry[0]).toBe(fakePolyfillPath);
+    // $FlowFixMe
+    generatedEntry.forEach(entry => {
+      expect(typeof entry).toBe('string');
+    });
   });
 
   test('entry is an array', () => {
     const userEntry = ['./src/index.js', './src/module.js'];
-    const generatedEntry = injectPolyfillIntoEntry(userEntry, fakePolyfillPath);
+    const generatedEntry = injectPolyfillIntoEntry({
+      entry: userEntry,
+      root: './__tests__/fixtures',
+    });
 
-    expect(generatedEntry[0]).toBe(fakePolyfillPath);
-    expect(generatedEntry.length).toBe(3);
+    // $FlowFixMe
+    generatedEntry.forEach(entry => {
+      expect(typeof entry).toBe('string');
+    });
   });
 
   test('entry is an object', () => {
@@ -85,18 +93,16 @@ describe('injects polyfill into different entries', () => {
       entry1: './src/index.js',
       entry2: ['./src/module.js', './src/vendor.js'],
     };
-    const expectedEntry1 = [fakePolyfillPath, './src/index.js'];
 
-    const expectedEntry2 = [
-      fakePolyfillPath,
-      './src/module.js',
-      './src/vendor.js',
-    ];
-    const generatedEntry = injectPolyfillIntoEntry(userEntry, fakePolyfillPath);
+    const generatedEntry = injectPolyfillIntoEntry({
+      entry: userEntry,
+      root: './__tests__/fixtures',
+    });
 
-    expect(generatedEntry).toMatchObject({
-      entry1: expectedEntry1,
-      entry2: expectedEntry2,
+    Object.entries(generatedEntry).forEach(([key, value]) => {
+      expect(Object.keys(userEntry).includes(key)).toBeTruthy();
+
+      expect(Array.isArray(value)).toBeTruthy();
     });
   });
 });

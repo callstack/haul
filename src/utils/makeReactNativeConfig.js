@@ -147,20 +147,6 @@ const getDefaultConfig = ({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
             }),
-            new webpack.BannerPlugin({
-              banner: `
-                if (this && !this.self) { this.self = this; };
-                ${fs
-                  .readFileSync(
-                    path.join(
-                      __dirname,
-                      '../../vendor/polyfills/Array.prototype.es6.js'
-                    )
-                  )
-                  .toString()}
-              `,
-              raw: true,
-            }),
           ]
         : [
             /**
