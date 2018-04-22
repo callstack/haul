@@ -4,15 +4,11 @@
  */
 const babelConfig = require('../package.json').babel;
 
-function resolveModule(moduleId, type) {
-  return require.resolve(`babel-${type}-${moduleId}`);
-}
-
-function resolve(presetsOrPlugins, type) {
+function resolve(presetsOrPlugins) {
   return presetsOrPlugins.map(item => {
     return typeof item === 'string'
-      ? resolveModule(item, type)
-      : [resolveModule(item[0], type), item[1]];
+      ? require.resolve(item)
+      : [require.resolve(item[0]), item[1]];
   });
 }
 
@@ -25,18 +21,18 @@ function resolve(presetsOrPlugins, type) {
  * Haul's `node_modules` directory, otherwise Babel would
  * search from them in project's `node_modules`.
  */
-require('babel-register')(
+require('@babel/register')(
   Object.assign(
     {
-      ignore: /node_modules(?!\/haul)/,
+      ignore: [/node_modules(?!\/haul)/],
       retainLines: true,
       sourceMaps: 'inline',
       babelrc: false,
     },
     babelConfig,
     {
-      presets: resolve(babelConfig.presets, 'preset'),
-      plugins: resolve(babelConfig.plugins, 'plugin'),
+      presets: resolve(babelConfig.presets),
+      plugins: resolve(babelConfig.plugins),
     }
   )
 );
