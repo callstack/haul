@@ -7,7 +7,7 @@
 const dedent = require('dedent');
 const chalk = require('chalk');
 const path = require('path');
-const { DEFAULT_CONFIG_FILE_PATH } = require('../constants');
+const { DEFAULT_CONFIG_FILENAME } = require('../constants');
 
 module.exports = (directory: string) => dedent`
    Couldn't find configuration file ${chalk.bold(directory)}
@@ -17,6 +17,6 @@ module.exports = (directory: string) => dedent`
    • You have a ${chalk.bold(path.basename(directory))} file
 
    Run ${chalk.bold('haul init')} to automatically generate a ${chalk.bold(
-  DEFAULT_CONFIG_FILE_PATH
+  DEFAULT_CONFIG_FILENAME
 )} file
 `;
