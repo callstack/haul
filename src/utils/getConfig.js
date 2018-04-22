@@ -7,15 +7,15 @@
 import type { Platform, Logger } from '../types';
 
 const path = require('path');
+const loggerUtil = require('../logger');
 const { createWebpackConfig } = require('../index');
-
 const { makeReactNativeConfig } = require('./makeReactNativeConfig');
 
 module.exports = function getConfig(
   configPath: ?string,
   configOptions: any,
   platform: Platform,
-  logger?: Logger
+  logger?: Logger = loggerUtil
 ) {
   let config;
 
@@ -37,6 +37,9 @@ module.exports = function getConfig(
     config = {
       webpack: createWebpackConfig({ entry }),
     };
+    logger.info(
+      `Couldn't find "haul.config.js". Using default configuration.\nFound entry file at ${entry}.`
+    );
   } else {
     // $FlowFixMe
     config = require(configPath);
