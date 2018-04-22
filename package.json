@@ -78,7 +78,6 @@
     "strip-ansi": "^3.0.1",
     "thread-loader": "^1.1.1",
     "webpack": "^4.6.0",
-    "webpack-dev-middleware": "^3.1.2",
     "webpack-hot-middleware": "^2.22.1",
     "ws": "^2.2.2",
     "xpipe": "^1.0.5"
