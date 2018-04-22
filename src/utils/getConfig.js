@@ -20,7 +20,7 @@ module.exports = function getConfig(
   let config;
 
   /**
-   * When it doesn't have DEFAULT_CONFIG_FILE_PATH and it's not specified another file
+   * When it doesn't have DEFAULT_CONFIG_FILENAME and it's not specified another file
    * we will use default configuration based on main file from package.json
    */
   if (configPath === null) {

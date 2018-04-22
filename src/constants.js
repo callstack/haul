@@ -1,4 +1,5 @@
 module.exports = {
-  DEFAULT_CONFIG_FILE_PATH: 'haul.config.js',
+  DEPRECATED_DEFAULT_CONFIG_FILENAME: 'webpack.haul.js',
+  DEFAULT_CONFIG_FILENAME: 'haul.config.js',
   DEFAULT_PORT: 8081,
 };

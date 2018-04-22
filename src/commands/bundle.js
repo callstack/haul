@@ -9,7 +9,7 @@ import type { Command } from '../types';
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
-const { DEFAULT_CONFIG_FILE_PATH } = require('../constants');
+const { DEFAULT_CONFIG_FILENAME } = require('../constants');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
@@ -149,8 +149,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: `Path to config file, eg. ${DEFAULT_CONFIG_FILE_PATH}`,
-      default: DEFAULT_CONFIG_FILE_PATH,
+      description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
+      default: DEFAULT_CONFIG_FILENAME,
     },
   ],
 }: Command);
