@@ -99,7 +99,10 @@
     "traverse": "^0.6.6"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "babel": {
     "presets": [
@@ -141,7 +144,9 @@
         "import/no-extraneous-dependencies": [
           "error",
           {
-            "devDependencies": ["**/integration_tests/**"]
+            "devDependencies": [
+              "**/integration_tests/**"
+            ]
           }
         ]
       }
@@ -149,10 +154,14 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
-    "testPathIgnorePatterns": ["/integration_tests/.*/__tests__"],
+    "testPathIgnorePatterns": [
+      "/integration_tests/.*/__tests__"
+    ],
     "moduleNameMapper": {
       "^jest/(.*)": "<rootDir>/jest/$1"
     },
-    "testMatch": ["**/*.test.js"]
+    "testMatch": [
+      "**/*.test.js"
+    ]
   }
 }
