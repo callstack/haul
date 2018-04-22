@@ -647,9 +647,9 @@ babel-jest@^22.2.0:
     babel-plugin-istanbul "^4.1.5"
     babel-preset-jest "^22.2.0"
 
-babel-loader@^7.1.2:
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-7.1.2.tgz#f6cbe122710f1aa2af4d881c6d5b54358ca24126"
+babel-loader@^7.1.4:
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-7.1.4.tgz#e3463938bd4e6d55d1c174c5485d406a188ed015"
   dependencies:
     find-cache-dir "^1.0.0"
     loader-utils "^1.0.2"
@@ -6974,9 +6974,9 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-thread-loader@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-1.1.1.tgz#a351bd9d12978f42b82aab74f76e896eed0a2ba6"
+thread-loader@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-1.1.5.tgz#7f9d6701f773734fff1832586779021ab8571917"
   dependencies:
     async "^2.3.0"
     loader-runner "^2.3.0"
