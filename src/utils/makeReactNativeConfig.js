@@ -345,11 +345,17 @@ function injectPolyfillIntoEntry({
   root: string,
 }) {
   // $FlowFixMe
-  const ReactNativePolyfills = require(`${root}/node_modules/react-native/rn-get-polyfills.js`)();
+  const ReactNativePolyfills = require(path.join(
+    root,
+    'node_modules/react-native/rn-get-polyfills.js'
+  ))();
 
   const ReactNativeHaulEntries = [
     ...ReactNativePolyfills,
-    `${root}/node_modules/react-native/Libraries/Core/InitializeCore.js`,
+    path.join(
+      root,
+      'node_modules/react-native/Libraries/Core/InitializeCore.js'
+    ),
     require.resolve('./polyfillEnvironment.js'),
   ];
 
