@@ -344,14 +344,17 @@ function injectPolyfillIntoEntry({
   entry: WebpackEntry,
   root: string,
 }) {
+  /**
+   * Get the RN polyfills from version of React Native what the project uses (min is RN version 0.47)
+   */
   // $FlowFixMe
-  const ReactNativePolyfills = require(path.join(
+  const reactNativePolyfills = require(path.join(
     root,
     'node_modules/react-native/rn-get-polyfills.js'
   ))();
 
-  const ReactNativeHaulEntries = [
-    ...ReactNativePolyfills,
+  const reactNativeHaulEntries = [
+    ...reactNativePolyfills,
     path.join(
       root,
       'node_modules/react-native/Libraries/Core/InitializeCore.js'
@@ -359,7 +362,7 @@ function injectPolyfillIntoEntry({
     require.resolve('./polyfillEnvironment.js'),
   ];
 
-  return makeWebpackEntry(userEntry, ReactNativeHaulEntries);
+  return makeWebpackEntry(userEntry, reactNativeHaulEntries);
 }
 
 function makeWebpackEntry(
