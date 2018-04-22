@@ -38,7 +38,7 @@ module.exports = function getConfig(
       webpack: createWebpackConfig({ entry }),
     };
     logger.info(
-      `Haul was not able to locate haul.config.js.\nTrying to serve app with the default configuration from ${entry}`
+      `Couldn't find "haul.config.js". Using default configuration.\nFound entry file at ${entry}.`
     );
   } else {
     // $FlowFixMe
