@@ -69,7 +69,10 @@ describe('injects polyfill into different entries', () => {
       root: path.resolve('src/utils/__tests__/fixtures'),
     });
 
-    // $FlowFixMe
+    if (!Array.isArray(generatedEntry)) {
+      throw new Error('Entries should be an array');
+    }
+
     generatedEntry.forEach(entry => {
       expect(typeof entry).toBe('string');
     });
@@ -82,7 +85,10 @@ describe('injects polyfill into different entries', () => {
       root: path.resolve('src/utils/__tests__/fixtures'),
     });
 
-    // $FlowFixMe
+    if (!Array.isArray(generatedEntry)) {
+      throw new Error('Entries should be an array');
+    }
+
     generatedEntry.forEach(entry => {
       expect(typeof entry).toBe('string');
     });
