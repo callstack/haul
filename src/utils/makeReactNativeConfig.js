@@ -147,20 +147,6 @@ const getDefaultConfig = ({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
             }),
-            new webpack.BannerPlugin({
-              banner: `
-                if (this && !this.self) { this.self = this; };
-                ${fs
-                  .readFileSync(
-                    path.join(
-                      __dirname,
-                      '../../vendor/polyfills/Array.prototype.es6.js'
-                    )
-                  )
-                  .toString()}
-              `,
-              raw: true,
-            }),
           ]
         : [
             /**
@@ -240,7 +226,6 @@ function DEPRECATEDMakeReactNativeConfig(
   };
 
   const defaultWebpackConfig = getDefaultConfig(env);
-  const polyfillPath = require.resolve('./polyfillEnvironment.js');
 
   const userConfig =
     typeof userWebpackConfig === 'function'
@@ -248,7 +233,10 @@ function DEPRECATEDMakeReactNativeConfig(
       : userWebpackConfig;
 
   const config = Object.assign({}, defaultWebpackConfig, userConfig, {
-    entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
+    entry: injectPolyfillIntoEntry({
+      root,
+      entry: userConfig.entry,
+    }),
     name: platform,
   });
 
@@ -349,20 +337,51 @@ function makeReactNativeConfig(
   return webpackConfig;
 }
 
-/*
- * Takes user entries from webpack.haul.js,
- * change them to multi-point entries
- * and injects polyfills
- */
-function injectPolyfillIntoEntry(
+function injectPolyfillIntoEntry({
+  entry: userEntry,
+  root,
+}: {
+  entry: WebpackEntry,
+  root: string,
+}) {
+  /**
+   * Get the RN polyfills from version of React Native what the project uses (min is RN version 0.48)
+   */
+  let reactNativePolyfills;
+  try {
+    // $FlowFixMe
+    reactNativePolyfills = require(path.join(
+      root,
+      'node_modules/react-native/rn-get-polyfills.js'
+    ))();
+  } catch (e) {
+    console.info(e); // for artifacts stacktrace
+    throw new Error(
+      'Unable to initialize React Native. The minimum supported version is 0.48.'
+    );
+  }
+
+  const reactNativeHaulEntries = [
+    ...reactNativePolyfills,
+    path.join(
+      root,
+      'node_modules/react-native/Libraries/Core/InitializeCore.js'
+    ),
+    require.resolve('./polyfillEnvironment.js'),
+  ];
+
+  return makeWebpackEntry(userEntry, reactNativeHaulEntries);
+}
+
+function makeWebpackEntry(
   userEntry: WebpackEntry,
-  polyfillPath: string
+  otherEntries: Array<string>
 ): WebpackEntry {
   if (typeof userEntry === 'string') {
-    return [polyfillPath, userEntry];
+    return [...otherEntries, userEntry];
   }
   if (Array.isArray(userEntry)) {
-    return [polyfillPath, ...userEntry];
+    return [...otherEntries, ...userEntry];
   }
   if (typeof userEntry === 'object') {
     const chunkNames = Object.keys(userEntry);
@@ -370,10 +389,10 @@ function injectPolyfillIntoEntry(
       // $FlowFixMe
       const chunk = userEntry[name];
       if (typeof chunk === 'string') {
-        entryObj[name] = [polyfillPath, chunk];
+        entryObj[name] = [...otherEntries, chunk];
         return entryObj;
       } else if (Array.isArray(chunk)) {
-        entryObj[name] = [polyfillPath, ...chunk];
+        entryObj[name] = [...otherEntries, ...chunk];
         return entryObj;
       }
       return chunk;
@@ -398,10 +417,10 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
 
     const config = {
       ...defaultWebpackConfig,
-      entry: injectPolyfillIntoEntry(
+      entry: injectPolyfillIntoEntry({
+        root: options.root,
         entry,
-        require.resolve('./polyfillEnvironment.js')
-      ),
+      }),
       name: options.platform,
     };
 
