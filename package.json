@@ -31,14 +31,14 @@
     "react-native": "*"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
+    "@babel/plugin-transform-flow-strip-types": "^7.0.0-beta.44",
+    "@babel/plugin-transform-react-jsx": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/register": "^7.0.0-beta.44",
     "@zamotany/react-proxy": "3.0.0-alpha.4",
-    "babel-core": "^6.24.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.2.2",
-    "babel-register": "^6.24.0",
+    "babel-loader": "^8.0.0-beta",
     "camelcase-keys": "^4.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "chalk": "1.1.3",
@@ -107,19 +107,19 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
             "node": "current"
           },
-          "useBuiltIns": true
+          "useBuiltIns": "entry"
         }
       ]
     ],
     "plugins": [
-      "transform-flow-strip-types",
-      "transform-object-rest-spread",
-      "transform-react-jsx"
+      "@babel/plugin-transform-flow-strip-types",
+      "@babel/plugin-proposal-object-rest-spread",
+      "@babel/plugin-transform-react-jsx"
     ]
   },
   "eslintConfig": {
