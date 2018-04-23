@@ -345,7 +345,7 @@ function injectPolyfillIntoEntry({
   root: string,
 }) {
   /**
-   * Get the RN polyfills from version of React Native what the project uses (min is RN version 0.47)
+   * Get the RN polyfills from version of React Native what the project uses (min is RN version 0.48)
    */
   let reactNativePolyfills;
   try {
@@ -357,7 +357,7 @@ function injectPolyfillIntoEntry({
   } catch (e) {
     console.info(e); // for artifacts stacktrace
     throw new Error(
-      'Unable to initialize React Native. The minimum supported version is 0.47.'
+      'Unable to initialize React Native. The minimum supported version is 0.48.'
     );
   }
 
