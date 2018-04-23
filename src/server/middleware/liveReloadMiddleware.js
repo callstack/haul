@@ -6,6 +6,7 @@
  */
 
 import type { $Request, $Response } from 'express';
+import logger from '../../logger';
 
 const Compiler = require('../../compiler/Compiler');
 
@@ -50,6 +51,9 @@ function liveReloadMiddleware(compiler: Compiler) {
     }
 
     if (req.path === '/reloadapp') {
+      logger.info(
+        'Attempt to reload the app, make sure you have enabled Live Reloading!'
+      );
       notifyAllWatchers();
       res.end();
       return;

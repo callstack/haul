@@ -79,6 +79,13 @@ module.exports = function runWebpackCompiler({
     },
   });
 
+  compiler.hooks.failed.intercept({
+    call: message => {
+      console.log(message); // save whole error with stack trace into artifacts
+      emitter.emit(Events.BUILD_FAILED, { message: message.toString() });
+    },
+  });
+
   compiler.hooks.invalid.intercept({
     tap() {
       emitter.emit(Events.BUILD_START);
