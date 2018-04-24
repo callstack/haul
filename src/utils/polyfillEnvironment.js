@@ -2,9 +2,8 @@
  * Copyright 2017-present, Callstack.
  * All rights reserved.
  *
- * polyfillEnvironment.js
- *
  * This file is loaded as a part of user bundle
+ *
  */
 import { NativeModules } from 'react-native';
 

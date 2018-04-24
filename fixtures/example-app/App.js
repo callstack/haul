@@ -40,7 +40,7 @@ export default class App extends Component<{}, State> {
           onPress={() => this.setState(this.increment)}
         />
         <Button
-          title="Decrement!"
+          title="Decrementsss!"
           onPress={() => this.setState(this.decrement)}
         />
       </View>

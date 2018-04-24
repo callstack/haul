@@ -14,8 +14,9 @@ const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
-const moduleResolve = require('../utils/resolveModule');
+const moduleResolve = require('./resolveModule');
 const getBabelConfig = require('./getBabelConfig');
+const getPolyfills = require('./getPolyfills');
 const loggerUtil = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
 
@@ -348,28 +349,13 @@ function injectPolyfillIntoEntry({
   entry: WebpackEntry,
   root: string,
 }) {
-  /**
-   * Get the RN polyfills from version of React Native what the project uses (min is RN version 0.48)
-   */
-  let reactNativePolyfills;
-  try {
-    // $FlowFixMe
-    reactNativePolyfills = require(path.join(
-      root,
-      'node_modules/react-native/rn-get-polyfills.js'
-    ))();
-  } catch (e) {
-    console.info(e); // for artifacts stacktrace
-    throw new Error(
-      'Unable to initialize React Native. The minimum supported version is 0.48.'
-    );
-  }
-
   const reactNativeHaulEntries = [
-    ...reactNativePolyfills,
-    path.join(
-      root,
-      'node_modules/react-native/Libraries/Core/InitializeCore.js'
+    ...getPolyfills(),
+    require.resolve(
+      path.join(
+        root,
+        'node_modules/react-native/Libraries/Core/InitializeCore.js'
+      )
     ),
     require.resolve('./polyfillEnvironment.js'),
   ];
