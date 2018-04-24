@@ -28,7 +28,7 @@
   "peerDependencies": {
     "babel-preset-react-native": "^2.0.0 || ^3.0.0 || ^4.0.0",
     "react": "*",
-    "react-native": ">=0.48"
+    "react-native": "*"
   },
   "dependencies": {
     "@zamotany/react-proxy": "3.0.0-alpha.4",

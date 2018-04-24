@@ -147,6 +147,10 @@ const getDefaultConfig = ({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
             }),
+            new webpack.BannerPlugin({
+              banner: 'if (this && !this.self) { this.self = this; };\n',
+              raw: true,
+            }),
           ]
         : [
             /**
