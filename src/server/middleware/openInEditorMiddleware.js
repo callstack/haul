@@ -33,7 +33,6 @@ const openInEditor = require('open-in-editor');
 const editors = Object.keys(require('open-in-editor/lib/editors'));
 const messages = require('../../messages');
 const logger = require('../../logger');
-const removeSlashFromTheEndOfPath = require('../util/removeSlashFromTheEndOfPath');
 
 // does `open-in-editor` know how to detect this editor?
 const isKnownEditor = (editor: string): boolean =>
@@ -109,7 +108,7 @@ function create(): Middleware {
    */
   function openInEditorMiddleware(req: $Request, res: $Response, next) {
     // only allow the appropriate path
-    if (removeSlashFromTheEndOfPath(req.path) !== '/open-stack-frame') {
+    if (req.cleanPath !== '/open-stack-frame') {
       return next();
     }
 

@@ -5,8 +5,6 @@
 const fs = require('fs');
 const path = require('path');
 const opn = require('opn');
-
-const removeSlashFromTheEndOfPath = require('../util/removeSlashFromTheEndOfPath');
 /**
  * Returns name of Chrome app to launch based on the platform
  */
@@ -35,7 +33,7 @@ const launchChrome = url => {
  */
 function devToolsMiddleware(debuggerProxy) {
   return (req, res, next) => {
-    switch (removeSlashFromTheEndOfPath(req.path)) {
+    switch (req.cleanPath) {
       /**
        * Request for the debugger frontend
        */
