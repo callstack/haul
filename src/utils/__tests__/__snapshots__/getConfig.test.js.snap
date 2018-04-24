@@ -34,7 +34,7 @@ exports[`creates config: diff ios/android config 1`] = `
     },
     \\"plugins\\": Array [
       CaseSensitivePathsPlugin {
-@@ -118,11 +118,11 @@
+@@ -127,11 +127,11 @@
     \\"resolve\\": Object {
       \\"alias\\": Object {
         \\"react-proxy\\": \\"@zamotany/react-proxy\\",
@@ -165,6 +165,15 @@ Object {
       "sourceMapFilename": "[file].map",
       "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
+    },
+    BannerPlugin {
+      "banner": "if (this && !this.self) { this.self = this; };
+",
+      "options": Object {
+        "banner": "if (this && !this.self) { this.self = this; };
+",
+        "raw": true,
+      },
     },
   ],
   "resolve": Object {

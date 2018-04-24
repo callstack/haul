@@ -34,7 +34,7 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
     },
     \\"plugins\\": Array [
       CaseSensitivePathsPlugin {
-@@ -118,11 +118,11 @@
+@@ -127,11 +127,11 @@
     \\"resolve\\": Object {
       \\"alias\\": Object {
         \\"react-proxy\\": \\"@zamotany/react-proxy\\",
