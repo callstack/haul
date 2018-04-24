@@ -114,7 +114,7 @@ function create(webpackCompiler: *): Middleware {
    * The Express middleware for symbolicatin'.
    */
   function symbolicateMiddleware(req: $Request, res, next) {
-    if (req.path !== '/symbolicate') return next();
+    if (req.cleanPath !== '/symbolicate') return next();
 
     // grab the source stack frames
     const unconvertedFrames = getRequestedFrames(req);

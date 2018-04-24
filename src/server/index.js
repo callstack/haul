@@ -28,6 +28,7 @@ const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 const requestChangeMiddleware = require('./middleware/requestChangeMiddleware');
+const cleanPathMiddleware = require('./middleware/cleanPathMiddleware');
 
 const WebSocketServer = require('ws').Server;
 
@@ -83,6 +84,7 @@ function createServer(
   appHandler
     .use(express.static(path.join(__dirname, '/assets/public')))
     .use(rawBodyMiddleware)
+    .use(cleanPathMiddleware)
     .use(devToolsMiddleware(debuggerProxy))
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
