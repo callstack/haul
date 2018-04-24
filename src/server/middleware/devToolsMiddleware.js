@@ -9,7 +9,7 @@ const select = require('platform-select');
 const logger = require('../../logger');
 
 /**
- * Launches given `url` in browser based on platform 
+ * Launches given `url` in browser based on platform
  */
 const launchBrowser = url => {
   const open = app => () => opn(url, { app });
@@ -48,7 +48,7 @@ const launchBrowser = url => {
  */
 function devToolsMiddleware(debuggerProxy) {
   return (req, res, next) => {
-    switch (req.path) {
+    switch (req.cleanPath) {
       /**
        * Request for the debugger frontend
        */

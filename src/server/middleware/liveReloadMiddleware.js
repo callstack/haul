@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -37,8 +37,7 @@ function liveReloadMiddleware(compiler: Compiler) {
      * React Native client opens connection at `/onchange`
      * and awaits reload signal (http status code - 205)
      */
-
-    if (req.path === '/onchange') {
+    if (req.cleanPath === '/onchange') {
       const watcher = { req, res };
 
       watchers.push(watcher);
@@ -50,7 +49,7 @@ function liveReloadMiddleware(compiler: Compiler) {
       return;
     }
 
-    if (req.path === '/reloadapp') {
+    if (req.cleanPath === '/reloadapp') {
       logger.info(
         'Attempt to reload the app, make sure you have enabled Live Reloading!'
       );

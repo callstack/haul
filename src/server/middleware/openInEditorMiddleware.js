@@ -108,7 +108,7 @@ function create(): Middleware {
    */
   function openInEditorMiddleware(req: $Request, res: $Response, next) {
     // only allow the appropriate path
-    if (req.path !== '/open-stack-frame') {
+    if (req.cleanPath !== '/open-stack-frame') {
       return next();
     }
 
