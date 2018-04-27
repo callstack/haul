@@ -3,7 +3,9 @@ id: configuration
 title: Configuration
 ---
 
-> You can use Haul also without any configuration. If you don't have in you project file named `haul.config.js` and you don't specify custom one it will be used the default Haul configuration with entry point from you `package.json`
+> You can use Haul also without any configuration. If you don't have in your project file named `haul.config.js` and you don't specify custom one it will be used the default Haul configuration with entry point from you `package.json`
+
+
 
 The `haul.config.js` file is a configuration used by `Haul`. The simplest config looks like this:
 
@@ -16,6 +18,8 @@ export default {
   })
 };
 ```
+
+> The `createWebpackConfig` helper function provided by Haul takes an object of settings – currently just `entry`, or function which takes an object (type Object) specified below as the first argument – it should return an object of settings as well. 
 
 This works when you have a single `index.js` as the entry point. But when you have more than one entry point like `index.android.js` and `index.ios.js`, or you want to customize the webpack configuration, you can use a function as an argument instead of a plain object.
 
@@ -47,7 +51,7 @@ export default {
 };
 ```
 
-If you are want to customize the webpack configuration, like `loaders` etc., define them as usual, and merge the passed configuration in:
+If you are want to customize the Webpack configuration, like `loaders` etc., you can use this approach, then you can mutate config as you want.
 
 ```js
 import { createWebpackConfig } from "haul";
@@ -55,8 +59,7 @@ import { createWebpackConfig } from "haul";
 export default {
   webpack: env => {
     const config = createWebpackConfig({
-      entry: `./index.js`,
-      include: /node_modules/
+      entry: './index.js',
     })(env);
 
     config.plugins.push(new CaseSensitivePathsPlugin());
