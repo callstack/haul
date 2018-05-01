@@ -8,7 +8,7 @@
 import type { Platform } from '../../types';
 
 module.exports = function getRequestDataFromPath(path: string) {
-  const fileRegExp = /\w+\.(ios|android)\.bundle/i;
+  const fileRegExp = /\w+\.(.*)\.bundle/i;
 
   const match = path.match(fileRegExp);
   if (match) {

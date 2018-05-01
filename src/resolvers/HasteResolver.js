@@ -10,6 +10,7 @@ type Request = {
 
 type Options = {
   directories: Array<string>,
+  hasteOptions?: *,
 };
 
 const findProvidesModule = require('../utils/findProvidesModule');
@@ -18,7 +19,10 @@ const findProvidesModule = require('../utils/findProvidesModule');
  * Resolver plugin that allows requiring haste modules with Webpack
  */
 function HasteResolver(options: Options) {
-  const hasteMap = findProvidesModule(options.directories);
+  const hasteMap = findProvidesModule(
+    options.directories,
+    options.hasteOptions
+  );
 
   this.apply = resolver => {
     resolver.hooks.resolve.tapAsync(

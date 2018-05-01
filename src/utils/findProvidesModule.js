@@ -57,7 +57,7 @@ function findProvidesModule(directories, opts = {}) {
   const modulesMap = {};
 
   const walk = dir => {
-    const stat = fs.lstatSync(dir);
+    const stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
       fs.readdirSync(dir).forEach(file => {
@@ -84,9 +84,11 @@ function findProvidesModule(directories, opts = {}) {
 
       // Throw when duplicated modules are provided from a different
       // fileName
+      /*
       if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
         throw new Error('Duplicate haste module found');
       }
+      */
       modulesMap[moduleName] = fileName;
     }
   };

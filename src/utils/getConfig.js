@@ -6,10 +6,9 @@
  */
 import type { Platform, Logger } from '../types';
 
-const path = require('path');
 const loggerUtil = require('../logger');
-const { createWebpackConfig } = require('../index');
 const { makeReactNativeConfig } = require('./makeReactNativeConfig');
+const { getUserConfig } = require('./getHaulConfig');
 
 module.exports = function getConfig(
   configPath: ?string,
@@ -17,35 +16,7 @@ module.exports = function getConfig(
   platform: Platform,
   logger?: Logger = loggerUtil
 ) {
-  let config;
-
-  /**
-   * When it doesn't have DEFAULT_CONFIG_FILENAME and it's not specified another file
-   * we will use default configuration based on main file from package.json
-   */
-  if (configPath === null) {
-    // $FlowFixMe
-    let entry = require(path.resolve(process.cwd(), 'package.json')).main;
-
-    if (!entry) entry = 'index.js';
-
-    /**
-     * Make it relative for Webpack
-     */
-    entry = `./${entry}`;
-
-    config = {
-      webpack: createWebpackConfig({ entry }),
-    };
-    logger.info(
-      `Couldn't find "haul.config.js". Using default configuration.\nFound entry file at ${entry}.`
-    );
-  } else {
-    // $FlowFixMe
-    config = require(configPath);
-    config = config.__esModule ? config.default : config;
-  }
-
+  const config = getUserConfig(configPath);
   // $FlowFixMe
   return makeReactNativeConfig(config, configOptions, platform, logger);
 };
