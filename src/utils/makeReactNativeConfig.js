@@ -356,20 +356,15 @@ function makeReactNativeConfig(
 function injectPolyfillIntoEntry({
   entry: userEntry,
   root,
-  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js'
+  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
 }: {
   entry: WebpackEntry,
   root: string,
-  initializeCoreLocation?: string
+  initializeCoreLocation?: string,
 }) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
-    require.resolve(
-      path.join(
-        root,
-        initializeCoreLocation
-      )
-    ),
+    require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
   ];
 
