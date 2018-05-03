@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -32,12 +32,12 @@ module.exports = function createForkProcess(
   const workerPath = path.resolve(rootDir, 'worker/index.js');
   const child = spawn(process.execPath, ['--trace-warnings', workerPath], {
     cwd: process.cwd(),
-    env: {
+    env: Object.assign({}, process.env, {
       HAUL_PLATFORM: platform,
       HAUL_DIRECTORY: path.join(rootDir, 'worker'),
       HAUL_OPTIONS: JSON.stringify(options),
       HAUL_SOCKET_ADDRESS: address,
-    },
+    }),
     stdio: 'pipe',
   });
 
