@@ -5944,9 +5944,15 @@ react-reconciler@0.3.0-beta.1:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-stream-renderer@^0.2.0:
+react-slate-utils@^0.2.0:
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/react-stream-renderer/-/react-stream-renderer-0.2.0.tgz#680297f32f8266160986bb2fdd3048e0c612c2f7"
+  resolved "https://registry.yarnpkg.com/react-slate-utils/-/react-slate-utils-0.2.0.tgz#951747f992984812e91c4b7741386be0b6c8b345"
+  dependencies:
+    mkdirp "^0.5.1"
+
+react-slate@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/react-slate/-/react-slate-0.5.1.tgz#a0e9b8558690a69ba8f5744d01d0ebf7bcb7dc44"
   dependencies:
     ansi-parser "^3.2.8"
     ansi-styles "^3.2.0"
@@ -5956,8 +5962,8 @@ react-stream-renderer@^0.2.0:
     fast-memoize "^2.2.8"
     fbjs "^0.8.16"
     is-fullwidth-code-point "^2.0.0"
+    mkdirp "^0.5.1"
     prop-types "^15.6.0"
-    react "^16.0.0"
     react-reconciler "0.3.0-beta.1"
     strip-ansi "^4.0.0"
 
@@ -5972,7 +5978,7 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react@^16.0.0, react@^16.2.0:
+react@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
   dependencies:
