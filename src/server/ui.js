@@ -7,17 +7,11 @@
 import type { Platform } from '../types';
 
 const path = require('path');
-const fs = require('fs');
 const React = require('react');
 const morgan = require('morgan');
 const { Subject } = require('rxjs');
-const {
-  render,
-  makeTTYAdapter,
-  makeTestAdapter,
-  Text,
-  ProgressBar,
-} = require('react-stream-renderer');
+const { renderToTerminal, Text, ProgressBar } = require('react-slate');
+const { hideCursor, overwriteConsole } = require('react-slate-utils');
 const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
@@ -53,41 +47,20 @@ module.exports = function initUI(
     }
   });
 
-  if (
-    process.env.NODE_ENV !== 'test' &&
-    !fs.existsSync(path.dirname(path.resolve(outStream)))
-  ) {
-    fs.mkdirSync(path.dirname(path.resolve(outStream)));
-  }
+  hideCursor(process.stdout);
+  overwriteConsole({
+    outStream,
+    errStream,
+  });
 
-  const streamAdapter =
-    process.env.NODE_ENV === 'test'
-      ? makeTestAdapter({
-          height: 40,
-          width: 80,
-          onPrint(data) {
-            process.stdout.write(data);
-          },
-        })
-      : makeTTYAdapter(process.stdout)
-          .withCustomConsole({
-            outStream,
-            errStream,
-          })
-          .hideCursor()
-          .makeEffects();
-
-  render(
+  renderToTerminal(
     <ServerUI
       port={port}
       compiler={compiler}
       logs={logs}
-      height={streamAdapter.getSize().height}
+      height={((process.stdout: any): tty$WriteStream).rows || 20}
     />,
-    streamAdapter,
-    {
-      hideCursor: true,
-    }
+    process.stdout
   );
 
   return morgan((tokens, req, res) => {
