@@ -26,7 +26,6 @@ const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
-const requestChangeMiddleware = require('./middleware/requestChangeMiddleware');
 const cleanPathMiddleware = require('./middleware/cleanPathMiddleware');
 
 const WebSocketServer = require('ws').Server;
@@ -102,7 +101,6 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
     .use(openInEditorMiddleware())
     .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
-    .use(requestChangeMiddleware)
     .use(compilerMiddleware)
     .use(missingBundleMiddleware);
 
