@@ -6,15 +6,17 @@
  */
 const dedent = require('dedent');
 const chalk = require('chalk');
+const path = require('path');
+const { DEFAULT_CONFIG_FILENAME } = require('../constants');
 
 module.exports = (directory: string) => dedent`
    Couldn't find configuration file ${chalk.bold(directory)}
 
    Make sure:
    • You are running haul from your project directory
-   • You have a ${chalk.bold('webpack.haul.js')} file
+   • You have a ${chalk.bold(path.basename(directory))} file
 
    Run ${chalk.bold('haul init')} to automatically generate a ${chalk.bold(
-  'webpack.haul.js'
+  DEFAULT_CONFIG_FILENAME
 )} file
 `;

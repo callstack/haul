@@ -1,0 +1,204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates config: diff ios/android config 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -44,25 +44,25 @@
+          \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
+          \\"use\\": Object {
+            \\"loader\\": \\"<<REPLACED>>/loaders/assetLoader.js\\",
+            \\"query\\": Object {
+              \\"bundle\\": undefined,
+-             \\"platform\\": \\"ios\\",
++             \\"platform\\": \\"android\\",
+              \\"root\\": \\"<<REPLACED>>/utils/__tests__/fixtures\\",
+            },
+          },
+        },
+      ],
+    },
+-   \\"name\\": \\"ios\\",
++   \\"name\\": \\"android\\",
+    \\"optimization\\": Object {
+      \\"concatenateModules\\": true,
+      \\"minimize\\": false,
+      \\"namedModules\\": true,
+    },
+    \\"output\\": Object {
+-     \\"filename\\": \\"index.ios.bundle\\",
++     \\"filename\\": \\"index.android.bundle\\",
+      \\"path\\": \\"<<REPLACED>>/utils/__tests__/fixtures\\",
+      \\"publicPath\\": \\"http://localhost:8081/\\",
+    },
+    \\"plugins\\": Array [
+      CaseSensitivePathsPlugin {
+@@ -127,11 +127,11 @@
+    \\"resolve\\": Object {
+      \\"alias\\": Object {
+        \\"react-proxy\\": \\"@zamotany/react-proxy\\",
+      },
+      \\"extensions\\": Array [
+-       \\".ios.js\\",
++       \\".android.js\\",
+        \\".native.js\\",
+        \\".js\\",
+      ],
+      \\"mainFields\\": Array [
+        \\"react-native\\","
+`;
+
+exports[`creates config: ios config 1`] = `
+Object {
+  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "entry": Array [
+    "<<REPLACED>>/vendor/polyfills/Object.es6.js",
+    "<<REPLACED>>/vendor/polyfills/console.js",
+    "<<REPLACED>>/vendor/polyfills/error-guard.js",
+    "<<REPLACED>>/vendor/polyfills/Number.es6.js",
+    "<<REPLACED>>/vendor/polyfills/String.prototype.es6.js",
+    "<<REPLACED>>/vendor/polyfills/Array.prototype.es6.js",
+    "<<REPLACED>>/vendor/polyfills/Array.es6.js",
+    "<<REPLACED>>/vendor/polyfills/Object.es7.js",
+    "<<REPLACED>>/vendor/polyfills/babelHelpers.js",
+    "<<REPLACED>><<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "./index.js",
+  ],
+  "mode": "development",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "parser": Object {
+          "requireEnsure": false,
+        },
+      },
+      Object {
+        "exclude": /node_modules\\\\/\\(\\?!react\\|@expo\\|pretty-format\\|haul\\|metro\\)/,
+        "test": /\\\\\\.js\\$/,
+        "use": Array [
+          Object {
+            "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+            "options": Object {
+              "cacheDirectory": true,
+              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "plugins": Array [
+                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<NODE_MODULE>>/react-hot-loader/babel.js",
+                "<<REPLACED>>/hot/babelPlugin.js",
+              ],
+            },
+          },
+        ],
+      },
+      Object {
+        "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+        "use": Object {
+          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "query": Object {
+            "bundle": undefined,
+            "platform": "ios",
+            "root": "<<REPLACED>>/utils/__tests__/fixtures",
+          },
+        },
+      },
+    ],
+  },
+  "name": "ios",
+  "optimization": Object {
+    "concatenateModules": true,
+    "minimize": false,
+    "namedModules": true,
+  },
+  "output": Object {
+    "filename": "index.ios.bundle",
+    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "publicPath": "http://localhost:8081/",
+  },
+  "plugins": Array [
+    CaseSensitivePathsPlugin {
+      "fsOperations": 0,
+      "options": Object {},
+      "pathCache": Object {},
+      "primed": false,
+    },
+    DefinePlugin {
+      "definitions": Object {
+        "__DEV__": true,
+        "process.env": Object {
+          "NODE_ENV": "\\"development\\"",
+        },
+      },
+    },
+    LoaderOptionsPlugin {
+      "options": Object {
+        "debug": true,
+        "minimize": false,
+        "test": Object {
+          "test": [Function],
+        },
+      },
+    },
+    HotModuleReplacementPlugin {
+      "fullBuildTimeout": 200,
+      "multiStep": undefined,
+      "options": Object {},
+      "requestTimeout": 10000,
+    },
+    EvalSourceMapDevToolPlugin {
+      "options": Object {
+        "module": true,
+      },
+    },
+    NamedModulesPlugin {
+      "options": Object {},
+    },
+    SourceMapDevToolPlugin {
+      "fallbackModuleFilenameTemplate": "webpack://[namespace]/[resourcePath]?[hash]",
+      "moduleFilenameTemplate": "webpack://[namespace]/[resourcePath]",
+      "namespace": "",
+      "options": Object {
+        "filename": "[file].map",
+        "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
+      },
+      "sourceMapFilename": "[file].map",
+      "sourceMappingURLComment": "
+//# sourceMappingURL=[url]",
+    },
+    BannerPlugin {
+      "banner": "if (this && !this.self) { this.self = this; };
+",
+      "options": Object {
+        "banner": "if (this && !this.self) { this.self = this; };
+",
+        "raw": true,
+      },
+    },
+  ],
+  "resolve": Object {
+    "alias": Object {
+      "react-proxy": "@zamotany/react-proxy",
+    },
+    "extensions": Array [
+      ".ios.js",
+      ".native.js",
+      ".js",
+    ],
+    "mainFields": Array [
+      "react-native",
+      "browser",
+      "main",
+    ],
+    "plugins": Array [
+      HasteResolver {
+        "apply": [Function],
+      },
+      AssetResolver {
+        "apply": [Function],
+      },
+    ],
+  },
+  "target": "webworker",
+}
+`;

@@ -9,11 +9,12 @@ import type { Command } from '../types';
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
+const { DEFAULT_CONFIG_FILENAME } = require('../constants');
 
 const { MessageError } = require('../errors');
 const messages = require('../messages');
-const { makeReactNativeConfig } = require('../utils/makeReactNativeConfig');
-const getWebpackConfig = require('../utils/getWebpackConfig');
+const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
+const getConfig = require('../utils/getConfig');
 const logger = require('../logger');
 
 /**
@@ -21,23 +22,14 @@ const logger = require('../logger');
  */
 async function bundle(opts: *) {
   const directory = process.cwd();
-  const configPath = getWebpackConfig(directory, opts.config);
+  const configPath = getWebpackConfigPath(directory, opts.config);
 
-  const [
-    configs,
-    availablePlatforms,
-  ] = makeReactNativeConfig(
-    // $FlowFixMe: Dynamic require
-    require(configPath),
-    {
-      root: directory,
-      dev: opts.dev,
-      minify: opts.minify,
-      bundle: true,
-    }
+  const config = getConfig(
+    configPath,
+    { root: directory, dev: opts.dev, minify: opts.minify, bundle: true },
+    opts.platform,
+    logger
   );
-
-  const config = configs[availablePlatforms.indexOf(opts.platform)];
 
   if (opts.assetsDest) {
     config.output.path = path.isAbsolute(opts.assetsDest)
@@ -95,7 +87,8 @@ async function bundle(opts: *) {
 
 module.exports = ({
   name: 'bundle',
-  description: 'Builds the app bundle for packaging',
+  description:
+    'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   action: bundle,
   options: [
     {
@@ -156,8 +149,8 @@ module.exports = ({
     },
     {
       name: 'config',
-      description: 'Path to config file, eg. webpack.haul.js',
-      default: 'webpack.haul.js',
+      description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
+      default: DEFAULT_CONFIG_FILENAME,
     },
   ],
 }: Command);

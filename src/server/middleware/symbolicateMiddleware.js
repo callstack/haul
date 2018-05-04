@@ -17,14 +17,19 @@
  *
  */
 import type { $Request, Middleware } from 'express';
-import type { ReactNativeStackFrame, ReactNativeStack } from '../../types';
+import type {
+  ReactNativeStackFrame,
+    ReactNativeStack,
+    Platform,
+} from '../../types';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
 const path = require('path');
-const delve = require('dlv');
+const fetch = require('node-fetch');
+const getConfig = require('../../utils/getConfig');
+const Compiler = require('../../compiler/Compiler');
 const messages = require('../../messages');
 const logger = require('../../logger');
-const getCompilerByPlatform = require('../../utils/getCompilerByPlatform');
 
 type ReactNativeSymbolicateRequest = {
   stack: ReactNativeStack,
@@ -37,30 +42,19 @@ type ReactNativeSymbolicateResponse = {
 /**
  * Creates a SourceMapConsumer so we can query it.
  */
-function createSourceMapConsumer(compiler: *) {
-  // turns /path/to/use into 'path.to.use'
-  const outputPath: string = compiler.options.output.path;
-  const hops: Array<string> = outputPath
-    .split(path.sep)
-    .filter((pathPart: string) => pathPart !== ''); // no blanks please
-
-  // grab the base directory out of webpack's deeply nested filesystem
-  const base = delve(compiler.outputFileSystem.data, hops);
-
-  // grab the Buffer for the source map
-  const sourceMapBuffer =
-    base && base[`${compiler.options.output.filename}.map`];
+async function createSourceMapConsumer(compiler: Compiler, url: string) {
+  const response = await fetch(url);
+  const sourceMap = await response.text();
 
   // we stop here if we couldn't find that map
-  if (!sourceMapBuffer) {
+  if (!sourceMap) {
     logger.warn(messages.sourceMapFileNotFound());
     return null;
   }
 
   // feed the raw source map into our consumer
   try {
-    const raw: string = sourceMapBuffer.toString();
-    return new SourceMapConsumer(raw);
+    return new SourceMapConsumer(sourceMap);
   } catch (err) {
     logger.error(messages.sourceMapInvalidFormat());
     return null;
@@ -109,32 +103,47 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
 /**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(webpackCompiler: *): Middleware {
+function create(
+  compiler: Compiler,
+  { configOptions, configPath }: *
+): Middleware {
   /**
-   * The Express middleware for symbolicatin'.
+   * The Express middleware for symbolicating'.
    */
-  function symbolicateMiddleware(req: $Request, res, next) {
+  async function symbolicateMiddleware(req: $Request, res, next) {
     if (req.cleanPath !== '/symbolicate') return next();
 
     // grab the source stack frames
     const unconvertedFrames = getRequestedFrames(req);
     if (!unconvertedFrames || unconvertedFrames.length === 0) return next();
 
-    // grab the platform from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
+    // grab the platform and filename from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
+    const filenameMatch = unconvertedFrames[0].file.match(/\/(\D+)\?/);
     const platformMatch = unconvertedFrames[0].file.match(
       /platform=([a-zA-Z]*)/
     );
-    const platform: ?string = platformMatch && platformMatch[1];
 
-    // grab the appropriate webpack compiler
-    const compiler = getCompilerByPlatform(webpackCompiler, platform);
+    const filename: ?string = filenameMatch && filenameMatch[1];
+    const platform: ?Platform = (platformMatch && platformMatch[1]: any);
+
+    if (!filename || !platform) {
+      return next();
+    }
+
+    const [name, ...rest] = filename.split('.');
+    const bundleName = `${name}.${platform}.${rest[rest.length - 1]}`;
 
     // grab our source map consumer
-    const consumer = createSourceMapConsumer(compiler);
+    const consumer = await createSourceMapConsumer(
+      compiler,
+      // $FlowFixMe
+      `http://localhost:${req.get('host').split(':')[1]}/${bundleName}.map`
+    );
+    // console.log('C', consumer);
     if (!consumer) return next();
 
     // the base directory
-    const root = compiler.options.context;
+    const root = getConfig(configPath, configOptions, platform).context;
 
     // error error on the wall, who's the fairest stack of all?
     const convertedFrames = unconvertedFrames.map(

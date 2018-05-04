@@ -5,13 +5,15 @@
  * @flow
  */
 
-const path = require('path');
-const { cleanup, run } = require('../../utils');
-const { bundleForPlatform, TEST_PROJECT_DIR } = require('./utils');
+const fs = require('fs');
+const { run } = require('../../utils');
+const { bundleForPlatform, TEST_PROJECT_DIR, cleanup } = require('./utils');
 
 beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
-beforeEach(() => cleanup(path.resolve(TEST_PROJECT_DIR, 'dist')));
+beforeEach(() => cleanup('ios'));
+afterAll(() => cleanup('ios'));
 
 test('bundle ios project', () => {
-  bundleForPlatform('ios');
+  const bundlePath = bundleForPlatform('ios');
+  expect(fs.existsSync(bundlePath)).toBeTruthy();
 });

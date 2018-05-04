@@ -6,22 +6,32 @@
  */
 /* eslint-disable no-param-reassign */
 
+import type { Logger, Platform } from '../types';
+
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const haulProgressBar = require('./haulProgressBar');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
-const moduleResolve = require('../utils/resolveModule');
+const moduleResolve = require('./resolveModule');
 const getBabelConfig = require('./getBabelConfig');
+const getPolyfills = require('./getPolyfills');
+const loggerUtil = require('../logger');
+const { DEFAULT_PORT } = require('../constants');
 
-const PLATFORMS = ['ios', 'android'];
-
-type ConfigOptions = {
+type ConfigOptions = {|
   root: string,
   dev: boolean,
-};
+  minify?: boolean,
+  bundle?: boolean,
+  port?: number,
+|};
+
+type EnvOptions = {|
+  ...ConfigOptions,
+  platform: Platform,
+|};
 
 type WebpackPlugin = {
   apply: (typeof webpack) => void,
@@ -37,6 +47,7 @@ type WebpackConfig = {
   },
   name?: string,
   plugins: WebpackPlugin[],
+  context: string,
   optimization: {
     minimize: boolean,
     namedModules: boolean,
@@ -44,9 +55,12 @@ type WebpackConfig = {
   },
 };
 
-type WebpackConfigFactory =
-  | ((ConfigOptions, WebpackConfig) => WebpackConfig)
-  | WebpackConfig;
+type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
+
+type DEPRECATEDWebpackConfigFactory = (
+  EnvOptions,
+  WebpackConfig
+) => WebpackConfig | WebpackConfig;
 
 /**
  * Returns default config based on environment
@@ -60,15 +74,14 @@ const getDefaultConfig = ({
   port,
 }): WebpackConfig => {
   // Getting Minor version
-  const platformProgressBar = haulProgressBar(platform);
   return {
     mode: dev ? 'development' : 'production',
     context: root,
     entry: [],
     output: {
-      path: path.join(root, 'dist'),
+      path: path.join(root),
       filename: `index.${platform}.bundle`,
-      publicPath: `http://localhost:${port}/`,
+      publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },
     module: {
       rules: [
@@ -109,11 +122,6 @@ const getDefaultConfig = ({
        * This is needed so we can error on incorrect case
        */
       new CaseSensitivePathsPlugin(),
-
-      new webpack.ProgressPlugin(perc => {
-        platformProgressBar(platform, perc);
-      }),
-
       new webpack.DefinePlugin({
         /**
          * Various libraries like React rely on `process.env.NODE_ENV`
@@ -135,18 +143,13 @@ const getDefaultConfig = ({
             new webpack.EvalSourceMapDevToolPlugin({
               module: true,
             }),
+            new webpack.NamedModulesPlugin(),
+            new webpack.SourceMapDevToolPlugin({
+              test: /\.(js|css|(js)?bundle)($|\?)/i,
+              filename: '[file].map',
+            }),
             new webpack.BannerPlugin({
-              banner: `
-                if (this && !this.self) { this.self = this; };
-                ${fs
-                  .readFileSync(
-                    path.join(
-                      __dirname,
-                      '../../vendor/polyfills/Array.prototype.es6.js'
-                    )
-                  )
-                  .toString()}
-              `,
+              banner: 'if (this && !this.self) { this.self = this; };\n',
               raw: true,
             }),
           ]
@@ -207,48 +210,168 @@ const getDefaultConfig = ({
 };
 
 /**
+ * Return React Native config
+ *
+ * @deprecated
+*/
+function DEPRECATEDMakeReactNativeConfig(
+  userWebpackConfig: DEPRECATEDWebpackConfigFactory,
+  options: ConfigOptions,
+  platform: Platform
+) {
+  const { root, dev, minify, bundle, port } = options;
+
+  const env = {
+    root,
+    dev,
+    minify,
+    platform,
+    bundle,
+    port,
+  };
+
+  const defaultWebpackConfig = getDefaultConfig(env);
+
+  const userConfig =
+    typeof userWebpackConfig === 'function'
+      ? userWebpackConfig(env, defaultWebpackConfig)
+      : userWebpackConfig;
+
+  const config = Object.assign({}, defaultWebpackConfig, userConfig, {
+    entry: injectPolyfillIntoEntry({
+      root,
+      entry: userConfig.entry,
+    }),
+    name: platform,
+  });
+
+  return config;
+}
+
+/**
  * Creates an array of configs based on changing `env` for every
  * platform and returns
  */
 function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
-  options: ConfigOptions
-): [Array<WebpackConfig>, typeof PLATFORMS] {
-  const configs = PLATFORMS.map(platform => {
-    const env = Object.assign({}, options, { platform });
-    const defaultWebpackConfig = getDefaultConfig(env);
-    const polyfillPath = require.resolve('./polyfillEnvironment.js');
+  options: ConfigOptions,
+  platform: Platform,
+  logger: Logger = loggerUtil
+): WebpackConfig {
+  /**
+   * We should support also the old format of config
+   *
+   * module.exports = {
+   *   entry: './index.js',
+   * };
+   *
+   * module.exports = ({ platform }) => ({
+   *   entry: `./index.${platform}.js`,
+   * });
+   */
+  const isLegacy =
+    typeof userWebpackConfig === 'function' || !userWebpackConfig.webpack;
 
-    const userConfig =
-      typeof userWebpackConfig === 'function'
-        ? userWebpackConfig(env, defaultWebpackConfig)
-        : userWebpackConfig;
+  if (isLegacy) {
+    logger.warn(
+      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
+    );
 
-    const config = Object.assign({}, defaultWebpackConfig, userConfig, {
-      entry: injectPolyfillIntoEntry(userConfig.entry, polyfillPath),
-      name: platform,
-    });
+    return DEPRECATEDMakeReactNativeConfig(
+      userWebpackConfig,
+      options,
+      platform
+    );
+  }
 
-    return config;
+  const { root, dev, minify, bundle, port } = options;
+
+  const env = {
+    root,
+    dev,
+    minify,
+    platform,
+    bundle,
+    port,
+  };
+
+  const {
+    webpack: webpackConfigFactory /* , ...haulConfig */,
+  } = userWebpackConfig;
+
+  if (
+    typeof webpackConfigFactory !== 'function' &&
+    typeof webpackConfigFactory !== 'object'
+  ) {
+    throw new Error(
+      'The webpack configuration must be an object or a function returning an object. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
+    );
+  }
+
+  const webpackConfig =
+    typeof webpackConfigFactory === 'function'
+      ? webpackConfigFactory(env)
+      : webpackConfigFactory;
+
+  if (typeof webpackConfig !== 'object' || webpackConfig === null) {
+    throw new Error(
+      `The arguments passed to 'createWebpackConfig' must be an object or a function returning an object.`
+    );
+  }
+
+  let entries = webpackConfig.entry;
+
+  if (typeof entries === 'string') {
+    entries = [entries];
+  }
+
+  entries.forEach(entry => {
+    if (typeof entry !== 'string') {
+      throw new Error(
+        `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
+      );
+    }
+
+    if (!fs.existsSync(path.resolve(root, entry))) {
+      throw new Error(
+        `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
+      );
+    }
   });
 
-  return [configs, PLATFORMS];
+  return webpackConfig;
 }
 
-/*
- * Takes user entries from webpack.haul.js,
- * change them to multi-point entries
- * and injects polyfills
- */
-function injectPolyfillIntoEntry(
+function injectPolyfillIntoEntry({
+  entry: userEntry,
+  root,
+}: {
+  entry: WebpackEntry,
+  root: string,
+}) {
+  const reactNativeHaulEntries = [
+    ...getPolyfills(),
+    require.resolve(
+      path.join(
+        root,
+        'node_modules/react-native/Libraries/Core/InitializeCore.js'
+      )
+    ),
+    require.resolve('./polyfillEnvironment.js'),
+  ];
+
+  return makeWebpackEntry(userEntry, reactNativeHaulEntries);
+}
+
+function makeWebpackEntry(
   userEntry: WebpackEntry,
-  polyfillPath: string
+  otherEntries: Array<string>
 ): WebpackEntry {
   if (typeof userEntry === 'string') {
-    return [polyfillPath, userEntry];
+    return [...otherEntries, userEntry];
   }
   if (Array.isArray(userEntry)) {
-    return [polyfillPath, ...userEntry];
+    return [...otherEntries, ...userEntry];
   }
   if (typeof userEntry === 'object') {
     const chunkNames = Object.keys(userEntry);
@@ -256,10 +379,10 @@ function injectPolyfillIntoEntry(
       // $FlowFixMe
       const chunk = userEntry[name];
       if (typeof chunk === 'string') {
-        entryObj[name] = [polyfillPath, chunk];
+        entryObj[name] = [...otherEntries, chunk];
         return entryObj;
       } else if (Array.isArray(chunk)) {
-        entryObj[name] = [polyfillPath, ...chunk];
+        entryObj[name] = [...otherEntries, ...chunk];
         return entryObj;
       }
       return chunk;
@@ -268,4 +391,35 @@ function injectPolyfillIntoEntry(
   return userEntry;
 }
 
-module.exports = { makeReactNativeConfig, injectPolyfillIntoEntry };
+function createWebpackConfig(configBuilder: WebpackConfigFactory) {
+  return (options: EnvOptions) => {
+    const haulWebpackConfiguration =
+      typeof configBuilder === 'function'
+        ? configBuilder(options)
+        : configBuilder;
+
+    const defaultWebpackConfig = getDefaultConfig(options);
+
+    /**
+     * Currently we support only "entry" field in config file
+     */
+    const { entry } = haulWebpackConfiguration;
+
+    const config = {
+      ...defaultWebpackConfig,
+      entry: injectPolyfillIntoEntry({
+        root: options.root,
+        entry,
+      }),
+      name: options.platform,
+    };
+
+    return config;
+  };
+}
+
+module.exports = {
+  makeReactNativeConfig,
+  injectPolyfillIntoEntry,
+  createWebpackConfig,
+};

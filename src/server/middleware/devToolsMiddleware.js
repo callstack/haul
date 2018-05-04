@@ -5,26 +5,41 @@
 const fs = require('fs');
 const path = require('path');
 const opn = require('opn');
-/**
- * Returns name of Chrome app to launch based on the platform
- */
-const getChromeAppName = () => {
-  switch (process.platform) {
-    case 'darwin':
-      return 'google chrome';
-    case 'win32':
-      return 'chrome';
-    default:
-      return 'google-chrome';
-  }
-};
+const select = require('platform-select');
+const logger = require('../../logger');
 
 /**
- * Launches given `url` in Chrome
+ * Launches given `url` in browser based on platform
  */
-const launchChrome = url => {
-  opn(url, { app: getChromeAppName() }, err => {
-    console.error('Google Chrome exited with error', err);
+const launchBrowser = url => {
+  const open = app => () => opn(url, { app });
+
+  /**
+   * Run Chrome (Chrome Canary) or supported platform.
+   * In case of macOS, we can eventually fallback to Safari.
+   *
+   * select(attemp1, attemp2, attemp3,...) // attempt to run is from left to right
+   */
+  select(
+    {
+      // try to find & run Google Chrome
+      darwin: open('google chrome'),
+      win32: open('chrome'),
+      _: open('google-chrome'),
+    },
+    {
+      // On macOS let's try to find & run Canary
+      darwin: open('google chrome canary'),
+    },
+    {
+      // No Canary / Chrome, let's run Safari
+      darwin: open('safari'),
+    }
+  ).catch(e => {
+    console.log(e); // print error to artifacts
+    logger.warn(
+      `Cannot start browser for debugging. Navigate manually to "${url}"`
+    );
   });
 };
 
@@ -63,7 +78,7 @@ function devToolsMiddleware(debuggerProxy) {
        */
       case '/launch-js-devtools': {
         if (!debuggerProxy.isDebuggerConnected()) {
-          launchChrome(`http://localhost:${req.socket.localPort}/debugger-ui`);
+          launchBrowser(`http://localhost:${req.socket.localPort}/debugger-ui`);
         }
         res.end('OK');
         break;

@@ -5,7 +5,8 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { Platform, StyleSheet, Text, View, Button, Image } from 'react-native';
+import image from './assets/haul_logo.png';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -29,6 +30,7 @@ export default class App extends Component<{}, State> {
   render() {
     return (
       <View style={styles.container}>
+        <Image source={image} style={styles.logo} />
         <Text style={styles.welcome}>Welcome to React Native with Haul!!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
@@ -62,5 +64,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  logo: {
+    width: 300,
+    height: 100,
   },
 });

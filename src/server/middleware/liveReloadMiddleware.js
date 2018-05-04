@@ -1,12 +1,19 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
+ *
+ * @flow
  */
+
+import type { $Request, $Response } from 'express';
+import logger from '../../logger';
+
+const Compiler = require('../../compiler/Compiler');
 
 /**
  * Live reload middleware
  */
-function liveReloadMiddleware(compiler) {
+function liveReloadMiddleware(compiler: Compiler) {
   let watchers = [];
   const headers = {
     'Content-Type': 'application/json; charset=UTF-8',
@@ -21,7 +28,11 @@ function liveReloadMiddleware(compiler) {
     watchers = [];
   }
 
-  return (req, res, next) => {
+  compiler.on(Compiler.Events.BUILD_FINISHED, () => {
+    notifyAllWatchers();
+  });
+
+  return (req: $Request, res: $Response, next: Function) => {
     /**
      * React Native client opens connection at `/onchange`
      * and awaits reload signal (http status code - 205)
@@ -39,17 +50,13 @@ function liveReloadMiddleware(compiler) {
     }
 
     if (req.cleanPath === '/reloadapp') {
+      logger.info(
+        'Attempt to reload the app, make sure you have enabled Live Reloading!'
+      );
       notifyAllWatchers();
       res.end();
       return;
     }
-
-    /**
-     * On new `build`, notify all registered watchers to reload
-     */
-    compiler.plugin('done', () => {
-      notifyAllWatchers();
-    });
 
     next();
   };

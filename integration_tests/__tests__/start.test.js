@@ -5,12 +5,14 @@
  * @flow
  */
 
-const { runHaul, runHaulSync } = require('../runHaul');
-const { cleanup, writeFiles } = require('../utils');
+const { runHaul } = require('../runHaul');
+const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
 const { run } = require('../utils');
+const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
+const { isPortTaken } = require('../../src/utils/haulPortHandler');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
@@ -18,35 +20,17 @@ const TEST_PROJECT_DIR = path.resolve(
   '../../fixtures/react-native-with-haul'
 );
 
-beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
-beforeEach(() => cleanup(TEMP_DIR));
-afterEach(() => cleanup(TEMP_DIR));
+let haul;
+beforeAll(async done => {
+  const isTaken = await isPortTaken(8081);
+  if (isTaken) {
+    done.fail('Port is already in use. Cannot run Haul in test env');
+  }
 
-test('start command displays "Select platform" message', () => {
-  writeFiles(TEMP_DIR, {
-    'webpack.haul.js': '{}',
-  });
+  run('yarn --mutex network', TEST_PROJECT_DIR);
+  haul = runHaul(TEST_PROJECT_DIR, ['start']);
 
-  const { stdout } = runHaulSync(TEMP_DIR, ['start']);
-  expect(stripAnsi(stdout).trim()).toMatchSnapshot();
-});
-
-test('starts server and bundling iOS platform', done => {
-  testPlatform('ios', done);
-});
-
-test('starts server and bundling Android platform', done => {
-  testPlatform('android', done);
-});
-
-test('starts server and bundling all platforms', done => {
-  testPlatform('android', done);
-});
-
-function testPlatform(platform, done) {
-  expect.hasAssertions();
   const messageBuffer = [];
-  const haul = runHaul(TEST_PROJECT_DIR, ['start', '--platform', platform]);
 
   haul.stdout.on('data', data => {
     const message = stripAnsi(data.toString()).trim();
@@ -57,14 +41,29 @@ function testPlatform(platform, done) {
 
     if (message.match(/ERROR/g)) {
       done.fail(message);
-      haul.kill();
     }
 
-    if (message.match('bundling your React Native app')) {
-      const stdout = messageBuffer.join('\n');
-      expect(stdout).toMatch('INFO  Ready at http://localhost:8081');
+    if (message.match('running')) {
       done();
-      haul.kill();
     }
   });
+});
+beforeEach(() => cleanup(TEMP_DIR));
+afterEach(() => cleanup(TEMP_DIR));
+afterAll(() => {
+  haul.kill();
+});
+
+test('starts server and bundling iOS platform', () => testPlatform('ios'));
+
+test('starts server and bundling Android platform', () =>
+  testPlatform('android'));
+
+test('starts server and bundling all platforms', () =>
+  Promise.all([testPlatform('ios'), testPlatform('android')]));
+
+async function testPlatform(platform) {
+  const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
+  const bundle = await res.text();
+  expect(bundle).toMatch('__webpack_require__');
 }
