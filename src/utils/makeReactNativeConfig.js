@@ -10,7 +10,6 @@ import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -318,26 +317,6 @@ function makeReactNativeConfig(
       `The arguments passed to 'createWebpackConfig' must be an object or a function returning an object.`
     );
   }
-
-  let entries = webpackConfig.entry;
-
-  if (typeof entries === 'string') {
-    entries = [entries];
-  }
-
-  entries.forEach(entry => {
-    if (typeof entry !== 'string') {
-      throw new Error(
-        `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
-      );
-    }
-
-    if (!fs.existsSync(path.resolve(root, entry))) {
-      throw new Error(
-        `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
-      );
-    }
-  });
 
   return webpackConfig;
 }
