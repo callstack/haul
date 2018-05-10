@@ -319,26 +319,6 @@ function makeReactNativeConfig(
     );
   }
 
-  let entries = webpackConfig.entry;
-
-  if (typeof entries === 'string') {
-    entries = [entries];
-  }
-
-  entries.forEach(entry => {
-    if (typeof entry !== 'string') {
-      throw new Error(
-        `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
-      );
-    }
-
-    if (!fs.existsSync(path.resolve(root, entry))) {
-      throw new Error(
-        `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
-      );
-    }
-  });
-
   return webpackConfig;
 }
 
