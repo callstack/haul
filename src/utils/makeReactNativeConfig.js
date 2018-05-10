@@ -10,7 +10,6 @@ import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
