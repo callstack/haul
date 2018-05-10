@@ -19,8 +19,8 @@
 import type { $Request, Middleware } from 'express';
 import type {
   ReactNativeStackFrame,
-    ReactNativeStack,
-    Platform,
+  ReactNativeStack,
+  Platform,
 } from '../../types';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
