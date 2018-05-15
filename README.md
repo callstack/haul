@@ -80,7 +80,7 @@ Check out the docs to learn more about available commands and tips on customizin
 1. [Recipes](docs/Recipes.md)
 
 ### Hot Module Replacement
-Please refer to the [Setup guide](./docs/hmr/Setup.md).
+Please refer to the [Setup guide](./docs/HMR_Setup.md).
 
 ## Limitations
 
