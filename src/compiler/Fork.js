@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -50,6 +50,13 @@ module.exports = class Fork extends EventEmitter {
         }
 
         forks[platformMatch[1]].setSocket(socket);
+
+        socket.on('error', err => {
+          this.emit(Events.BUILD_FAILED, {
+            message: `Socket: ${err.toString()}`,
+          });
+          throw err;
+        });
       });
     }
 

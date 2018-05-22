@@ -39,7 +39,11 @@ module.exports = function createWebSocketServer() {
   const socketAddress = getSocketAddress();
 
   const httpServer = http.createServer();
-  const webSocketServer = new Server({ server: httpServer });
+  const webSocketServer = new Server({
+    server: httpServer,
+    perMessageDeflate: false,
+    maxPayload: 200 * 1024 * 1024,
+  });
 
   httpServer.listen(socketAddress);
 

@@ -92,7 +92,13 @@ module.exports = class Compiler extends EventEmitter {
    * Create fork process and attach necessary event listeners.
    */
   initFork({ platform, options }: { platform: Platform, options: * }) {
-    const fork = new Fork({ platform, options });
+    let fork;
+    try {
+      fork = new Fork({ platform, options });
+    } catch (err) {
+      this.emit(Events.BUILD_FAILED, { platform, message: err.toString() });
+      return null;
+    }
 
     fork.on(Events.FILE_NOT_FOUND, ({ taskId }) => {
       const { callback, awaitingCount } = this.tasks.pop(taskId);
