@@ -37,6 +37,8 @@ module.exports = class Compiler extends EventEmitter {
         this.forks[platform] = this.initFork({ platform, options });
       }
 
+      if (!this.forks[platform]) return;
+
       // If the fork is compiling the bundle, attach listener to emit `REQUEST_FILE` once
       // the bundle is created, otherwise simply request the file. Callback will be then invoked in
       // `FILE_RECEIVED` listener.
