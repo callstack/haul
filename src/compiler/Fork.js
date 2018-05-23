@@ -42,7 +42,7 @@ module.exports = class Fork extends EventEmitter {
       // WebSocket connection is established after the Fork is created.
       transportServer.on('connection', socket => {
         const platformMatch = socket.upgradeReq.url.match(
-          /platform=(.*)([&]|$)/
+          /platform=([^&]*)/
         );
 
         if (!platformMatch) {
