@@ -53,7 +53,7 @@ module.exports = class Fork extends EventEmitter {
 
         socket.on('error', err => {
           this.emit(Events.BUILD_FAILED, {
-            message: `Socket: ${err.toString()}`,
+            message: `Socket: ${err}`,
           });
           throw err;
         });

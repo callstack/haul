@@ -95,8 +95,8 @@ module.exports = class Compiler extends EventEmitter {
     let fork;
     try {
       fork = new Fork({ platform, options });
-    } catch (err) {
-      this.emit(Events.BUILD_FAILED, { platform, message: err.toString() });
+    } catch (message) {
+      this.emit(Events.BUILD_FAILED, { platform, message });
       return null;
     }
 
