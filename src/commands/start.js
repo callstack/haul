@@ -63,7 +63,7 @@ async function start(opts: *) {
   }
 
   // Run `adb reverse` on Android
-  if (opts.platform === 'android') {
+  if (opts.platform === 'android' || opts.platform === 'all') {
     const command = `adb reverse tcp:${opts.port} tcp:${opts.port}`;
 
     try {
