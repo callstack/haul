@@ -25,7 +25,7 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 ## Features
 
 - Replaces React Native packager to bundle your app
-- Access to full webpack ecosystem, using additonal loaders and plugins is simple
+- Access to full webpack ecosystem, using additional loaders and plugins is simple
 - Doesn't need watchman, symlinks work nicely
 - Helpful and easy to understand error messages
 - Hot Module Reloading
