@@ -37,7 +37,7 @@ There are two bundle methods: with or without assets. Refer to table below to se
 
   1. `<entryFile>` is either `index.android.js` (for Android), `index.ios.js` (for iOS), or other entry file
 
-  2. `<outputDir>` is Your defined output bundle directory, each platform should be seperated
+  2. `<outputDir>` is Your defined output bundle directory, each platform should be separated
 
   3. Don't change `index.android.bundle` (android) or `main.jsbundle` filename as those names are **required** for update to work
 
