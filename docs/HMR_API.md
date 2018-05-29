@@ -38,7 +38,7 @@ import {
 
 ### `makeHot`
 
-Wrap the initial root component factory with HotWrapper, which allows for force deep update of the components tree and servers as an error boundry. This function should be called only once, upon app's initial render.
+Wrap the initial root component factory with HotWrapper, which allows for force deep update of the components tree and servers as an error boundary. This function should be called only once, upon app's initial render.
 
 In case of multi root component app, the second argument is used for differentiating the factories. When calling `redraw`, the same `id` must be passed as a 2nd argument.
 
