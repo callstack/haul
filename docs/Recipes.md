@@ -8,7 +8,7 @@ You will need to install `ts-loader` for Haul to work with TypeScript.
 
 ```yarn add --dev ts-loader```
 
-This is a `webpack.haul.js` that works with TypeScript.
+This is a `haul.config.js` that works with TypeScript.
 ```javascript
 import { createWebpackConfig } from "haul";
 
@@ -66,7 +66,7 @@ You will need `babel-loader` for this.
 
 ```yarn add --dev babel-loader```
 
-Revised `webpack.haul.js`
+Revised `haul.config.js`
 
 ```javascript
 import { createWebpackConfig } from "haul";
@@ -116,8 +116,7 @@ react-native-repackager is built for the standard react-native packager, so your
 
 
 ```javascript
-
-// webpack.haul.js
+// haul.config.js
 
 resolve: {
     ...defaults.resolve,
@@ -125,8 +124,6 @@ resolve: {
             ? ['.mock.behaviour.js', ...defaults.resolve.extensions]
             : defaults.resolve.extensions
   },
-
-
 ```
 
 Set the environment variable `APP_ENV` to
