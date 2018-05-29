@@ -37,6 +37,8 @@ module.exports = class Compiler extends EventEmitter {
         this.forks[platform] = this.initFork({ platform, options });
       }
 
+      if (!this.forks[platform]) return;
+
       // If the fork is compiling the bundle, attach listener to emit `REQUEST_FILE` once
       // the bundle is created, otherwise simply request the file. Callback will be then invoked in
       // `FILE_RECEIVED` listener.
@@ -92,7 +94,13 @@ module.exports = class Compiler extends EventEmitter {
    * Create fork process and attach necessary event listeners.
    */
   initFork({ platform, options }: { platform: Platform, options: * }) {
-    const fork = new Fork({ platform, options });
+    let fork;
+    try {
+      fork = new Fork({ platform, options });
+    } catch (message) {
+      this.emit(Events.BUILD_FAILED, { platform, message });
+      return null;
+    }
 
     fork.on(Events.FILE_NOT_FOUND, ({ taskId }) => {
       const { callback, awaitingCount } = this.tasks.pop(taskId);
