@@ -14,7 +14,7 @@ import {
 
 test('creates config from defaults', () => {
   // We need to go one level higher because of read polyfills with fs.readFileSync
-  const orginalPath = __dirname;
+  const originalPath = __dirname;
   process.chdir(path.join(__dirname, '..'));
 
   const webpackConfig = require('./fixtures/webpack.config.js');
@@ -26,12 +26,12 @@ test('creates config from defaults', () => {
   expect(replacePathsInObject(configs)).toMatchSnapshot('(configs)');
   expect(platforms).toMatchSnapshot('(platforms)');
 
-  process.chdir(orginalPath);
+  process.chdir(originalPath);
 });
 
 test('merges existing config', () => {
   // We need to go one level higher because of read polyfills with fs.readFileSync
-  const orginalPath = __dirname;
+  const originalPath = __dirname;
   process.chdir(path.join(__dirname, '..'));
 
   const webpackConfig = require('./fixtures/webpack.custom.config.js');
@@ -42,7 +42,7 @@ test('merges existing config', () => {
 
   expect(replacePathsInObject(configs)).toMatchSnapshot();
 
-  process.chdir(orginalPath);
+  process.chdir(originalPath);
 });
 
 describe('injects polyfill into different entries', () => {
