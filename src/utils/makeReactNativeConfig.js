@@ -92,7 +92,8 @@ const getDefaultConfig = ({
         { parser: { requireEnsure: false } },
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!react|@expo|pretty-format|haul|metro)/,
+          // eslint-disable-next-line no-useless-escape
+          exclude: /node_modules(?!.*[\/\\](react|@expo|pretty-format|haul|metro))/,
           use: [
             {
               loader: require.resolve('babel-loader'),
