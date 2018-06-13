@@ -25,6 +25,9 @@ type ConfigOptions = {|
   minify?: boolean,
   bundle?: boolean,
   port?: number,
+  providesModuleNodeModules?: string[],
+  hasteOptions?: *,
+  initializeCoreLocation?: string,
 |};
 
 type EnvOptions = {|
@@ -71,6 +74,8 @@ const getDefaultConfig = ({
   minify,
   bundle,
   port,
+  providesModuleNodeModules,
+  hasteOptions,
 }): WebpackConfig => {
   // Getting Minor version
   return {
@@ -178,10 +183,14 @@ const getDefaultConfig = ({
       plugins: [
         /**
          * React Native uses a module system called Haste
-         * We don't support it, but need to provide a compatibility layer
+         * React Native uses haste internally, and additional RN
+         * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: [moduleResolve(root, 'react-native')],
+          directories: providesModuleNodeModules
+            ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
+            : [moduleResolve(root, 'react-native')],
+          hasteOptions: hasteOptions || {},
         }),
         /**
          * This is required by asset loader to resolve extra scales
@@ -227,6 +236,8 @@ function DEPRECATEDMakeReactNativeConfig(
     platform,
     bundle,
     port,
+    providesModuleNodeModules: undefined,
+    hasteOptions: undefined,
   };
 
   const defaultWebpackConfig = getDefaultConfig(env);
@@ -324,18 +335,15 @@ function makeReactNativeConfig(
 function injectPolyfillIntoEntry({
   entry: userEntry,
   root,
+  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
 }: {
   entry: WebpackEntry,
   root: string,
+  initializeCoreLocation?: string,
 }) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
-    require.resolve(
-      path.join(
-        root,
-        'node_modules/react-native/Libraries/Core/InitializeCore.js'
-      )
-    ),
+    require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
   ];
 
@@ -388,6 +396,7 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
       ...defaultWebpackConfig,
       entry: injectPolyfillIntoEntry({
         root: options.root,
+        initializeCoreLocation: options.initializeCoreLocation,
         entry,
       }),
       name: options.platform,

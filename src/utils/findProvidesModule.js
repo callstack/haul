@@ -36,7 +36,15 @@ const getJSFileName = fileName => {
 const getPlatformFileName = (fileName, platforms) => {
   // eslint-disable-next-line no-unused-vars
   const [_, realName, extension] = /^(.*)\.(\w+)$/.exec(fileName) || [];
-  return platforms.indexOf(extension) >= 0 ? realName : fileName;
+
+  const isPlatformExtension = platforms.indexOf(extension) >= 0;
+
+  // StaticContainer.react would be dropped if we dont count react as a valid extension
+  return {
+    name: isPlatformExtension ? realName : fileName,
+    ignoredPlatformExtension:
+      extension && !isPlatformExtension && extension !== 'react',
+  };
 };
 
 /**
@@ -57,7 +65,7 @@ function findProvidesModule(directories, opts = {}) {
   const modulesMap = {};
 
   const walk = dir => {
-    const stat = fs.lstatSync(dir);
+    const stat = fs.statSync(dir);
 
     if (stat.isDirectory()) {
       fs.readdirSync(dir).forEach(file => {
@@ -75,7 +83,14 @@ function findProvidesModule(directories, opts = {}) {
         return;
       }
 
-      const fileName = getPlatformFileName(jsFileName, options.platforms);
+      const { name: fileName, ignoredPlatformExtension } = getPlatformFileName(
+        jsFileName,
+        options.platforms
+      );
+
+      if (ignoredPlatformExtension) {
+        return;
+      }
 
       const moduleName = getProvidedModuleName(dir);
       if (!moduleName) {
@@ -84,9 +99,11 @@ function findProvidesModule(directories, opts = {}) {
 
       // Throw when duplicated modules are provided from a different
       // fileName
+      /*
       if (modulesMap[moduleName] && modulesMap[moduleName] !== fileName) {
         throw new Error('Duplicate haste module found');
       }
+      */
       modulesMap[moduleName] = fileName;
     }
   };

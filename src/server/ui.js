@@ -129,6 +129,7 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
     this.props.compiler.on(
       Compiler.Events.BUILD_PROGRESS,
       ({ progress, platform }) => {
+        this._ensurePlatformState(platform);
         this.setState(state => ({
           compilationProgress: {
             ...state.compilationProgress,
@@ -139,6 +140,7 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
     );
 
     this.props.compiler.on(Compiler.Events.BUILD_START, ({ platform }) => {
+      this._ensurePlatformState(platform);
       this.setState(state => ({
         forkStatus: {
           ...state.forkStatus,
@@ -150,6 +152,7 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
     this.props.compiler.on(
       Compiler.Events.BUILD_FAILED,
       ({ platform, message }) => {
+        this._ensurePlatformState(platform);
         this.setState(state => ({
           errors: [...state.errors, message],
           forkStatus: {
@@ -163,6 +166,7 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
     this.props.compiler.on(
       Compiler.Events.BUILD_FINISHED,
       ({ platform, errors }) => {
+        this._ensurePlatformState(platform);
         this.setState(state => ({
           compilationProgress: {
             ...state.compilationProgress,
@@ -180,9 +184,24 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
     });
   }
 
+  _ensurePlatformState(platform: Platform) {
+    if (this.state.compilationProgress[platform] === undefined) {
+      this.setState(state => ({
+        compilationProgress: {
+          ...state.compilationProgress,
+          [platform]: -1,
+        },
+        forkStatus: {
+          ...state.forkStatus,
+          [platform]: 'cold',
+        },
+      }));
+    }
+  }
+
   _makeProgressBar(platform: Platform, label, marginLeft = 0) {
     return (
-      <Text>
+      <Text key={platform}>
         <Text
           style={{
             ...styles.progressLabel,
@@ -303,8 +322,15 @@ class ServerUI extends React.Component<ServerPropsType, ServerStateType> {
         <Text style={styles.welcomeMessage}>done</Text>
         Haul running at port {this.props.port}
         <Text style={styles.progressContainer}>
-          {this._makeProgressBar('ios', 'iOS', 4)}
-          {this._makeProgressBar('android', 'Android')}
+          {Object.keys(this.state.compilationProgress)
+            .sort()
+            .map(platform => {
+              return this._makeProgressBar(
+                platform,
+                platform,
+                7 - platform.length > 0 ? 7 - platform.length : 0
+              );
+            })}
         </Text>
         {this.state.errors.length ? this._displayErrors() : this._displayLogs()}
       </Text>

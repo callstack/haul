@@ -99,6 +99,29 @@ module.exports = ({ platform }, { module, resolve }) => ({
 });
 ```
 
+## Use Haul with react-native-windows
+If you want to use react-native-windows, you can register windows as a supported platform type for the commandline, and for windows platform builds add the react-native-windows package as an additional package to look for RN modules:
+```js
+import { createWebpackConfig } from "haul";
+
+export default {
+  platforms: { ios: 'iOS', android: 'Android', windows: 'Windows' },
+  webpack: env => {
+    const platformSpecificOptions = env.platform === 'windows' ? {
+        providesModuleNodeModules: ['react-native', 'react-native-windows']
+        hasteOptions: { platforms: ['native', 'windows'] }
+      } : {};
+    const config = createWebpackConfig({
+      entry: './index.js',
+    })({...env, ...platformSpecificOptions});
+
+    config.plugins.push(new CaseSensitivePathsPlugin());
+
+    return config;
+  }
+};
+```
+
 ## Mock files when running detox tests
 [Detox](https://github.com/wix/detox) is a "grey box" e2e framework developed by wix.
 It provides the ability to mock files during tests using [react-native-repackager](https://github.com/wix/react-native-repackager)

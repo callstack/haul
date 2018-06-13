@@ -26,6 +26,7 @@ export type Command = {
   description: string,
   action: (args: Object) => void | Promise<void>,
   options?: Array<CommandOption>,
+  adjustOptions?: (options: Object) => void,
 };
 
 export type WebpackStats = {
