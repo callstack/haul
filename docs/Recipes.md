@@ -8,33 +8,37 @@ You will need to install `ts-loader` for Haul to work with TypeScript.
 
 ```yarn add --dev ts-loader```
 
-This is a `webpack.haul.js` that works with TypeScript.
+This is a `haul.config.js` that works with TypeScript.
 ```javascript
-module.exports = ({ platform }, { module, resolve }) => ({
-  entry: `./src/index.${platform}.tsx`,
-  module: {
-    ...module,
-    rules: [
+import { createWebpackConfig } from "haul";
+
+export default {
+  webpack: env => {
+    const config = createWebpackConfig({
+      entry: `./src/index.${env.platform}.tsx`,
+    })(env);
+
+    config.module.rules = [
       {
         test: /\.tsx?$/,
         loader: 'ts-loader'
       },
-      ...module.rules
-    ]
-  },
-  resolve: {
-    ...resolve,
-    extensions: [
+      ...config.module.rules,
+    ];
+
+    config.resolve.extensions = [
       '.ts',
       '.tsx',
-      `.${platform}.ts`,
+      `.${env.platform}.ts`,
       '.native.ts',
-      `.${platform}.tsx`,
+      `.${env.platform}.tsx`,
       '.native.tsx',
-      ...resolve.extensions
+      ...config.resolve.extensions,
     ]
+
+    return config;
   }
-});
+};
 ```
 
 And a corresponding (example) `tsconfig.json`
@@ -62,14 +66,18 @@ You will need `babel-loader` for this.
 
 ```yarn add --dev babel-loader```
 
-Revised `webpack.haul.js`
+Revised `haul.config.js`
 
 ```javascript
-module.exports = ({ platform }, { module, resolve }) => ({
-  entry: `./src/index.${platform}.tsx`,
-  module: {
-    ...module,
-    rules: [
+import { createWebpackConfig } from "haul";
+
+export default {
+  webpack: env => {
+    const config = createWebpackConfig({
+      entry: `./src/index.${env.platform}.tsx`,
+    })(env);
+
+    config.module.rules = [
       {
         test: /\.tsx?$/,
         exclude: '/node_modules/',
@@ -78,25 +86,26 @@ module.exports = ({ platform }, { module, resolve }) => ({
             loader: 'babel-loader',
           },
           {
-            loader: 'ts-loader'
-          },
-        ],
+            loader: 'ts-loader',
+          }
+        ]
       },
-      ...module.rules
-    ]
-  },
-  resolve: {
-    ...resolve,
-    extensions: [
+      ...config.module.rules,
+    ];
+
+    config.resolve.extensions = [
       '.ts',
       '.tsx',
-      `.${platform}.ts`,
+      `.${env.platform}.ts`,
       '.native.ts',
-      `.${platform}.tsx`,
+      `.${env.platform}.tsx`,
       '.native.tsx',
-      ...resolve.extensions],
-  },
-});
+      ...config.resolve.extensions,
+    ]
+
+    return config;
+  }
+};
 ```
 
 ## Use Haul with react-native-windows
@@ -130,8 +139,7 @@ react-native-repackager is built for the standard react-native packager, so your
 
 
 ```javascript
-
-// webpack.haul.js
+// haul.config.js
 
 resolve: {
     ...defaults.resolve,
@@ -139,8 +147,6 @@ resolve: {
             ? ['.mock.behaviour.js', ...defaults.resolve.extensions]
             : defaults.resolve.extensions
   },
-
-
 ```
 
 Set the environment variable `APP_ENV` to
