@@ -28,9 +28,8 @@ function resolve(presetsOrPlugins, type) {
 require('babel-register')(
   Object.assign(
     {
-      // Replaces Haul's 'ignore' pattern, which does not work with PNPM.
-      // eslint-disable-next-line no-useless-escape
-      ignore: /node_modules(?!.*[\/\\]haul)/,
+      // Use a PNPM-compatible search pattern for node_modules.
+      ignore: /node_modules(?!.*[/\\]haul)/,
       retainLines: true,
       sourceMaps: 'inline',
       babelrc: false,
