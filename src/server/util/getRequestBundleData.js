@@ -53,11 +53,14 @@ module.exports = function getRequestBundleData(
     platform = match[1];
   }
 
-  // Convert to a filename the compiler will find. This actually depends
-  // on the output configuration, so really this should be just picking it
-  // off the configuration for the provided platform.
-  // Also note the cast due to https://github.com/facebook/flow/issues/3554
-  const basename = request.path.substring(1, (match: any).index);
+  // Normalize the filename so it matches what the webpack compiler is actually
+  // outputting (by default). A better fix here would probably be to change the
+  // default webpack configuration to match metro's behavior, which AFAICT
+  // simply replaces the entry .js extension with .bundle. (compilers are
+  // already separated by platform)
+
+  // $FlowFixMe - Missing match result props: https://github.com/facebook/flow/issues/3554
+  const basename = request.path.substring(1, match.index);
   const filename = `${basename}.${platform}.bundle`;
 
   return {
