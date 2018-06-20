@@ -37,6 +37,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.2.2",
     "babel-register": "^6.24.0",
     "camelcase-keys": "^4.0.0",
@@ -78,7 +79,7 @@
     "source-map": "^0.5.6",
     "strip-ansi": "^3.0.1",
     "thread-loader": "^1.1.5",
-    "webpack": "^4.6.0",
+    "webpack": "^4.12.0",
     "webpack-hot-middleware": "^2.22.1",
     "ws": "^2.2.2",
     "xpipe": "^1.0.5"
