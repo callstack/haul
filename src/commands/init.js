@@ -15,6 +15,7 @@ const inquirer = require('inquirer');
 const semver = require('semver');
 const getReactNativeVersion = require('../utils/getReactNativeVersion');
 
+const constants = require('../constants');
 const messages = require('../messages');
 
 async function init() {
@@ -32,8 +33,8 @@ async function init() {
     process.exit(1);
   }
 
-  // Does `webpack.haul.js` already exist?
-  if (fs.existsSync(path.join(cwd, 'webpack.haul.js'))) {
+  // Does `haul.config.js` already exist?
+  if (fs.existsSync(path.join(cwd, constants.DEFAULT_CONFIG_FILENAME))) {
     const result = await inquirer.prompt([
       {
         type: 'confirm',
@@ -60,7 +61,7 @@ async function init() {
   } else {
     const list = fs
       .readdirSync(cwd)
-      .filter(f => /\.js$/.test(f) && f !== 'webpack.haul.js');
+      .filter(f => /\.js$/.test(f) && f !== constants.DEFAULT_CONFIG_FILENAME);
 
     if (list.length <= 5) {
       const result = await inquirer.prompt([
@@ -130,12 +131,16 @@ async function init() {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const config = dedent`
-    module.exports = ({ platform }) => ({
-      entry: \`./${entry}\`,
-    });
+    import { createWebpackConfig } from "haul";
+
+    export default {
+      webpack: createWebpackConfig(({ platform }) => ({
+        entry: \`./${entry}\`
+      }))
+    };
   `;
 
-  fs.writeFileSync(path.join(cwd, 'webpack.haul.js'), config);
+  fs.writeFileSync(path.join(cwd, constants.DEFAULT_CONFIG_FILENAME), config);
 
   progress.succeed(messages.generatedConfig());
 }

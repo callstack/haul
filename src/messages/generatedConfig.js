@@ -7,4 +7,7 @@
 
 const chalk = require('chalk');
 
-module.exports = () => `Generated ${chalk.bold('webpack.haul.js')}`;
+const constants = require('../constants');
+
+module.exports = () =>
+  `Generated ${chalk.bold(constants.DEFAULT_CONFIG_FILENAME)}`;
