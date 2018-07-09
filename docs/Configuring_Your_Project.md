@@ -23,6 +23,14 @@ Usually, a React Native project has a run script phase that runs `react-native-x
 
 ![](./img/xcode-integration-3.png)
 
+In case you rely on a library that uses their own custom `react-native-xcode.sh` or `package.sh` script, you may provide their paths to Haul by exporting the variables `REACT_NATIVE_XCODE_SRC` or `PACKAGER_SRC`. 
+
+To achieve this you should do the following:
+```
+export REACT_NATIVE_XCODE_SRC="../../../react-native-schemes-manager/lib"
+bash ../node_modules/haul/src/utils/haul-integrate.sh
+```
+
 ## Integrating with Gradle
 
 If you're on React Native version >= 0.43, run the following to automatically configure your gradle config to use haul:
