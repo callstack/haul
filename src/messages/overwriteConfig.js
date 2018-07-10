@@ -5,4 +5,7 @@
  * @flow
  */
 
-module.exports = () => `There is already a 'webpack.haul.js'. Overwrite it?`;
+import { DEFAULT_CONFIG_FILENAME } from '../constants';
+
+module.exports = () =>
+  `There is already a '${DEFAULT_CONFIG_FILENAME}'. Overwrite it?`;
