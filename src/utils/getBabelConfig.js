@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DEFAULT_BABELRC = {
-  presets: ['react-native'],
+  presets: [require.resolve('babel-preset-react-native')],
 };
 
 module.exports = function getBabelConfig(cwd: string) {
