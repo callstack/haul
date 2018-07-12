@@ -8,7 +8,7 @@ Object {
     "<<REPLACED>>/hot/babelPlugin.js",
   ],
   "presets": Array [
-    "react-native",
+    "<<NODE_MODULE>>/babel-preset-react-native/index.js",
   ],
 }
 `;
@@ -19,7 +19,7 @@ Object {
     "<<REPLACED>>/utils/fixRequireIssues.js",
   ],
   "presets": Array [
-    "react-native",
+    "<<NODE_MODULE>>/babel-preset-react-native/index.js",
   ],
 }
 `;
