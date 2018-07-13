@@ -7674,7 +7674,7 @@ ws@^1.1.0:
     options ">=0.0.5"
     ultron "1.0.x"
 
-ws@^2.0.3, ws@^2.2.2:
+ws@^2.0.3:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-2.3.1.tgz#6b94b3e447cb6a363f785eaf94af6359e8e81c80"
   dependencies:
@@ -7688,6 +7688,12 @@ ws@^4.0.0:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"
     ultron "~1.1.0"
+
+ws@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.2.tgz#dffef14866b8e8dc9133582514d1befaf96e980f"
+  dependencies:
+    async-limiter "~1.0.0"
 
 xcode@^0.9.1:
   version "0.9.3"
