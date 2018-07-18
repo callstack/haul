@@ -11,6 +11,7 @@ import type { Logger, Platform } from '../types';
 const webpack = require('webpack');
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('./resolveModule');
@@ -52,6 +53,7 @@ type WebpackConfig = {
   context: string,
   optimization: {
     minimize: boolean,
+    minimizer: WebpackPlugin[],
     namedModules: boolean,
     concatenateModules: boolean,
   },
@@ -208,6 +210,14 @@ const getDefaultConfig = ({
     },
     optimization: {
       minimize: !!minify,
+      minimizer: [
+        new UglifyJsPlugin({
+          test: /\.(js|(js)?bundle)($|\?)/i,
+          cache: true,
+          parallel: true,
+          sourceMap: true,
+        }),
+      ],
       namedModules: true,
       concatenateModules: true,
     },
