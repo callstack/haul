@@ -109,7 +109,7 @@ module.exports = class Compiler extends EventEmitter {
       // responses, so we put the task back with the same ID and decremented count.
       if (awaitingCount > 1) {
         this.tasks.set(taskId, { callback, awaitingCount: awaitingCount - 1 });
-      } else {
+      } else if (callback) {
         callback({
           errors: null,
           platform,
@@ -120,13 +120,24 @@ module.exports = class Compiler extends EventEmitter {
     });
 
     fork.on(Events.FILE_RECEIVED, ({ file, taskId, mimeType }) => {
-      const { callback } = this.tasks.pop(taskId);
-      callback({
-        errors: null,
-        platform,
-        file,
-        mimeType,
-      });
+      const { callback, awaitingCount } = this.tasks.pop(taskId);
+
+      // If the value is more than 1, it means that we are still awaiting
+      // responses from other forks, so we put the task back with the same ID and decremented count and null callback.
+      if (awaitingCount > 1) {
+        this.tasks.set(taskId, {
+          callback: null,
+          awaitingCount: awaitingCount - 1,
+        });
+      }
+      if (callback) {
+        callback({
+          errors: null,
+          platform,
+          file,
+          mimeType,
+        });
+      }
     });
 
     fork.on(Events.LOG, ({ message, logger: type }) => {
