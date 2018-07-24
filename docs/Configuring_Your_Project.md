@@ -5,32 +5,29 @@ title: Configuring Your Project
 
 ## Integrating with Xcode
 
-Add a new Run Script phase to your project's main target.
+In `Build Phases` edit `Bundle React Native code and images`. It should look like this:
 
-![](./img/xcode-integration-1.png)
-
-Click on its default "Run Script" label to set its name to something like "Integrate Haul with React Native".
-
-![](./img/xcode-integration-2.png)
-
-Add the following command to the script:
-
-```
-bash ../node_modules/haul/src/utils/haul-integrate.sh
+```bash
+# added by Haul
+export CLI_PATH=node_modules/haul/bin/cli.js
+export NODE_BINARY=node
+../node_modules/react-native/scripts/react-native-xcode.sh
 ```
 
-Usually, a React Native project has a run script phase that runs `react-native-xcode.sh`. This phase is added during initial integration with RN. Due to the fact that `haul-integrate.sh` rewrites parts of `react-native-xcode.sh`, the new build phase should be run before the existing build phase:
+There is a mechanism implemented into React Native which tries to ensure that packager (Metro) is always running prior to build. Whenever you run the project and your Haul instance is not running properly you will get a popup with Metro bundler. If you want to disable it (most likely you do) just export `RCT_NO_LAUNCH_PACKAGER` ENV variable in your project. (https://twitter.com/jukben/status/1016706074878119936)
 
-![](./img/xcode-integration-3.png)
+<img src="https://user-images.githubusercontent.com/8135252/42522489-8594b538-846b-11e8-8f7f-80454a47656c.png" width="500"/>
 
 ## Integrating with Gradle
 
 If you're on React Native version >= 0.43, run the following to automatically configure your gradle config to use haul:
+
 ```
 haul init
 ```
 
 If the automatic setup didn't work for you, you can manually add the following code in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
+
 ```
 project.ext.react = [
     cliPath: "node_modules/haul/bin/cli.js"

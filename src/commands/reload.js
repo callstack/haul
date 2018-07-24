@@ -9,15 +9,16 @@ import type { Command } from '../types';
 const clear = require('clear');
 const logger = require('../logger');
 const http = require('http');
+const { DEFAULT_PORT } = require('../constants');
 
 /**
  * Send reload request to devices
  */
 
-async function reload() {
+async function reload(opts: *) {
   const requestOptions = {
     hostname: 'localhost',
-    port: 8081,
+    port: opts.port,
     path: '/reloadapp',
     method: 'HEAD',
   };
@@ -45,5 +46,12 @@ module.exports = ({
   name: 'reload',
   description: 'Sends reload request to all devices that enabled live reload',
   action: reload,
-  options: [],
+  options: [
+    {
+      name: 'port',
+      description: 'Port your webpack server is running on',
+      default: DEFAULT_PORT,
+      parse: Number,
+    },
+  ],
 }: Command);

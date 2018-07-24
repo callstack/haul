@@ -15,7 +15,7 @@ const TEST_PROJECT_DIR = path.resolve(
   __dirname,
   '../../fixtures/react-native-clean'
 );
-const CONFIG_FILE_PATH = path.resolve(TEST_PROJECT_DIR, 'webpack.haul.js');
+const CONFIG_FILE_PATH = path.resolve(TEST_PROJECT_DIR, 'haul.config.js');
 const GRADLE_PATH = path.resolve(TEST_PROJECT_DIR, 'android/app/build.gradle');
 const ENTER_KEY = '\x0d';
 

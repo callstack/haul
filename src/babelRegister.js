@@ -20,7 +20,7 @@ function resolve(presetsOrPlugins, type) {
  * To prevent `babel-register` from reading foreign Babel
  * configs, `babelrc` has to be set to `false` and Haul's
  * Babel config inlined into `babel-register`'s options.
- * 
+ *
  * Also presets and plugins need to be resolved to
  * Haul's `node_modules` directory, otherwise Babel would
  * search from them in project's `node_modules`.
@@ -28,7 +28,8 @@ function resolve(presetsOrPlugins, type) {
 require('babel-register')(
   Object.assign(
     {
-      ignore: /node_modules(?!\/haul)/,
+      // Use a PNPM-compatible search pattern for node_modules.
+      ignore: /node_modules(?!.*[/\\]haul)/,
       retainLines: true,
       sourceMaps: 'inline',
       babelrc: false,

@@ -64,7 +64,7 @@ function detectEditorType(): ?string {
  * to target.
  */
 function detectEditorCmd(): ?string {
-  // the specific haul command gets precident
+  // the specific haul command gets precedent
   if (process.env.REACT_EDITOR_CMD) {
     return process.env.REACT_EDITOR_CMD;
   }

@@ -24,7 +24,7 @@ type State = {
 
 /**
  * Wrap root component factory with custom HotWrapper, which allows for deep force update
- * and servers as an error boundry.
+ * and servers as an error boundary.
  */
 export function makeHot(initialRootFactory: Function, id?: string = 'default') {
   instances[id] = [];

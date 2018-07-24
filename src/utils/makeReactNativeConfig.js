@@ -10,7 +10,6 @@ import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
 const HasteResolver = require('../resolvers/HasteResolver');
@@ -26,6 +25,9 @@ type ConfigOptions = {|
   minify?: boolean,
   bundle?: boolean,
   port?: number,
+  providesModuleNodeModules?: string[],
+  hasteOptions?: *,
+  initializeCoreLocation?: string,
 |};
 
 type EnvOptions = {|
@@ -72,6 +74,8 @@ const getDefaultConfig = ({
   minify,
   bundle,
   port,
+  providesModuleNodeModules,
+  hasteOptions,
 }): WebpackConfig => {
   // Getting Minor version
   return {
@@ -88,7 +92,8 @@ const getDefaultConfig = ({
         { parser: { requireEnsure: false } },
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!react|@expo|pretty-format|haul|metro)/,
+          // eslint-disable-next-line no-useless-escape
+          exclude: /node_modules(?!.*[\/\\](react|@expo|pretty-format|haul|metro))/,
           use: [
             {
               loader: require.resolve('babel-loader'),
@@ -179,10 +184,14 @@ const getDefaultConfig = ({
       plugins: [
         /**
          * React Native uses a module system called Haste
-         * We don't support it, but need to provide a compatibility layer
+         * React Native uses haste internally, and additional RN
+         * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: [moduleResolve(root, 'react-native')],
+          directories: providesModuleNodeModules
+            ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
+            : [moduleResolve(root, 'react-native')],
+          hasteOptions: hasteOptions || {},
         }),
         /**
          * This is required by asset loader to resolve extra scales
@@ -228,6 +237,8 @@ function DEPRECATEDMakeReactNativeConfig(
     platform,
     bundle,
     port,
+    providesModuleNodeModules: undefined,
+    hasteOptions: undefined,
   };
 
   const defaultWebpackConfig = getDefaultConfig(env);
@@ -319,44 +330,21 @@ function makeReactNativeConfig(
     );
   }
 
-  let entries = webpackConfig.entry;
-
-  if (typeof entries === 'string') {
-    entries = [entries];
-  }
-
-  entries.forEach(entry => {
-    if (typeof entry !== 'string') {
-      throw new Error(
-        `The 'entry' property must be a string and point to your app's entry point (usually 'index.js').`
-      );
-    }
-
-    if (!fs.existsSync(path.resolve(root, entry))) {
-      throw new Error(
-        `The file '${entry}' doesn't exist. It should point to your app's entry point (usually 'index.js').`
-      );
-    }
-  });
-
   return webpackConfig;
 }
 
 function injectPolyfillIntoEntry({
   entry: userEntry,
   root,
+  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
 }: {
   entry: WebpackEntry,
   root: string,
+  initializeCoreLocation?: string,
 }) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
-    require.resolve(
-      path.join(
-        root,
-        'node_modules/react-native/Libraries/Core/InitializeCore.js'
-      )
-    ),
+    require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
   ];
 
@@ -409,6 +397,7 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
       ...defaultWebpackConfig,
       entry: injectPolyfillIntoEntry({
         root: options.root,
+        initializeCoreLocation: options.initializeCoreLocation,
         entry,
       }),
       name: options.platform,

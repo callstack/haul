@@ -25,7 +25,7 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 ## Features
 
 - Replaces React Native packager to bundle your app
-- Access to full webpack ecosystem, using additonal loaders and plugins is simple
+- Access to full webpack ecosystem, using additional loaders and plugins is simple
 - Doesn't need watchman, symlinks work nicely
 - Helpful and easy to understand error messages
 - Hot Module Reloading
@@ -80,7 +80,7 @@ Check out the docs to learn more about available commands and tips on customizin
 1. [Recipes](docs/Recipes.md)
 
 ### Hot Module Replacement
-Please refer to the [Setup guide](./docs/hmr/Setup.md).
+Please refer to the [Setup guide](./docs/HMR_Setup.md).
 
 ## Limitations
 
@@ -127,7 +127,7 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
 [coc]: https://github.com/callstack/haul/blob/master/CODE_OF_CONDUCT.md
 [all-contributors-badge]: https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square
-[chat-badge]: https://img.shields.io/badge/chat-slack-brightgreen.svg?style=flat-square&colorB=E01563
-[chat]: https://slack.callstack.io/
+[chat-badge]: https://img.shields.io/discord/426714625279524876.svg?style=flat-square&colorB=758ED3
+[chat]: https://discord.gg/zwR2Cdh
 [tweet-badge]: https://img.shields.io/badge/tweet-%23haul-blue.svg?style=flat-square&colorB=1DA1F2&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAUCAYAAACXtf2DAAAAAXNSR0IArs4c6QAAAaRJREFUOBGtlM8rBGEYx3cWtRHJRaKcuMtBSitxkCQ3LtzkP9iUUu5ODspRHLhRLtq0FxeicEBC2cOivcge%2FMgan3fNM8bbzL4zm6c%2BPT%2Fe7%2FO8887svrFYBWbbtgWzsAt3sAcpqJFxxF1QV8oJFqFPFst5dLWQAT87oTgPB7DtziFRT1EA4yZolsFkhwjGYFRO8Op0KD8HVe7unoB6PRTBZG8IctAmG1xrHcfkQ2B55sfI%2ByGMXSBqV71xZ8CWdxBxN6ThFuECDEAL%2Bc9HIzDYumVZ966GZnX0SzCZvEqTbkaGywkyFE6hKAsBPhFQ18uPUqh2ggJ%2BUor%2F4M%2F%2FzOC8g6YzR1i%2F8g4vvSI%2ByD7FFNjexQrjHd8%2BnjABI3AU4Wl16TuF1qANGll81jsi5qu%2Bw6XIsCn4ijhU5FmCJpkV6BGNw410hfSf6JKBQ%2FUFxHGYBnWnmOwDwYQ%2BwzdHqO75HtiAMJfaC7ph32FSRJCENUhDHsLaJkL%2FX4wMF4%2BwA5bgAcrZE4sr0Cu9Jq9fxyrvBHWbNkMD5CEHWTjjT2m6r5D92jfmbbKJEWuMMAAAAABJRU5ErkJggg%3D%3D
 [tweet]: https://twitter.com/intent/tweet?text=Check%20out%20Haul!%20https://github.com/callstack/haul%20%F0%9F%91%8D

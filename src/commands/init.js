@@ -10,11 +10,11 @@ const path = require('path');
 const fs = require('fs');
 const dedent = require('dedent');
 const ora = require('ora');
-const chalk = require('chalk');
 const inquirer = require('inquirer');
 const semver = require('semver');
 const getReactNativeVersion = require('../utils/getReactNativeVersion');
 
+const constants = require('../constants');
 const messages = require('../messages');
 
 async function init() {
@@ -32,8 +32,8 @@ async function init() {
     process.exit(1);
   }
 
-  // Does `webpack.haul.js` already exist?
-  if (fs.existsSync(path.join(cwd, 'webpack.haul.js'))) {
+  // Does `haul.config.js` already exist?
+  if (fs.existsSync(path.join(cwd, constants.DEFAULT_CONFIG_FILENAME))) {
     const result = await inquirer.prompt([
       {
         type: 'confirm',
@@ -60,7 +60,7 @@ async function init() {
   } else {
     const list = fs
       .readdirSync(cwd)
-      .filter(f => /\.js$/.test(f) && f !== 'webpack.haul.js');
+      .filter(f => /\.js$/.test(f) && f !== constants.DEFAULT_CONFIG_FILENAME);
 
     if (list.length <= 5) {
       const result = await inquirer.prompt([
@@ -130,12 +130,16 @@ async function init() {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const config = dedent`
-    module.exports = ({ platform }) => ({
-      entry: \`./${entry}\`,
-    });
+    import { createWebpackConfig } from "haul";
+
+    export default {
+      webpack: createWebpackConfig(({ platform }) => ({
+        entry: \`./${entry}\`
+      }))
+    };
   `;
 
-  fs.writeFileSync(path.join(cwd, 'webpack.haul.js'), config);
+  fs.writeFileSync(path.join(cwd, constants.DEFAULT_CONFIG_FILENAME), config);
 
   progress.succeed(messages.generatedConfig());
 }
@@ -317,79 +321,37 @@ const addToXcodeBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(path.join(entry, 'project.pbxproj')).toString();
 
-  const haulScriptKey = 'AD0CE2C91E925489006FC317';
+  const haulSignature = 'added by Haul';
+
+  /* Make sure we check both project iOS and iOS-TV, that's the magic behind "2" constant */
+
+  const PROJECTS_COUNT = 2;
+
+  const countOccurrences = search => {
+    return project.split(search).length - 1;
+  };
 
   // Are we already integrated?
-  if (project.includes(haulScriptKey)) {
+  if (countOccurrences(haulSignature) === PROJECTS_COUNT) {
     progress.info('Haul is already part of your build scripts');
     return;
   }
 
-  /**
-   * Define Haul integration script in the PBXShellScriptBuildPhase section.
-   *
-   * This is done by prepending our predefined script phase to the list
-   * of all phases.
-   */
-  project = project.replace(
-    '/* Begin PBXShellScriptBuildPhase section */',
-    dedent`
-      /* Begin PBXShellScriptBuildPhase section */
-      ${haulScriptKey} /* Integrate Haul with React Native */ = {
-        isa = PBXShellScriptBuildPhase;
-        buildActionMask = 2147483647;
-        name = "Integrate Haul with React Native";
-        files = (
-        );
-        inputPaths = (
-        );
-        outputPaths = (
-        );
-        runOnlyForDeploymentPostprocessing = 0;
-        shellPath = /bin/sh;
-        shellScript = "bash ../node_modules/haul/src/utils/haul-integrate.sh";
-      };`
-  );
+  const originalTask = 'shellScript = "export NODE_BINARY=node';
 
-  /**
-   * Add Haul integration to build phases that already contain `react-native-xcode.sh`
-   *
-   * We are typically trying to match the following:
-   *
-   * ```
-   *   buildPhases = (
-   *     13B07F871A680F5B00A75B9A \/* Sources *\/,
-   *     13B07F8C1A680F5B00A75B9A \/* Frameworks *\/,
-   *     13B07F8E1A680F5B00A75B9A \/* Resources *\/,
-   *     00DD1BFF1BD5951E006B06BC \/* Bundle React Native code and images *\/,
-   *   );
-   * ```
-   *
-   * and prepend our build phase to the beginning.
-   */
-  let sectionsCount = 0;
-  project = project.replace(/buildPhases = \(\n(?:.*,\n)*\s*\);/g, match => {
-    if (!match.includes('React Native')) return match;
-    sectionsCount++;
-    return match.replace(
-      'buildPhases = (',
-      dedent`
-        buildPhases = (
-          ${haulScriptKey} /* Integrate Haul with React Native */,
-        `
+  if (countOccurrences(originalTask) !== PROJECTS_COUNT) {
+    progress.warn(
+      `Couldn't edit Xcode project. Haven't recognized 'Bundle React Native code and images' build phase.`
     );
-  });
-
-  if (sectionsCount > 0) {
-    fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
-    progress.succeed('Added haul to your Xcode build scripts');
-  } else {
-    progress.fail(
-      `Failed to add Haul to your Xcode build scripts. See: ${chalk.grey(
-        'https://github.com/callstack-io/haul/blob/master/docs/Configuring%20Your%20Project.md#integrating-with-xcode'
-      )} for manual instructions`
-    );
+    return;
   }
+
+  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/haul/bin/cli.js\nexport NODE_BINARY=node`;
+
+  project = project.replace(new RegExp(originalTask, 'g'), haulTask);
+
+  fs.writeFileSync(path.join(entry, 'project.pbxproj'), project);
+  progress.succeed('Added haul to your Xcode build scripts');
 };
 
 module.exports = ({

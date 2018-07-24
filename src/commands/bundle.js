@@ -15,6 +15,7 @@ const { MessageError } = require('../errors');
 const messages = require('../messages');
 const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const getConfig = require('../utils/getConfig');
+const { getHaulConfig } = require('../utils/getHaulConfig');
 const logger = require('../logger');
 
 /**
@@ -85,11 +86,44 @@ async function bundle(opts: *) {
   );
 }
 
-module.exports = ({
+// Allow config file to override the list of availiable platforms
+function adjustOptions(options) {
+  const directory = process.cwd();
+  const configPath = getWebpackConfigPath(directory, options.config);
+  const haulOptions = getHaulConfig(configPath, logger);
+
+  if (haulOptions.platforms) {
+    const platformOption =
+      command.options && command.options.find(_ => _.name === 'platform');
+    if (platformOption) {
+      platformOption.choices = [];
+      for (const platformName in haulOptions.platforms) {
+        if (
+          Object.prototype.hasOwnProperty.call(
+            haulOptions.platforms,
+            platformName
+          )
+        ) {
+          if (platformOption.choices) {
+            platformOption.choices.push({
+              value: platformName,
+              description: `Builds ${haulOptions.platforms[
+                platformName
+              ]} bundle`,
+            });
+          }
+        }
+      }
+    }
+  }
+}
+
+let command = ({
   name: 'bundle',
   description:
     'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   action: bundle,
+  adjustOptions,
   options: [
     {
       name: 'dev',
@@ -154,3 +188,5 @@ module.exports = ({
     },
   ],
 }: Command);
+
+module.exports = command;

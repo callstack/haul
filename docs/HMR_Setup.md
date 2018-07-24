@@ -30,7 +30,7 @@ All **default** `index.js` and `App.js` files created by `react-native init` wor
 In order to enable HMR add `import 'haul/hot';` at the top of the `index.js` file. Then, from within _Developer menu_ tap _Enable Hot Reloading_.
 
 ## Manual setup
-> Navigate to: [API docs](./API.md)
+> Navigate to: [API docs](./HMR_API.md)
 
 > Jump to: [Examples](#examples)
 
@@ -38,8 +38,8 @@ For advanced projects or the ones with different structure, we provide our own H
 
 This guide below is not a list of steps, but rather a set of rules and tips on how to setup HMR, since we don't know how your project looks like. However, if you're using one of the following navigation libraries, please refer to associated guide:
 
-* [`react-navigation`](./guides/react-navigation.md)
-* [`react-native-navigation`](./guides/react-native-navigation.md)
+* [`react-navigation`](./HMR_react-navigation.md)
+* [`react-native-navigation`](./HMR_react-native-navigation.md)
 
 ------
 

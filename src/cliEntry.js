@@ -166,6 +166,8 @@ async function run(args: Array<string>) {
     })
   );
 
+  if (command.adjustOptions) command.adjustOptions(flags);
+
   const { options, promptedOptions } = await validateOptions(opts, flags);
   const userDefinedOptions = { ...flags, ...promptedOptions };
   const displayName = getDisplayName(command.name, userDefinedOptions);

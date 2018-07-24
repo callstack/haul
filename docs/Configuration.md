@@ -51,7 +51,7 @@ export default {
 };
 ```
 
-If you are want to customize the Webpack configuration, like `loaders` etc., you can use this approach, then you can mutate config as you want.
+If you want to customize the Webpack configuration, like `loaders` etc., you can use this approach, then you can mutate config as you want.
 
 ```js
 import { createWebpackConfig } from "haul";
