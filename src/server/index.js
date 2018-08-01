@@ -106,6 +106,16 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
     .use(compilerMiddleware)
     .use(missingBundleMiddleware);
 
+  if (configOptions.noLazy) {
+    configOptions.noLazy.forEach(platform => {
+      compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+        filename: `/index.${platform}.bundle`,
+        platform,
+        callback() {},
+      });
+    });
+  }
+
   return httpServer;
 }
 

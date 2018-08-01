@@ -46,6 +46,7 @@ async function start(opts: *) {
     dev: opts.dev,
     minify: opts.minify,
     port: opts.port,
+    noLazy: opts.noLazy,
   };
 
   createServer({
@@ -101,6 +102,13 @@ module.exports = ({
       name: 'config',
       description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
       default: DEFAULT_CONFIG_FILENAME,
+    },
+    {
+      name: 'noLazy',
+      description: `Disable lazy building for platforms (list is separated by ','), 'false' by default`,
+      default: false,
+      parse: (val: string) => val.split(',').map(_ => _.trim()),
+      example: 'haul bundle --noLazy ios,android',
     },
   ],
 }: Command);
