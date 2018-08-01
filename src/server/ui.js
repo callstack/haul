@@ -17,8 +17,8 @@ const emoji = require('node-emoji');
 const Compiler = require('../compiler/Compiler');
 const logger = require('../logger');
 
-const outStream = 'node_modules/.haul-artifacts/stdout.log';
-const errStream = 'node_modules/.haul-artifacts/stderr.log';
+const outStream = '.haul-artifacts/stdout.log';
+const errStream = '.haul-artifacts/stderr.log';
 
 /**
  * Create and render React-powered UI for Haul packager server.
