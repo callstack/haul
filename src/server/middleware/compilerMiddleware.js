@@ -9,7 +9,9 @@ import type { $Response, $Request } from 'express';
 import type { Platform } from '../../types';
 
 const Compiler = require('../../compiler/Compiler');
-const getRequestDataFromPath = require('../util/getRequestDataFromPath');
+const logger = require('../../logger');
+const getRequestBundleData = require('../util/getRequestBundleData');
+const createDeltaBundle = require('../util/createDeltaBundle');
 const runAdbReverse = require('../util/runAdbReverse');
 
 type ConfigOptionsType = {
@@ -50,35 +52,69 @@ module.exports = function createCompilerMiddleware(
     };
   }
 
-  return function compilerMiddleware(
-    request: $Request,
-    response: $Response,
-    next: Function
-  ) {
-    // If file doesn't include `bundle`, we assume it's just a regular file, hence the
+  let hasRunAdbReverse = false;
+  let hasWarnedDelta = false;
+
+  return function compilerMiddleware(request: $Request, response: $Response) {
+    // If the request doesn't end with .bundle or .delta, we assume it's just a regular file, hence the
     // `REQUEST_FILE` event is emitted. Otherwise we emit `REQUEST_BUNDLE` event.
-    if (!/bundle$/.test(request.path)) {
+    const bundleData = getRequestBundleData(request);
+    if (!bundleData) {
       compiler.emit(Compiler.Events.REQUEST_FILE, {
         filename: request.path,
         callback: createCallback(response),
       });
     } else {
-      const { filename, platform } = getRequestDataFromPath(request.path);
-      if (!platform || !filename) {
-        next();
-        return;
-      }
+      const { type, platform, filename } = bundleData;
 
-      if (platform === 'android') {
+      if (!hasRunAdbReverse && platform === 'android') {
         const { port } = options && options.configOptions;
         runAdbReverse(port);
+        hasRunAdbReverse = true;
       }
 
-      compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
-        filename: request.path,
-        platform,
-        callback: createCallback(response),
-      });
+      const callback = createCallback(response);
+
+      if (type !== 'delta') {
+        compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+          filename,
+          platform,
+          callback,
+        });
+      } else {
+        if (!hasWarnedDelta) {
+          logger.warn(
+            'Your app requested a delta bundle, this has minimal support in haul'
+          );
+          hasWarnedDelta = true;
+        }
+
+        compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+          filename,
+          platform,
+          callback(result) {
+            if (result.errors || !result.file) {
+              callback(result);
+            } else {
+              // We have a bundle, but RN is expecting a delta bundle.
+              // Convert full bundle into the simplest delta possible.
+              // This will load slower in RN, but it won't error, which is
+              // nice for automated use-cases where changing the dev setting
+              // is not possible.
+
+              const file =
+                result.file.type === 'Buffer'
+                  ? Buffer.from(result.file.data).toString()
+                  : result.file;
+
+              callback({
+                ...result,
+                file: createDeltaBundle(file),
+              });
+            }
+          },
+        });
+      }
     }
   };
 };

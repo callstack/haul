@@ -55,4 +55,4 @@ export type ReactNativeStackFrame = {
 
 export type ReactNativeStack = Array<ReactNativeStackFrame>;
 
-export type Platform = 'ios' | 'android';
+export type Platform = string;
