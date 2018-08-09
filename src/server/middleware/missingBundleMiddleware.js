@@ -4,16 +4,17 @@
  */
 const dedent = require('dedent');
 
-function missingBundleMiddleware(req, res, next) {
-  // eslint-disable-next-line no-unused-vars
-  const [_, platform] = req.path.match(/(?:\.(ios|android))?\.bundle$/) || [];
+const getRequestBundleData = require('../util/getRequestBundleData');
 
-  if (platform) {
+function missingBundleMiddleware(req, res, next) {
+  const bundleData = getRequestBundleData(req);
+
+  if (bundleData) {
     res.status(500).end(
       dedent`
       Couldn't load bundle
 
-      Make sure that Haul is running with --platform all or --platform ${platform}
+      Make sure that Haul is running with --platform all or --platform ${bundleData.platform}
     `
     );
     return;

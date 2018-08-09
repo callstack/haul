@@ -1,5 +1,6 @@
 # root dotfiles
 /.*
+*.log
 
 # tests
 __tests__
@@ -8,5 +9,6 @@ __tests__
 
 # docs and tooling
 /docs
+/website
 /flow-typed
 /jest
