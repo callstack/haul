@@ -104,6 +104,25 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
     .use(compilerMiddleware)
     .use(missingBundleMiddleware);
 
+  if (configOptions.eager) {
+    if (
+      !Array.isArray(configOptions.eager) &&
+      typeof configOptions.eager === 'boolean'
+    ) {
+      // implicitly true...
+      // TODO: Eager loading for all platforms
+      configOptions.eager = ['android', 'ios' /* , ... potentially more? */];
+    }
+
+    configOptions.eager.forEach(platform => {
+      compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+        filename: `/index.${platform}.bundle`, // XXX: maybe the entry bundle is arbitary
+        platform,
+        callback() {},
+      });
+    });
+  }
+
   return httpServer;
 }
 

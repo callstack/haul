@@ -46,6 +46,7 @@ async function start(opts: *) {
     dev: opts.dev,
     minify: opts.minify,
     port: opts.port,
+    eager: opts.eager,
   };
 
   createServer({
@@ -101,6 +102,19 @@ module.exports = ({
       name: 'config',
       description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
       default: DEFAULT_CONFIG_FILENAME,
+    },
+    {
+      name: 'eager',
+      description: `Disable lazy building for platforms (list is separated by ','), 'false' by default`,
+      default: false,
+      parse(val: string) {
+        const list = val.split(',').map(_ => _.trim());
+        if (list.length === 1 && (list[0] === 'true' || list[0] === 'false')) {
+          return Boolean(list[0]);
+        }
+        return list;
+      },
+      example: 'haul bundle --eager ios,android',
     },
   ],
 }: Command);
