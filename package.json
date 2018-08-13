@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0-rc.7",
-  "name": "haul",
+  "version": "1.0.0",
+  "name": "@office-iss/haul",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
     "haul": "./bin/cli.js"
