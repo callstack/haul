@@ -10,6 +10,7 @@ import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
+const os = require('os');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -57,6 +58,7 @@ type WebpackConfig = {
     namedModules: boolean,
     concatenateModules: boolean,
   },
+  stats: string,
 };
 
 type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
@@ -79,6 +81,8 @@ const getDefaultConfig = ({
   providesModuleNodeModules,
   hasteOptions,
 }): WebpackConfig => {
+  // const logger: Logger = loggerUtil;
+
   // Getting Minor version
   return {
     mode: dev ? 'development' : 'production',
@@ -97,6 +101,17 @@ const getDefaultConfig = ({
           // eslint-disable-next-line no-useless-escape
           exclude: /node_modules(?!.*[\/\\](react|@expo|pretty-format|haul|metro))/,
           use: [
+            {
+              loader: require.resolve('cache-loader'),
+            },
+            {
+              loader: require.resolve('thread-loader'),
+              options: {
+                // There should be 1 cpu for the
+                // fork-ts-checker-webpack-plugin
+                workers: os.cpus().length - 1,
+              },
+            },
             {
               loader: require.resolve('babel-loader'),
               options: Object.assign({}, getBabelConfig(root), {
@@ -159,6 +174,13 @@ const getDefaultConfig = ({
               banner: 'if (this && !this.self) { this.self = this; };\n',
               raw: true,
             }),
+            /* https://github.com/dominique-mueller/simple-progress-webpack-plugin/blob/develop/logger/compact-logger.js */
+            // new webpack.ProgressPlugin((percent, message, moduleProgress, activeModules, moduleName) => {
+            //   const newPercent = percent.toFixed(2);
+            //   const isModuleName = undefined !== moduleName;
+
+            //   logger.info(`[${newPercent}] ${message}${isModuleName ? ' -- ':''}${moduleName || ''}`);
+            // }),
           ]
         : [
             /**
@@ -225,6 +247,7 @@ const getDefaultConfig = ({
      * Set target to webworker as it's closer to RN environment than `web`.
      */
     target: 'webworker',
+    stats: 'verbose',
   };
 };
 

@@ -9,4 +9,7 @@
 // individual requires for babel-polyfill based on environment
 require('babel-polyfill');
 
+// dump start parameters
+require('./logger').done(`${process.argv.join(' ')}`);
+
 require('./cliEntry')(process.argv.slice(2));

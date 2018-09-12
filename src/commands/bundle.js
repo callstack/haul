@@ -17,6 +17,7 @@ const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const getConfig = require('../utils/getConfig');
 const { getHaulConfig } = require('../utils/getHaulConfig');
 const logger = require('../logger');
+const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 
 /**
  * Bundles your application code
@@ -27,7 +28,12 @@ async function bundle(opts: *) {
 
   const config = getConfig(
     configPath,
-    { root: directory, dev: opts.dev, minify: opts.minify, bundle: true },
+    {
+      root: directory,
+      dev: opts.dev,
+      minify: opts.minify,
+      bundle: true,
+    },
     opts.platform,
     logger
   );
@@ -45,6 +51,21 @@ async function bundle(opts: *) {
           config.output.path,
           path.join(directory, opts.bundleOutput)
         );
+  }
+
+  logger.info(`Assets Destination: ${config.output.path}`);
+  logger.info(`Bundle output: ${config.output.filename}`);
+  logger.info(
+    `Bundle output (resolved): ${path.resolve(config.output.filename)}`
+  );
+
+  // attach progress plugin
+  if (opts.progress !== 'none') {
+    config.plugins = config.plugins.concat([
+      new SimpleProgressWebpackPlugin({
+        format: opts.progress,
+      }),
+    ]);
   }
 
   const compiler = webpack(config);
@@ -68,6 +89,9 @@ async function bundle(opts: *) {
             })
           )
         );
+      } else if (info.hasWarnings()) {
+        logger.warn(info.toJson().warnings);
+        resolve(info);
       } else {
         resolve(info);
       }
@@ -185,6 +209,35 @@ let command = ({
       name: 'config',
       description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
       default: DEFAULT_CONFIG_FILENAME,
+    },
+    {
+      name: 'progress',
+      description:
+        'Display bundle compilation progress with different verbosity levels',
+      default: 'compact',
+      choices: [
+        {
+          value: 'none',
+          decription: 'no progress',
+        },
+        {
+          value: 'minimal',
+          decription: 'minimalistic, one line progress',
+        },
+        {
+          value: 'compact',
+          decription: 'show stages and compilation progress',
+        },
+        {
+          value: 'expanded',
+          decription: 'sho more information and phases of compilation',
+        },
+        {
+          value: 'verbose',
+          decription: 'show all',
+        },
+      ],
+      example: 'haul bundle --progress minimal',
     },
   ],
 }: Command);

@@ -7,6 +7,7 @@
 
 const path = require('path');
 const escapeStringRegexp = require('escape-string-regexp');
+// const logger = require('../logger');
 
 type Request = {
   path: string,
@@ -72,16 +73,17 @@ function AssetResolver(options: Options) {
             }
 
             if (resolved) {
-              callback(
-                null,
-                Object.assign({}, request, {
-                  path: resolved,
-                  relativePath:
-                    request.relativePath &&
-                    resolver.join(request.relativePath, resolved),
-                  file: true,
-                })
-              );
+              const resolvedFile = Object.assign({}, request, {
+                path: resolved,
+                relativePath:
+                  request.relativePath &&
+                  resolver.join(request.relativePath, resolved),
+                file: true,
+              });
+
+              // logger.info(`${request.path} <--> ${resolvedFile.path}`);
+
+              callback(null, resolvedFile);
             } else {
               callback();
             }
