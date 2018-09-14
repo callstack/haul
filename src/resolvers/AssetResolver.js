@@ -7,7 +7,9 @@
 
 const path = require('path');
 const escapeStringRegexp = require('escape-string-regexp');
-// const logger = require('../logger');
+const logger = require('../logger');
+
+const isVerbose = process.argv.includes('--verbose');
 
 type Request = {
   path: string,
@@ -37,61 +39,69 @@ function AssetResolver(options: Options) {
 
   this.apply = function apply(resolver) {
     resolver.plugin('file', (request: Request, callback: Function) => {
-      if (test.test(request.path)) {
-        resolver.fileSystem.readdir(
-          path.dirname(request.path),
-          (error, result) => {
-            if (error) {
-              callback();
-              return;
-            }
-
-            const name = path.basename(request.path).replace(/\.[^.]+$/, '');
-            const type = request.path.split('.').pop();
-
-            let resolved = result.includes(path.basename(request.path))
-              ? request.path
-              : null;
-
-            if (!resolved) {
-              const map = AssetResolver.collect(result, {
-                name,
-                type,
-                platform,
-              });
-              const key = map['@1x']
-                ? '@1x'
-                : Object.keys(map).sort(
-                    (a, b) =>
-                      Number(a.replace(/[^\d.]/g, '')) -
-                      Number(b.replace(/[^\d.]/g, ''))
-                  )[0];
-              resolved =
-                map[key] && map[key].name
-                  ? path.resolve(path.dirname(request.path), map[key].name)
-                  : null;
-            }
-
-            if (resolved) {
-              const resolvedFile = Object.assign({}, request, {
-                path: resolved,
-                relativePath:
-                  request.relativePath &&
-                  resolver.join(request.relativePath, resolved),
-                file: true,
-              });
-
-              // logger.info(`${request.path} <--> ${resolvedFile.path}`);
-
-              callback(null, resolvedFile);
-            } else {
-              callback();
-            }
-          }
-        );
-      } else {
+      if (!test.test(request.path)) {
         callback();
+        return;
       }
+
+      resolver.fileSystem.readdir(
+        path.dirname(request.path),
+        (error, result) => {
+          if (error) {
+            callback();
+            return;
+          }
+
+          const name = path.basename(request.path).replace(/\.[^.]+$/, '');
+          const type = request.path.split('.').pop();
+
+          let resolved = result.includes(path.basename(request.path))
+            ? request.path
+            : null;
+
+          if (!resolved) {
+            const map = AssetResolver.collect(result, {
+              name,
+              type,
+              platform,
+            });
+            const key = map['@1x']
+              ? '@1x'
+              : Object.keys(map).sort(
+                  (a, b) =>
+                    Number(a.replace(/[^\d.]/g, '')) -
+                    Number(b.replace(/[^\d.]/g, ''))
+                )[0];
+
+            resolved =
+              map[key] && map[key].name
+                ? path.resolve(path.dirname(request.path), map[key].name)
+                : null;
+          }
+
+          if (!resolved) {
+            if (isVerbose) {
+              logger.warn(`Cannot resolve: ${request.path}`);
+            }
+            callback();
+            return;
+          }
+
+          const resolvedFile = Object.assign({}, request, {
+            path: resolved,
+            relativePath:
+              request.relativePath &&
+              resolver.join(request.relativePath, resolved),
+            file: true,
+          });
+
+          if (isVerbose) {
+            logger.info(`${request.path} <--> ${resolvedFile.path}`);
+          }
+
+          callback(null, resolvedFile);
+        }
+      );
     });
   };
 }
@@ -116,7 +126,7 @@ AssetResolver.collect = (
     const match = regex.exec(curr);
 
     if (match) {
-      let [x, scale, y, z, platform] = match; // eslint-disable-line
+      let [x, scale, y, z, platform] = match // eslint-disable-line
 
       scale = scale || '@1x';
 

@@ -12,6 +12,9 @@ const dedent = require('dedent');
 const hasha = require('hasha');
 const escapeStringRegexp = require('escape-string-regexp');
 const AssetResolver = require('../resolvers/AssetResolver');
+const logger = require('../logger');
+
+const isVerbose = process.argv.includes('--verbose');
 
 type Config = {
   platform: string,
@@ -29,7 +32,10 @@ module.exports = async function assetLoader() {
   const query = utils.getOptions(this) || {};
   const config: Config = Object.assign(
     {},
-    { platform: 'ios', root: process.cwd() },
+    {
+      platform: 'ios',
+      root: process.cwd(),
+    },
     query
   );
 
@@ -76,39 +82,65 @@ module.exports = async function assetLoader() {
 
       return new Promise((resolve, reject) =>
         this.fs.readFile(path.join(dirname, map[scale].name), (err, res) => {
+          console.log(`--- ${scale} for ${filepath}`);
+
           if (err) {
             reject(err);
           } else {
             let dest;
 
             if (config.bundle && config.platform === 'android') {
-              switch (scale) {
-                case '@0.75x':
-                  dest = 'drawable-ldpi';
-                  break;
-                case '@1x':
-                  dest = 'drawable-mdpi';
-                  break;
-                case '@1.5x':
-                  dest = 'drawable-hdpi';
-                  break;
-                case '@2x':
-                  dest = 'drawable-xhdpi';
-                  break;
-                case '@3x':
-                  dest = 'drawable-xxhdpi';
-                  break;
-                case '@4x':
-                  dest = 'drawable-xxxhdpi';
-                  break;
-                default:
-                  throw new Error(`Unknown scale ${scale} for ${filepath}`);
+              const testXml = /\.(xml)$/;
+              const testMP4 = /\.(mp4)$/;
+              const testImages = /\.(png|jpg|gif|webp)$/;
+              const testFonts = /\.(ttf|otf|ttc)$/;
+
+              // found font family
+              if (testXml.test(longname) && res.indexOf('font-family') !== -1) {
+                dest = 'font';
+              } else if (testFonts.test(longname)) {
+                // font extensions
+                dest = 'font';
+              } else if (testMP4.test(longname)) {
+                // video files extensions
+                dest = 'raw';
+              } else if (testImages.test(longname) || testXml.test(longname)) {
+                // images extensions
+                switch (scale) {
+                  case '@0.75x':
+                    dest = 'drawable-ldpi';
+                    break;
+                  case '@1x':
+                    dest = 'drawable-mdpi';
+                    break;
+                  case '@1.5x':
+                    dest = 'drawable-hdpi';
+                    break;
+                  case '@2x':
+                    dest = 'drawable-xhdpi';
+                    break;
+                  case '@3x':
+                    dest = 'drawable-xxhdpi';
+                    break;
+                  case '@4x':
+                    dest = 'drawable-xxxhdpi';
+                    break;
+                  default:
+                    throw new Error(`Unknown scale ${scale} for ${filepath}`);
+                }
+              } else {
+                // everything else is going to RAW
+                dest = 'raw';
               }
 
               dest = path.join(dest, longname);
             } else {
               const name = `${filename}${scale === '@1x' ? '' : scale}.${type}`;
               dest = path.join(assets, url, name);
+            }
+
+            if (isVerbose) {
+              logger.info(`file: ${filepath} --> destination: ${dest}`);
             }
 
             resolve({
@@ -148,11 +180,21 @@ module.exports = async function assetLoader() {
     );
   }
 
-  const hashes = pairs.map(item => hasha(item.content, { algorithm: 'md5' }));
+  const hashes = pairs.map(item =>
+    hasha(item.content, {
+      algorithm: 'md5',
+    })
+  );
 
-  let info: ?{ width: number, height: number, type: string };
+  let info: ?{
+    width: number,
+    height: number,
+    type: string,
+  };
 
   try {
+    logger.info(`path: ${this.resourcePath}`);
+
     info = size(this.resourcePath);
 
     const match = path
@@ -169,6 +211,9 @@ module.exports = async function assetLoader() {
     }
   } catch (e) {
     // Asset is not an image
+    logger.error(
+      `found asset that we don't know how to process. ${this.resourcePath}`
+    );
   }
 
   callback(

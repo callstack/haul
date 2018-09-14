@@ -18,7 +18,7 @@ const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('./resolveModule');
 const getBabelConfig = require('./getBabelConfig');
 const getPolyfills = require('./getPolyfills');
-const loggerUtil = require('../logger');
+const loggerInst = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
 
 type ConfigOptions = {|
@@ -81,8 +81,6 @@ const getDefaultConfig = ({
   providesModuleNodeModules,
   hasteOptions,
 }): WebpackConfig => {
-  // const logger: Logger = loggerUtil;
-
   // Getting Minor version
   return {
     mode: dev ? 'development' : 'production',
@@ -174,20 +172,13 @@ const getDefaultConfig = ({
               banner: 'if (this && !this.self) { this.self = this; };\n',
               raw: true,
             }),
-            /* https://github.com/dominique-mueller/simple-progress-webpack-plugin/blob/develop/logger/compact-logger.js */
-            // new webpack.ProgressPlugin((percent, message, moduleProgress, activeModules, moduleName) => {
-            //   const newPercent = percent.toFixed(2);
-            //   const isModuleName = undefined !== moduleName;
-
-            //   logger.info(`[${newPercent}] ${message}${isModuleName ? ' -- ':''}${moduleName || ''}`);
-            // }),
           ]
         : [
             /**
-               * By default, sourcemaps are only generated with *.js files
-               * We need to use the plugin to configure *.bundle (Android, iOS - development)
-               * and *.jsbundle (iOS - production) to emit sourcemap
-               */
+             * By default, sourcemaps are only generated with *.js files
+             * We need to use the plugin to configure *.bundle (Android, iOS - development)
+             * and *.jsbundle (iOS - production) to emit sourcemap
+             */
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
@@ -255,7 +246,7 @@ const getDefaultConfig = ({
  * Return React Native config
  *
  * @deprecated
-*/
+ */
 function DEPRECATEDMakeReactNativeConfig(
   userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
@@ -300,7 +291,7 @@ function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
   platform: Platform,
-  logger: Logger = loggerUtil
+  logger: Logger = loggerInst
 ): WebpackConfig {
   /**
    * We should support also the old format of config

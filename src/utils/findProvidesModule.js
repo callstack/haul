@@ -17,6 +17,7 @@ const defaultOpts = {
     '__fixtures__',
     'react-packager',
     'androidTest',
+    'scripts',
   ],
   // An array of platform extensions to look for when locating
   // modules
@@ -67,6 +68,7 @@ function findProvidesModule(directories, opts = {}) {
   const walk = dir => {
     const stat = fs.statSync(dir);
 
+    // recursive walk throw directories
     if (stat.isDirectory()) {
       fs.readdirSync(dir).forEach(file => {
         if (options.blacklist.indexOf(file) >= 0) {
