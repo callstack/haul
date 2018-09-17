@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DEFAULT_BABELRC = {
-  presets: [require.resolve('module:metro-react-native-babel-preset')],
+  presets: [require.resolve('metro-react-native-babel-preset')],
 };
 
 module.exports = function getBabelConfig(cwd: string) {
