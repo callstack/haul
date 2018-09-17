@@ -192,7 +192,7 @@ const getDefaultConfig = ({
         new HasteResolver({
           directories: providesModuleNodeModules
             ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
-            : [moduleResolve(root, 'react-native')],
+            : [path.join(moduleResolve(root, 'react-native'), 'Libraries')],
           hasteOptions: hasteOptions || {},
         }),
         /**
