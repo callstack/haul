@@ -25,7 +25,7 @@ require('@babel/register')(
   Object.assign(
     {
       // Use a PNPM-compatible search pattern for node_modules.
-      ignore: /node_modules(?!.*[/\\]haul)/,
+      ignore: [/node_modules(?!.*[/\\]haul)/],
       retainLines: true,
       sourceMaps: 'inline',
       babelrc: false,
