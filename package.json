@@ -26,24 +26,23 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack-io/haul/issues",
   "peerDependencies": {
-    "babel-preset-react-native": "^2.0.0 || ^3.0.0 || ^4.0.0",
-    "react": "*",
-    "react-native": "*"
+    "metro-react-native-babel-preset": "^0.45.0",
+    "react-native": "^0.56.0"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "@react-slate/components": "^0.2.0",
     "@react-slate/core": "^0.7.0",
     "@react-slate/utils": "^0.2.2",
     "@zamotany/react-proxy": "3.0.0-alpha.4",
-    "babel-core": "^6.24.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.2.2",
-    "babel-register": "^6.24.0",
+    "babel-loader": "^8.0.2",
     "camelcase-keys": "^4.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "chalk": "1.1.3",
@@ -89,13 +88,13 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.5.1",
-    "babel-preset-react-native": "^2.0.0",
     "eslint": "^4.3.0",
     "eslint-config-callstack-io": "^1.0.1",
     "flow-bin": "^0.65.0",
     "husky": "^0.13.3",
     "jest": "^22.2.1",
     "lint-staged": "^3.4.0",
+    "metro-react-native-babel-preset": "^0.45",
     "mkdirp": "^0.5.1",
     "react-native": "^0.51.0",
     "rimraf": "^2.6.1",
@@ -111,7 +110,7 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
             "node": "current"
@@ -121,10 +120,10 @@
       ]
     ],
     "plugins": [
-      "transform-flow-strip-types",
-      "transform-class-properties",
-      "transform-object-rest-spread",
-      "transform-react-jsx"
+      "@babel/plugin-transform-flow-strip-types",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread",
+      "@babel/plugin-transform-react-jsx"
     ]
   },
   "eslintConfig": {

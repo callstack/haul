@@ -12,9 +12,11 @@
     "react-native": "0.50.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "21.2.0",
-    "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
+    "metro-react-native-babel-preset": "^0.45",
     "react-test-renderer": "16.0.0"
   },
   "jest": {

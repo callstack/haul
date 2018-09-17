@@ -25,7 +25,7 @@ function resolve(presetsOrPlugins, type) {
  * Haul's `node_modules` directory, otherwise Babel would
  * search from them in project's `node_modules`.
  */
-require('babel-register')(
+require('@babel/register')(
   Object.assign(
     {
       // Use a PNPM-compatible search pattern for node_modules.
