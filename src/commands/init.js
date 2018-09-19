@@ -250,11 +250,11 @@ const addToGradleBuild = async (cwd: string) => {
   let project = fs.readFileSync(entry).toString();
 
   const cliString = '"node_modules/haul/bin/cli.js"';
-
   const gradleConf = `
-    project.ext.react = [
-      cliPath: ${cliString}
-    ]
+    if (!project.hasProperty('react')) {
+      project.ext.react = [:]
+    }
+    project.ext.react['cliPath'] = ${cliString}
   `;
 
   // Are we already integrated?
