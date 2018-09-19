@@ -10,14 +10,14 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@react-slate/components@^0.2.0":
+"@react-slate/components@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@react-slate/components/-/components-0.2.0.tgz#c101a76968c4325d37c02fedf851c6f34e097be0"
   dependencies:
     cli-spinners "^1.3.1"
     shallowequal "^1.0.2"
 
-"@react-slate/core@^0.7.0":
+"@react-slate/core@0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@react-slate/core/-/core-0.7.0.tgz#ebc3c62375ac93ba50e1655f1abf10787afd7cde"
   dependencies:
@@ -34,7 +34,7 @@
     react-reconciler "0.3.0-beta.1"
     strip-ansi "^4.0.0"
 
-"@react-slate/utils@^0.2.2":
+"@react-slate/utils@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@react-slate/utils/-/utils-0.2.2.tgz#5b6931cb03f0c7dc16484f0ec6979fe8471ae7bd"
   dependencies:
