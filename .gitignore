@@ -22,3 +22,6 @@ yarn-debug.log
 .gradle
 
 coverage/
+
+# Cache loader
+.cache-loader/
