@@ -84,9 +84,7 @@ module.exports = async function assetLoader() {
 
       return new Promise((resolve, reject) =>
         this.fs.readFile(path.join(dirname, map[scale].name), (err, res) => {
-          if (isVerbose) {
-            console.log(`resolves ${scale} for ${filepath}`);
-          }
+          console.log(`--- ${scale} for ${filepath}`);
 
           if (err) {
             reject(err);
