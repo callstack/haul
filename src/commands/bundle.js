@@ -215,29 +215,29 @@ let command = ({
       description:
         'Display bundle compilation progress with different verbosity levels',
       default: 'compact',
+      example: 'haul bundle --progress minimal',
       choices: [
         {
           value: 'none',
-          decription: 'no progress',
+          description: 'no progress',
         },
         {
           value: 'minimal',
-          decription: 'minimalistic, one line progress',
+          description: 'minimalistic, one line progress',
         },
         {
           value: 'compact',
-          decription: 'show stages and compilation progress',
+          description: 'show stages and compilation progress',
         },
         {
           value: 'expanded',
-          decription: 'sho more information and phases of compilation',
+          description: 'sho more information and phases of compilation',
         },
         {
           value: 'verbose',
-          decription: 'show all',
+          description: 'show all',
         },
       ],
-      example: 'haul bundle --progress minimal',
     },
   ],
 }: Command);

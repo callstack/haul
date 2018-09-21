@@ -105,9 +105,7 @@ const getDefaultConfig = ({
             {
               loader: require.resolve('thread-loader'),
               options: {
-                // There should be 1 cpu for the
-                // fork-ts-checker-webpack-plugin
-                workers: os.cpus().length - 1,
+                workers: Math.max(os.cpus().length - 1, 1),
               },
             },
             {

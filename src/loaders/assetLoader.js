@@ -45,9 +45,7 @@ module.exports = async function assetLoader() {
   const url = path.relative(config.root, dirname);
   const type = path.extname(filepath).replace(/^\./, '');
   const assets = path.join('assets', config.bundle ? '' : config.platform);
-  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${
-    config.platform
-  }|native))?\\.${type}$`;
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
   const normalizedUrl = url.replace(new RegExp(`^[\\.\\${path.sep}]+`), '');
   const normalizedName =
@@ -84,7 +82,9 @@ module.exports = async function assetLoader() {
 
       return new Promise((resolve, reject) =>
         this.fs.readFile(path.join(dirname, map[scale].name), (err, res) => {
-          console.log(`--- ${scale} for ${filepath}`);
+          if (isVerbose) {
+            console.log(`--- ${scale} for ${filepath}`);
+          }
 
           if (err) {
             reject(err);

@@ -68,7 +68,6 @@ function findProvidesModule(directories, opts = {}) {
   const walk = dir => {
     const stat = fs.statSync(dir);
 
-    // recursive walk throw directories
     if (stat.isDirectory()) {
       fs.readdirSync(dir).forEach(file => {
         if (options.blacklist.indexOf(file) >= 0) {

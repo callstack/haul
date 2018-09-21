@@ -3,6 +3,10 @@ id: cli
 title: CLI Commands
 ---
 
+## Generic flags
+
+`--verbose` can be added to any HAUL command. Force HAUL to publish more internal details about processing the files, composing configuration, composed files _runtime_ bindings etc.
+
 ## `haul init`
 
 This creates `haul.config.js` file in your project directory which is required by `Haul` to function. The file contains the app's entry point used for creating the app bundle.
