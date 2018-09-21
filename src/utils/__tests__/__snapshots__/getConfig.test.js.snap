@@ -89,7 +89,7 @@ Object {
           Object {
             "loader": "<<NODE_MODULE>>/thread-loader/dist/cjs.js",
             "options": Object {
-              "workers": 7,
+              "workers": "<<CPUS>>",
             },
           },
           Object {

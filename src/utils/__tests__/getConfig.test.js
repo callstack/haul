@@ -1,6 +1,6 @@
 /* @flow */
 import path from 'path';
-import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
+import { replacePathsInObject, fixWorkers } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import snapshotDiff from 'snapshot-diff';
 import getConfig from '../getConfig';
 
@@ -96,12 +96,14 @@ it('creates config', () => {
     'android'
   );
 
-  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
+  expect(replacePathsInObject(fixWorkers(iosConfig))).toMatchSnapshot(
+    'ios config'
+  );
 
   expect(
     snapshotDiff(
-      replacePathsInObject(iosConfig),
-      replacePathsInObject(androidConfig)
+      replacePathsInObject(fixWorkers(iosConfig)),
+      replacePathsInObject(fixWorkers(androidConfig))
     )
   ).toMatchSnapshot('diff ios/android config');
 });
