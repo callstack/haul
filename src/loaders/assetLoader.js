@@ -45,7 +45,9 @@ module.exports = async function assetLoader() {
   const url = path.relative(config.root, dirname);
   const type = path.extname(filepath).replace(/^\./, '');
   const assets = path.join('assets', config.bundle ? '' : config.platform);
-  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${
+    config.platform
+  }|native))?\\.${type}$`;
   const filename = path.basename(filepath).replace(new RegExp(suffix), '');
   const normalizedUrl = url.replace(new RegExp(`^[\\.\\${path.sep}]+`), '');
   const normalizedName =
