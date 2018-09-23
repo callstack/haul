@@ -61,16 +61,6 @@ export function makeHot(initialRootFactory: Function, id?: string = 'default') {
         deepForceUpdate(this);
       }
 
-      componentDidMount() {
-        if (typeof global.__REACT_HOT_LOADER__ === 'undefined') {
-          console.error(
-            'Haul HMR: It appears that "haul-hmr/patch" ' +
-              'did not run immediately before the app started. Make sure that it ' +
-              'runs before any other code.'
-          );
-        }
-      }
-
       componentWillReceiveProps() {
         this._resetError();
         deepForceUpdate(this);
