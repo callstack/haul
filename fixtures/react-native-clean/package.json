@@ -8,8 +8,8 @@
     "haul": "haul"
   },
   "dependencies": {
-    "react": "16.0.0",
-    "react-native": "0.50.3"
+    "react": "16.5.0",
+    "react-native": "0.57.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",
