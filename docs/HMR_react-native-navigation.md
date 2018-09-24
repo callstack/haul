@@ -7,30 +7,10 @@ Since we don't know how your project looks like, we will use one of the possible
 
 ---
 
-Let's assume you have `index.js` file which imports your screens and bootstraps the navigation. Add `import 'haul/hot/patch';` at the beginning:
+Let's assume you have `index.js` file which imports your screens and bootstraps the navigation. Make the following changes:
 
 ```diff
 // index.js
-+ import 'haul/hot/patch';
-import { Navigation } from 'react-native-navigation';
-
-// Screens
-import Calendar from './Calendar';
-import Localization from './Localization';
-import Information from './Information';
-
-Navigation.registerComponent('Calendar', () => Calendar);
-Navigation.registerComponent('Localization', () => Localization);
-Navigation.registerComponent('Information',() => Information);
-```
-
-`import 'haul/hot/patch';` should be placed in the root file / entry file, since __the code from this file must be executed before anything else!__
-
-Now, make the following changes:
-
-```diff
-// index.js
-import 'haul/hot/patch';
 import { Navigation } from 'react-native-navigation';
 + import {
 +   makeHot,

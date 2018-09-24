@@ -356,6 +356,7 @@ function injectPolyfillIntoEntry({
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
+    require.resolve('../../hot/patch'),
   ];
 
   return makeWebpackEntry(userEntry, reactNativeHaulEntries);

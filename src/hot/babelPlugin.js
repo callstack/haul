@@ -119,19 +119,6 @@ const visitor = {
 function applyHmrTweaks({ types: t, template }, path, state) {
   const { programPath } = state;
 
-  // Add import to `haul/hot/patch` to path React.createElement and createFactory.
-  if (
-    !programPath.node.body.find(
-      bodyNode =>
-        t.isImportDeclaration(bodyNode) &&
-        bodyNode.source.value === 'haul/hot/path'
-    )
-  ) {
-    programPath.node.body.unshift(
-      t.importDeclaration([], t.stringLiteral('haul/hot/patch'))
-    );
-  }
-
   // Add specifiers for required functions to import statement.
   const specifiers = [
     t.importSpecifier(t.identifier(MAKE_HOT_NAME), t.identifier(MAKE_HOT_NAME)),

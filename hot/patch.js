@@ -8,6 +8,4 @@
 /**
  * Apply React patches in development by importing `haul/hot/patch`.
  */
-if (module.hot && process.env.NODE_ENV !== 'production') {
-  require('../src/hot/client/hotPatch');
-}
+require('react-hot-loader/patch');

@@ -31,7 +31,6 @@ First thing you need to do is to add the following code snipped at the top of `A
 
 ```diff
 // index.js
-+ import 'haul/hot/patch';
 + import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -49,15 +48,12 @@ const MyApp = StackNavigator({
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
 
-`import 'haul/hot/patch'` must be placed before anything else, since __the code in that file must be executed at the very beginning!__
-
 ---
 
 Now, if you're defining your screens using `screen` property, you must replace it with `getScreen` and convert the value to a function:
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -81,7 +77,6 @@ Then, wrap those screen factories with `makeHot` call and pass the name of the s
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -108,7 +103,6 @@ Place the following code snipped at the end of the file:
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,

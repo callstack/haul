@@ -43,14 +43,9 @@ This guide below is not a list of steps, but rather a set of rules and tips on h
 
 ------
 
-Haul uses `react-hot-loader` to support HMR, so the first step is to _patch_ React's `createElement` and `createFactory` functions to use `react-proxy`. Proxied component can be updated with a new implementation but it's state is persisted between updates.
-In order to do that, add the following line to `__the root file__` - the one that is used as an entrypoint, before any other code:
-
-```javascript
-import 'haul/hot/patch';
-```
-
-It's important that __the code from `haul/hot/patch` is evaluated before anything else!__
+Haul uses `react-hot-loader` to support HMR. `react-hot-loader/patch`
+is automatically imported in all entry points in development when
+HMR is enabled.
 
 Now, we need to wrap the __root component factories__ using `makeHot` function. Root component factory is a function that returns a __root component__:
 
@@ -148,7 +143,6 @@ Now, you need to replace empty strings with the paths according to the following
 ### Single root component in a entry file
 
 ```javascript
-import 'haul/hot/patch';
 import {
   makeHot,
   tryUpdateSelf,
@@ -176,7 +170,6 @@ if (module.hot) {
 
 ```javascript
 // index.js
-import 'haul/hot/patch';
 import './screens';
 ```
 
