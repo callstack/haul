@@ -5,15 +5,15 @@ exports[`creates config: diff ios/android config 1`] = `
 - First value
 + Second value
 
-@@ -44,18 +44,18 @@
+@@ -45,18 +45,18 @@
           \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
           \\"use\\": Object {
-            \\"loader\\": \\"<<REPLACED>>/loaders/assetLoader.js\\",
+            \\"loader\\": \\"<<REPLACED>>/src/loaders/assetLoader.js\\",
             \\"query\\": Object {
               \\"bundle\\": undefined,
 -             \\"platform\\": \\"ios\\",
 +             \\"platform\\": \\"android\\",
-              \\"root\\": \\"<<REPLACED>>/utils/__tests__/fixtures\\",
+              \\"root\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
             },
           },
         },
@@ -26,7 +26,7 @@ exports[`creates config: diff ios/android config 1`] = `
       \\"minimize\\": false,
       \\"minimizer\\": Array [
         UglifyJsPlugin {
-@@ -80,11 +80,11 @@
+@@ -81,11 +81,11 @@
         },
       ],
       \\"namedModules\\": true,
@@ -34,12 +34,12 @@ exports[`creates config: diff ios/android config 1`] = `
     \\"output\\": Object {
 -     \\"filename\\": \\"index.ios.bundle\\",
 +     \\"filename\\": \\"index.android.bundle\\",
-      \\"path\\": \\"<<REPLACED>>/utils/__tests__/fixtures\\",
+      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
     },
     \\"plugins\\": Array [
       CaseSensitivePathsPlugin {
-@@ -148,11 +148,11 @@
+@@ -149,11 +149,11 @@
     \\"resolve\\": Object {
       \\"alias\\": Object {
         \\"react-proxy\\": \\"@zamotany/react-proxy\\",
@@ -56,19 +56,20 @@ exports[`creates config: diff ios/android config 1`] = `
 
 exports[`creates config: ios config 1`] = `
 Object {
-  "context": "<<REPLACED>>/utils/__tests__/fixtures",
+  "context": "<<REPLACED>>/src/utils/__tests__/fixtures",
   "entry": Array [
-    "<<REPLACED>>/vendor/polyfills/Object.es6.js",
-    "<<REPLACED>>/vendor/polyfills/console.js",
-    "<<REPLACED>>/vendor/polyfills/error-guard.js",
-    "<<REPLACED>>/vendor/polyfills/Number.es6.js",
-    "<<REPLACED>>/vendor/polyfills/String.prototype.es6.js",
-    "<<REPLACED>>/vendor/polyfills/Array.prototype.es6.js",
-    "<<REPLACED>>/vendor/polyfills/Array.es6.js",
-    "<<REPLACED>>/vendor/polyfills/Object.es7.js",
-    "<<REPLACED>>/vendor/polyfills/babelHelpers.js",
-    "<<REPLACED>><<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-    "<<REPLACED>>/utils/polyfillEnvironment.js",
+    "<<REPLACED>>/src/vendor/polyfills/Object.es6.js",
+    "<<REPLACED>>/src/vendor/polyfills/console.js",
+    "<<REPLACED>>/src/vendor/polyfills/error-guard.js",
+    "<<REPLACED>>/src/vendor/polyfills/Number.es6.js",
+    "<<REPLACED>>/src/vendor/polyfills/String.prototype.es6.js",
+    "<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js",
+    "<<REPLACED>>/src/vendor/polyfills/Array.es6.js",
+    "<<REPLACED>>/src/vendor/polyfills/Object.es7.js",
+    "<<REPLACED>>/src/vendor/polyfills/babelHelpers.js",
+    "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+    "<<REPLACED>>/src/utils/polyfillEnvironment.js",
+    "<<REPLACED>>/hot/patch.js",
     "./index.js",
   ],
   "mode": "development",
@@ -87,11 +88,11 @@ Object {
             "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
             "options": Object {
               "cacheDirectory": true,
-              "extends": "<<REPLACED>>/utils/__tests__/fixtures/.babelrc",
+              "extends": "<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc",
               "plugins": Array [
-                "<<REPLACED>>/utils/fixRequireIssues.js",
+                "<<REPLACED>>/src/utils/fixRequireIssues.js",
                 "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                "<<REPLACED>>/hot/babelPlugin.js",
+                "<<REPLACED>>/src/hot/babelPlugin.js",
               ],
             },
           },
@@ -100,11 +101,11 @@ Object {
       Object {
         "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
         "use": Object {
-          "loader": "<<REPLACED>>/loaders/assetLoader.js",
+          "loader": "<<REPLACED>>/src/loaders/assetLoader.js",
           "query": Object {
             "bundle": undefined,
             "platform": "ios",
-            "root": "<<REPLACED>>/utils/__tests__/fixtures",
+            "root": "<<REPLACED>>/src/utils/__tests__/fixtures",
           },
         },
       },
@@ -140,7 +141,7 @@ Object {
   },
   "output": Object {
     "filename": "index.ios.bundle",
-    "path": "<<REPLACED>>/utils/__tests__/fixtures",
+    "path": "<<REPLACED>>/src/utils/__tests__/fixtures",
     "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
