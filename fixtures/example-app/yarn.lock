@@ -4765,7 +4765,7 @@ metro-minify-uglify@0.45.6:
   dependencies:
     uglify-es "^3.1.9"
 
-metro-react-native-babel-preset@0.45.6:
+metro-react-native-babel-preset@0.45.6, metro-react-native-babel-preset@^0.45.6:
   version "0.45.6"
   resolved "https://registry.yarnpkg.com/metro-react-native-babel-preset/-/metro-react-native-babel-preset-0.45.6.tgz#077ce4039d6461a1b699b215612985415f9816a9"
   dependencies:
