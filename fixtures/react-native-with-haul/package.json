@@ -12,10 +12,12 @@
     "react-native": "0.57.1"
   },
   "devDependencies": {
-    "babel-jest": "21.2.0",
-    "babel-preset-react-native": "4.0.0",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "@babel/core": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "^0.45.6",
+    "react-test-renderer": "16.5.0"
   },
   "jest": {
     "preset": "react-native"
