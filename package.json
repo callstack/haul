@@ -27,7 +27,7 @@
   "bugs": "https://github.com/callstack-io/haul/issues",
   "peerDependencies": {
     "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.56.0"
+    "react-native": "^0.57.0"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
@@ -70,7 +70,7 @@
     "opn": "^5.3.0",
     "ora": "^1.2.0",
     "platform-select": "^1.1.0",
-    "react": "^16.2.0",
+    "react": "16.5.0",
     "react-deep-force-update": "^2.0.1",
     "react-hot-loader": "^4.3.6",
     "resolve": "^1.3.3",
@@ -88,15 +88,17 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.5.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "eslint": "^4.3.0",
     "eslint-config-callstack-io": "^1.0.1",
     "flow-bin": "^0.65.0",
     "husky": "^0.13.3",
-    "jest": "^22.2.1",
+    "jest": "^23.6.0",
     "lint-staged": "^3.4.0",
     "metro-react-native-babel-preset": "^0.45",
     "mkdirp": "^0.5.1",
-    "react-native": "^0.51.0",
+    "react-native": "^0.57.0",
     "rimraf": "^2.6.1",
     "snapshot-diff": "^0.3.0",
     "traverse": "^0.6.6"
