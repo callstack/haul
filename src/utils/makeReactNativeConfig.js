@@ -10,6 +10,7 @@ import type { Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
+const os = require('os');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -17,7 +18,7 @@ const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('./resolveModule');
 const getBabelConfig = require('./getBabelConfig');
 const getPolyfills = require('./getPolyfills');
-const loggerUtil = require('../logger');
+const loggerInst = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
 
 type ConfigOptions = {|
@@ -57,6 +58,7 @@ type WebpackConfig = {
     namedModules: boolean,
     concatenateModules: boolean,
   },
+  stats: string,
 };
 
 type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
@@ -97,6 +99,15 @@ const getDefaultConfig = ({
           // eslint-disable-next-line no-useless-escape
           exclude: /node_modules(?!.*[\/\\](react|@expo|pretty-format|haul|metro))/,
           use: [
+            {
+              loader: require.resolve('cache-loader'),
+            },
+            {
+              loader: require.resolve('thread-loader'),
+              options: {
+                workers: Math.max(os.cpus().length - 1, 1),
+              },
+            },
             {
               loader: require.resolve('babel-loader'),
               options: Object.assign({}, getBabelConfig(root), {
@@ -162,10 +173,10 @@ const getDefaultConfig = ({
           ]
         : [
             /**
-               * By default, sourcemaps are only generated with *.js files
-               * We need to use the plugin to configure *.bundle (Android, iOS - development)
-               * and *.jsbundle (iOS - production) to emit sourcemap
-               */
+             * By default, sourcemaps are only generated with *.js files
+             * We need to use the plugin to configure *.bundle (Android, iOS - development)
+             * and *.jsbundle (iOS - production) to emit sourcemap
+             */
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
@@ -225,6 +236,7 @@ const getDefaultConfig = ({
      * Set target to webworker as it's closer to RN environment than `web`.
      */
     target: 'webworker',
+    stats: 'verbose',
   };
 };
 
@@ -232,7 +244,7 @@ const getDefaultConfig = ({
  * Return React Native config
  *
  * @deprecated
-*/
+ */
 function DEPRECATEDMakeReactNativeConfig(
   userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
@@ -277,7 +289,7 @@ function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
   platform: Platform,
-  logger: Logger = loggerUtil
+  logger: Logger = loggerInst
 ): WebpackConfig {
   /**
    * We should support also the old format of config

@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const logger = require('../logger');
 
 const DEFAULT_BABELRC = {
   presets: [require.resolve('babel-preset-react-native')],
@@ -18,6 +19,7 @@ module.exports = function getBabelConfig(cwd: string) {
   const file = path.join(cwd, '.babelrc');
 
   if (fs.existsSync(file)) {
+    logger.info(`loaded babel-loader configuration: ${file}`);
     babelrc = { extends: file };
   } else {
     babelrc = DEFAULT_BABELRC;
