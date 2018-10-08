@@ -26,7 +26,7 @@ type ConfigOptions = {|
   minify?: boolean,
   bundle?: boolean,
   port?: number,
-  providesModuleNodeModules?: string[],
+  providesModuleNodeModules?: (string | { name: string, directory: string })[],
   hasteOptions?: *,
   initializeCoreLocation?: string,
 |};
@@ -162,10 +162,10 @@ const getDefaultConfig = ({
           ]
         : [
             /**
-               * By default, sourcemaps are only generated with *.js files
-               * We need to use the plugin to configure *.bundle (Android, iOS - development)
-               * and *.jsbundle (iOS - production) to emit sourcemap
-               */
+             * By default, sourcemaps are only generated with *.js files
+             * We need to use the plugin to configure *.bundle (Android, iOS - development)
+             * and *.jsbundle (iOS - production) to emit sourcemap
+             */
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
@@ -190,9 +190,20 @@ const getDefaultConfig = ({
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: providesModuleNodeModules
-            ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
-            : [path.join(moduleResolve(root, 'react-native'), 'Libraries')],
+          directories: (providesModuleNodeModules || [
+            'react-native',
+          ]).map(_ => {
+            if (typeof _ === 'string') {
+              if (_ === 'react-native') {
+                return path.join(
+                  moduleResolve(root, 'react-native'),
+                  'Libraries'
+                );
+              }
+              return moduleResolve(root, _);
+            }
+            return path.join(moduleResolve(root, _.name), _.directory);
+          }),
           hasteOptions: hasteOptions || {},
         }),
         /**
@@ -232,7 +243,7 @@ const getDefaultConfig = ({
  * Return React Native config
  *
  * @deprecated
-*/
+ */
 function DEPRECATEDMakeReactNativeConfig(
   userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
