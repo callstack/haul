@@ -22,27 +22,23 @@ const TRY_UPDATE_SELF_NAME = 'tryUpdateSelf';
 const CALL_ONCE_NAME = 'callOnce';
 const CLEAR_CACHE_FOR_NAME = 'clearCacheFor';
 
-const codeSnippets = [
-  `${TRY_UPDATE_SELF_NAME}();`,
-  `${CALL_ONCE_NAME}(function () {
-    APP_REGISTRATION
-  });
-  `,
-  `if (module.hot) {
-    module.hot.accept(undefined, function () {
-      // Self-accept
-    });
-
-    module.hot.accept(CHILDREN_IMPORTS, function () {
-      ${CLEAR_CACHE_FOR_NAME}(require.resolve(ROOT_SOURCE_FILEPATH));
-      ${REDRAW_NAME}(() => require(ROOT_SOURCE_FILEPATH).default);
-    });
-  }
-  `,
-];
-
 function createHmrLogic(template) {
-  return codeSnippets.map(snippet => template(snippet));
+  return template(`
+    ${TRY_UPDATE_SELF_NAME}();
+    ${CALL_ONCE_NAME}(function () {
+      APP_REGISTRATION
+    });
+    if (module.hot) {
+      module.hot.accept(undefined, function () {
+        // Self-accept
+      });
+
+      module.hot.accept(CHILDREN_IMPORTS, function () {
+        ${CLEAR_CACHE_FOR_NAME}(require.resolve(ROOT_SOURCE_FILEPATH));
+        ${REDRAW_NAME}(() => require(ROOT_SOURCE_FILEPATH).default);
+      });
+    }
+  `);
 }
 
 function isValidChildPath(source) {
@@ -114,7 +110,7 @@ const visitor = {
         ]),
       ];
 
-      this.registerComponentDetachedPath = clone(path);
+      this.registerComponentDetachedNode = clone(path.node);
       path.remove();
     }
   },
@@ -122,19 +118,6 @@ const visitor = {
 
 function applyHmrTweaks({ types: t, template }, path, state) {
   const { programPath } = state;
-
-  // Add import to `haul/hot/patch` to path React.createElement and createFactory.
-  if (
-    !programPath.node.body.find(
-      bodyNode =>
-        t.isImportDeclaration(bodyNode) &&
-        bodyNode.source.value === 'haul/hot/path'
-    )
-  ) {
-    programPath.node.body.unshift(
-      t.importDeclaration([], t.stringLiteral('haul/hot/patch'))
-    );
-  }
 
   // Add specifiers for required functions to import statement.
   const specifiers = [
@@ -165,13 +148,13 @@ function applyHmrTweaks({ types: t, template }, path, state) {
     exportDeclarationPath: null,
     rootComponentName: null,
     isRootComponentImported: false,
-    registerComponentDetachedPath: null,
+    registerComponentDetachedNode: null,
     types: t,
   };
 
   programPath.traverse(visitor, metadata);
 
-  if (!metadata.registerComponentDetachedPath) {
+  if (!metadata.registerComponentDetachedNode) {
     throw new Error(
       'Haul HMR: `haul/hot` must be imported in the file with `AppRegistry.registerComponent` call.'
     );
@@ -185,17 +168,13 @@ function applyHmrTweaks({ types: t, template }, path, state) {
     }
 
     programPath.node.body.push(
-      ...createHmrLogic(template).map(partial =>
-        partial({
-          APP_REGISTRATION: metadata.registerComponentDetachedPath,
-          CHILDREN_IMPORTS: t.arrayExpression(
-            metadata.importedModules.map(({ source }) =>
-              t.stringLiteral(source)
-            )
-          ),
-          ROOT_SOURCE_FILEPATH: t.stringLiteral(filename),
-        })
-      )
+      ...createHmrLogic(template)({
+        APP_REGISTRATION: metadata.registerComponentDetachedNode,
+        CHILDREN_IMPORTS: t.arrayExpression(
+          metadata.importedModules.map(({ source }) => t.stringLiteral(source))
+        ),
+        ROOT_SOURCE_FILEPATH: t.stringLiteral(filename),
+      })
     );
   } else {
     if (!metadata.isRootComponentImported) {
@@ -207,13 +186,11 @@ function applyHmrTweaks({ types: t, template }, path, state) {
     ).source;
 
     programPath.node.body.push(
-      ...createHmrLogic(template).map(partial =>
-        partial({
-          APP_REGISTRATION: metadata.registerComponentDetachedPath,
-          CHILDREN_IMPORTS: t.stringLiteral(rootComponentSource),
-          ROOT_SOURCE_FILEPATH: t.stringLiteral(rootComponentSource),
-        })
-      )
+      ...createHmrLogic(template)({
+        APP_REGISTRATION: metadata.registerComponentDetachedNode,
+        CHILDREN_IMPORTS: t.stringLiteral(rootComponentSource),
+        ROOT_SOURCE_FILEPATH: t.stringLiteral(rootComponentSource),
+      })
     );
   }
 

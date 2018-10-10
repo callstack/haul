@@ -27,7 +27,7 @@ type ConfigOptions = {|
   minify?: boolean,
   bundle?: boolean,
   port?: number,
-  providesModuleNodeModules?: string[],
+  providesModuleNodeModules?: (string | { name: string, directory: string })[],
   hasteOptions?: *,
   initializeCoreLocation?: string,
 |};
@@ -201,9 +201,20 @@ const getDefaultConfig = ({
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: providesModuleNodeModules
-            ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
-            : [moduleResolve(root, 'react-native')],
+          directories: (providesModuleNodeModules || [
+            'react-native',
+          ]).map(_ => {
+            if (typeof _ === 'string') {
+              if (_ === 'react-native') {
+                return path.join(
+                  moduleResolve(root, 'react-native'),
+                  'Libraries'
+                );
+              }
+              return moduleResolve(root, _);
+            }
+            return path.join(moduleResolve(root, _.name), _.directory);
+          }),
           hasteOptions: hasteOptions || {},
         }),
         /**
@@ -368,6 +379,7 @@ function injectPolyfillIntoEntry({
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
+    require.resolve('../../hot/patch.js'),
   ];
 
   return makeWebpackEntry(userEntry, reactNativeHaulEntries);

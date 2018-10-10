@@ -55,3 +55,7 @@ buck-out/
 # Haul
 #
 haul-debug.log
+
+# Bundle artifact
+#
+*.jsbundle

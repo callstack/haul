@@ -7,7 +7,7 @@
 
 // babel-preset-env will transform the line below into
 // individual requires for babel-polyfill based on environment
-require('babel-polyfill');
+require('@babel/polyfill');
 
 // dump start parameters
 const isVerbose = process.argv.includes('--verbose');

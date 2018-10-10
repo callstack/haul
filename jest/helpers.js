@@ -8,6 +8,8 @@
 'use strict';
 
 const traverse = require('traverse'); // eslint-disable-line
+const path = require('path');
+const excapeStringRegex = require('escape-string-regexp');
 
 const flushPromises = (): Promise<any> =>
   new Promise(resolve => setTimeout(resolve));
@@ -17,8 +19,13 @@ const replacePathsInObject = (object: mixed) => {
     entry =>
       typeof entry === 'string'
         ? entry
-            .replace(/\/.*\/src/, '<<REPLACED>>')
             .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
+            .replace(
+              new RegExp(
+                `^${excapeStringRegex(path.resolve(__dirname, '..'))}`
+              ),
+              '<<REPLACED>>'
+            )
         : entry
   );
 };
