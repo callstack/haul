@@ -17,6 +17,7 @@ const defaultOpts = {
     '__fixtures__',
     'react-packager',
     'androidTest',
+    'scripts',
   ],
   // An array of platform extensions to look for when locating
   // modules

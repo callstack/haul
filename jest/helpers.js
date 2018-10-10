@@ -30,7 +30,18 @@ const replacePathsInObject = (object: mixed) => {
   );
 };
 
+const fixWorkers = (object: mixed) => {
+  return traverse(object).map(entry => {
+    if (typeof entry === 'object' && 'workers' in entry) {
+      return Object.assign({}, entry, { workers: '<<CPUS>>' });
+    }
+
+    return entry;
+  });
+};
+
 module.exports = {
   flushPromises,
   replacePathsInObject,
+  fixWorkers,
 };
