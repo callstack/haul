@@ -101,6 +101,9 @@ const getDefaultConfig = ({
           use: [
             {
               loader: require.resolve('cache-loader'),
+              options: {
+                cacheDirectory: path.join(root, 'node_modules/.cache/cache-loader'),
+              }
             },
             {
               loader: require.resolve('thread-loader'),
