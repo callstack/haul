@@ -5,7 +5,7 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
 - First value
 + Second value
 
-@@ -54,18 +54,18 @@
+@@ -57,18 +57,18 @@
           \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
           \\"use\\": Object {
             \\"loader\\": \\"<<REPLACED>>/src/loaders/assetLoader.js\\",
@@ -26,7 +26,7 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
       \\"minimize\\": false,
       \\"minimizer\\": Array [
         UglifyJsPlugin {
-@@ -90,11 +90,11 @@
+@@ -93,11 +93,11 @@
         },
       ],
       \\"namedModules\\": true,
@@ -39,7 +39,7 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
     },
     \\"plugins\\": Array [
       CaseSensitivePathsPlugin {
-@@ -158,11 +158,11 @@
+@@ -161,11 +161,11 @@
     \\"resolve\\": Object {
       \\"alias\\": Object {
         \\"react-proxy\\": \\"@zamotany/react-proxy\\",
