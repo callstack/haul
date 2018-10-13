@@ -9,7 +9,7 @@ const { runHaul } = require('../runHaul');
 const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
-const { run } = require('../utils');
+const { run, yarnCommand } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
 const { isPortTaken } = require('../../src/utils/haulPortHandler');
@@ -27,7 +27,7 @@ beforeAll(async done => {
     done.fail('Port is already in use. Cannot run Haul in test env');
   }
 
-  run('yarn --mutex network', TEST_PROJECT_DIR);
+  run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR);
   haul = runHaul(TEST_PROJECT_DIR, ['start']);
 
   const messageBuffer = [];
