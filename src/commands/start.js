@@ -13,7 +13,7 @@ const createServer = require('../server');
 const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
 const {
-  DISABLE_PORT_PROMPT,
+  INTERACTIVE_MODE_DEFAULT,
   DEFAULT_CONFIG_FILENAME,
   DEFAULT_PORT,
 } = require('../constants');
@@ -24,7 +24,7 @@ const {
 async function start(opts: *) {
   const isTaken = await isPortTaken(opts.port);
   if (isTaken) {
-    if (opts.interactive_mode) {
+    if (!opts.no_interactive) {
       const { userChoice } = await inquirer.prompt({
         type: 'list',
         name: 'userChoice',
@@ -97,11 +97,10 @@ module.exports = ({
       ],
     },
     {
-      name: 'disable_port_prompt',
-      description:
-        'Whether or not to prompt the user if the port is already in use',
-      default: DISABLE_PORT_PROMPT,
-      parse: (val: string) => val !== 'true',
+      name: 'no-interactive',
+      description: 'Disables prompting the user if the port is already in use',
+      default: !INTERACTIVE_MODE_DEFAULT,
+      parse: (val: string) => val !== 'false',
       choices: [
         {
           value: true,
