@@ -207,20 +207,20 @@ const getDefaultConfig = ({
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: (providesModuleNodeModules || [
-            'react-native',
-          ]).map(_ => {
-            if (typeof _ === 'string') {
-              if (_ === 'react-native') {
-                return path.join(
-                  moduleResolve(root, 'react-native'),
-                  'Libraries'
-                );
+          directories: (providesModuleNodeModules || ['react-native']).map(
+            _ => {
+              if (typeof _ === 'string') {
+                if (_ === 'react-native') {
+                  return path.join(
+                    moduleResolve(root, 'react-native'),
+                    'Libraries'
+                  );
+                }
+                return moduleResolve(root, _);
               }
-              return moduleResolve(root, _);
+              return path.join(moduleResolve(root, _.name), _.directory);
             }
-            return path.join(moduleResolve(root, _.name), _.directory);
-          }),
+          ),
           hasteOptions: hasteOptions || {},
         }),
         /**
@@ -372,21 +372,27 @@ function makeReactNativeConfig(
   return webpackConfig;
 }
 
-function injectPolyfillIntoEntry({
-  entry: userEntry,
-  root,
-  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
-}: {
-  entry: WebpackEntry,
-  root: string,
-  initializeCoreLocation?: string,
-}) {
+function injectPolyfillIntoEntry(
+  {
+    entry: userEntry,
+    root,
+    initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
+  }: {
+    entry: WebpackEntry,
+    root: string,
+    initializeCoreLocation?: string,
+  },
+  withHotPatch: boolean = true
+) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
     require.resolve('./polyfillEnvironment.js'),
-    require.resolve('../../hot/patch.js'),
   ];
+
+  if (withHotPatch) {
+    reactNativeHaulEntries.push(require.resolve('../../hot/patch.js'));
+  }
 
   return makeWebpackEntry(userEntry, reactNativeHaulEntries);
 }
@@ -435,11 +441,14 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
 
     const config = {
       ...defaultWebpackConfig,
-      entry: injectPolyfillIntoEntry({
-        root: options.root,
-        initializeCoreLocation: options.initializeCoreLocation,
-        entry,
-      }),
+      entry: injectPolyfillIntoEntry(
+        {
+          root: options.root,
+          initializeCoreLocation: options.initializeCoreLocation,
+          entry,
+        },
+        options.dev
+      ),
       name: options.platform,
     };
 
