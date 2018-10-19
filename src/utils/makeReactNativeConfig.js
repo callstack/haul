@@ -209,8 +209,7 @@ const getDefaultConfig = ({
         new HasteResolver({
           directories: (providesModuleNodeModules || [
             'react-native',
-          ]).map(
-            _ => {
+          ]).map(_ => {
             if (typeof _ === 'string') {
               if (_ === 'react-native') {
                 return path.join(
