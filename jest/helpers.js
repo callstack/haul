@@ -19,10 +19,22 @@ const replacePathsInObject = (object: mixed) => {
     entry =>
       typeof entry === 'string'
         ? entry
+            .replace(
+              new RegExp(`^${excapeStringRegex(path.resolve('/'))}`),
+              '/'
+            )
+            .replace(new RegExp('\\\\', 'g'), '/')
             .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
             .replace(
               new RegExp(
-                `^${excapeStringRegex(path.resolve(__dirname, '..'))}`
+                process.platform === 'win32'
+                  ? `^${excapeStringRegex(
+                      path
+                        .resolve(__dirname, '..')
+                        .slice(2)
+                        .replace(new RegExp('\\\\', 'g'), '/')
+                    )}`
+                  : `^${excapeStringRegex(path.resolve(__dirname, '..'))}`
               ),
               '<<REPLACED>>'
             )

@@ -43,7 +43,6 @@ module.exports = function runWebpackCompiler({
   const config = getConfig(
     configPath,
     configOptions,
-    // $FlowFixMe
     (platform: Platform),
     // $FlowFixMe
     (loggerProxy: Logger)

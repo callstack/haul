@@ -13,6 +13,8 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 
+const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
+
 const run = (cmd: string, cwd?: string) => {
   const args = cmd.split(/\s/).slice(1);
   const spawnOptions = { cwd };
@@ -117,4 +119,5 @@ module.exports = {
   run,
   writeFiles,
   replaceTestPath,
+  yarnCommand,
 };

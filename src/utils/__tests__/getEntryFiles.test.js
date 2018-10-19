@@ -10,7 +10,7 @@ const path = require('path');
 const dedent = require('dedent');
 
 const fakePolyfill = 'polyfill/to/remove';
-const fakeCwd = '/usr/fake';
+const fakeCwd = path.resolve('/usr/fake');
 
 const originalCWD = process.cwd;
 

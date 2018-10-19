@@ -32,7 +32,8 @@ function runHaulSync(
   const env = options.nodePath
     ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
     : process.env;
-  const result = spawnSync(BIN_PATH, args || [], { cwd, env });
+
+  const result = spawnSync('node', [BIN_PATH, ...(args || [])], { cwd, env });
 
   result.stdout = result.stdout.toString();
   result.stderr = result.stderr.toString();
@@ -56,7 +57,7 @@ function runHaul(
     ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
     : process.env;
 
-  return spawn(BIN_PATH, args || [], { cwd, env });
+  return spawn('node', [BIN_PATH, ...(args || [])], { cwd, env });
 }
 
 module.exports = {
