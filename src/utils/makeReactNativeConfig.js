@@ -372,19 +372,17 @@ function makeReactNativeConfig(
   return webpackConfig;
 }
 
-function injectPolyfillIntoEntry(
-  {
-    entry: userEntry,
-    root,
-    initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
-    dev = true,
-  }: {
-    entry: WebpackEntry,
-    root: string,
-    initializeCoreLocation?: string,
-    dev?: boolean
-  }
-) {
+function injectPolyfillIntoEntry({
+  entry: userEntry,
+  root,
+  initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
+  dev = true,
+}: {
+  entry: WebpackEntry,
+  root: string,
+  initializeCoreLocation?: string,
+  dev?: boolean,
+}) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
@@ -442,14 +440,12 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
 
     const config = {
       ...defaultWebpackConfig,
-      entry: injectPolyfillIntoEntry(
-        {
-          root: options.root,
-          initializeCoreLocation: options.initializeCoreLocation,
-          entry,
-          dev: options.dev,
-        }
-      ),
+      entry: injectPolyfillIntoEntry({
+        root: options.root,
+        initializeCoreLocation: options.initializeCoreLocation,
+        entry,
+        dev: options.dev,
+      }),
       name: options.platform,
     };
 
