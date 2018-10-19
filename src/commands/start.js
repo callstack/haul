@@ -12,7 +12,11 @@ const logger = require('../logger');
 const createServer = require('../server');
 const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
-const { DEFAULT_CONFIG_FILENAME, DEFAULT_PORT } = require('../constants');
+const {
+  INTERACTIVE_MODE_DEFAULT,
+  DEFAULT_CONFIG_FILENAME,
+  DEFAULT_PORT,
+} = require('../constants');
 
 /**
  * Starts development server
@@ -20,22 +24,32 @@ const { DEFAULT_CONFIG_FILENAME, DEFAULT_PORT } = require('../constants');
 async function start(opts: *) {
   const isTaken = await isPortTaken(opts.port);
   if (isTaken) {
-    const { userChoice } = await inquirer.prompt({
-      type: 'list',
-      name: 'userChoice',
-      message: `Port ${opts.port} is already in use. What should we do?`,
-      choices: [`Kill process using port ${opts.port} and start Haul`, 'Quit'],
-    });
-    if (userChoice === 'Quit') {
-      process.exit();
-    }
-    try {
-      await killProcess(opts.port);
-    } catch (e) {
-      logger.error(`Could not kill process! Reason: \n ${e.message}`);
+    if (!opts.no_interactive) {
+      const { userChoice } = await inquirer.prompt({
+        type: 'list',
+        name: 'userChoice',
+        message: `Port ${opts.port} is already in use. What should we do?`,
+        choices: [
+          `Kill process using port ${opts.port} and start Haul`,
+          'Quit',
+        ],
+      });
+      if (userChoice === 'Quit') {
+        process.exit();
+      }
+      try {
+        await killProcess(opts.port);
+      } catch (e) {
+        logger.error(`Could not kill process! Reason: \n ${e.message}`);
+        process.exit(1);
+      }
+      logger.info(`Successfully killed processes.`);
+    } else {
+      logger.error(
+        `Could not spawn process! Reason: Port ${opts.port} already in use.`
+      );
       process.exit(1);
     }
-    logger.info(`Successfully killed processes.`);
   }
 
   const directory = process.cwd();
@@ -79,6 +93,24 @@ module.exports = ({
         {
           value: false,
           description: 'Builds in production mode',
+        },
+      ],
+    },
+    {
+      name: 'no-interactive',
+      description: 'Disables prompting the user if the port is already in use',
+      default: !INTERACTIVE_MODE_DEFAULT,
+      parse: (val: string) => val !== 'false',
+      choices: [
+        {
+          value: true,
+          description:
+            'Will quit without prompting the user if the port is in use',
+        },
+        {
+          value: false,
+          description:
+            'Will prompt the user with options if the port is currently in use',
         },
       ],
     },
