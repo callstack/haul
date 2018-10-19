@@ -377,12 +377,13 @@ function injectPolyfillIntoEntry(
     entry: userEntry,
     root,
     initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
+    dev = true,
   }: {
     entry: WebpackEntry,
     root: string,
     initializeCoreLocation?: string,
-  },
-  withHotPatch: boolean = true
+    dev?: boolean
+  }
 ) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
@@ -390,7 +391,7 @@ function injectPolyfillIntoEntry(
     require.resolve('./polyfillEnvironment.js'),
   ];
 
-  if (withHotPatch) {
+  if (dev) {
     reactNativeHaulEntries.push(require.resolve('../../hot/patch.js'));
   }
 
@@ -446,8 +447,8 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
           root: options.root,
           initializeCoreLocation: options.initializeCoreLocation,
           entry,
-        },
-        options.dev
+          dev: options.dev,
+        }
       ),
       name: options.platform,
     };
