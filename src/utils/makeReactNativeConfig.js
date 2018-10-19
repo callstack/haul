@@ -207,20 +207,21 @@ const getDefaultConfig = ({
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: (providesModuleNodeModules || ['react-native']).map(
+          directories: (providesModuleNodeModules || [
+            'react-native',
+          ]).map(
             _ => {
-              if (typeof _ === 'string') {
-                if (_ === 'react-native') {
-                  return path.join(
-                    moduleResolve(root, 'react-native'),
-                    'Libraries'
-                  );
-                }
-                return moduleResolve(root, _);
+            if (typeof _ === 'string') {
+              if (_ === 'react-native') {
+                return path.join(
+                  moduleResolve(root, 'react-native'),
+                  'Libraries'
+                );
               }
-              return path.join(moduleResolve(root, _.name), _.directory);
+              return moduleResolve(root, _);
             }
-          ),
+            return path.join(moduleResolve(root, _.name), _.directory);
+          }),
           hasteOptions: hasteOptions || {},
         }),
         /**
