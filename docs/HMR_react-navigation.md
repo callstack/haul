@@ -73,7 +73,9 @@ const MyApp = StackNavigator({
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
 
-Then, wrap those screen factories with `makeHot` call and pass the name of the screen as a second argument:
+Since a comparison is made of the results of `getScreen` each time the drawer is toggled, we need to make sure that subsequent calls of our function return the same value. 
+
+To do this, we need to create our `HotViews` then provide them as a result to `getScreen`.  
 
 ```diff
 // index.js
@@ -86,15 +88,22 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './src/HomeScreen';
 import SecondScreen from './src/SecondScreen';
 
++ const HotViews = {
++   Home: makeHot(() => HomeScreen, 'Home'),
++   Second: makeHot(() => SecondScreen, 'Second')
++ };
+
 const MyApp = StackNavigator({
 -   Home: { getScreen: () => HomeScreen },
 -   Second: { getScreen: () => SecondScreen },
-+   Home: { getScreen: makeHot(() => HomeScreen, 'Home') },
-+   Second: { getScreen: makeHot(() => SecondScreen, 'Second') },
++   Home: { getScreen: HotViews.Home },
++   Second: { getScreen: HotViews.Second },
 });
 
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
+
+> When doing this it ensures that `HotViews.Home() === HotViews.Home()` so that unnecessary re-renders do not occur.
 
 ---
 
