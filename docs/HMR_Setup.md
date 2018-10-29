@@ -47,6 +47,12 @@ Haul uses `react-hot-loader` to support HMR. `react-hot-loader/patch`
 is automatically imported in all entry points in development when
 HMR is enabled.
 
+```bash
+yarn add react-hot-loader
+# Or
+npm install --save react-hot-loader
+```
+
 Now, we need to wrap the __root component factories__ using `makeHot` function. Root component factory is a function that returns a __root component__:
 
 ```javascript
