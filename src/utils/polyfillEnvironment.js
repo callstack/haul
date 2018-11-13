@@ -7,19 +7,6 @@
  */
 import { NativeModules } from 'react-native';
 
-// HACK:
-//   This is horrible.  I know.  But this hack seems to be needed due to the way
-//   React Native lazy evaluates `fetch` within `InitializeCore`.  This was fixed
-//   in 34-ish, but seems to be back again.  I hope I'm wrong because I lost sleep
-//   on this one.
-//
-//   Without this in place, global.fetch will be undefined and cause the symbolicate
-//   check to fail.  This must be something that the packager is doing that haul isn't.
-//   I also so people complaining about this in Jest as well.
-//
-// ref: https://github.com/callstack/haul/pull/74
-if (!global.self) global.self = global;
-
 require('../hot/client/importScriptsPolyfill');
 
 if (process.env.NODE_ENV !== 'production') {
