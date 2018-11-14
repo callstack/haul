@@ -160,6 +160,10 @@ const getDefaultConfig = ({
         minimize: !!minify,
         debug: dev,
       }),
+      new webpack.BannerPlugin({
+        banner: 'if (this && !this.self) { this.self = this; };\n',
+        raw: true,
+      }),
     ].concat(
       dev
         ? [
@@ -172,10 +176,6 @@ const getDefaultConfig = ({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
             }),
-            new webpack.BannerPlugin({
-              banner: 'if (this && !this.self) { this.self = this; };\n',
-              raw: true,
-            }),
           ]
         : [
             /**
@@ -186,10 +186,6 @@ const getDefaultConfig = ({
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
-            }),
-            new webpack.BannerPlugin({
-              banner: 'if (this && !this.self) { this.self = this; };\n',
-              raw: true,
             }),
           ]
     ),
