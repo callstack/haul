@@ -180,6 +180,14 @@ Object {
         },
       },
     },
+    BannerPlugin {
+      "banner": [Function],
+      "options": Object {
+        "banner": "if (this && !this.self) { this.self = this; };
+",
+        "raw": true,
+      },
+    },
     HotModuleReplacementPlugin {
       "fullBuildTimeout": 200,
       "multiStep": undefined,
@@ -205,14 +213,6 @@ Object {
       "sourceMapFilename": "[file].map",
       "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
-    },
-    BannerPlugin {
-      "banner": [Function],
-      "options": Object {
-        "banner": "if (this && !this.self) { this.self = this; };
-",
-        "raw": true,
-      },
     },
   ],
   "resolve": Object {
