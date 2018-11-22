@@ -126,7 +126,7 @@ AssetResolver.collect = (
     const match = regex.exec(curr);
 
     if (match) {
-      let [x, scale, y, z, platform] = match // eslint-disable-line
+      let [x, scale, y, z, _platform] = match // eslint-disable-line
 
       scale = scale || '@1x';
 
@@ -143,7 +143,7 @@ AssetResolver.collect = (
       }
 
       return Object.assign({}, acc, {
-        [scale]: { platform, name: curr },
+        [scale]: { platform: _platform, name: curr },
       });
     }
 
