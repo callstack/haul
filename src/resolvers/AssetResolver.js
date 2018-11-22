@@ -120,8 +120,7 @@ AssetResolver.collect = (
     : new RegExp(
         `^${escapeStringRegexp(name)}(\\.(${platform}|native))?\\.${type}$`
       );
-  const priority = queryPlatform =>
-    [undefined, 'native', platform].indexOf(queryPlatform);
+  const priority = queryPlatform => ['native', platform].indexOf(queryPlatform);
 
   // Build a map of files according to the scale
   return list.reduce((acc, curr) => {

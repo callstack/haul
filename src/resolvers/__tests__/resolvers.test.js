@@ -78,8 +78,12 @@ test('AssetResolver.collect returns files based on requested platform', () => {
     'mail@2x.png',
     'mail@3x.android.png',
     'mail@3x.png',
+    'mail.ios.png',
+    'mail.native.png',
   ];
   const fileListDifferentOrder = [
+    'mail.ios.png',
+    'mail.native.png',
     'mail.png',
     'mail.android.png',
     'mail@2x.png',
@@ -88,13 +92,13 @@ test('AssetResolver.collect returns files based on requested platform', () => {
     'mail@3x.android.png',
   ];
 
-  [fileList, fileListDifferentOrder].map(files => {
+  [fileList, fileListDifferentOrder].forEach(files => {
     const result = AssetResolver.collect(files, {
       name: 'mail',
       type: 'png',
       platform: 'android',
     });
-    return expect(result).toEqual({
+    expect(result).toEqual({
       '@1x': {
         name: 'mail.android.png',
         platform: 'android',
