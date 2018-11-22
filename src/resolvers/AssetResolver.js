@@ -120,30 +120,25 @@ AssetResolver.collect = (
     : new RegExp(
         `^${escapeStringRegexp(name)}(\\.(${platform}|native))?\\.${type}$`
       );
+  const priority = queryPlatform =>
+    [undefined, 'native', platform].indexOf(queryPlatform);
 
   // Build a map of files according to the scale
   return list.reduce((acc, curr) => {
     const match = regex.exec(curr);
 
     if (match) {
-      let [x, scale, y, z, _platform] = match // eslint-disable-line
+      let [x, scale, y, z, platform] = match // eslint-disable-line
 
       scale = scale || '@1x';
 
-      if (acc[scale]) {
-        // platform takes highest prio, so if it exists, don't do anything
-        if (acc[scale].platform === platform) {
-          return acc;
-        }
-
-        // native takes second prio, so if it exists and platform doesn't, don't do anything
-        if (acc[scale].platform === 'native' && !platform) {
-          return acc;
-        }
+      if (acc[scale] && priority(platform) < priority(acc[scale].platform)) {
+        // do nothing
+        return acc;
       }
 
       return Object.assign({}, acc, {
-        [scale]: { platform: _platform, name: curr },
+        [scale]: { platform, name: curr },
       });
     }
 

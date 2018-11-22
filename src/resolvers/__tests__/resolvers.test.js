@@ -70,36 +70,44 @@ test('AssetResolver.collect returns empty object when file not in the list', () 
   expect(result).toEqual({});
 });
 
-test('AssetResolver.collect returns android file when wanting an android file', () => {
-  const result = AssetResolver.collect(
-    [
-      'mail.android.png',
-      'mail.png',
-      'mail@2x.android.png',
-      'mail@2x.png',
-      'mail@3x.android.png',
-      'mail@3x.png',
-    ],
-    {
+test('AssetResolver.collect returns files based on requested platform', () => {
+  const fileList = [
+    'mail.android.png',
+    'mail.png',
+    'mail@2x.android.png',
+    'mail@2x.png',
+    'mail@3x.android.png',
+    'mail@3x.png',
+  ];
+  const fileListDifferentOrder = [
+    'mail.png',
+    'mail.android.png',
+    'mail@2x.png',
+    'mail@2x.android.png',
+    'mail@3x.png',
+    'mail@3x.android.png',
+  ];
+
+  [fileList, fileListDifferentOrder].map(files => {
+    const result = AssetResolver.collect(files, {
       name: 'mail',
       type: 'png',
       platform: 'android',
-    }
-  );
-
-  expect(result).toEqual({
-    '@1x': {
-      name: 'mail.android.png',
-      platform: 'android',
-    },
-    '@2x': {
-      name: 'mail@2x.android.png',
-      platform: 'android',
-    },
-    '@3x': {
-      name: 'mail@3x.android.png',
-      platform: 'android',
-    },
+    });
+    return expect(result).toEqual({
+      '@1x': {
+        name: 'mail.android.png',
+        platform: 'android',
+      },
+      '@2x': {
+        name: 'mail@2x.android.png',
+        platform: 'android',
+      },
+      '@3x': {
+        name: 'mail@3x.android.png',
+        platform: 'android',
+      },
+    });
   });
 });
 
