@@ -324,7 +324,7 @@ function makeReactNativeConfig(
 
   if (isLegacy) {
     logger.warn(
-      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
+      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/next/docs/Configuration.md'
     );
 
     return DEPRECATEDMakeReactNativeConfig(
