@@ -97,7 +97,7 @@ const getDefaultConfig = ({
         {
           test: /\.js$/,
           // eslint-disable-next-line no-useless-escape
-          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@expo|pretty-format|haul|metro))/,
+          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|query-string|strict-uri-encode|decode-uri-component|@expo|pretty-format|haul|metro))/,
           use: [
             {
               loader: require.resolve('cache-loader'),
