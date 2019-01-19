@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 import type { Logger, Platform } from '../../types';
@@ -25,7 +25,7 @@ module.exports = function runWebpackCompiler({
   const { configPath, configOptions } = JSON.parse(options);
 
   /**
-   * Proxy based on Logger.js 
+   * Proxy based on Logger.js
    */
   const loggerProxy = new Proxy(
     {},
@@ -67,7 +67,6 @@ module.exports = function runWebpackCompiler({
     ],
   });
 
-  // Use memory fs
   compiler.outputFileSystem = fs;
 
   compiler.hooks.done.intercept({
