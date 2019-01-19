@@ -8,6 +8,8 @@
 import type { Platform } from '../types';
 
 const EventEmitter = require('events');
+const fs = require('fs');
+
 const Events = require('./events');
 const logger = require('../logger');
 const Fork = require('./Fork');
@@ -134,7 +136,7 @@ module.exports = class Compiler extends EventEmitter {
         callback({
           errors: null,
           platform,
-          file,
+          file: fs.readFileSync(file),
           mimeType,
         });
       }
