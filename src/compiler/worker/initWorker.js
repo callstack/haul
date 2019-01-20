@@ -1,13 +1,14 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const WebSocket = require('ws');
-const MemoryFileSystem = require('memory-fs');
 const mime = require('mime-types');
 
 const Events = require('../events');
@@ -20,7 +21,6 @@ module.exports = function initWorker({
 }: {
   [key: string]: string,
 }) {
-  const fs = new MemoryFileSystem();
   const webSocket = new WebSocket(
     `ws+unix://${socketAddress}:/?platform=${platform}`
   );
@@ -41,7 +41,11 @@ module.exports = function initWorker({
       compiler = runWebpackCompiler({
         platform,
         options,
-        fs,
+        fs: {
+          ...fs,
+          join: path.join,
+          mkdirp,
+        },
       });
     } catch (e) {
       send(Events.BUILD_FAILED, { message: e.message });
@@ -78,11 +82,11 @@ module.exports = function initWorker({
     const { type, ...payload } = JSON.parse(data.toString());
 
     if (type === Events.REQUEST_FILE) {
-      const filename = path.join(process.cwd(), payload.filename);
-      if (fs.existsSync(filename)) {
+      const filePath = path.join(process.cwd(), payload.filename);
+      if (fs.existsSync(filePath)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,
-          file: fs.readFileSync(filename),
+          filePath,
           mimeType: mime.lookup(payload.filename) || 'text/javascript',
         });
       } else {

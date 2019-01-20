@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 import type { Logger, Platform } from '../../types';
@@ -25,7 +25,7 @@ module.exports = function runWebpackCompiler({
   const { configPath, configOptions } = JSON.parse(options);
 
   /**
-   * Proxy based on Logger.js 
+   * Proxy based on Logger.js
    */
   const loggerProxy = new Proxy(
     {},
@@ -67,7 +67,8 @@ module.exports = function runWebpackCompiler({
     ],
   });
 
-  // Use memory fs
+  // As of Webpack 4.12.0, |outputFileSystem| must be set since there is no
+  // fallback despite the documentation stating otherwise.
   compiler.outputFileSystem = fs;
 
   compiler.hooks.done.intercept({
