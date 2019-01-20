@@ -67,6 +67,8 @@ module.exports = function runWebpackCompiler({
     ],
   });
 
+  // As of Webpack 4.12.0, |outputFileSystem| must be set since there is no
+  // fallback despite the documentation stating otherwise.
   compiler.outputFileSystem = fs;
 
   compiler.hooks.done.intercept({

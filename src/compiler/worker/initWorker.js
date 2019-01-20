@@ -42,12 +42,9 @@ module.exports = function initWorker({
         platform,
         options,
         fs: {
+          ...fs,
           join: path.join,
-          mkdir: fs.mkdir,
           mkdirp,
-          rmdir: fs.rmdir,
-          unlink: fs.unlink,
-          writeFile: fs.writeFile,
         },
       });
     } catch (e) {
@@ -85,11 +82,11 @@ module.exports = function initWorker({
     const { type, ...payload } = JSON.parse(data.toString());
 
     if (type === Events.REQUEST_FILE) {
-      const filename = path.join(process.cwd(), payload.filename);
-      if (fs.existsSync(filename)) {
+      const filePath = path.join(process.cwd(), payload.filename);
+      if (fs.existsSync(filePath)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,
-          file: filename,
+          filePath,
           mimeType: mime.lookup(payload.filename) || 'text/javascript',
         });
       } else {

@@ -121,7 +121,7 @@ module.exports = class Compiler extends EventEmitter {
       }
     });
 
-    fork.on(Events.FILE_RECEIVED, ({ file, taskId, mimeType }) => {
+    fork.on(Events.FILE_RECEIVED, ({ filePath, taskId, mimeType }) => {
       const { callback, awaitingCount } = this.tasks.pop(taskId);
 
       // If the value is more than 1, it means that we are still awaiting
@@ -136,7 +136,7 @@ module.exports = class Compiler extends EventEmitter {
         callback({
           errors: null,
           platform,
-          file: fs.readFileSync(file),
+          file: fs.readFileSync(filePath),
           mimeType,
         });
       }
