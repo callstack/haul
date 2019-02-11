@@ -16,6 +16,7 @@ const runAdbReverse = require('../util/runAdbReverse');
 
 type ConfigOptionsType = {
   root: string,
+  assetsDest: string,
   dev: boolean,
   minify: boolean,
   port: number,

@@ -34,6 +34,14 @@ module.exports = function initWorker({
     );
   }
 
+  const { configOptions } = JSON.parse(options);
+  let outputPath = configOptions.root;
+  if (configOptions.assetsDest) {
+    outputPath = path.isAbsolute(configOptions.assetsDest)
+      ? configOptions.assetsDest
+      : path.join(configOptions.root, configOptions.assetsDest);
+  }
+
   webSocket.on('open', () => {
     let compiler;
 
@@ -82,7 +90,7 @@ module.exports = function initWorker({
     const { type, ...payload } = JSON.parse(data.toString());
 
     if (type === Events.REQUEST_FILE) {
-      const filePath = path.join(process.cwd(), payload.filename);
+      const filePath = path.join(outputPath, payload.filename);
       if (fs.existsSync(filePath)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,

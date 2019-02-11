@@ -57,6 +57,7 @@ async function start(opts: *) {
 
   const configOptions = {
     root: directory,
+    assetsDest: opts.assetsDest,
     dev: opts.dev,
     minify: opts.minify,
     port: opts.port,
@@ -129,6 +130,10 @@ module.exports = ({
           description: 'Disables minification for the bundle',
         },
       ],
+    },
+    {
+      name: 'assetsDest',
+      description: 'Path to directory where to store assets, eg. /tmp/dist.',
     },
     {
       name: 'config',
