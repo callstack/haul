@@ -34,13 +34,7 @@ module.exports = function initWorker({
     );
   }
 
-  const { configOptions } = JSON.parse(options);
-  let outputPath = configOptions.root;
-  if (configOptions.assetsDest) {
-    outputPath = path.isAbsolute(configOptions.assetsDest)
-      ? configOptions.assetsDest
-      : path.join(configOptions.root, configOptions.assetsDest);
-  }
+  const outputPath = JSON.parse(options).configOptions.assetsDest;
 
   webSocket.on('open', () => {
     let compiler;

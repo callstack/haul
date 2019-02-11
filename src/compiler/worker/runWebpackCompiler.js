@@ -7,7 +7,6 @@
 import type { Logger, Platform } from '../../types';
 
 const EventEmitter = require('events');
-const path = require('path');
 const webpack = require('webpack');
 
 const getConfig = require('../../utils/getConfig');
@@ -51,11 +50,7 @@ module.exports = function runWebpackCompiler({
 
   let lastPercent = -1;
 
-  if (configOptions.assetsDest) {
-    config.output.path = path.isAbsolute(configOptions.assetsDest)
-      ? configOptions.assetsDest
-      : path.join(configOptions.root, configOptions.assetsDest);
-  }
+  config.output.path = configOptions.assetsDest;
 
   /**
    * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
