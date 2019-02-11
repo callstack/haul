@@ -145,7 +145,7 @@ module.exports = ({
     },
     {
       name: 'assetsDest',
-      description: 'Path to directory where to store assets, eg. /tmp/dist',
+      description: 'Path to directory where to store generated assets, eg. /tmp/dist',
     },
     {
       name: 'config',
