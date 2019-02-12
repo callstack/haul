@@ -10,6 +10,7 @@ Options:
   --dev [true|false]               Whether to build in development mode, true by default
   --no-interactive [true|false]    Disables prompting the user if the port is already in use
   --minify [true|false]            Whether to minify the bundle, 'true' by default when dev=false
+  --assets-dest [string]           Path to directory where to store generated assets, eg. /tmp/dist
   --config [string]                Path to config file, eg. haul.config.js, haul.config.js by
                                    default
   --eager [parse]                  Disable lazy building for platforms (list is separated by ','),

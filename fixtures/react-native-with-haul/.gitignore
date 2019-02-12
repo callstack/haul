@@ -59,3 +59,5 @@ haul-debug.log
 # Bundle artifact
 #
 *.jsbundle
+
+dist/

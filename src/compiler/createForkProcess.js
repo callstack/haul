@@ -12,6 +12,7 @@ const path = require('path');
 
 type ConfigOptions = {
   root: string,
+  assetsDest: string,
   dev: boolean,
   minify: boolean,
   port: number,

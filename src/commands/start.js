@@ -6,7 +6,10 @@
  */
 import type { Command } from '../types';
 
+const fs = require('fs');
 const inquirer = require('inquirer');
+const os = require('os');
+const path = require('path');
 
 const logger = require('../logger');
 const createServer = require('../server');
@@ -55,8 +58,18 @@ async function start(opts: *) {
   const directory = process.cwd();
   const configPath = getWebpackConfigPath(directory, opts.config);
 
+  let assetsDest;
+  if (opts.assetsDest) {
+    assetsDest = path.isAbsolute(opts.assetsDest)
+      ? opts.assetsDest
+      : path.join(directory, opts.assetsDest);
+  } else {
+    assetsDest = path.join(os.tmpdir(), fs.mkdtempSync('haul-start-'));
+  }
+
   const configOptions = {
     root: directory,
+    assetsDest,
     dev: opts.dev,
     minify: opts.minify,
     port: opts.port,
@@ -129,6 +142,11 @@ module.exports = ({
           description: 'Disables minification for the bundle',
         },
       ],
+    },
+    {
+      name: 'assetsDest',
+      description:
+        'Path to directory where to store generated assets, eg. /tmp/dist',
     },
     {
       name: 'config',

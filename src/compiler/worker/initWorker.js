@@ -34,6 +34,8 @@ module.exports = function initWorker({
     );
   }
 
+  const outputPath = JSON.parse(options).configOptions.assetsDest;
+
   webSocket.on('open', () => {
     let compiler;
 
@@ -82,7 +84,7 @@ module.exports = function initWorker({
     const { type, ...payload } = JSON.parse(data.toString());
 
     if (type === Events.REQUEST_FILE) {
-      const filePath = path.join(process.cwd(), payload.filename);
+      const filePath = path.join(outputPath, payload.filename);
       if (fs.existsSync(filePath)) {
         send(Events.FILE_RECEIVED, {
           taskId: payload.taskId,
