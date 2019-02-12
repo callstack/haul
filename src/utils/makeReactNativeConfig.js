@@ -89,7 +89,7 @@ const getDefaultConfig = ({
     context: root,
     entry: [],
     output: {
-      path: assetsDest,
+      path: assetsDest || path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },

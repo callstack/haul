@@ -34,7 +34,7 @@ exports[`creates config: diff ios/android config 1`] = `
     \\"output\\": Object {
 -     \\"filename\\": \\"index.ios.bundle\\",
 +     \\"filename\\": \\"index.android.bundle\\",
-      \\"path\\": undefined,
+      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
     },
     \\"plugins\\": Array [
@@ -153,7 +153,7 @@ Object {
   },
   "output": Object {
     "filename": "index.ios.bundle",
-    "path": undefined,
+    "path": "<<REPLACED>>/src/utils/__tests__/fixtures",
     "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
