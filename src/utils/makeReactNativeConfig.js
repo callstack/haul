@@ -23,6 +23,7 @@ const { DEFAULT_PORT } = require('../constants');
 
 type ConfigOptions = {|
   root: string,
+  assetsDest: string,
   dev: boolean,
   minify?: boolean,
   bundle?: boolean,
@@ -74,6 +75,7 @@ type DEPRECATEDWebpackConfigFactory = (
 const getDefaultConfig = ({
   platform,
   root,
+  assetsDest,
   dev,
   minify,
   bundle,
@@ -87,7 +89,7 @@ const getDefaultConfig = ({
     context: root,
     entry: [],
     output: {
-      path: path.join(root),
+      path: assetsDest || path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },
@@ -267,10 +269,11 @@ function DEPRECATEDMakeReactNativeConfig(
   options: ConfigOptions,
   platform: Platform
 ) {
-  const { root, dev, minify, bundle, port } = options;
+  const { root, assetsDest, dev, minify, bundle, port } = options;
 
   const env = {
     root,
+    assetsDest,
     dev,
     minify,
     platform,
@@ -334,10 +337,11 @@ function makeReactNativeConfig(
     );
   }
 
-  const { root, dev, minify, bundle, port } = options;
+  const { root, assetsDest, dev, minify, bundle, port } = options;
 
   const env = {
     root,
+    assetsDest,
     dev,
     minify,
     platform,
