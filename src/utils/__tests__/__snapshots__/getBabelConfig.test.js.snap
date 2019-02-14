@@ -8,7 +8,12 @@ Object {
     "<<REPLACED>>/src/hot/babelPlugin.js",
   ],
   "presets": Array [
-    "<<NODE_MODULE>>/metro-react-native-babel-preset/src/index.js",
+    Array [
+      "<<NODE_MODULE>>/metro-react-native-babel-preset/src/index.js",
+      Object {
+        "disableImportExportTransform": true,
+      },
+    ],
   ],
 }
 `;
@@ -19,7 +24,12 @@ Object {
     "<<REPLACED>>/src/utils/fixRequireIssues.js",
   ],
   "presets": Array [
-    "<<NODE_MODULE>>/metro-react-native-babel-preset/src/index.js",
+    Array [
+      "<<NODE_MODULE>>/metro-react-native-babel-preset/src/index.js",
+      Object {
+        "disableImportExportTransform": true,
+      },
+    ],
   ],
 }
 `;

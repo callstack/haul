@@ -10,7 +10,12 @@ const path = require('path');
 const logger = require('../logger');
 
 const DEFAULT_BABELRC = {
-  presets: [require.resolve('metro-react-native-babel-preset')],
+  presets: [
+    [
+      require.resolve('metro-react-native-babel-preset'),
+      { disableImportExportTransform: true },
+    ],
+  ],
 };
 
 module.exports = function getBabelConfig(cwd: string) {
