@@ -64,7 +64,7 @@ async function start(opts: *) {
       ? opts.assetsDest
       : path.join(directory, opts.assetsDest);
   } else {
-    assetsDest = path.join(os.tmpdir(), fs.mkdtempSync('haul-start-'));
+    assetsDest = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
   }
 
   const configOptions = {
