@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.13",
+  "version": "1.0.0-rc.14",
   "name": "haul",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
