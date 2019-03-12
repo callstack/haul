@@ -31,6 +31,7 @@ type ConfigOptions = {|
   providesModuleNodeModules?: (string | { name: string, directory: string })[],
   hasteOptions?: *,
   initializeCoreLocation?: string,
+  includedNodeModules?: Array<string>,
 |};
 
 type EnvOptions = {|
@@ -69,6 +70,30 @@ type DEPRECATEDWebpackConfigFactory = (
   WebpackConfig
 ) => WebpackConfig | WebpackConfig;
 
+const DEFAULT_INCLUDED_NODE_MODULES = [
+  'react',
+  '@react-navigation',
+  '@expo',
+  'pretty-format',
+  'haul',
+  'metro',
+];
+
+/**
+ * Constructs a RegExp for the default JavaScript processing rule
+ */
+const getJavaScriptExcludeRegex = (
+  includedNodeModules?: Array<string>
+): RegExp => {
+  includedNodeModules = includedNodeModules || [];
+  includedNodeModules = includedNodeModules.concat(
+    DEFAULT_INCLUDED_NODE_MODULES
+  );
+  return new RegExp(
+    `node_modules(?!.*[\\/\\\\](${includedNodeModules.join('|')}))`
+  );
+};
+
 /**
  * Returns default config based on environment
  */
@@ -82,6 +107,7 @@ const getDefaultConfig = ({
   port,
   providesModuleNodeModules,
   hasteOptions,
+  includedNodeModules,
 }): WebpackConfig => {
   // Getting Minor version
   return {
@@ -97,9 +123,9 @@ const getDefaultConfig = ({
       rules: [
         { parser: { requireEnsure: false } },
         {
-          test: /\.js$/,
+          test: /\.jsx?$/,
           // eslint-disable-next-line no-useless-escape
-          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@expo|pretty-format|haul|metro))/,
+          exclude: getJavaScriptExcludeRegex(includedNodeModules),
           use: [
             {
               loader: require.resolve('cache-loader'),
@@ -281,6 +307,7 @@ function DEPRECATEDMakeReactNativeConfig(
     port,
     providesModuleNodeModules: undefined,
     hasteOptions: undefined,
+    includedNodeModules: undefined,
   };
 
   const defaultWebpackConfig = getDefaultConfig(env);

@@ -82,7 +82,7 @@ Object {
       },
       Object {
         "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@expo\\|pretty-format\\|haul\\|metro\\)\\)/,
-        "test": /\\\\\\.js\\$/,
+        "test": /\\\\\\.jsx\\?\\$/,
         "use": Array [
           Object {
             "loader": "<<NODE_MODULE>>/cache-loader/dist/cjs.js",
