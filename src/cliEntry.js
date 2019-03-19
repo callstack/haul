@@ -7,7 +7,6 @@
 import type { Command } from './types';
 
 const minimist = require('minimist');
-const camelcaseKeys = require('camelcase-keys');
 const clear = require('clear');
 const inquirer = require('inquirer');
 const path = require('path');
@@ -160,11 +159,9 @@ async function run(args: Array<string>) {
 
   const opts = command.options || [];
 
-  const { _, ...flags } = camelcaseKeys(
-    minimist(args, {
-      string: opts.map(opt => opt.name),
-    })
-  );
+  const { _, ...flags } = minimist(args, {
+    string: opts.map(opt => opt.name),
+  });
 
   if (command.adjustOptions) command.adjustOptions(flags);
 

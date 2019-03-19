@@ -95,9 +95,22 @@ it('creates config', () => {
     },
     'android'
   );
+  const configWithoutHMR = getConfig(
+    configFilePath,
+    {
+      dev: true,
+      root: path.resolve(__dirname, 'fixtures'),
+      disableHotReloading: true,
+    },
+    'ios'
+  );
 
   expect(replacePathsInObject(fixWorkers(iosConfig))).toMatchSnapshot(
     'ios config'
+  );
+
+  expect(replacePathsInObject(fixWorkers(configWithoutHMR))).toMatchSnapshot(
+    'ios config with hot reloading disabled'
   );
 
   expect(

@@ -33,3 +33,19 @@ Object {
   ],
 }
 `;
+
+exports[`does not include "hot" plugins when HMR is disabled 1`] = `
+Object {
+  "plugins": Array [
+    "<<REPLACED>>/src/utils/fixRequireIssues.js",
+  ],
+  "presets": Array [
+    Array [
+      "<<NODE_MODULE>>/metro-react-native-babel-preset/src/index.js",
+      Object {
+        "disableImportExportTransform": true,
+      },
+    ],
+  ],
+}
+`;

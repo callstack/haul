@@ -14,7 +14,8 @@ Options:
   --config [string]                Path to config file, eg. haul.config.js, haul.config.js by
                                    default
   --eager [parse]                  Disable lazy building for platforms (list is separated by ','),
-                                   'false' by default"
+                                   'false' by default
+  --hot-reloading [true|false]     Enables hot reloading, true by default"
 `;
 
 exports[`display help 1`] = `
