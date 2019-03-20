@@ -109,9 +109,12 @@ it('creates config', () => {
     'ios config'
   );
 
-  expect(replacePathsInObject(fixWorkers(configWithoutHMR))).toMatchSnapshot(
-    'ios config with hot reloading disabled'
-  );
+  expect(
+    snapshotDiff(
+      replacePathsInObject(fixWorkers(iosConfig)),
+      replacePathsInObject(fixWorkers(configWithoutHMR))
+    )
+  ).toMatchSnapshot('ios config with hot reloading disabled');
 
   expect(
     snapshotDiff(
