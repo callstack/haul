@@ -6,7 +6,7 @@
  */
 /* eslint-disable no-param-reassign */
 
-import type { Logger, Platform } from '../types';
+import type { ConfigOptions, EnvOptions, Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -20,24 +20,6 @@ const getBabelConfig = require('./getBabelConfig');
 const getPolyfills = require('./getPolyfills');
 const loggerInst = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
-
-type ConfigOptions = {|
-  root: string,
-  assetsDest: string,
-  dev: boolean,
-  minify?: boolean,
-  bundle?: boolean,
-  port?: number,
-  providesModuleNodeModules?: (string | { name: string, directory: string })[],
-  hasteOptions?: *,
-  initializeCoreLocation?: string,
-  disableHotReloading?: boolean,
-|};
-
-type EnvOptions = {|
-  ...ConfigOptions,
-  platform: Platform,
-|};
 
 type WebpackPlugin = {
   apply: (typeof webpack) => void,
