@@ -1,7 +1,7 @@
 /**
  * Copyright 2017-present, Callstack.
  * All rights reserved.
- * 
+ *
  * @flow
  */
 
@@ -60,7 +60,10 @@ module.exports = function getRequestBundleData(
   // already separated by platform)
 
   // $FlowFixMe - Missing match result props: https://github.com/facebook/flow/issues/3554
-  const basename = request.path.substring(1, match.index);
+  let basename = request.path.substring(1, match.index);
+  if (basename.endsWith(`.${platform}`)) {
+    basename = basename.split(`.${platform}`).join('');
+  }
   const filename = `${basename}.${platform}.bundle`;
 
   return {

@@ -31,7 +31,6 @@ First thing you need to do is to add the following code snipped at the top of `A
 
 ```diff
 // index.js
-+ import 'haul/hot/patch';
 + import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -49,15 +48,12 @@ const MyApp = StackNavigator({
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
 
-`import 'haul/hot/patch'` must be placed before anything else, since __the code in that file must be executed at the very beginning!__
-
 ---
 
 Now, if you're defining your screens using `screen` property, you must replace it with `getScreen` and convert the value to a function:
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -77,11 +73,12 @@ const MyApp = StackNavigator({
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
 
-Then, wrap those screen factories with `makeHot` call and pass the name of the screen as a second argument:
+Since a comparison is made of the results of `getScreen` each time the drawer is toggled, we need to make sure that subsequent calls of our function return the same value. 
+
+To do this, we need to create our `HotViews` then provide them as a result to `getScreen`.  
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,
@@ -91,15 +88,22 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './src/HomeScreen';
 import SecondScreen from './src/SecondScreen';
 
++ const HotViews = {
++   Home: makeHot(() => HomeScreen, 'Home'),
++   Second: makeHot(() => SecondScreen, 'Second')
++ };
+
 const MyApp = StackNavigator({
 -   Home: { getScreen: () => HomeScreen },
 -   Second: { getScreen: () => SecondScreen },
-+   Home: { getScreen: makeHot(() => HomeScreen, 'Home') },
-+   Second: { getScreen: makeHot(() => SecondScreen, 'Second') },
++   Home: { getScreen: HotViews.Home },
++   Second: { getScreen: HotViews.Second },
 });
 
 AppRegistry.registerComponent('MyApp', () => MyApp);
 ```
+
+> When doing this it ensures that `HotViews.Home() === HotViews.Home()` so that unnecessary re-renders do not occur.
 
 ---
 
@@ -108,7 +112,6 @@ Place the following code snipped at the end of the file:
 
 ```diff
 // index.js
-import 'haul/hot/patch';
 import { makeHot, clearCacheFor, redraw } from 'haul/hot';
 import {
   AppRegistry,

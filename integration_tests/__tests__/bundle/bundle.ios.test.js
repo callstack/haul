@@ -6,10 +6,10 @@
  */
 
 const fs = require('fs');
-const { run } = require('../../utils');
+const { run, yarnCommand } = require('../../utils');
 const { bundleForPlatform, TEST_PROJECT_DIR, cleanup } = require('./utils');
 
-beforeAll(() => run('yarn --mutex network', TEST_PROJECT_DIR));
+beforeAll(() => run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR));
 beforeEach(() => cleanup('ios'));
 afterAll(() => cleanup('ios'));
 

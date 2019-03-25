@@ -6,10 +6,11 @@
  */
 /* eslint-disable no-param-reassign */
 
-import type { Logger, Platform } from '../types';
+import type { ConfigOptions, EnvOptions, Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
+const os = require('os');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
@@ -17,24 +18,8 @@ const HasteResolver = require('../resolvers/HasteResolver');
 const moduleResolve = require('./resolveModule');
 const getBabelConfig = require('./getBabelConfig');
 const getPolyfills = require('./getPolyfills');
-const loggerUtil = require('../logger');
+const loggerInst = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
-
-type ConfigOptions = {|
-  root: string,
-  dev: boolean,
-  minify?: boolean,
-  bundle?: boolean,
-  port?: number,
-  providesModuleNodeModules?: string[],
-  hasteOptions?: *,
-  initializeCoreLocation?: string,
-|};
-
-type EnvOptions = {|
-  ...ConfigOptions,
-  platform: Platform,
-|};
 
 type WebpackPlugin = {
   apply: (typeof webpack) => void,
@@ -57,6 +42,7 @@ type WebpackConfig = {
     namedModules: boolean,
     concatenateModules: boolean,
   },
+  stats: string,
 };
 
 type WebpackConfigFactory = EnvOptions => WebpackConfig | WebpackConfig;
@@ -69,23 +55,25 @@ type DEPRECATEDWebpackConfigFactory = (
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = ({
-  platform,
-  root,
-  dev,
-  minify,
-  bundle,
-  port,
-  providesModuleNodeModules,
-  hasteOptions,
-}): WebpackConfig => {
-  // Getting Minor version
+const getDefaultConfig = (options: EnvOptions): WebpackConfig => {
+  const {
+    platform,
+    root,
+    assetsDest,
+    dev,
+    minify,
+    bundle,
+    port,
+    providesModuleNodeModules,
+    hasteOptions,
+    disableHotReloading,
+  } = options;
   return {
     mode: dev ? 'development' : 'production',
     context: root,
     entry: [],
     output: {
-      path: path.join(root),
+      path: assetsDest || path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
     },
@@ -95,11 +83,26 @@ const getDefaultConfig = ({
         {
           test: /\.js$/,
           // eslint-disable-next-line no-useless-escape
-          exclude: /node_modules(?!.*[\/\\](react|@expo|pretty-format|haul|metro))/,
+          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|haul|metro))/,
           use: [
             {
+              loader: require.resolve('cache-loader'),
+              options: {
+                cacheDirectory: path.join(
+                  root,
+                  'node_modules/.cache/cache-loader'
+                ),
+              },
+            },
+            {
+              loader: require.resolve('thread-loader'),
+              options: {
+                workers: Math.max(os.cpus().length - 1, 1),
+              },
+            },
+            {
               loader: require.resolve('babel-loader'),
-              options: Object.assign({}, getBabelConfig(root), {
+              options: Object.assign({}, getBabelConfig(root, options), {
                 /**
                  * to improve the rebuild speeds
                  * This enables caching results in ./node_modules/.cache/babel-loader/
@@ -146,7 +149,9 @@ const getDefaultConfig = ({
     ].concat(
       dev
         ? [
-            new webpack.HotModuleReplacementPlugin(),
+            ...(disableHotReloading
+              ? []
+              : [new webpack.HotModuleReplacementPlugin()]),
             new webpack.EvalSourceMapDevToolPlugin({
               module: true,
             }),
@@ -162,10 +167,10 @@ const getDefaultConfig = ({
           ]
         : [
             /**
-               * By default, sourcemaps are only generated with *.js files
-               * We need to use the plugin to configure *.bundle (Android, iOS - development)
-               * and *.jsbundle (iOS - production) to emit sourcemap
-               */
+             * By default, sourcemaps are only generated with *.js files
+             * We need to use the plugin to configure *.bundle (Android, iOS - development)
+             * and *.jsbundle (iOS - production) to emit sourcemap
+             */
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
@@ -190,9 +195,20 @@ const getDefaultConfig = ({
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: providesModuleNodeModules
-            ? providesModuleNodeModules.map(_ => moduleResolve(root, _))
-            : [moduleResolve(root, 'react-native')],
+          directories: (providesModuleNodeModules || [
+            'react-native',
+          ]).map(_ => {
+            if (typeof _ === 'string') {
+              if (_ === 'react-native') {
+                return path.join(
+                  moduleResolve(root, 'react-native'),
+                  'Libraries'
+                );
+              }
+              return moduleResolve(root, _);
+            }
+            return path.join(moduleResolve(root, _.name), _.directory);
+          }),
           hasteOptions: hasteOptions || {},
         }),
         /**
@@ -225,6 +241,7 @@ const getDefaultConfig = ({
      * Set target to webworker as it's closer to RN environment than `web`.
      */
     target: 'webworker',
+    stats: 'verbose',
   };
 };
 
@@ -232,16 +249,17 @@ const getDefaultConfig = ({
  * Return React Native config
  *
  * @deprecated
-*/
+ */
 function DEPRECATEDMakeReactNativeConfig(
   userWebpackConfig: DEPRECATEDWebpackConfigFactory,
   options: ConfigOptions,
   platform: Platform
 ) {
-  const { root, dev, minify, bundle, port } = options;
+  const { root, assetsDest, dev, minify, bundle, port } = options;
 
   const env = {
     root,
+    assetsDest,
     dev,
     minify,
     platform,
@@ -277,7 +295,7 @@ function makeReactNativeConfig(
   userWebpackConfig: WebpackConfigFactory,
   options: ConfigOptions,
   platform: Platform,
-  logger: Logger = loggerUtil
+  logger: Logger = loggerInst
 ): WebpackConfig {
   /**
    * We should support also the old format of config
@@ -295,7 +313,7 @@ function makeReactNativeConfig(
 
   if (isLegacy) {
     logger.warn(
-      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/master/docs/Configuration.md'
+      'You using a deprecated style of the configuration. Please follow the docs for the upgrade. See https://github.com/callstack/haul/blob/next/docs/Configuration.md'
     );
 
     return DEPRECATEDMakeReactNativeConfig(
@@ -305,15 +323,25 @@ function makeReactNativeConfig(
     );
   }
 
-  const { root, dev, minify, bundle, port } = options;
+  const {
+    root,
+    assetsDest,
+    dev,
+    minify,
+    bundle,
+    port,
+    disableHotReloading,
+  } = options;
 
   const env = {
     root,
+    assetsDest,
     dev,
     minify,
     platform,
     bundle,
     port,
+    disableHotReloading,
   };
 
   const {
@@ -347,16 +375,24 @@ function injectPolyfillIntoEntry({
   entry: userEntry,
   root,
   initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
+  dev = true,
+  disableHotReloading = false,
 }: {
   entry: WebpackEntry,
   root: string,
   initializeCoreLocation?: string,
+  dev?: boolean,
+  disableHotReloading?: boolean,
 }) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
-    require.resolve('./polyfillEnvironment.js'),
   ];
+
+  if (dev && !disableHotReloading) {
+    reactNativeHaulEntries.push(require.resolve('./polyfillEnvironment.js'));
+    reactNativeHaulEntries.push(require.resolve('../../hot/patch.js'));
+  }
 
   return makeWebpackEntry(userEntry, reactNativeHaulEntries);
 }
@@ -409,6 +445,8 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
         root: options.root,
         initializeCoreLocation: options.initializeCoreLocation,
         entry,
+        dev: options.dev,
+        disableHotReloading: options.disableHotReloading,
       }),
       name: options.platform,
     };

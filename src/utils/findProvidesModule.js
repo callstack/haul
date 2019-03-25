@@ -17,6 +17,7 @@ const defaultOpts = {
     '__fixtures__',
     'react-packager',
     'androidTest',
+    'scripts',
   ],
   // An array of platform extensions to look for when locating
   // modules
@@ -51,8 +52,9 @@ const getPlatformFileName = (fileName, platforms) => {
  * Returns name of the module provided by given file (if present)
  */
 const getProvidedModuleName = fileName => {
-  const content = fs.readFileSync(fileName, 'utf-8');
-  return (/\* @providesModule ([\w.-]+)/.exec(content) || [])[1];
+  // The provided module is the file name (excluding OS/platform extensions)
+  const segments = fileName.split(path.sep);
+  return segments[segments.length - 1];
 };
 
 /**
@@ -92,7 +94,7 @@ function findProvidesModule(directories, opts = {}) {
         return;
       }
 
-      const moduleName = getProvidedModuleName(dir);
+      const moduleName = getProvidedModuleName(fileName);
       if (!moduleName) {
         return;
       }

@@ -1,6 +1,6 @@
 /* @flow */
 import path from 'path';
-import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
+import { replacePathsInObject, fixWorkers } from 'jest/helpers'; // eslint-disable-line import/no-unresolved
 import snapshotDiff from 'snapshot-diff';
 import getConfig from '../getConfig';
 
@@ -95,13 +95,31 @@ it('creates config', () => {
     },
     'android'
   );
+  const configWithoutHMR = getConfig(
+    configFilePath,
+    {
+      dev: true,
+      root: path.resolve(__dirname, 'fixtures'),
+      disableHotReloading: true,
+    },
+    'ios'
+  );
 
-  expect(replacePathsInObject(iosConfig)).toMatchSnapshot('ios config');
+  expect(replacePathsInObject(fixWorkers(iosConfig))).toMatchSnapshot(
+    'ios config'
+  );
 
   expect(
     snapshotDiff(
-      replacePathsInObject(iosConfig),
-      replacePathsInObject(androidConfig)
+      replacePathsInObject(fixWorkers(iosConfig)),
+      replacePathsInObject(fixWorkers(configWithoutHMR))
+    )
+  ).toMatchSnapshot('ios config with hot reloading disabled');
+
+  expect(
+    snapshotDiff(
+      replacePathsInObject(fixWorkers(iosConfig)),
+      replacePathsInObject(fixWorkers(androidConfig))
     )
   ).toMatchSnapshot('diff ios/android config');
 });

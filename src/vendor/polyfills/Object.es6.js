@@ -63,3 +63,11 @@ Object.assign = function(target, sources) {
 
   return target;
 };
+
+Object.setPrototypeOf =
+  Object.setPrototypeOf ||
+  ((obj, proto) => {
+    // eslint-disable-next-line no-proto,no-param-reassign
+    obj.__proto__ = proto;
+    return obj;
+  });

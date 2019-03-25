@@ -21,6 +21,7 @@ describe('makeReactNativeConfig', () => {
       {
         dev: true,
         root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
       },
       'ios'
     );
@@ -29,6 +30,7 @@ describe('makeReactNativeConfig', () => {
       {
         dev: true,
         root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
       },
       'android'
     );
@@ -48,6 +50,7 @@ describe('makeReactNativeConfig', () => {
       {
         dev: true,
         root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
       },
       'ios'
     );

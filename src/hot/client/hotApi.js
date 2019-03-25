@@ -28,79 +28,66 @@ type State = {
  */
 export function makeHot(initialRootFactory: Function, id?: string = 'default') {
   instances[id] = [];
+  class HotWrapper extends Component<*, State> {
+    state = {
+      error: null,
+    };
 
-  return () => {
-    class HotWrapper extends Component<*, State> {
-      state = {
-        error: null,
-      };
+    rootComponentFactory: ?Function;
 
-      rootComponentFactory: ?Function;
+    constructor(props: *) {
+      super(props);
 
-      constructor(props: *) {
-        super(props);
+      const pendingRedraw = pendingRedraws[id];
+      delete pendingRedraws[id];
 
-        const pendingRedraw = pendingRedraws[id];
-        delete pendingRedraws[id];
-
-        instances[id].push(this);
-        this.rootComponentFactory = pendingRedraw || null;
-      }
-
-      _resetError() {
-        this.setState({ error: null });
-        resetRedBox();
-      }
-
-      _redraw(rootComponentFactory?: Function) {
-        if (rootComponentFactory) {
-          this.rootComponentFactory = rootComponentFactory;
-        }
-
-        this._resetError();
-        deepForceUpdate(this);
-      }
-
-      componentDidMount() {
-        if (typeof global.__REACT_HOT_LOADER__ === 'undefined') {
-          console.error(
-            'Haul HMR: It appears that "haul-hmr/patch" ' +
-              'did not run immediately before the app started. Make sure that it ' +
-              'runs before any other code.'
-          );
-        }
-      }
-
-      componentWillReceiveProps() {
-        this._resetError();
-        deepForceUpdate(this);
-      }
-
-      componentWillUnmount() {
-        instances[id] = instances[id].filter(instance => instance !== this);
-      }
-
-      componentDidCatch(error: Object) {
-        this.setState({
-          error,
-        });
-      }
-
-      render() {
-        if (this.state.error) {
-          console.error(this.state.error);
-          return null;
-        }
-
-        const Root = this.rootComponentFactory
-          ? this.rootComponentFactory()
-          : initialRootFactory();
-        return <Root {...this.props} />;
-      }
+      instances[id].push(this);
+      this.rootComponentFactory = pendingRedraw || null;
     }
 
-    return hoistNonReactStatic(HotWrapper, initialRootFactory());
-  };
+    _resetError() {
+      this.setState({ error: null });
+      resetRedBox();
+    }
+
+    _redraw(rootComponentFactory?: Function) {
+      if (rootComponentFactory) {
+        this.rootComponentFactory = rootComponentFactory;
+      }
+
+      this._resetError();
+      deepForceUpdate(this);
+    }
+
+    componentWillReceiveProps() {
+      this._resetError();
+      deepForceUpdate(this);
+    }
+
+    componentWillUnmount() {
+      instances[id] = instances[id].filter(instance => instance !== this);
+    }
+
+    componentDidCatch(error: Object) {
+      this.setState({
+        error,
+      });
+    }
+
+    render() {
+      if (this.state.error) {
+        console.error(this.state.error);
+        return null;
+      }
+
+      const Root = this.rootComponentFactory
+        ? this.rootComponentFactory()
+        : initialRootFactory();
+      return <Root {...this.props} />;
+    }
+  }
+
+  return () => hoistNonReactStatic(HotWrapper, initialRootFactory());
 }
 
 /**
