@@ -5,7 +5,7 @@
  * @flow
  */
 
-require('../src/hot/client/polyfillEnvironment');
+require('./polyfillEnvironment');
 
 /**
  * Apply React patches in development by importing `haul/hot/patch`.
