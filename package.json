@@ -118,7 +118,8 @@
           "targets": {
             "node": "current"
           },
-          "useBuiltIns": "entry"
+          "useBuiltIns": "entry",
+          "corejs": 2
         }
       ]
     ],
