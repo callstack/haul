@@ -390,7 +390,6 @@ function injectPolyfillIntoEntry({
   ];
 
   if (dev && !disableHotReloading) {
-    reactNativeHaulEntries.push(require.resolve('./polyfillEnvironment.js'));
     reactNativeHaulEntries.push(require.resolve('../../hot/patch.js'));
   }
 
