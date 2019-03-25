@@ -79,10 +79,12 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
     webSocketProxy(webSocketServer, '/debugger-proxy')
   );
 
-  hotMiddleware(compiler, {
-    nativeProxy: webSocketProxy(webSocketServer, '/hot'),
-    haulProxy: webSocketProxy(webSocketServer, '/haul-hmr'),
-  });
+  if (!configOptions.disableHotReloading) {
+    hotMiddleware(compiler, {
+      nativeProxy: webSocketProxy(webSocketServer, '/hot'),
+      haulProxy: webSocketProxy(webSocketServer, '/haul-hmr'),
+    });
+  }
 
   // Middlewares
   appHandler

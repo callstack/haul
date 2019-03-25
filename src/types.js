@@ -29,6 +29,24 @@ export type Command = {
   adjustOptions?: (options: Object) => void,
 };
 
+export type ConfigOptions = {|
+  root: string,
+  assetsDest: string,
+  dev: boolean,
+  minify?: boolean,
+  bundle?: boolean,
+  port?: number,
+  providesModuleNodeModules?: (string | { name: string, directory: string })[],
+  hasteOptions?: *,
+  initializeCoreLocation?: string,
+  disableHotReloading?: boolean,
+|};
+
+export type EnvOptions = {|
+  ...ConfigOptions,
+  platform: Platform,
+|};
+
 export type WebpackStats = {
   hasWarnings: () => boolean,
   hasErrors: () => boolean,
