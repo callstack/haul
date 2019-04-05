@@ -59,13 +59,12 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
 - First value
 + Second value
 
-@@ -9,15 +9,13 @@
+@@ -9,14 +9,13 @@
       \\"<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js\\",
       \\"<<REPLACED>>/src/vendor/polyfills/Array.es6.js\\",
       \\"<<REPLACED>>/src/vendor/polyfills/Object.es7.js\\",
       \\"<<REPLACED>>/src/vendor/polyfills/babelHelpers.js\\",
       \\"<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js\\",
--     \\"<<REPLACED>>/src/utils/polyfillEnvironment.js\\",
 -     \\"<<REPLACED>>/hot/patch.js\\",
       \\"./index.js\\",
     ],
@@ -76,7 +75,7 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
         Object {
           \\"parser\\": Object {
             \\"requireEnsure\\": false,
-@@ -40,11 +38,11 @@
+@@ -39,11 +38,11 @@
               },
             },
             Object {
@@ -89,7 +88,7 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
                   \\"<<REPLACED>>/src/utils/fixRequireIssues.js\\",
                   \\"<<NODE_MODULE>>/react-hot-loader/babel.js\\",
                   \\"<<REPLACED>>/src/hot/babelPlugin.js\\",
-@@ -90,11 +88,11 @@
+@@ -89,11 +88,11 @@
             },
             \\"warningsFilter\\": [Function anonymous],
           },
@@ -102,7 +101,7 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
       \\"filename\\": \\"index.ios.bundle\\",
       \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
-@@ -106,39 +104,25 @@
+@@ -105,39 +104,25 @@
         \\"pathCache\\": Object {},
         \\"primed\\": false,
       },
@@ -145,7 +144,7 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
         \\"moduleFilenameTemplate\\": \\"webpack://[namespace]/[resourcePath]\\",
         \\"namespace\\": \\"\\",
         \\"options\\": Object {
-@@ -147,18 +131,10 @@
+@@ -146,18 +131,10 @@
         },
         \\"sourceMapFilename\\": \\"[file].map\\",
         \\"sourceMappingURLComment\\": \\"
