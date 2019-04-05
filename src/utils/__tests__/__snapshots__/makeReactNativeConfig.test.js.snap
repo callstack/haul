@@ -53,3 +53,114 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
       \\"mainFields\\": Array [
         \\"react-native\\","
 `;
+
+exports[`makeReactNativeConfig generates production config: diff dev/prod config 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -9,14 +9,13 @@
+      \\"<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/Array.es6.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/Object.es7.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/babelHelpers.js\\",
+      \\"<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js\\",
+-     \\"<<REPLACED>>/hot/patch.js\\",
+      \\"./index.js\\",
+    ],
+-   \\"mode\\": \\"development\\",
++   \\"mode\\": \\"production\\",
+    \\"module\\": Object {
+      \\"rules\\": Array [
+        Object {
+          \\"parser\\": Object {
+            \\"requireEnsure\\": false,
+@@ -39,11 +38,11 @@
+              },
+            },
+            Object {
+              \\"loader\\": \\"<<NODE_MODULE>>/babel-loader/lib/index.js\\",
+              \\"options\\": Object {
+-               \\"cacheDirectory\\": true,
++               \\"cacheDirectory\\": false,
+                \\"extends\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc\\",
+                \\"plugins\\": Array [
+                  \\"<<REPLACED>>/src/utils/fixRequireIssues.js\\",
+                  \\"<<NODE_MODULE>>/react-hot-loader/babel.js\\",
+                  \\"<<REPLACED>>/src/hot/babelPlugin.js\\",
+@@ -89,11 +88,11 @@
+            },
+            \\"warningsFilter\\": [Function anonymous],
+          },
+        },
+      ],
+-     \\"namedModules\\": true,
++     \\"namedModules\\": false,
+    },
+    \\"output\\": Object {
+      \\"filename\\": \\"index.ios.bundle\\",
+      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+      \\"publicPath\\": \\"http://localhost:8081/\\",
+@@ -105,39 +104,25 @@
+        \\"pathCache\\": Object {},
+        \\"primed\\": false,
+      },
+      DefinePlugin {
+        \\"definitions\\": Object {
+-         \\"__DEV__\\": true,
++         \\"__DEV__\\": false,
+          \\"process.env\\": Object {
+-           \\"NODE_ENV\\": \\"\\\\\\"development\\\\\\"\\",
++           \\"NODE_ENV\\": \\"\\\\\\"production\\\\\\"\\",
+          },
+        },
+      },
+      LoaderOptionsPlugin {
+        \\"options\\": Object {
+-         \\"debug\\": true,
++         \\"debug\\": false,
+          \\"minimize\\": false,
+          \\"test\\": Object {
+            \\"test\\": [Function test],
+          },
+        },
+      },
+-     HotModuleReplacementPlugin {
+-       \\"fullBuildTimeout\\": 200,
+-       \\"multiStep\\": undefined,
+-       \\"options\\": Object {},
+-       \\"requestTimeout\\": 10000,
+-     },
+-     EvalSourceMapDevToolPlugin {
+-       \\"options\\": Object {
+-         \\"module\\": true,
+-       },
+-     },
+-     NamedModulesPlugin {
+-       \\"options\\": Object {},
+-     },
+      SourceMapDevToolPlugin {
+        \\"fallbackModuleFilenameTemplate\\": \\"webpack://[namespace]/[resourcePath]?[hash]\\",
+        \\"moduleFilenameTemplate\\": \\"webpack://[namespace]/[resourcePath]\\",
+        \\"namespace\\": \\"\\",
+        \\"options\\": Object {
+@@ -146,18 +131,10 @@
+        },
+        \\"sourceMapFilename\\": \\"[file].map\\",
+        \\"sourceMappingURLComment\\": \\"
+  //# sourceMappingURL=[url]\\",
+      },
+-     BannerPlugin {
+-       \\"banner\\": [Function anonymous],
+-       \\"options\\": Object {
+-         \\"banner\\": \\"if (this && !this.self) { this.self = this; };
+- \\",
+-         \\"raw\\": true,
+-       },
+-     },
+    ],
+    \\"resolve\\": Object {
+      \\"alias\\": Object {
+        \\"react-proxy\\": \\"@zamotany/react-proxy\\",
+      },"
+`;

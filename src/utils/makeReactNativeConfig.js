@@ -234,7 +234,7 @@ const getDefaultConfig = (options: EnvOptions): WebpackConfig => {
           sourceMap: true,
         }),
       ],
-      namedModules: true,
+      namedModules: dev,
       concatenateModules: true,
     },
     /**
