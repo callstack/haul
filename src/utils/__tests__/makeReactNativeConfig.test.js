@@ -62,6 +62,34 @@ describe('makeReactNativeConfig', () => {
       ])
     );
   });
+
+  it('generates production config', () => {
+    const webpackConfig = require('./fixtures/haul.config.js');
+    const devConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    const prodConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: false,
+        root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    expect(
+      snapshotDiff(
+        replacePathsInObject(devConfig),
+        replacePathsInObject(prodConfig)
+      )
+    ).toMatchSnapshot('diff dev/prod config');
+  });
 });
 
 describe('injects polyfill into different entries', () => {
