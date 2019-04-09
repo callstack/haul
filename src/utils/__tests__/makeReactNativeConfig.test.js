@@ -57,7 +57,7 @@ describe('makeReactNativeConfig', () => {
 
     expect(config.entry).toEqual(
       expect.arrayContaining([
-        expect.stringMatching(/polyfillEnvironment\.js/),
+        expect.stringMatching(/hot\/patch\.js/),
         './index.js',
       ])
     );
