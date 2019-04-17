@@ -10,7 +10,7 @@
     "prepare1": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
     "add-contributor": "all-contributors add",
-    "test": "lerna exec --parallel \"jest\""
+    "test": "jest"
   },
   "dependencies": {
     "chalk": "^2.4.2",
