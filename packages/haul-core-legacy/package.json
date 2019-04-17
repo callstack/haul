@@ -7,12 +7,7 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "flow": "flow --include-warnings",
-    "jest": "jest",
-    "test": "yarn flow && yarn lint && yarn jest",
-    "test:ci": "yarn flow && yarn lint && yarn jest -- -i",
-    "format": "eslint --fix .",
-    "add-contributor": "all-contributors add"
+    "flow": "flow --include-warnings"
   },
   "author": "Mike Grabowski <mike@callstack.io>",
   "repository": "github:callstack-io/haul",
@@ -80,26 +75,12 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "all-contributors-cli": "^4.5.1",
-    "babel-jest": "^23.6.0",
     "flow-bin": "^0.65.0",
-    "jest": "^23.6.0",
     "metro-react-native-babel-preset": "^0.45",
     "react-native": "^0.57.0",
+    "jest": "^24.7.1",
     "rimraf": "^2.6.1",
     "snapshot-diff": "^0.3.0",
     "traverse": "^0.6.6"
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
-    "testPathIgnorePatterns": [
-      "/integration_tests/.*/__tests__"
-    ],
-    "moduleNameMapper": {
-      "^jest/(.*)": "<rootDir>/jest/$1"
-    },
-    "testMatch": [
-      "**/*.test.js"
-    ]
   }
 }

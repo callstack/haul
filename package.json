@@ -8,7 +8,9 @@
     "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../.babelrc\"",
     "build:def": "lerna exec --parallel \"tsc --emitDeclarationOnly --outDir build\"",
     "prepare1": "yarn build:source && yarn build:def",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "add-contributor": "all-contributors add",
+    "test": "lerna exec --parallel \"jest\""
   },
   "dependencies": {
     "lerna": "^3.13.2"
@@ -24,9 +26,11 @@
     "@callstack/eslint-config": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
+    "all-contributors-cli": "^4.5.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "eslint": "^5.16.0",
+    "jest": "^24.7.1",
     "typescript": "^3.4.3"
   }
 }

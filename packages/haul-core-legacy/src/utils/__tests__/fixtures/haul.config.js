@@ -1,4 +1,4 @@
-const { createWebpackConfig } = require('haul'); //eslint-disable-line
+const { createWebpackConfig } = require('../../../index');
 
 module.exports = {
   webpack: createWebpackConfig(() => ({
