@@ -13,11 +13,4 @@
     "declarationMap": true,
     "typeRoots": ["node_modules/@types", "typings"]
   },
-  "include": [
-    "packages/*/src/**/*.ts"
-  ],
-  "exclude": [
-    "**/__tests__/**",
-    "packages/haul-core-legacy/**/*"
-  ]
 }

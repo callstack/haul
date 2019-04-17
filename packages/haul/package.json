@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-rc.15",
+  "name": "haul",
+  "description": "Haul is a new command line tools for React Native",
+  "bin": {
+    "haul": "./bin/haul.js"
+  },
+  "dependencies": {
+    "yargs": "^13.2.2",
+    "ws": "^6.2.1",
+    "haul-inspector-events": "1.0.0-rc.15"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.4",
+    "@types/yargs": "^13.0.0",
+    "@types/ws": "^6.0.1"
+  }
+}

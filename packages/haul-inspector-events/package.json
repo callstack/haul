@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0-rc.15",
+  "name": "haul-inspector-events",
+  "description": "Events source for Haul Inspector",
+  "main": "build/index.js"
+}

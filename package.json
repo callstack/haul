@@ -4,10 +4,10 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint --ext '.js,.ts' './packages/*/src/**/*'",
-    "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../.babelrc\"",
-    "build:def": "lerna exec --parallel \"tsc --emitDeclarationOnly --outDir build\"",
-    "prepare1": "yarn build:source && yarn build:def",
+    "lint": "eslint --ext '.js,.ts' './packages'",
+    "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../babel.config.js\"",
+    "build:def": "lerna exec --ignore 'haul-core-legacy' \"tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./build\"",
+    "prepare": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
     "add-contributor": "all-contributors add",
     "test": "jest"

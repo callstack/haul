@@ -3,3 +3,5 @@
 **/src/vendor/**
 **/fixtures/**
 **/assets/**
+**/node_modules/**
+**/build/**

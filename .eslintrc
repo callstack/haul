@@ -1,9 +1,3 @@
 {
-  "extends": "@callstack/eslint-config",
-  "overrides": [{
-    "files": "packages/haul-core-legacy/**/*.js",
-    "rules": {
-      "no-console": 0
-    }
-  }]
+  "extends": "@callstack/eslint-config/node"
 }
