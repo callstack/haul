@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2015",
+    "lib": ["es2016"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "build",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "typeRoots": ["node_modules/@types", "typings"]
+  },
+  "include": [
+    "packages/*/src/**/*.ts"
+  ],
+  "exclude": [
+    "**/__tests__/**",
+    "packages/haul-core-legacy/**/*"
+  ]
+}

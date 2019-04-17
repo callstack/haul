@@ -1,4 +1,5 @@
-flow-typed/**
-coverage/**
-src/vendor/**
-fixtures/**
+**/flow-typed/**
+**/coverage/**
+**/src/vendor/**
+**/fixtures/**
+**/assets/**
