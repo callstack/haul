@@ -80,7 +80,6 @@
     "react-native": "^0.57.0",
     "jest": "^24.7.1",
     "rimraf": "^2.6.1",
-    "snapshot-diff": "^0.3.0",
-    "traverse": "^0.6.6"
+    "snapshot-diff": "^0.3.0"
   }
 }

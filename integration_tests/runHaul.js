@@ -10,7 +10,10 @@
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 
-const BIN_PATH = path.resolve(__dirname, '../bin/cli.js');
+const BIN_PATH = path.resolve(
+  __dirname,
+  '../packages/haul-core-legacy/bin/cli.js'
+);
 
 type RunHaulOptions = {
   nodePath?: string,

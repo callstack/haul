@@ -3,9 +3,9 @@
 exports[`creates new config when no .babelrc found 1`] = `
 Object {
   "plugins": Array [
-    "<<REPLACED>>/src/utils/fixRequireIssues.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js",
     "<<NODE_MODULE>>/react-hot-loader/babel.js",
-    "<<REPLACED>>/src/hot/babelPlugin.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/hot/babelPlugin.js",
   ],
   "presets": Array [
     Array [
@@ -21,7 +21,7 @@ Object {
 exports[`does not include "hot" plugins in production 1`] = `
 Object {
   "plugins": Array [
-    "<<REPLACED>>/src/utils/fixRequireIssues.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js",
   ],
   "presets": Array [
     Array [
@@ -37,7 +37,7 @@ Object {
 exports[`does not include "hot" plugins when HMR is disabled 1`] = `
 Object {
   "plugins": Array [
-    "<<REPLACED>>/src/utils/fixRequireIssues.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js",
   ],
   "presets": Array [
     Array [

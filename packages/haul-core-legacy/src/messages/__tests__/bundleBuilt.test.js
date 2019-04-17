@@ -24,6 +24,10 @@ const statsWithWithWarnings = {
 };
 
 describe('message bundleBuild for all platforms', () => {
+  beforeEach(() => {
+    require('chalk').enabled = false;
+  });
+
   it('should match the snapshot without warnings', () => {
     expect(
       message({ stats: statsWithWithoutWarnings, platform: 'all' })

@@ -1,4 +1,4 @@
 module.exports = {
   rootDir: __dirname,
-  projects: ['<rootDir>/packages/*'],
+  projects: ['integration_tests', 'packages/*'],
 };

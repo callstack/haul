@@ -8,12 +8,12 @@ exports[`creates config: diff ios/android config 1`] = `
 @@ -56,18 +56,18 @@
           \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
           \\"use\\": Object {
-            \\"loader\\": \\"<<REPLACED>>/src/loaders/assetLoader.js\\",
+            \\"loader\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/loaders/assetLoader.js\\",
             \\"query\\": Object {
               \\"bundle\\": undefined,
 -             \\"platform\\": \\"ios\\",
 +             \\"platform\\": \\"android\\",
-              \\"root\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+              \\"root\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures\\",
             },
           },
         },
@@ -34,7 +34,7 @@ exports[`creates config: diff ios/android config 1`] = `
     \\"output\\": Object {
 -     \\"filename\\": \\"index.ios.bundle\\",
 +     \\"filename\\": \\"index.android.bundle\\",
-      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+      \\"path\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
     },
     \\"plugins\\": Array [
@@ -56,19 +56,19 @@ exports[`creates config: diff ios/android config 1`] = `
 
 exports[`creates config: ios config 1`] = `
 Object {
-  "context": "<<REPLACED>>/src/utils/__tests__/fixtures",
+  "context": "<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures",
   "entry": Array [
-    "<<REPLACED>>/src/vendor/polyfills/Object.es6.js",
-    "<<REPLACED>>/src/vendor/polyfills/console.js",
-    "<<REPLACED>>/src/vendor/polyfills/error-guard.js",
-    "<<REPLACED>>/src/vendor/polyfills/Number.es6.js",
-    "<<REPLACED>>/src/vendor/polyfills/String.prototype.es6.js",
-    "<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js",
-    "<<REPLACED>>/src/vendor/polyfills/Array.es6.js",
-    "<<REPLACED>>/src/vendor/polyfills/Object.es7.js",
-    "<<REPLACED>>/src/vendor/polyfills/babelHelpers.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Object.es6.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/console.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/error-guard.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Number.es6.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/String.prototype.es6.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.prototype.es6.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.es6.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Object.es7.js",
+    "<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/babelHelpers.js",
     "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-    "<<REPLACED>>/hot/patch.js",
+    "<<REPLACED>>/packages/haul-core-legacy/hot/patch.js",
     "./index.js",
   ],
   "mode": "development",
@@ -99,11 +99,11 @@ Object {
             "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
             "options": Object {
               "cacheDirectory": true,
-              "extends": "<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc",
+              "extends": "<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures/.babelrc",
               "plugins": Array [
-                "<<REPLACED>>/src/utils/fixRequireIssues.js",
+                "<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js",
                 "<<NODE_MODULE>>/react-hot-loader/babel.js",
-                "<<REPLACED>>/src/hot/babelPlugin.js",
+                "<<REPLACED>>/packages/haul-core-legacy/src/hot/babelPlugin.js",
               ],
             },
           },
@@ -112,11 +112,11 @@ Object {
       Object {
         "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
         "use": Object {
-          "loader": "<<REPLACED>>/src/loaders/assetLoader.js",
+          "loader": "<<REPLACED>>/packages/haul-core-legacy/src/loaders/assetLoader.js",
           "query": Object {
             "bundle": undefined,
             "platform": "ios",
-            "root": "<<REPLACED>>/src/utils/__tests__/fixtures",
+            "root": "<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures",
           },
         },
       },
@@ -152,7 +152,7 @@ Object {
   },
   "output": Object {
     "filename": "index.ios.bundle",
-    "path": "<<REPLACED>>/src/utils/__tests__/fixtures",
+    "path": "<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures",
     "publicPath": "http://localhost:8081/",
   },
   "plugins": Array [
@@ -248,12 +248,12 @@ exports[`creates config: ios config with hot reloading disabled 1`] = `
 + Second value
 
 @@ -9,11 +9,10 @@
-      \\"<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/Array.es6.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/Object.es7.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/babelHelpers.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.prototype.es6.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.es6.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Object.es7.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/babelHelpers.js\\",
       \\"<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js\\",
--     \\"<<REPLACED>>/hot/patch.js\\",
+-     \\"<<REPLACED>>/packages/haul-core-legacy/hot/patch.js\\",
       \\"./index.js\\",
     ],
     \\"mode\\": \\"development\\",
@@ -262,11 +262,11 @@ exports[`creates config: ios config with hot reloading disabled 1`] = `
 @@ -43,12 +42,10 @@
               \\"options\\": Object {
                 \\"cacheDirectory\\": true,
-                \\"extends\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc\\",
+                \\"extends\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures/.babelrc\\",
                 \\"plugins\\": Array [
-                  \\"<<REPLACED>>/src/utils/fixRequireIssues.js\\",
+                  \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js\\",
 -                 \\"<<NODE_MODULE>>/react-hot-loader/babel.js\\",
--                 \\"<<REPLACED>>/src/hot/babelPlugin.js\\",
+-                 \\"<<REPLACED>>/packages/haul-core-legacy/src/hot/babelPlugin.js\\",
                 ],
               },
             },

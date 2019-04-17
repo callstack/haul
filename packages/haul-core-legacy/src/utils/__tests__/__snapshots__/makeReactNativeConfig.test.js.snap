@@ -8,12 +8,12 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
 @@ -56,18 +56,18 @@
           \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
           \\"use\\": Object {
-            \\"loader\\": \\"<<REPLACED>>/src/loaders/assetLoader.js\\",
+            \\"loader\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/loaders/assetLoader.js\\",
             \\"query\\": Object {
               \\"bundle\\": undefined,
 -             \\"platform\\": \\"ios\\",
 +             \\"platform\\": \\"android\\",
-              \\"root\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+              \\"root\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures\\",
             },
           },
         },
@@ -34,7 +34,7 @@ exports[`makeReactNativeConfig creates config from defaults: diff ios/android co
     \\"output\\": Object {
 -     \\"filename\\": \\"index.ios.bundle\\",
 +     \\"filename\\": \\"index.android.bundle\\",
-      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+      \\"path\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
     },
     \\"plugins\\": Array [
@@ -60,12 +60,12 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
 + Second value
 
 @@ -9,14 +9,13 @@
-      \\"<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/Array.es6.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/Object.es7.js\\",
-      \\"<<REPLACED>>/src/vendor/polyfills/babelHelpers.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.prototype.es6.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Array.es6.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/Object.es7.js\\",
+      \\"<<REPLACED>>/packages/haul-core-legacy/src/vendor/polyfills/babelHelpers.js\\",
       \\"<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js\\",
--     \\"<<REPLACED>>/hot/patch.js\\",
+-     \\"<<REPLACED>>/packages/haul-core-legacy/hot/patch.js\\",
       \\"./index.js\\",
     ],
 -   \\"mode\\": \\"development\\",
@@ -83,11 +83,11 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
               \\"options\\": Object {
 -               \\"cacheDirectory\\": true,
 +               \\"cacheDirectory\\": false,
-                \\"extends\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc\\",
+                \\"extends\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures/.babelrc\\",
                 \\"plugins\\": Array [
-                  \\"<<REPLACED>>/src/utils/fixRequireIssues.js\\",
+                  \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/fixRequireIssues.js\\",
                   \\"<<NODE_MODULE>>/react-hot-loader/babel.js\\",
-                  \\"<<REPLACED>>/src/hot/babelPlugin.js\\",
+                  \\"<<REPLACED>>/packages/haul-core-legacy/src/hot/babelPlugin.js\\",
 @@ -89,11 +88,11 @@
             },
             \\"warningsFilter\\": [Function anonymous],
@@ -99,7 +99,7 @@ exports[`makeReactNativeConfig generates production config: diff dev/prod config
     },
     \\"output\\": Object {
       \\"filename\\": \\"index.ios.bundle\\",
-      \\"path\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures\\",
+      \\"path\\": \\"<<REPLACED>>/packages/haul-core-legacy/src/utils/__tests__/fixtures\\",
       \\"publicPath\\": \\"http://localhost:8081/\\",
 @@ -105,39 +104,25 @@
         \\"pathCache\\": Object {},

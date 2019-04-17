@@ -97,7 +97,7 @@ describe('injects polyfill into different entries', () => {
     const userEntry = './src/index.js';
     const generatedEntry = injectPolyfillIntoEntry({
       entry: userEntry,
-      root: path.resolve('src/utils/__tests__/fixtures'),
+      root: path.join(__dirname, './fixtures'),
     });
 
     if (!Array.isArray(generatedEntry)) {
@@ -113,7 +113,7 @@ describe('injects polyfill into different entries', () => {
     const userEntry = ['./src/index.js', './src/module.js'];
     const generatedEntry = injectPolyfillIntoEntry({
       entry: userEntry,
-      root: path.resolve('src/utils/__tests__/fixtures'),
+      root: path.join(__dirname, './fixtures'),
     });
 
     if (!Array.isArray(generatedEntry)) {
@@ -133,7 +133,7 @@ describe('injects polyfill into different entries', () => {
 
     const generatedEntry = injectPolyfillIntoEntry({
       entry: userEntry,
-      root: path.resolve('src/utils/__tests__/fixtures'),
+      root: path.join(__dirname, './fixtures'),
     });
 
     Object.entries(generatedEntry).forEach(([key, value]) => {

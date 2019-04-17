@@ -13,7 +13,13 @@
     "test": "lerna exec --parallel \"jest\""
   },
   "dependencies": {
-    "lerna": "^3.13.2"
+    "chalk": "^2.4.2",
+    "escape-string-regexp": "^2.0.0",
+    "lerna": "^3.13.2",
+    "node-fetch": "^2.3.0",
+    "rimraf": "^2.6.3",
+    "strip-ansi": "^5.2.0",
+    "traverse": "^0.6.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

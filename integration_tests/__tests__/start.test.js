@@ -12,7 +12,9 @@ const os = require('os');
 const { run, yarnCommand } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
-const { isPortTaken } = require('../../src/utils/haulPortHandler');
+const {
+  isPortTaken,
+} = require('../../packages/haul-core-legacy/src/utils/haulPortHandler');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(

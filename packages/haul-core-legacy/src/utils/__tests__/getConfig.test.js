@@ -9,7 +9,7 @@ const cwd = process.cwd();
 describe('zero config', () => {
   beforeEach(() => {
     // $FlowFixMe
-    process.cwd = () => 'src/utils/__tests__/fixtures';
+    process.cwd = () => path.join(__dirname, './fixtures');
   });
 
   afterEach(() => {

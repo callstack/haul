@@ -1,12 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  setupFilesAfterEnv: [path.join(__dirname, '/jest/setupTestFramework.js')],
-  testPathIgnorePatterns: [
-    path.join(__dirname, '/integration_tests/.*/__tests__'),
-  ],
+  displayName: 'haul-core-legacy',
+  testPathIgnorePatterns: ['fixtures/.*'],
   moduleNameMapper: {
-    '^jest/(.*)': path.join(__dirname, 'jest/$1'),
+    '^jest/(.*)': path.join(__dirname, '../../jest/$1'),
   },
-  testMatch: ['**/*.test.js'],
+  testRegex: '/__tests__/.*\\.(test|spec)\\.js?$',
 };
