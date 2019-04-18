@@ -57,10 +57,38 @@ describe('makeReactNativeConfig', () => {
 
     expect(config.entry).toEqual(
       expect.arrayContaining([
-        expect.stringMatching(/polyfillEnvironment\.js/),
+        expect.stringMatching(/hot\/patch\.js/),
         './index.js',
       ])
     );
+  });
+
+  it('generates production config', () => {
+    const webpackConfig = require('./fixtures/haul.config.js');
+    const devConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: true,
+        root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    const prodConfig = makeReactNativeConfig(
+      webpackConfig,
+      {
+        dev: false,
+        root: path.resolve(__dirname, 'fixtures'),
+        assetsDest: path.resolve(__dirname, 'fixtures'),
+      },
+      'ios'
+    );
+    expect(
+      snapshotDiff(
+        replacePathsInObject(devConfig),
+        replacePathsInObject(prodConfig)
+      )
+    ).toMatchSnapshot('diff dev/prod config');
   });
 });
 

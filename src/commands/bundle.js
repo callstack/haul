@@ -214,7 +214,11 @@ let command = ({
       name: 'progress',
       description:
         'Display bundle compilation progress with different verbosity levels',
-      default: 'compact',
+      default: () => {
+        // Ensure that we don't trip Xcode's error detection. 'verbose' is the
+        // only level that doesn't make Xcode think that the bundle failed.
+        return !process.stdin.isTTY ? 'verbose' : 'compact';
+      },
       example: 'haul bundle --progress minimal',
       choices: [
         {

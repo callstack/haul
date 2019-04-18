@@ -5,7 +5,7 @@ exports[`creates config: diff ios/android config 1`] = `
 - First value
 + Second value
 
-@@ -57,18 +57,18 @@
+@@ -56,18 +56,18 @@
           \\"test\\": /\\\\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/,
           \\"use\\": Object {
             \\"loader\\": \\"<<REPLACED>>/src/loaders/assetLoader.js\\",
@@ -26,7 +26,7 @@ exports[`creates config: diff ios/android config 1`] = `
       \\"minimize\\": false,
       \\"minimizer\\": Array [
         UglifyJsPlugin {
-@@ -93,11 +93,11 @@
+@@ -92,11 +92,11 @@
         },
       ],
       \\"namedModules\\": true,
@@ -39,7 +39,7 @@ exports[`creates config: diff ios/android config 1`] = `
     },
     \\"plugins\\": Array [
       CaseSensitivePathsPlugin {
-@@ -161,11 +161,11 @@
+@@ -160,11 +160,11 @@
     \\"resolve\\": Object {
       \\"alias\\": Object {
         \\"react-proxy\\": \\"@zamotany/react-proxy\\",
@@ -68,7 +68,6 @@ Object {
     "<<REPLACED>>/src/vendor/polyfills/Object.es7.js",
     "<<REPLACED>>/src/vendor/polyfills/babelHelpers.js",
     "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-    "<<REPLACED>>/src/utils/polyfillEnvironment.js",
     "<<REPLACED>>/hot/patch.js",
     "./index.js",
   ],
@@ -81,7 +80,7 @@ Object {
         },
       },
       Object {
-        "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@expo\\|pretty-format\\|haul\\|metro\\)\\)/,
+        "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|haul\\|metro\\)\\)/,
         "test": /\\\\\\.jsx\\?\\$/,
         "use": Array [
           Object {
@@ -241,4 +240,53 @@ Object {
   "stats": "verbose",
   "target": "webworker",
 }
+`;
+
+exports[`creates config: ios config with hot reloading disabled 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -9,11 +9,10 @@
+      \\"<<REPLACED>>/src/vendor/polyfills/Array.prototype.es6.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/Array.es6.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/Object.es7.js\\",
+      \\"<<REPLACED>>/src/vendor/polyfills/babelHelpers.js\\",
+      \\"<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js\\",
+-     \\"<<REPLACED>>/hot/patch.js\\",
+      \\"./index.js\\",
+    ],
+    \\"mode\\": \\"development\\",
+    \\"module\\": Object {
+      \\"rules\\": Array [
+@@ -43,12 +42,10 @@
+              \\"options\\": Object {
+                \\"cacheDirectory\\": true,
+                \\"extends\\": \\"<<REPLACED>>/src/utils/__tests__/fixtures/.babelrc\\",
+                \\"plugins\\": Array [
+                  \\"<<REPLACED>>/src/utils/fixRequireIssues.js\\",
+-                 \\"<<NODE_MODULE>>/react-hot-loader/babel.js\\",
+-                 \\"<<REPLACED>>/src/hot/babelPlugin.js\\",
+                ],
+              },
+            },
+          ],
+        },
+@@ -120,16 +117,10 @@
+          \\"test\\": Object {
+            \\"test\\": [Function test],
+          },
+        },
+      },
+-     HotModuleReplacementPlugin {
+-       \\"fullBuildTimeout\\": 200,
+-       \\"multiStep\\": undefined,
+-       \\"options\\": Object {},
+-       \\"requestTimeout\\": 10000,
+-     },
+      EvalSourceMapDevToolPlugin {
+        \\"options\\": Object {
+          \\"module\\": true,
+        },
+      },"
 `;

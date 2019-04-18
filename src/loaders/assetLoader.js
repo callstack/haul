@@ -195,7 +195,9 @@ module.exports = async function assetLoader() {
   };
 
   try {
-    logger.info(`path: ${this.resourcePath}`);
+    if (isVerbose) {
+      logger.info(`path: ${this.resourcePath}`);
+    }
 
     info = size(this.resourcePath);
 

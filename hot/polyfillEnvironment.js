@@ -7,7 +7,7 @@
  */
 import { NativeModules } from 'react-native';
 
-require('../hot/client/importScriptsPolyfill');
+require('./importScriptsPolyfill');
 
 if (process.env.NODE_ENV !== 'production') {
   let protocol;

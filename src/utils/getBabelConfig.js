@@ -5,6 +5,8 @@
  * @flow
  */
 
+import type { EnvOptions } from '../types';
+
 const fs = require('fs');
 const path = require('path');
 const logger = require('../logger');
@@ -18,7 +20,7 @@ const DEFAULT_BABELRC = {
   ],
 };
 
-module.exports = function getBabelConfig(cwd: string) {
+module.exports = function getBabelConfig(cwd: string, options: EnvOptions) {
   let babelrc;
 
   const file = path.join(cwd, '.babelrc');
@@ -33,7 +35,7 @@ module.exports = function getBabelConfig(cwd: string) {
   return Object.assign({}, babelrc, {
     plugins: [require.resolve('./fixRequireIssues')]
       .concat(
-        process.env.NODE_ENV === 'production'
+        process.env.NODE_ENV === 'production' || options.disableHotReloading
           ? []
           : [
               require.resolve('react-hot-loader/babel'),

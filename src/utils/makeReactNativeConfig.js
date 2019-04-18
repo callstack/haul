@@ -6,7 +6,7 @@
  */
 /* eslint-disable no-param-reassign */
 
-import type { Logger, Platform } from '../types';
+import type { ConfigOptions, EnvOptions, Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -20,24 +20,6 @@ const getBabelConfig = require('./getBabelConfig');
 const getPolyfills = require('./getPolyfills');
 const loggerInst = require('../logger');
 const { DEFAULT_PORT } = require('../constants');
-
-type ConfigOptions = {|
-  root: string,
-  assetsDest: string,
-  dev: boolean,
-  minify?: boolean,
-  bundle?: boolean,
-  port?: number,
-  providesModuleNodeModules?: (string | { name: string, directory: string })[],
-  hasteOptions?: *,
-  initializeCoreLocation?: string,
-  includedNodeModules?: Array<string>,
-|};
-
-type EnvOptions = {|
-  ...ConfigOptions,
-  platform: Platform,
-|};
 
 type WebpackPlugin = {
   apply: (typeof webpack) => void,
@@ -73,6 +55,7 @@ type DEPRECATEDWebpackConfigFactory = (
 const DEFAULT_INCLUDED_NODE_MODULES = [
   'react',
   '@react-navigation',
+  '@react-native-community',
   '@expo',
   'pretty-format',
   'haul',
@@ -97,19 +80,20 @@ const getJavaScriptExcludeRegex = (
 /**
  * Returns default config based on environment
  */
-const getDefaultConfig = ({
-  platform,
-  root,
-  assetsDest,
-  dev,
-  minify,
-  bundle,
-  port,
-  providesModuleNodeModules,
-  hasteOptions,
-  includedNodeModules,
-}): WebpackConfig => {
-  // Getting Minor version
+const getDefaultConfig = (options: EnvOptions): WebpackConfig => {
+  const {
+    platform,
+    root,
+    assetsDest,
+    dev,
+    minify,
+    bundle,
+    port,
+    providesModuleNodeModules,
+    hasteOptions,
+    disableHotReloading,
+    includedNodeModules,
+  } = options;
   return {
     mode: dev ? 'development' : 'production',
     context: root,
@@ -124,7 +108,6 @@ const getDefaultConfig = ({
         { parser: { requireEnsure: false } },
         {
           test: /\.jsx?$/,
-          // eslint-disable-next-line no-useless-escape
           exclude: getJavaScriptExcludeRegex(includedNodeModules),
           use: [
             {
@@ -144,7 +127,7 @@ const getDefaultConfig = ({
             },
             {
               loader: require.resolve('babel-loader'),
-              options: Object.assign({}, getBabelConfig(root), {
+              options: Object.assign({}, getBabelConfig(root, options), {
                 /**
                  * to improve the rebuild speeds
                  * This enables caching results in ./node_modules/.cache/babel-loader/
@@ -191,7 +174,9 @@ const getDefaultConfig = ({
     ].concat(
       dev
         ? [
-            new webpack.HotModuleReplacementPlugin(),
+            ...(disableHotReloading
+              ? []
+              : [new webpack.HotModuleReplacementPlugin()]),
             new webpack.EvalSourceMapDevToolPlugin({
               module: true,
             }),
@@ -274,7 +259,7 @@ const getDefaultConfig = ({
           sourceMap: true,
         }),
       ],
-      namedModules: true,
+      namedModules: dev,
       concatenateModules: true,
     },
     /**
@@ -364,7 +349,15 @@ function makeReactNativeConfig(
     );
   }
 
-  const { root, assetsDest, dev, minify, bundle, port } = options;
+  const {
+    root,
+    assetsDest,
+    dev,
+    minify,
+    bundle,
+    port,
+    disableHotReloading,
+  } = options;
 
   const env = {
     root,
@@ -374,6 +367,7 @@ function makeReactNativeConfig(
     platform,
     bundle,
     port,
+    disableHotReloading,
   };
 
   const {
@@ -408,19 +402,20 @@ function injectPolyfillIntoEntry({
   root,
   initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
   dev = true,
+  disableHotReloading = false,
 }: {
   entry: WebpackEntry,
   root: string,
   initializeCoreLocation?: string,
   dev?: boolean,
+  disableHotReloading?: boolean,
 }) {
   const reactNativeHaulEntries = [
     ...getPolyfills(),
     require.resolve(path.join(root, initializeCoreLocation)),
-    require.resolve('./polyfillEnvironment.js'),
   ];
 
-  if (dev) {
+  if (dev && !disableHotReloading) {
     reactNativeHaulEntries.push(require.resolve('../../hot/patch.js'));
   }
 
@@ -476,6 +471,7 @@ function createWebpackConfig(configBuilder: WebpackConfigFactory) {
         initializeCoreLocation: options.initializeCoreLocation,
         entry,
         dev: options.dev,
+        disableHotReloading: options.disableHotReloading,
       }),
       name: options.platform,
     };

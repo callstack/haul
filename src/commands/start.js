@@ -74,6 +74,7 @@ async function start(opts: *) {
     minify: opts.minify,
     port: opts.port,
     eager: opts.eager,
+    disableHotReloading: !opts.hotReloading,
   };
 
   createServer({
@@ -165,6 +166,22 @@ module.exports = ({
         return list;
       },
       example: 'haul bundle --eager ios,android',
+    },
+    {
+      name: 'hotReloading',
+      description: `Enables hot reloading`,
+      default: true,
+      parse: (val: string) => val !== 'false',
+      choices: [
+        {
+          value: true,
+          description: 'Enables hot reloading (default)',
+        },
+        {
+          value: false,
+          description: 'Disables hot reloading',
+        },
+      ],
     },
   ],
 }: Command);
