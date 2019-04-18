@@ -1,3 +1,4 @@
+import { inspect } from 'util';
 import { LoggerEvent } from 'haul-inspector-events';
 import { container, color, modifier, pad, AnsiColor } from 'ansi-fragments';
 import InspectorClient from './InspectorClient';
@@ -46,7 +47,9 @@ export default class Logger {
           pad(1),
           '▶︎',
           pad(1),
-          args.join(' ')
+          args
+            .map(item => (typeof item === 'string' ? item : inspect(item)))
+            .join(' ')
         ).build()
       );
     };

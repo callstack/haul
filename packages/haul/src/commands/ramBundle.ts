@@ -8,9 +8,9 @@ export default function ramBundleCommand(runtime: Runtime) {
     builder(yargs: Argv) {
       return yargs;
     },
-    handler(argv: any) {
-      runtime.logger.info(argv);
-      runtime.complete();
+    handler(/* argv: any */) {
+      runtime.logger.error('Not yet implemented');
+      runtime.complete(1);
     },
   };
 }
