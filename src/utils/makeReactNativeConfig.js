@@ -72,9 +72,7 @@ const getJavaScriptExcludeRegex = (
     ...(includedNodeModules || []),
     ...DEFAULT_INCLUDED_NODE_MODULES,
   ];
-  return new RegExp(
-    `node_modules(?!.*[\\/\\\\](${modules.join('|')}))`
-  );
+  return new RegExp(`node_modules(?!.*[\\/\\\\](${modules.join('|')}))`);
 };
 
 /**
