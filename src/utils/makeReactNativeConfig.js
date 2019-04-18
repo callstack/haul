@@ -85,12 +85,12 @@ const DEFAULT_INCLUDED_NODE_MODULES = [
 const getJavaScriptExcludeRegex = (
   includedNodeModules?: Array<string>
 ): RegExp => {
-  includedNodeModules = includedNodeModules || [];
-  includedNodeModules = includedNodeModules.concat(
-    DEFAULT_INCLUDED_NODE_MODULES
-  );
+  const modules = [
+    ...(includedNodeModules || []),
+    ...DEFAULT_INCLUDED_NODE_MODULES,
+  ];
   return new RegExp(
-    `node_modules(?!.*[\\/\\\\](${includedNodeModules.join('|')}))`
+    `node_modules(?!.*[\\/\\\\](${modules.join('|')}))`
   );
 };
 
