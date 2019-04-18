@@ -1,7 +1,8 @@
-import ramBundleCommand from './commands/ramBundle';
 import yargs from 'yargs';
 import Runtime from './Runtime';
 import InspectorClient from './InspectorClient';
+import ramBundleCommand from './commands/ramBundle';
+import legacyFallbackCommand from './commands/legacyFallback';
 
 export default async function main() {
   const {
@@ -20,7 +21,7 @@ export default async function main() {
     Boolean(HAUL_INSPECTOR_WAIT) || HAUL_INSPECTOR === 'wait'
   );
 
-  [ramBundleCommand]
+  [ramBundleCommand, legacyFallbackCommand]
     .reduce((yargsInstance, commandBuilder) => {
       return yargsInstance.command(commandBuilder(runtime));
     }, yargs)

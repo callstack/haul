@@ -10,6 +10,7 @@ export default function ramBundleCommand(runtime: Runtime) {
     },
     handler(argv: any) {
       runtime.logger.info(argv);
+      runtime.complete();
     },
   };
 }

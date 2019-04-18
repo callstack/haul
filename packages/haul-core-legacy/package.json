@@ -3,7 +3,7 @@
   "name": "haul-core-legacy",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
-    "haul": "./bin/cli.js"
+    "haul-core-legacy": "./bin/cli.js"
   },
   "main": "src/index.js",
   "scripts": {
