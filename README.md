@@ -56,7 +56,7 @@ This will automatically add the configuration needed to make Haul work with your
 Next, you're ready to start the development server:
 
 ```bash
-yarn haul start -- --platform ios
+yarn haul start --platform ios
 # Or:
 npx haul start --platform ios
 ```
