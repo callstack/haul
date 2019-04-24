@@ -5,6 +5,7 @@
   "bin": {
     "haul": "./bin/haul.js"
   },
+  "main": "build/api.js",
   "dependencies": {
     "ansi-fragments": "^0.2.1",
     "yargs": "^13.2.2",

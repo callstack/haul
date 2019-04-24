@@ -5,7 +5,7 @@
   "bin": {
     "haul-core-legacy": "./bin/cli.js"
   },
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "flow": "flow --include-warnings"
   },
@@ -24,6 +24,13 @@
   },
   "dependencies": {
     "@babel/core": "^7.4.0",
+    "@babel/register": "^7.4.0",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "@react-slate/components": "0.2.0",
     "@react-slate/core": "0.7.0",
     "@react-slate/utils": "0.2.2",

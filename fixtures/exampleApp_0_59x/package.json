@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "init": "node ../../packages/haul/bin/haul.js init",
+    "start": "node ../../packages/haul/bin/haul.js start"
   },
   "dependencies": {
     "react": "16.8.3",
