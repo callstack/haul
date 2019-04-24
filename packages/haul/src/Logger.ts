@@ -1,6 +1,13 @@
 import { inspect } from 'util';
 import { LoggerEvent } from 'haul-inspector-events';
-import { container, color, modifier, pad, AnsiColor } from 'ansi-fragments';
+import {
+  container,
+  color,
+  modifier,
+  pad,
+  AnsiColor,
+  AnsiModifier,
+} from 'ansi-fragments';
 import InspectorClient from './InspectorClient';
 
 enum LoggerLevel {
@@ -33,6 +40,24 @@ export default class Logger {
   print = (...args: unknown[]) => {
     // eslint-disable-next-line no-console
     console.log(...args);
+  };
+
+  enhanceWithColor = (enhancer: AnsiColor, ...args: unknown[]) => {
+    return color(
+      enhancer,
+      args
+        .map(item => (typeof item === 'string' ? item : inspect(item)))
+        .join(' ')
+    ).build();
+  };
+
+  enhanceWithModifier = (enhancer: AnsiModifier, ...args: unknown[]) => {
+    return modifier(
+      enhancer,
+      args
+        .map(item => (typeof item === 'string' ? item : inspect(item)))
+        .join(' ')
+    ).build();
   };
 
   private createLoggingFunction(level: LoggerLevel) {

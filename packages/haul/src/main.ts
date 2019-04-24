@@ -32,7 +32,9 @@ export default async function main() {
     legacyFallbackCommand,
   ]
     .reduce((yargsInstance, commandBuilder) => {
-      return yargsInstance.command(commandBuilder(runtime));
+      return yargsInstance.command(commandBuilder(
+        runtime
+      ) as yargs.CommandModule);
     }, yargs)
     .demandCommand(1)
     .help('h')

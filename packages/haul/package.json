@@ -6,16 +6,21 @@
     "haul": "./bin/haul.js"
   },
   "main": "build/api.js",
+  "peerDependencies": {
+    "webpack": "^4.30.0"
+  },
   "dependencies": {
     "ansi-fragments": "^0.2.1",
     "yargs": "^13.2.2",
     "ws": "^6.2.1",
     "haul-inspector-events": "1.0.0-rc.15",
-    "haul-core-legacy": "1.0.0-rc.15"
+    "haul-core-legacy": "1.0.0-rc.15",
+    "simple-progress-webpack-plugin": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "^11.13.4",
     "@types/yargs": "^13.0.0",
-    "@types/ws": "^6.0.1"
+    "@types/ws": "^6.0.1",
+    "webpack": "^4.30.0"
   }
 }
