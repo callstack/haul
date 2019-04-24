@@ -1,9 +1,7 @@
 import assert from 'assert';
-import fs from 'fs';
+import nodeFs from 'fs';
 import path from 'path';
 import dedent from 'dedent';
-import mkdirp from 'mkdirp';
-import del from 'del';
 import webpack from 'webpack';
 import RamBundle from './RamBundle';
 
@@ -11,8 +9,6 @@ import RamBundle from './RamBundle';
  * TODO: support file paths as an ID and map it to idx
  * TODO: support imports
  * TODO: support other chunks
- * TODO: figure out no emit
- * TODO: use compiler.outputFileSystem
  */
 
 export type Module = {
@@ -30,10 +26,15 @@ type Compilation = webpack.compilation.Compilation & {
   };
 };
 
+type FileSystem = {
+  writeFileSync: (filename: string, data: string | Buffer) => void;
+};
+
 type WebpackRamBundlePluginOptions = {
   debug?: boolean;
   onResults?: Function;
   filename: string;
+  fs?: FileSystem;
 };
 
 export default class WebpackRamBundlePlugin {
@@ -50,13 +51,13 @@ export default class WebpackRamBundlePlugin {
   debugDir: string | undefined;
   filename: string = '';
   modules: Module[] = [];
-  onResults: Function | undefined;
+  fs: FileSystem;
 
-  constructor({ debug = false, filename }: WebpackRamBundlePluginOptions) {
+  constructor({ debug = false, filename, fs }: WebpackRamBundlePluginOptions) {
     if (debug) {
       this.debugDir = path.resolve('webpack-ram-debug');
     }
-
+    this.fs = fs || nodeFs;
     this.filename = filename;
   }
 
@@ -69,24 +70,33 @@ export default class WebpackRamBundlePlugin {
       // Render modules to it's 'final' form with injected webpack variables
       // and wrapped with ModuleTemplate.
       this.modules = compilation.modules.map(webpackModule => {
-        const renderedSource = compilation.moduleTemplate
+        const renderedModule = compilation.moduleTemplate
           .render(
             webpackModule,
             compilation.dependencyTemplates,
             compilation.options
           )
-          .source();
+          .sourceAndMap();
 
         const selfRegisterId =
           typeof webpackModule.id === 'string'
             ? `"${webpackModule.id}"`
             : webpackModule.id;
 
+        const sourceMaps = Buffer.from(
+          JSON.stringify(renderedModule.map),
+          'utf-8'
+        ).toString('base64');
+        const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
         return {
           id: webpackModule.id,
           idx: webpackModule.index,
           filename: webpackModule.resource,
-          source: `__webpack_require__.sr(${selfRegisterId}, ${renderedSource});`,
+          source: `__webpack_require__.sr(
+            ${selfRegisterId}, ${renderedModule.source.replace(
+            /}\)$/gm,
+            sourceMapsComment
+          )});`,
         };
       });
 
@@ -189,9 +199,6 @@ export default class WebpackRamBundlePlugin {
         .join('\n')}\n${indent('})(this);')}\n`;
 
       if (this.debugDir) {
-        del.sync(`${this.debugDir}/*`);
-        mkdirp.sync(this.debugDir);
-
         const manifest = {
           modulesLength: this.modules.length,
           modules: this.modules.map(m => ({
@@ -200,15 +207,15 @@ export default class WebpackRamBundlePlugin {
             filename: m.filename,
           })),
         };
-        fs.writeFileSync(
+        this.fs.writeFileSync(
           path.join(this.debugDir, 'manifest.json'),
           JSON.stringify(manifest, null, '  ')
         );
-        fs.writeFileSync(
+        this.fs.writeFileSync(
           path.join(this.debugDir, 'bootstrap.js'),
           bootstrapCode
         );
-        fs.writeFileSync(
+        this.fs.writeFileSync(
           path.join(this.debugDir, 'modules.js'),
           this.modules.map(m => m.source).join('\n\n')
         );
@@ -218,7 +225,7 @@ export default class WebpackRamBundlePlugin {
         ? this.filename
         : path.join(compilation.outputOptions.path, this.filename);
       const bundle = new RamBundle();
-      fs.writeFileSync(
+      this.fs.writeFileSync(
         outputFilename,
         bundle.build(bootstrapCode, this.modules)
       );

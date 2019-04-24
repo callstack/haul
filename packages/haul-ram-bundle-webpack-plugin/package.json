@@ -8,18 +8,13 @@
     "metro": "^0.53.1"
   },
   "dependencies": {
-    "dedent": "^0.7.0",
-    "del": "^4.1.0",
-    "mkdirp": "^0.5.1"
+    "dedent": "^0.7.0"
   },
   "devDependencies": {
     "@types/node": "^11.13.4",
     "@types/webpack": "^4.4.27",
     "metro": "^0.53.1",
     "webpack": "^4.30.0",
-    "@types/dedent": "^0.7.0",
-    "@types/del": "^4.0.0",
-    "@types/glob": "^7.1.1",
-    "@types/mkdirp": "^0.5.2"
+    "@types/dedent": "^0.7.0"
   }
 }

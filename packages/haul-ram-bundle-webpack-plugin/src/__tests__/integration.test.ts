@@ -9,7 +9,7 @@ function build() {
   const compiler = webpack({
     entry: path.join(__dirname, './__fixtures__/index.js'),
     mode: 'development',
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     output: {
       path: path.join(__dirname, './__fixtures__/dist'),
     },
@@ -53,7 +53,7 @@ test('should build and successfully evaluate bundle', async () => {
     global: undefined,
     done: undefined,
   };
-  global.global = global;
+  (global as any).global = global;
   context = vm.createContext(global);
 
   let error: Error | undefined;

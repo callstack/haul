@@ -1,9 +1,12 @@
 import { Arguments } from 'yargs';
 import path from 'path';
 import webpack from 'webpack';
+import nodeFs from 'fs';
+import MemoryFileSystem from 'memory-fs';
 import getWebpackConfigPath from 'haul-core-legacy/build/utils/getWebpackConfigPath';
 import getConfig from 'haul-core-legacy/build/utils/getConfig';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
+import RamBundlePlugin from 'haul-ram-bundle-webpack-plugin';
 import * as messages from '../messages/ramBundleMessages';
 import Runtime from '../Runtime';
 
@@ -119,12 +122,21 @@ export default function ramBundleCommand(runtime: Runtime) {
           }) as webpack.Plugin);
         }
 
+        const fs = new MemoryFileSystem();
+        webpackConfig.plugins!.push(
+          new RamBundlePlugin({
+            filename: 'ramBundle.bundle',
+            fs,
+          })
+        );
+
         messages.initialBundleInformation(runtime, {
           entry: webpackConfig.entry as string[],
           dev,
         });
 
         const compiler = webpack(webpackConfig);
+        compiler.outputFileSystem = fs;
 
         const stats = await new Promise<webpack.Stats>((resolve, reject) =>
           compiler.run((err, info) => {
@@ -136,6 +148,21 @@ export default function ramBundleCommand(runtime: Runtime) {
             }
           })
         );
+
+        try {
+          nodeFs.writeFileSync(
+            path.join(
+              webpackConfig.output!.path!,
+              webpackConfig.output!.filename!
+            ),
+            fs.readFileSync(
+              path.join(webpackConfig.output!.path!, 'ramBundle.bundle')
+            )
+          );
+        } catch (error) {
+          runtime.logger.error('Failed to save RAM bundle');
+          throw error;
+        }
 
         messages.bundleBuilt(runtime, {
           stats,
