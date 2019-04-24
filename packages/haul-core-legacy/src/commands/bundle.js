@@ -112,6 +112,8 @@ async function bundle(opts: *) {
 
 // Allow config file to override the list of availiable platforms
 function adjustOptions(options) {
+  // Need to add @babel/register to support ES2015+ in config file.
+  require('../babelRegister');
   const directory = process.cwd();
   const configPath = getWebpackConfigPath(directory, options.config);
   const haulOptions = getHaulConfig(configPath, logger);
