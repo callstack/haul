@@ -13,7 +13,9 @@ export default async function main() {
     HAUL_INSPECTOR_PORT,
     HAUL_INSPECTOR_HOST,
     HAUL_INSPECTOR_WAIT,
+    NODE_INSPECTOR,
   } = process.env;
+
   const runtime = new Runtime(
     HAUL_INSPECTOR || HAUL_INSPECTOR_PORT || HAUL_INSPECTOR_HOST
       ? new InspectorClient(HAUL_INSPECTOR_HOST, HAUL_INSPECTOR_PORT)
@@ -23,6 +25,14 @@ export default async function main() {
   await runtime.ready(
     Boolean(HAUL_INSPECTOR_WAIT) || HAUL_INSPECTOR === 'wait'
   );
+
+  // Experimental
+  if (NODE_INSPECTOR) {
+    const wait = NODE_INSPECTOR === 'wait';
+    runtime.nodeInspectorStarted(wait);
+    const inspector = require('inspector');
+    inspector.open(undefined, undefined, wait);
+  }
 
   [
     initCommand,

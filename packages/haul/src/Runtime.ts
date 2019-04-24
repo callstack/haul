@@ -2,6 +2,7 @@ import {
   RuntimeCompleteEvent,
   RuntimeCommandStartEvent,
   RuntimeUnhandledErrorEvent,
+  RuntimeNodeInspectorStartedEvent,
 } from 'haul-inspector-events';
 import InspectorClient from './InspectorClient';
 import Logger from './Logger';
@@ -34,6 +35,14 @@ export default class Runtime {
     this.logger.error('Unhandled error:', error);
     if (this.inspectorClient) {
       this.inspectorClient.emitEvent(new RuntimeUnhandledErrorEvent(error));
+    }
+  }
+
+  nodeInspectorStarted(wait: boolean = false) {
+    if (this.inspectorClient) {
+      this.inspectorClient.emitEvent(
+        new RuntimeNodeInspectorStartedEvent(wait)
+      );
     }
   }
 

@@ -48,3 +48,13 @@ export class RuntimeUnhandledErrorEvent implements InspectorEvent {
     });
   }
 }
+
+export class RuntimeNodeInspectorStartedEvent implements InspectorEvent {
+  constructor(private wait: boolean) {}
+  serialize() {
+    return JSON.stringify({
+      type: 'RuntimeNodeInspectorStartedEvent',
+      wait: this.wait,
+    });
+  }
+}
