@@ -27,3 +27,24 @@ export class RuntimeCompleteEvent implements InspectorEvent {
     });
   }
 }
+
+export class RuntimeCommandStartEvent implements InspectorEvent {
+  constructor(private command: string, private argv: string[]) {}
+  serialize() {
+    return JSON.stringify({
+      type: 'RuntimeCommandStartEvent',
+      command: this.command,
+      argv: this.argv,
+    });
+  }
+}
+
+export class RuntimeUnhandledErrorEvent implements InspectorEvent {
+  constructor(private error: string | Error) {}
+  serialize() {
+    return JSON.stringify({
+      type: 'RuntimeUnhandledErrorEvent',
+      error: this.error,
+    });
+  }
+}

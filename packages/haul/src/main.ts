@@ -32,9 +32,30 @@ export default async function main() {
     legacyFallbackCommand,
   ]
     .reduce((yargsInstance, commandBuilder) => {
-      return yargsInstance.command(commandBuilder(
-        runtime
-      ) as yargs.CommandModule);
+      const commandModule = commandBuilder(runtime) as yargs.CommandModule;
+      return yargsInstance.command({
+        ...commandModule,
+        handler(...args) {
+          runtime.startCommand(
+            commandModule.command || 'unknown',
+            process.argv
+          );
+          try {
+            const results = commandModule.handler(...args) as
+              | undefined
+              | Promise<unknown>;
+            if (results && results.catch) {
+              results.catch(error => {
+                runtime.unhandledError(error);
+                runtime.complete(1);
+              });
+            }
+          } catch (error) {
+            runtime.unhandledError(error);
+            runtime.complete(1);
+          }
+        },
+      });
     }, yargs)
     .demandCommand(1)
     .help('h')

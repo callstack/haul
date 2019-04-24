@@ -143,6 +143,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           assetsPath: webpackConfig.output!.path,
           bundlePath: webpackConfig.output!.filename,
         });
+        runtime.complete();
       } catch (error) {
         runtime.logger.error(error);
         runtime.complete(1);
