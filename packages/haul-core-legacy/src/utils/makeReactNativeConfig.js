@@ -10,7 +10,7 @@ import type { ConfigOptions, EnvOptions, Logger, Platform } from '../types';
 
 const webpack = require('webpack');
 const path = require('path');
-const os = require('os');
+// const os = require('os');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const AssetResolver = require('../resolvers/AssetResolver');
