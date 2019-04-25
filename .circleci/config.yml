@@ -36,17 +36,17 @@ executors:
       - image: circleci/node:latest
 
 jobs:
-  test-node-8:
+  test_node_8:
     executor: node_8
     steps:
       - run_node_tests:
           cache_prefix: "node_8"
-  test-node-10:
+  test_node_10:
     executor: node_10
     steps:
       - run_node_tests:
           cache_prefix: "node_10"
-  test-node-latest:
+  test_node_latest:
     executor: node_latest
     steps:
       - run_node_tests:
@@ -56,6 +56,6 @@ workflows:
   version: 2
   test:
     jobs:
-      - test-node-8
-      - test-node-10
-      - test-node-latest
+      - test_node_8
+      - test_node_10
+      - test_node_latest
