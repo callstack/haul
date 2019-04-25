@@ -97,7 +97,8 @@ const getDefaultConfig = (options: EnvOptions): WebpackConfig => {
             {
               loader: require.resolve('thread-loader'),
               options: {
-                workers: Math.max(os.cpus().length - 1, 1),
+                // TODO: figure out what to do about it? remove? allow to configure?
+                workers: 1, //Math.max(os.cpus().length - 1, 1),
               },
             },
             {

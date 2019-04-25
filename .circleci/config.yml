@@ -19,7 +19,7 @@ commands:
           key: << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
       - run: yarn lint
       - run: yarn typecheck
-      - run: yarn test
+      - run: yarn test -i
 
 executors:
   node_8:
