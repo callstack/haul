@@ -6,7 +6,18 @@
     "haul": "./bin/haul.js"
   },
   "main": "build/api.js",
+  "author": "Mike Grabowski <mike@callstack.com>",
+  "repository": "github:callstack/haul",
+  "contributors": [
+    "Satyajit Sahoo <satyajit.sahoo@callstack.com>",
+    "Piotr Drapich <piotr.drapich@callstack.com>",
+    "Pawel Trysla <pawel.trysla@callstack.com>"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
+    "metro-react-native-babel-preset": "^0.45.0",
+    "react-native": "^0.57.0",
     "webpack": "^4.30.0"
   },
   "dependencies": {

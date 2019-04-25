@@ -2,6 +2,7 @@
 **/coverage/**
 **/src/vendor/**
 **/fixtures/**
+**/__fixtures__/**
 **/assets/**
 **/node_modules/**
 **/build/**

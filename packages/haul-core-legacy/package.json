@@ -1,23 +1,20 @@
 {
   "version": "1.0.0-rc.15",
   "name": "haul-core-legacy",
-  "description": "Haul is a new command line tools for React Native",
+  "description": "Haul core library (legacy)",
   "bin": {
     "haul-core-legacy": "./bin/cli.js"
   },
   "main": "build/index.js",
-  "scripts": {
-    "flow": "flow --include-warnings"
-  },
-  "author": "Mike Grabowski <mike@callstack.io>",
-  "repository": "github:callstack-io/haul",
+  "author": "Mike Grabowski <mike@callstack.com>",
+  "repository": "github:callstack/haul",
   "contributors": [
-    "Satyajit Sahoo <satyajit.sahoo@callstack.io>",
-    "Piotr Drapich <piotr.drapich@callstack.io>",
-    "Pawel Trysla <pawel.trysla@callstack.io>"
+    "Satyajit Sahoo <satyajit.sahoo@callstack.com>",
+    "Piotr Drapich <piotr.drapich@callstack.com>",
+    "Pawel Trysla <pawel.trysla@callstack.com>"
   ],
   "license": "MIT",
-  "bugs": "https://github.com/callstack-io/haul/issues",
+  "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
     "metro-react-native-babel-preset": "^0.45.0",
     "react-native": "^0.57.0"

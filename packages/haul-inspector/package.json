@@ -1,10 +1,14 @@
 {
   "version": "1.0.0-rc.15",
   "name": "haul-inspector",
-  "description": "haul-inspector",
+  "description": "Haul inspector for monitoring Haul processes",
   "bin": {
     "haul": "./bin/haul-inspector.js"
   },
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
   "dependencies": {
     "ansi-fragments": "^0.2.1",
     "yargs": "^13.2.2",
