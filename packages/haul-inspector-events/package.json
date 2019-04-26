@@ -3,6 +3,9 @@
   "name": "@haul/inspector-events",
   "description": "Inspector events for Haul",
   "main": "build/index.js",
+  "files": [
+    "build/"
+  ],
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",

@@ -1,15 +1,8 @@
 import assert from 'assert';
 import nodeFs from 'fs';
 import path from 'path';
-import dedent from 'dedent';
 import webpack from 'webpack';
 import RamBundle from './RamBundle';
-
-/**
- * TODO: support file paths as an ID and map it to idx
- * TODO: support imports
- * TODO: support other chunks
- */
 
 export type Module = {
   id: string | number;
@@ -67,6 +60,30 @@ export default class WebpackRamBundlePlugin {
       // which contains additional properties.
       const compilation: Compilation = _compilation as any;
 
+      const moduleMappings: {
+        modules: { [key: string]: number };
+        chunks: { [key: string]: Array<number | string> };
+      } = {
+        modules: {},
+        chunks: {},
+      };
+
+      let mainId;
+
+      (compilation.chunks as webpack.compilation.Chunk[]).forEach(chunk => {
+        if (chunk.id === 'main' || chunk.name === 'main') {
+          mainId = chunk.entryModule.id;
+        }
+
+        chunk.getModules().forEach((moduleInChunk: { id: string | number }) => {
+          moduleMappings.chunks[chunk.id] = ([] as Array<string | number>)
+            .concat(...(moduleMappings.chunks[chunk.id] || []))
+            .concat(moduleInChunk.id);
+        });
+      });
+
+      assert(mainId !== undefined, "Couldn't find mainId");
+
       // Render modules to it's 'final' form with injected webpack variables
       // and wrapped with ModuleTemplate.
       this.modules = compilation.modules.map(webpackModule => {
@@ -83,20 +100,26 @@ export default class WebpackRamBundlePlugin {
             ? `"${webpackModule.id}"`
             : webpackModule.id;
 
-        const sourceMaps = Buffer.from(
-          JSON.stringify(renderedModule.map),
-          'utf-8'
-        ).toString('base64');
-        const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
+        if (typeof webpackModule.id === 'string') {
+          moduleMappings.modules[webpackModule.id] = webpackModule.index;
+        }
+
+        // const sourceMaps = Buffer.from(
+        //   JSON.stringify(renderedModule.map),
+        //   'utf-8'
+        // ).toString('base64');
+        // const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
         return {
           id: webpackModule.id,
           idx: webpackModule.index,
           filename: webpackModule.resource,
-          source: `__webpack_require__.sr(
-            ${selfRegisterId}, ${renderedModule.source.replace(
+          source: `__webpack_require__.loadSelf(
+            ${selfRegisterId}, ${
+            renderedModule.source /* .replace(
             /}\)$/gm,
             sourceMapsComment
-          )});`,
+          ) */
+          });`,
         };
       });
 
@@ -113,90 +136,18 @@ export default class WebpackRamBundlePlugin {
         }; filename=${duplicatedModule ? duplicatedModule.filename : ''}`
       );
 
-      const webpackBootstrapper = compilation.mainTemplate
-        .renderBootstrap(
-          compilation.hash,
-          compilation.chunks[0],
-          compilation.moduleTemplate,
-          compilation.dependencyTemplates
-        )
-        .reduce((acc: string[], line: string) => {
-          return acc.concat(
-            ...line
-              .replace(
-                '__webpack_require__.m = modules;',
-                '__webpack_require__.m = {};'
-              )
-              .replace(
-                'function __webpack_require__',
-                'function __original_webpack_require__'
-              )
-              .split('\n')
-          );
-        }, []);
-
-      const customBootstrapper = dedent`
-      /*** BEGIN: CUSTOM BOOTSTRAPPER ***/
-
-      var ID_MASK_SHIFT = 16;
-      var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
-
-      function unpackModuleId(moduleId) {
-        var segmentId = moduleId >>> ID_MASK_SHIFT;
-        var localId = moduleId & LOCAL_ID_MASK;
-        return {
-          segmentId: segmentId,
-          localId: localId
-        };
-      }
-
-      function __webpack_require__(moduleId) {
-        // Check if module is in cache
-        if (installedModules[moduleId]) {
-          return installedModules[moduleId].exports;
-        }
-
-        // Create a new module (and put it into the cache)
-        var module = installedModules[moduleId] = {
-          i: moduleId,
-          l: false,
-          exports: {}
-        }
-
-        // Load module on the native side
-        var unpackedModule = unpackModuleId(moduleId);
-        global.nativeRequire(unpackedModule.localId, unpackedModule.segmentId);
-
-        // Return the exports of the module
-        return module.exports;
-      }
-      
-      // Allow module to self register
-      __webpack_require__.sr = function (moduleId, factory) {
-        // Make sure module is in installedModules
-        if (!installedModules[moduleId]) {
-          throw new Error(moduleId + ' missing in installedModules');
-        }
-
-        var module = installedModules[moduleId];
-        factory.call(module.exports, module, module.exports, __webpack_require__);
-        
-        // Flag the module as loaded
-        module.l = true;
-      }
-      
-      global.__webpack_require__ = __webpack_require__;
-
-      /*** END: CUSTOM BOOTSTRAPPER ***/
-
-      `.split('\n');
-
       const indent = (line: string) => `/*****/  ${line}`;
-      const bootstrapCode = `${indent(
-        '(function(global){ // bootstraper'
-      )}\n${customBootstrapper.map(indent).join('\n')}${webpackBootstrapper
-        .map(indent)
-        .join('\n')}\n${indent('})(this);')}\n`;
+      const bootstrap = nodeFs.readFileSync(
+        path.join(__dirname, '../runtime/bootstrap.js'),
+        'utf8'
+      );
+      const bootstrapCode =
+        `(${bootstrap.trim()})(this, ${
+          typeof mainId === 'string' ? `"${mainId}"` : mainId
+        }, JSON.parse('${JSON.stringify(moduleMappings)}'));`
+          .split('\n')
+          .map(indent)
+          .join('\n') + '\n';
 
       if (this.debugDir) {
         const manifest = {

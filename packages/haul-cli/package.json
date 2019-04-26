@@ -6,13 +6,12 @@
     "haul": "./bin/haul.js"
   },
   "main": "build/api.js",
-  "author": "Mike Grabowski <mike@callstack.com>",
-  "repository": "github:callstack/haul",
-  "contributors": [
-    "Satyajit Sahoo <satyajit.sahoo@callstack.com>",
-    "Piotr Drapich <piotr.drapich@callstack.com>",
-    "Pawel Trysla <pawel.trysla@callstack.com>"
+  "files": [
+    "build/",
+    "bin/"
   ],
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {

@@ -1,4 +1,4 @@
-import { createWebpackConfig } from "../../packages/haul/build/api";
+import { createWebpackConfig } from "../../packages/haul-cli/build/api";
 
 export default {
   webpack: env => {

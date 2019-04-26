@@ -7,6 +7,10 @@ function main() {
     throw new Error('helloEsm failed');
   }
 
+  import('./crashFn.async').then(({ default: crash }) => {
+    global.crash = crash;
+  });
+
   global.done = true;
 }
 

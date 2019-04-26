@@ -5,6 +5,10 @@
   "bin": {
     "haul": "./bin/haul-inspector.js"
   },
+  "files": [
+    "build/",
+    "bin/"
+  ],
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",

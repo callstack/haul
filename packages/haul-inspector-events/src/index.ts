@@ -45,6 +45,7 @@ export class RuntimeUnhandledErrorEvent implements InspectorEvent {
     return JSON.stringify({
       type: 'RuntimeUnhandledErrorEvent',
       error: this.error,
+      message: typeof this.error === 'string' ? this.error : this.error.message,
     });
   }
 }
