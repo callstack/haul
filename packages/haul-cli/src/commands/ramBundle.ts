@@ -3,10 +3,10 @@ import path from 'path';
 import webpack from 'webpack';
 import nodeFs from 'fs';
 import MemoryFileSystem from 'memory-fs';
-import getWebpackConfigPath from 'haul-core-legacy/build/utils/getWebpackConfigPath';
-import getConfig from 'haul-core-legacy/build/utils/getConfig';
+import getWebpackConfigPath from '@haul/core-legacy/build/utils/getWebpackConfigPath';
+import getConfig from '@haul/core-legacy/build/utils/getConfig';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
-import RamBundlePlugin from 'haul-ram-bundle-webpack-plugin';
+import RamBundlePlugin from '@haul/ram-bundle-webpack-plugin';
 import * as messages from '../messages/ramBundleMessages';
 import Runtime from '../Runtime';
 
@@ -81,7 +81,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         } = argv;
 
         // TODO: figure out a better way to read and transpile user files on-demand
-        require('haul-core-legacy/build/babelRegister');
+        require('@haul/core-legacy/build/babelRegister');
 
         const directory = process.cwd();
         const configPath = getWebpackConfigPath(directory, config);

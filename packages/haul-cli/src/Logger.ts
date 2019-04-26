@@ -1,5 +1,5 @@
 import { inspect } from 'util';
-import { LoggerEvent } from 'haul-inspector-events';
+import { LoggerEvent } from '@haul/inspector-events';
 import {
   container,
   color,

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  displayName: 'haul-core-legacy',
+  displayName: '@haul/core-legacy',
   testPathIgnorePatterns: ['fixtures/.*'],
   moduleNameMapper: {
     '^jest/(.*)': path.join(__dirname, '../../jest/$1'),

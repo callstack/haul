@@ -14,7 +14,7 @@ If you're on a React Native version >= 0.43, add the following in `android/app/b
 
 ```
 project.ext.react = [
-    cliPath: "node_modules/haul/bin/cli.js"
+    cliPath: "node_modules/@haul/cli/bin/haul.js"
 ]
 ```
 

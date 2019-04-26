@@ -7,7 +7,7 @@
     "lint": "eslint --ext '.js,.ts' './packages'",
     "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../babel.config.js\"",
     "watch": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../babel.config.js --watch\"",
-    "build:def": "lerna exec --ignore 'haul-core-legacy' \"tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./build\"",
+    "build:def": "lerna exec --ignore '@haul/core-legacy' \"tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./build\"",
     "prepare": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
     "add-contributor": "all-contributors add",

@@ -83,7 +83,7 @@ const getDefaultConfig = (options: EnvOptions): WebpackConfig => {
         {
           test: /\.js$/,
           // eslint-disable-next-line no-useless-escape
-          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|haul|metro))/,
+          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul|metro))/,
           use: [
             {
               loader: require.resolve('cache-loader'),

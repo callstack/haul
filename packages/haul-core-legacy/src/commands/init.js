@@ -130,7 +130,7 @@ async function init() {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const config = dedent`
-    import { createWebpackConfig } from "haul";
+    import { createWebpackConfig } from "@haul/cli";
 
     export default {
       webpack: createWebpackConfig(({ platform }) => ({
@@ -253,7 +253,7 @@ const addToGradleBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(entry).toString();
 
-  const cliString = '"node_modules/haul/bin/cli.js"';
+  const cliString = '"node_modules/@haul/cli/bin/haul.js"';
 
   const gradleConf = `
     project.ext.react = [
@@ -346,7 +346,7 @@ const addToXcodeBuild = async (cwd: string) => {
     return;
   }
 
-  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/haul/bin/cli.js\nexport NODE_BINARY=node`;
+  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/@haul/cli/bin/haul.js\nexport NODE_BINARY=node`;
 
   project = project.replace(new RegExp(originalTask, 'g'), haulTask);
 

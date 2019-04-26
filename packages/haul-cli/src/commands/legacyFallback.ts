@@ -18,7 +18,7 @@ export default function legacyFallbackCommand(runtime: Runtime) {
       );
 
       const haulCoreLegacy = path.join(
-        path.dirname(require.resolve('haul-core-legacy')),
+        path.dirname(require.resolve('@haul/core-legacy')),
         '../bin/cli.js'
       );
       runtime.logger.info('Resolved binary to:', haulCoreLegacy);

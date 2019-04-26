@@ -1,10 +1,10 @@
 import yargs from 'yargs';
-import legacyStartCommand from 'haul-core-legacy/build/commands/start';
+import legacyStartCommand from '@haul/core-legacy/build/commands/start';
 import {
   DEFAULT_PORT,
   DEFAULT_CONFIG_FILENAME,
   INTERACTIVE_MODE_DEFAULT,
-} from 'haul-core-legacy/build/constants';
+} from '@haul/core-legacy/build/constants';
 import Runtime from '../Runtime';
 
 export default function startCommand(runtime: Runtime): yargs.CommandModule {

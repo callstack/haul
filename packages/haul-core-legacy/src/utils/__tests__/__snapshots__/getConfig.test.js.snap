@@ -80,7 +80,7 @@ Object {
         },
       },
       Object {
-        "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|haul\\|metro\\)\\)/,
+        "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|@haul\\|metro\\)\\)/,
         "test": /\\\\\\.js\\$/,
         "use": Array [
           Object {

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-rc.15",
-  "name": "haul-ram-bundle-webpack-plugin",
+  "name": "@haul/ram-bundle-webpack-plugin",
   "description": "RAM bundle plugin for Haul and Webpack",
   "main": "build/index.js",
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",

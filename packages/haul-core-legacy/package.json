@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-rc.15",
-  "name": "haul-core-legacy",
+  "name": "@haul/core-legacy",
   "description": "Haul core library (legacy)",
   "bin": {
     "haul-core-legacy": "./bin/cli.js"

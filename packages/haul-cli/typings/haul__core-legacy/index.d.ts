@@ -1,18 +1,18 @@
-declare module 'haul-core-legacy/build/commands/init' {
+declare module '@haul/core-legacy/build/commands/init' {
   const legacyCommand: {
     action: Function;
   };
   export default legacyCommand;
 }
 
-declare module 'haul-core-legacy/build/commands/reload' {
+declare module '@haul/core-legacy/build/commands/reload' {
   const legacyCommand: {
     action: Function;
   };
   export default legacyCommand;
 }
 
-declare module 'haul-core-legacy/build/commands/start' {
+declare module '@haul/core-legacy/build/commands/start' {
   type StartCommandOptions = {
     port: number;
     no_interactive?: boolean;
@@ -30,30 +30,30 @@ declare module 'haul-core-legacy/build/commands/start' {
   export default legacyCommand;
 }
 
-declare module 'haul-core-legacy/build/constants' {
+declare module '@haul/core-legacy/build/constants' {
   export const DEFAULT_PORT: number;
   export const DEFAULT_CONFIG_FILENAME: string;
   export const INTERACTIVE_MODE_DEFAULT: boolean;
 }
 
-declare module 'haul-core-legacy/build/utils/getEntryFiles' {
+declare module '@haul/core-legacy/build/utils/getEntryFiles' {
   export default function getEntryFiles(entry: string[]): string;
 }
 
-declare module 'haul-core-legacy/build/utils/getConfig' {
+declare module '@haul/core-legacy/build/utils/getConfig' {
   import webpack from 'webpack';
 
   export default function getConfig(...args: any[]): webpack.Configuration;
 }
 
-declare module 'haul-core-legacy/build/utils/getWebpackConfigPath' {
+declare module '@haul/core-legacy/build/utils/getWebpackConfigPath' {
   export default function getWebpackConfigPath(
     dir: string,
     userConfig?: string
   ): string;
 }
 
-declare module 'haul-core-legacy' {
+declare module '@haul/core-legacy' {
   type EnvOptions = ConfigOptions & {
     platform: string;
   };

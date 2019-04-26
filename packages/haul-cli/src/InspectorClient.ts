@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { InspectorEvent } from 'haul-inspector-events';
+import { InspectorEvent } from '@haul/inspector-events';
 
 export default class InspectorClient {
   socket?: WebSocket;
