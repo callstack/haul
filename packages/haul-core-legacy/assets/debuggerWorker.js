@@ -61,10 +61,10 @@ onmessage = (function() {
 
       function evalJS(js) {
         try {
-          eval(
+          new Function(
             js
-              .replace(/this\["webpackHotUpdate"\]/g, 'self["webpackHotUpdate"]')
-          );
+              .replace(/this\["webpackHotUpdate"\]/g, 'self["webpackHotUpdate"]') + `\n//# sourceURL=${message.url}`
+          )();
         } catch (e) {
           self.ErrorUtils.reportFatalError(e);
         } finally {

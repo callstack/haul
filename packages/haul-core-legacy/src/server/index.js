@@ -88,7 +88,7 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
 
   // Middlewares
   appHandler
-    .use(express.static(path.join(__dirname, '/assets/public')))
+    .use(express.static(path.join(__dirname, '../../assets/public')))
     .use(rawBodyMiddleware)
     .use(cleanPathMiddleware)
     .use(devToolsMiddleware(debuggerProxy))

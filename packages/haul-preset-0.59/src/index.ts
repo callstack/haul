@@ -29,7 +29,7 @@ export function createWebpackConfig(
         initializeCoreLocation: options.initializeCoreLocation,
         entry,
         dev: options.dev,
-        disableHotReloading: options.hotReloading,
+        disableHotReloading: !options.hotReloading,
       }),
       name: options.platform,
     };

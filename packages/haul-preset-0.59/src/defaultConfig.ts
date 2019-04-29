@@ -40,6 +40,7 @@ export default function getDefaultConfig(options: EnvOptions) {
   return {
     mode: dev ? 'development' : 'production',
     context: root,
+    devtool: false,
     entry: [],
     output: {
       path: assetsDest || path.join(root),
@@ -89,7 +90,9 @@ export default function getDefaultConfig(options: EnvOptions) {
              * Asset loader enables asset management based on image scale
              * This needs the AssetResolver plugin in resolver.plugins to work
              */
-            loader: require.resolve('../loaders/assetLoader'),
+            loader: require.resolve(
+              '@haul/core-legacy/build/loaders/assetLoader'
+            ),
             query: { platform, root, bundle },
           },
         },
@@ -119,14 +122,14 @@ export default function getDefaultConfig(options: EnvOptions) {
       dev
         ? [
             ...(hotReloading ? [new webpack.HotModuleReplacementPlugin()] : []),
-            new webpack.EvalSourceMapDevToolPlugin({
-              module: true,
-            }),
             new webpack.NamedModulesPlugin(),
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
-            }),
+              publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
+              moduleFilenameTemplate: '[absolute-resource-path]',
+              module: true,
+            } as any),
             new webpack.BannerPlugin({
               banner: 'if (this && !this.self) { this.self = this; };\n',
               raw: true,
