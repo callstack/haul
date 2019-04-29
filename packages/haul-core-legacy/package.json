@@ -6,6 +6,8 @@
     "haul-core-legacy": "./bin/cli.js"
   },
   "main": "build/index.js",
+  "types": "./index.d.ts",
+  "engines": { "node": ">=8.x" },
   "author": "Mike Grabowski <mike@callstack.com>",
   "repository": "github:callstack/haul",
   "contributors": [

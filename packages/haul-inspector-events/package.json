@@ -6,6 +6,7 @@
   "files": [
     "build/"
   ],
+  "engines": { "node": ">=8.x" },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",

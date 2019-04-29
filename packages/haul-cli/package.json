@@ -10,6 +10,7 @@
     "build/",
     "bin/"
   ],
+  "engines": { "node": ">=8.x" },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",
@@ -31,7 +32,6 @@
   },
   "devDependencies": {
     "@types/memory-fs": "^0.3.2",
-    "@types/node": "^11.13.4",
     "@types/yargs": "^13.0.0",
     "@types/ws": "^6.0.1",
     "webpack": "^4.30.0"

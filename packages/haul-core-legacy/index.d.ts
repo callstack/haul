@@ -53,6 +53,27 @@ declare module '@haul/core-legacy/build/utils/getWebpackConfigPath' {
   ): string;
 }
 
+declare module '@haul/core-legacy/build/resolvers/AssetResolver' {
+  export default class AssetResolver {
+    static test: RegExp;
+    constructor(options: any);
+  }
+}
+
+declare module '@haul/core-legacy/build/resolvers/HasteResolver' {
+  export default class HasteResolver {
+    constructor(options: any);
+  }
+}
+
+declare module '@haul/core-legacy/build/utils/resolveModule' {
+  export default function moduleResolve(root: string, name: string): string;
+}
+
+declare module '@haul/core-legacy/build/utils/makeReactNativeConfig' {
+  export function injectPolyfillIntoEntry(options: any): string[];
+}
+
 declare module '@haul/core-legacy' {
   type EnvOptions = ConfigOptions & {
     platform: string;

@@ -129,8 +129,11 @@ async function init() {
 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
+  const version = semver.parse(rnVersion);
   const config = dedent`
-    import { createWebpackConfig } from "@haul/cli";
+    import { createWebpackConfig } from "@haul/preset-${version.major}.${
+    version.minor
+  }";
 
     export default {
       webpack: createWebpackConfig(({ platform }) => ({
