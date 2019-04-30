@@ -21,12 +21,12 @@ const hotMiddleware = require('./middleware/hotMiddleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
-const symbolicateMiddleware = require('./middleware/symbolicateMiddleware');
 const openInEditorMiddleware = require('./middleware/openInEditorMiddleware');
 const missingBundleMiddleware = require('./middleware/missingBundleMiddleware');
 const systraceMiddleware = require('./middleware/systraceMiddleware');
 const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
 const cleanPathMiddleware = require('./middleware/cleanPathMiddleware');
+const symbolicateRoute = require('./routes/symbolicate');
 
 const WebSocketServer = require('ws').Server;
 
@@ -95,7 +95,8 @@ function createServer(config: { configPath: ?string, configOptions: Object }) {
     .use(liveReloadMiddleware(compiler))
     .use(statusPageMiddleware)
     .use(
-      symbolicateMiddleware(compiler, {
+      '/',
+      symbolicateRoute(compiler, {
         configPath,
         configOptions,
       })

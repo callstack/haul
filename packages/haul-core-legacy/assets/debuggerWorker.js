@@ -59,21 +59,14 @@ onmessage = (function() {
 
       shouldQueueMessages = true;
 
-      function evalJS(js) {
-        try {
-          new Function(
-            js
-              .replace(/this\["webpackHotUpdate"\]/g, 'self["webpackHotUpdate"]') + `\n//# sourceURL=${message.url}`
-          )();
-        } catch (e) {
-          self.ErrorUtils.reportFatalError(e);
-        } finally {
-          self.postMessage({ replyID: message.id });
-          processEnqueuedMessages();
-        }
+      try {
+        importScripts(message.url)
+      } catch (e) {
+        self.ErrorUtils.reportFatalError(e);
+      } finally {
+        self.postMessage({ replyID: message.id });
+        processEnqueuedMessages();
       }
-
-      fetch(message.url).then(resp => resp.text()).then(evalJS);
     },
     setDebuggerVisibility(message) {
       visibilityState = message.visibilityState;

@@ -16,7 +16,7 @@
  *   the source map that is tucked away inside webpack's in-memory filesystem.
  *
  */
-import type { $Request, Middleware } from 'express';
+import { Router, type $Request } from 'express';
 import type {
   ReactNativeStackFrame,
   ReactNativeStack,
@@ -101,16 +101,15 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
 /**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(compiler: Compiler): Middleware {
-  /**
-   * The Express middleware for symbolicating'.
-   */
-  async function symbolicateMiddleware(req: $Request, res, next) {
-    if (req.cleanPath !== '/symbolicate') return next();
+module.exports = function create(compiler: Compiler) {
+  const router = Router();
 
+  router.post('/symbolicate', async (req: $Request, res) => {
     // grab the source stack frames
     const unconvertedFrames = getRequestedFrames(req);
-    if (!unconvertedFrames || unconvertedFrames.length === 0) return next();
+    if (!unconvertedFrames || unconvertedFrames.length === 0) {
+      return res.sendStatus(400);
+    }
 
     // grab the platform and filename from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
     const filenameMatch = unconvertedFrames[0].file.match(/\/(\D+)\?/);
@@ -122,7 +121,7 @@ function create(compiler: Compiler): Middleware {
     const platform: ?Platform = (platformMatch && platformMatch[1]: any);
 
     if (!filename || !platform) {
-      return next();
+      return res.sendStatus(400);
     }
 
     const [name, ...rest] = filename.split('.');
@@ -134,8 +133,10 @@ function create(compiler: Compiler): Middleware {
       // $FlowFixMe
       `http://localhost:${req.get('host').split(':')[1]}/${bundleName}.map`
     );
-    // console.log('C', consumer);
-    if (!consumer) return next();
+
+    if (!consumer) {
+      return res.sendStatus(500);
+    }
 
     // the base directory
     // const root = getConfig(configPath, configOptions, platform).context;
@@ -183,12 +184,8 @@ function create(compiler: Compiler): Middleware {
       stack: convertedFrames,
     };
     const response = JSON.stringify(responseObject);
-    res.end(response);
+    res.send(response);
+  });
 
-    return null;
-  }
-
-  return symbolicateMiddleware;
-}
-
-module.exports = create;
+  return router;
+};
