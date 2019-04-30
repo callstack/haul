@@ -4,12 +4,11 @@
  *
  * @flow
  */
-import type { Logger, Platform } from '../../types';
+import { getProjectConfig, getWebpackConfig, Runtime } from '@haul/core';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
 
-const getConfig = require('../../utils/getConfig');
 const Events = require('../events');
 
 module.exports = function runWebpackCompiler({
@@ -24,9 +23,7 @@ module.exports = function runWebpackCompiler({
 
   const { configPath, configOptions } = JSON.parse(options);
 
-  /**
-   * Proxy based on Logger.js
-   */
+  const runtime = new Runtime();
   const loggerProxy = new Proxy(
     {},
     {
@@ -39,13 +36,13 @@ module.exports = function runWebpackCompiler({
       },
     }
   );
+  runtime.logger = loggerProxy;
 
-  const config = getConfig(
-    configPath,
-    configOptions,
-    (platform: Platform),
-    // $FlowFixMe
-    (loggerProxy: Logger)
+  const projectConfig = getProjectConfig(configPath);
+  const config = getWebpackConfig(
+    runtime,
+    { ...configOptions, platform },
+    projectConfig
   );
 
   let lastPercent = -1;

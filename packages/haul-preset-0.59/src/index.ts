@@ -1,26 +1,16 @@
+import { createPreset, EnvOptions, HaulConfig, Runtime } from '@haul/core';
 import webpack from 'webpack';
 import { injectPolyfillIntoEntry } from '@haul/core-legacy/build/utils/makeReactNativeConfig';
-import getDefaultConfig, { EnvOptions } from './defaultConfig';
+import getDefaultConfig from './defaultConfig';
 
-type WebpackConfigFactory =
-  | ((options: EnvOptions) => webpack.Configuration)
-  | webpack.Configuration;
-
-export function createWebpackConfig(
-  configBuilder: WebpackConfigFactory
-): (options: EnvOptions) => webpack.Configuration {
-  return (options: EnvOptions) => {
-    const haulWebpackConfiguration =
-      typeof configBuilder === 'function'
-        ? configBuilder(options)
-        : configBuilder;
-
-    const defaultWebpackConfig = getDefaultConfig(options);
+export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
+  return (runtime: Runtime, options: EnvOptions) => {
+    const defaultWebpackConfig = getDefaultConfig(runtime, options);
 
     /**
      * Currently we support only "entry" field in config file
      */
-    const { entry } = haulWebpackConfiguration;
+    const { entry } = haulConfig;
 
     const config = {
       ...defaultWebpackConfig,
@@ -36,4 +26,4 @@ export function createWebpackConfig(
 
     return (config as unknown) as webpack.Configuration;
   };
-}
+});

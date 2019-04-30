@@ -1,4 +1,4 @@
-import Runtime from '../Runtime';
+import { Runtime } from '@haul/core';
 import webpack from 'webpack';
 import path from 'path';
 import getEntryFiles from '@haul/core-legacy/build/utils/getEntryFiles';

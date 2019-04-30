@@ -1,4 +1,4 @@
-import Runtime from '../Runtime';
+import { Runtime } from '@haul/core';
 import legacyInitCommand from '@haul/core-legacy/build/commands/init';
 
 export default function initCommand(runtime: Runtime) {

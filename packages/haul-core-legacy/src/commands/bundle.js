@@ -5,17 +5,19 @@
  * @flow
  */
 import type { Command } from '../types';
+import {
+  getProjectConfigPath,
+  getProjectConfig,
+  getWebpackConfig,
+  Runtime,
+  DEFAULT_CONFIG_FILENAME,
+} from '@haul/core';
 
 const path = require('path');
 const webpack = require('webpack');
 const clear = require('clear');
-const { DEFAULT_CONFIG_FILENAME } = require('../constants');
-
 const { MessageError } = require('../errors');
 const messages = require('../messages');
-const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
-const getConfig = require('../utils/getConfig');
-const { getHaulConfig } = require('../utils/getHaulConfig');
 const logger = require('../logger');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 
@@ -24,18 +26,20 @@ const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
  */
 async function bundle(opts: *) {
   const directory = process.cwd();
-  const configPath = getWebpackConfigPath(directory, opts.config);
-
-  const config = getConfig(
-    configPath,
+  // Need to add @babel/register to support ES2015+ in config file.
+  require('../babelRegister');
+  const configPath = getProjectConfigPath(directory, opts.config);
+  const projectConfig = getProjectConfig(configPath);
+  const config = getWebpackConfig(
+    new Runtime(),
     {
+      platform: opts.platform,
       root: directory,
       dev: opts.dev,
       minify: opts.minify,
       bundle: true,
     },
-    opts.platform,
-    logger
+    projectConfig
   );
 
   if (opts.assetsDest) {
@@ -111,45 +115,45 @@ async function bundle(opts: *) {
 }
 
 // Allow config file to override the list of availiable platforms
-function adjustOptions(options) {
-  // Need to add @babel/register to support ES2015+ in config file.
-  require('../babelRegister');
-  const directory = process.cwd();
-  const configPath = getWebpackConfigPath(directory, options.config);
-  const haulOptions = getHaulConfig(configPath, logger);
+// function adjustOptions(options) {
+//   // Need to add @babel/register to support ES2015+ in config file.
+//   require('../babelRegister');
+//   const directory = process.cwd();
+//   const configPath = getProjectConfigPath(directory, options.config);
+//   const haulOptions = getHaulConfig(configPath, logger);
 
-  if (haulOptions.platforms) {
-    const platformOption =
-      command.options && command.options.find(_ => _.name === 'platform');
-    if (platformOption) {
-      platformOption.choices = [];
-      for (const platformName in haulOptions.platforms) {
-        if (
-          Object.prototype.hasOwnProperty.call(
-            haulOptions.platforms,
-            platformName
-          )
-        ) {
-          if (platformOption.choices) {
-            platformOption.choices.push({
-              value: platformName,
-              description: `Builds ${
-                haulOptions.platforms[platformName]
-              } bundle`,
-            });
-          }
-        }
-      }
-    }
-  }
-}
+//   if (haulOptions.platforms) {
+//     const platformOption =
+//       command.options && command.options.find(_ => _.name === 'platform');
+//     if (platformOption) {
+//       platformOption.choices = [];
+//       for (const platformName in haulOptions.platforms) {
+//         if (
+//           Object.prototype.hasOwnProperty.call(
+//             haulOptions.platforms,
+//             platformName
+//           )
+//         ) {
+//           if (platformOption.choices) {
+//             platformOption.choices.push({
+//               value: platformName,
+//               description: `Builds ${
+//                 haulOptions.platforms[platformName]
+//               } bundle`,
+//             });
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 
 let command = ({
   name: 'bundle',
   description:
     'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   action: bundle,
-  adjustOptions,
+  // adjustOptions,
   options: [
     {
       name: 'dev',

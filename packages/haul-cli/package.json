@@ -26,6 +26,7 @@
     "ws": "^6.2.1",
     "@haul/inspector-events": "1.0.0-rc.15",
     "@haul/core-legacy": "1.0.0-rc.15",
+    "@haul/core": "1.0.0-rc.15",
     "@haul/ram-bundle-webpack-plugin": "1.0.0-rc.15",
     "memory-fs": "^0.4.1",
     "simple-progress-webpack-plugin": "^1.1.2"

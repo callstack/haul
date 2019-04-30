@@ -24,9 +24,7 @@ import type {
 } from '../../types';
 
 const SourceMapConsumer = require('source-map').SourceMapConsumer;
-const path = require('path');
 const fetch = require('node-fetch');
-const getConfig = require('../../utils/getConfig');
 const Compiler = require('../../compiler/Compiler');
 const messages = require('../../messages');
 const logger = require('../../logger');
@@ -103,10 +101,7 @@ function getRequestedFrames(req: $Request): ?ReactNativeStack {
 /**
  * Create an Express middleware for handling React Native symbolication requests
  */
-function create(
-  compiler: Compiler,
-  { configOptions, configPath }: *
-): Middleware {
+function create(compiler: Compiler): Middleware {
   /**
    * The Express middleware for symbolicating'.
    */
@@ -143,39 +138,45 @@ function create(
     if (!consumer) return next();
 
     // the base directory
-    const root = getConfig(configPath, configOptions, platform).context;
+    // const root = getConfig(configPath, configOptions, platform).context;
+    let convertedFrames = [];
+    try {
+      // error error on the wall, who's the fairest stack of all?
+      convertedFrames = unconvertedFrames.map(
+        (originalFrame): ReactNativeStackFrame => {
+          if (
+            originalFrame.lineNumber === null ||
+            originalFrame.column === null
+          ) {
+            return originalFrame;
+          }
 
-    // error error on the wall, who's the fairest stack of all?
-    const convertedFrames = unconvertedFrames.map(
-      (originalFrame): ReactNativeStackFrame => {
-        // find the original home of this line of code.
-        const lookup = consumer.originalPositionFor({
-          line: originalFrame.lineNumber,
-          column: originalFrame.column,
-        });
+          // find the original home of this line of code.
+          const lookup = consumer.originalPositionFor({
+            line: originalFrame.lineNumber,
+            column: originalFrame.column,
+          });
 
-        // If lookup fails, we get the same shape object, but with
-        // all values set to null
-        if (lookup.source == null) {
-          // It is better to gracefully return the original frame
-          // than to throw an exception
-          return originalFrame;
+          // If lookup fails, we get the same shape object, but with
+          // all values set to null
+          if (lookup.source == null) {
+            // It is better to gracefully return the original frame
+            // than to throw an exception
+            return originalFrame;
+          }
+
+          // convert these to a format which React Native wants
+          return {
+            lineNumber: lookup.line,
+            column: lookup.column,
+            file: lookup.source,
+            methodName: originalFrame.methodName,
+          };
         }
-
-        // convert the original source into an absolute path
-        const mappedFile = lookup.source
-          .replace('webpack:///~', path.resolve(root, 'node_modules'))
-          .replace('webpack://', root);
-
-        // convert these to a format which React Native wants
-        return {
-          lineNumber: lookup.line,
-          column: lookup.column,
-          file: mappedFile,
-          methodName: originalFrame.methodName,
-        };
-      }
-    );
+      );
+    } catch (error) {
+      logger.error(error);
+    }
 
     // send it back to React Native
     const responseObject: ReactNativeSymbolicateResponse = {

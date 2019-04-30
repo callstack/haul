@@ -5,6 +5,12 @@
  * @flow
  */
 import type { Command } from '../types';
+import {
+  INTERACTIVE_MODE_DEFAULT,
+  DEFAULT_CONFIG_FILENAME,
+  DEFAULT_PORT,
+  getProjectConfigPath,
+} from '@haul/core';
 
 const fs = require('fs');
 const inquirer = require('inquirer');
@@ -13,13 +19,7 @@ const path = require('path');
 
 const logger = require('../logger');
 const createServer = require('../server');
-const getWebpackConfigPath = require('../utils/getWebpackConfigPath');
 const { isPortTaken, killProcess } = require('../utils/haulPortHandler');
-const {
-  INTERACTIVE_MODE_DEFAULT,
-  DEFAULT_CONFIG_FILENAME,
-  DEFAULT_PORT,
-} = require('../constants');
 
 /**
  * Starts development server
@@ -56,7 +56,7 @@ async function start(opts: *) {
   }
 
   const directory = process.cwd();
-  const configPath = getWebpackConfigPath(directory, opts.config);
+  const configPath = getProjectConfigPath(directory, opts.config);
 
   let assetsDest;
   if (opts.assetsDest) {

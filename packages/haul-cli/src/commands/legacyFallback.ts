@@ -1,7 +1,7 @@
 import path from 'path';
 import { execSync } from 'child_process';
 import { Argv } from 'yargs';
-import Runtime from '../Runtime';
+import { Runtime } from '@haul/core';
 
 export default function legacyFallbackCommand(runtime: Runtime) {
   return {

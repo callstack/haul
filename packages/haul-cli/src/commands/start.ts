@@ -4,8 +4,8 @@ import {
   DEFAULT_PORT,
   DEFAULT_CONFIG_FILENAME,
   INTERACTIVE_MODE_DEFAULT,
-} from '@haul/core-legacy/build/constants';
-import Runtime from '../Runtime';
+} from '@haul/core';
+import { Runtime } from '@haul/core';
 
 export default function startCommand(runtime: Runtime): yargs.CommandModule {
   return {

@@ -19,7 +19,8 @@
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
     "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.57.0"
+    "react-native": "^0.57.0",
+    "@haul/core": "1.0.0-rc.15"
   },
   "dependencies": {
     "@babel/core": "^7.4.0",
@@ -81,6 +82,7 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
+    "@haul/core": "1.0.0-rc.15",
     "flow-bin": "^0.65.0",
     "metro-react-native-babel-preset": "^0.45",
     "react-native": "^0.57.0",

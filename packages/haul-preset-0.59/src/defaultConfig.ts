@@ -1,29 +1,21 @@
+import {
+  AssetResolver,
+  HasteResolver,
+  DEFAULT_PORT,
+  ASSET_LOADER_PATH,
+  resolveModule,
+  EnvOptions,
+  Runtime,
+} from '@haul/core';
 import path from 'path';
 import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import { DEFAULT_PORT } from '@haul/core-legacy/build/constants';
-import AssetResolver from '@haul/core-legacy/build/resolvers/AssetResolver';
-import HasteResolver from '@haul/core-legacy/build/resolvers/HasteResolver';
-import moduleResolve from '@haul/core-legacy/build/utils/resolveModule';
 import getBabelConfigPath from './getBabelConfigPath';
 
-export type EnvOptions = {
-  platform: string;
-  root: string;
-  dev: boolean;
-  assetsDest?: string;
-  minify?: boolean;
-  bundle?: boolean;
-  port?: number;
-  providesModuleNodeModules?: Array<
-    string | { name: string; directory: string }
-  >;
-  hasteOptions?: any;
-  initializeCoreLocation?: string;
-  hotReloading?: boolean;
-};
-
-export default function getDefaultConfig(options: EnvOptions) {
+export default function getDefaultConfig(
+  runtime: Runtime,
+  options: EnvOptions
+) {
   const {
     platform,
     root,
@@ -90,10 +82,14 @@ export default function getDefaultConfig(options: EnvOptions) {
              * Asset loader enables asset management based on image scale
              * This needs the AssetResolver plugin in resolver.plugins to work
              */
-            loader: require.resolve(
-              '@haul/core-legacy/build/loaders/assetLoader'
-            ),
-            query: { platform, root, bundle },
+            loader: ASSET_LOADER_PATH,
+            options: {
+              runtime,
+              platform,
+              root,
+              bundle,
+            },
+            // query: { platform, root, bundle },
           },
         },
       ],
@@ -170,13 +166,13 @@ export default function getDefaultConfig(options: EnvOptions) {
               if (typeof _ === 'string') {
                 if (_ === 'react-native') {
                   return path.join(
-                    moduleResolve(root, 'react-native'),
+                    resolveModule(root, 'react-native'),
                     'Libraries'
                   );
                 }
-                return moduleResolve(root, _);
+                return resolveModule(root, _);
               }
-              return path.join(moduleResolve(root, _.name), _.directory);
+              return path.join(resolveModule(root, _.name), _.directory);
             }
           ),
           hasteOptions: hasteOptions || {},
@@ -185,7 +181,7 @@ export default function getDefaultConfig(options: EnvOptions) {
          * This is required by asset loader to resolve extra scales
          * It will resolve assets like image@1x.png when image.png is not present
          */
-        new AssetResolver({ platform }),
+        new AssetResolver({ platform, runtime }),
       ],
       /**
        * Match what React Native packager supports

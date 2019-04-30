@@ -3,12 +3,15 @@ import path from 'path';
 import webpack from 'webpack';
 import nodeFs from 'fs';
 import MemoryFileSystem from 'memory-fs';
-import getWebpackConfigPath from '@haul/core-legacy/build/utils/getWebpackConfigPath';
-import getConfig from '@haul/core-legacy/build/utils/getConfig';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 import RamBundlePlugin from '@haul/ram-bundle-webpack-plugin';
 import * as messages from '../messages/ramBundleMessages';
-import Runtime from '../Runtime';
+import {
+  getProjectConfigPath,
+  getProjectConfig,
+  getWebpackConfig,
+  Runtime,
+} from '@haul/core';
 
 export default function ramBundleCommand(runtime: Runtime) {
   return {
@@ -84,18 +87,19 @@ export default function ramBundleCommand(runtime: Runtime) {
         require('@haul/core-legacy/build/babelRegister');
 
         const directory = process.cwd();
-        const configPath = getWebpackConfigPath(directory, config);
-
-        const webpackConfig = getConfig(
-          configPath,
+        const configPath = getProjectConfigPath(directory, config);
+        const projectConfig = getProjectConfig(configPath);
+        const webpackConfig = getWebpackConfig(
+          runtime,
           {
+            platform,
             root: directory,
             dev: dev,
             minify: minify === undefined ? !dev : minify,
             bundle: true,
+            assetsDest,
           },
-          platform,
-          runtime.logger
+          projectConfig
         );
 
         if (assetsDest) {
