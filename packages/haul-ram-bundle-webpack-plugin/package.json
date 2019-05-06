@@ -12,14 +12,15 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "webpack": "^4.30.0",
-    "metro": "^0.53.1"
+    "metro": "^0.53.1",
+    "webpack": "^4.30.0"
   },
   "dependencies": {
+    "terser": "^3.17.0"
   },
   "devDependencies": {
-    "source-map": "^0.7.3",
     "metro": "^0.53.1",
+    "source-map": "^0.7.3",
     "webpack": "^4.30.0"
   }
 }

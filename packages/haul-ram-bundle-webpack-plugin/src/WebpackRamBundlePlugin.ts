@@ -3,6 +3,7 @@ import nodeFs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 import RamBundle from './RamBundle';
+import terser from 'terser';
 
 export type Module = {
   id: string | number;
@@ -109,22 +110,30 @@ export default class WebpackRamBundlePlugin {
         //   'utf-8'
         // ).toString('base64');
         // const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
+
+        // Minify source of module
+        // TODO - source map https://github.com/terser-js/terser#source-map-options
+        const minifiedSource = terser.minify(`__webpack_require__.loadSelf(
+          ${selfRegisterId}, ${
+          renderedModule.source /* .replace(
+          /}\)$/gm,
+          sourceMapsComment
+        ) */
+        });`);
+
+        // Check if there is no error in minifed source
+        assert(!minifiedSource.error, minifiedSource.error);
+
         return {
           id: webpackModule.id,
           idx: webpackModule.index,
           filename: webpackModule.resource,
-          source: `__webpack_require__.loadSelf(
-            ${selfRegisterId}, ${
-            renderedModule.source /* .replace(
-            /}\)$/gm,
-            sourceMapsComment
-          ) */
-          });`,
+          source: minifiedSource.code || '',
         };
       });
 
       // Sanity check
-      let duplicatedModule = this.modules.find(m1 =>
+      const duplicatedModule = this.modules.find(m1 =>
         this.modules.some(
           m2 => m1.filename !== m2.filename && m1.idx === m2.idx
         )
