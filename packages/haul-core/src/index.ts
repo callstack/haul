@@ -15,6 +15,7 @@ export {
 } from './constants';
 export {
   EnvOptions,
+  HaulConfigBuilder,
   HaulConfig,
   WebpackConfigBuilder,
   ProjectConfig,
