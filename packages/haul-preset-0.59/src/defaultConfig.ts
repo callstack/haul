@@ -6,7 +6,7 @@ import {
   resolveModule,
   EnvOptions,
   Runtime,
-  ReactNativeEnvPlugin,
+  ReactNativeTarget,
 } from '@haul/core';
 import path from 'path';
 import webpack from 'webpack';
@@ -115,7 +115,6 @@ export default function getDefaultConfig(
         minimize: !!minify,
         debug: dev,
       }),
-      new ReactNativeEnvPlugin(),
     ].concat(
       dev
         ? [
@@ -200,11 +199,7 @@ export default function getDefaultConfig(
       namedModules: dev,
       concatenateModules: true,
     },
-    /**
-     * Set target to webworker as it's closer to RN environment than `web`. It should be
-     * later tweaked by ReactNativeEnvPlugin.
-     */
-    target: 'webworker',
+    target: ReactNativeTarget,
     stats: 'verbose',
   };
 }

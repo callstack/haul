@@ -11,6 +11,7 @@ export { default as resolveModule } from './webpack/resolvers/resolveModule';
 export {
   default as ReactNativeEnvPlugin,
 } from './webpack/plugins/ReactNativeEnvPlugin';
+export { default as ReactNativeTarget } from './webpack/ReactNativeTarget';
 
 // Shared CLI utils
 export { default as Runtime } from './runtime/Runtime';

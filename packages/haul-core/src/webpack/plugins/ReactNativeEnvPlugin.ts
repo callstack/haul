@@ -19,10 +19,12 @@ export default class ReactNativeEnvPlugin {
           return `${asyncEval}\n${source}`;
         }
       );
-
-      (compilation.mainTemplate as any).requireEnsure.tap(
+      (compilation.mainTemplate as any).hooks.requireEnsure.tap(
         'ReactNativeEnvPlugin',
         (source: string) => {
+          // The is no `importScripts` in react-native. Replace it with Promise based
+          // fetch + eval and return the promise so the webpack module system and bootstrapping
+          // logic is not broken.
           return source.replace(
             /importScripts\((.+)\)/gm,
             'return asyncEval(__webpack_require__.p + $1)'
