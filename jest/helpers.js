@@ -15,30 +15,26 @@ const flushPromises = (): Promise<any> =>
   new Promise(resolve => setTimeout(resolve));
 
 const replacePathsInObject = (object: mixed) => {
-  return traverse(object).map(
-    entry =>
-      typeof entry === 'string'
-        ? entry
-            .replace(
-              new RegExp(`^${excapeStringRegex(path.resolve('/'))}`),
-              '/'
-            )
-            .replace(new RegExp('\\\\', 'g'), '/')
-            .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
-            .replace(
-              new RegExp(
-                process.platform === 'win32'
-                  ? `^${excapeStringRegex(
-                      path
-                        .resolve(__dirname, '..')
-                        .slice(2)
-                        .replace(new RegExp('\\\\', 'g'), '/')
-                    )}`
-                  : `^${excapeStringRegex(path.resolve(__dirname, '..'))}`
-              ),
-              '<<REPLACED>>'
-            )
-        : entry
+  return traverse(object).map(entry =>
+    typeof entry === 'string'
+      ? entry
+          .replace(new RegExp(`^${excapeStringRegex(path.resolve('/'))}`), '/')
+          .replace(new RegExp('\\\\', 'g'), '/')
+          .replace(/\/.*\/node_modules/, '<<NODE_MODULE>>')
+          .replace(
+            new RegExp(
+              process.platform === 'win32'
+                ? `^${excapeStringRegex(
+                    path
+                      .resolve(__dirname, '..')
+                      .slice(2)
+                      .replace(new RegExp('\\\\', 'g'), '/')
+                  )}`
+                : `^${excapeStringRegex(path.resolve(__dirname, '..'))}`
+            ),
+            '<<REPLACED>>'
+          )
+      : entry
   );
 };
 

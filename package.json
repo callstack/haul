@@ -1,175 +1,46 @@
 {
-  "version": "1.0.0-rc.14",
-  "name": "haul",
-  "description": "Haul is a new command line tools for React Native",
-  "bin": {
-    "haul": "./bin/cli.js"
-  },
-  "main": "src/index.js",
-  "scripts": {
-    "precommit": "lint-staged",
-    "flow": "flow --include-warnings",
-    "lint": "eslint .",
-    "jest": "jest",
-    "test": "yarn flow && yarn lint && yarn jest",
-    "test:ci": "yarn flow && yarn lint && yarn jest -- -i",
-    "format": "eslint --fix .",
-    "add-contributor": "all-contributors add"
-  },
-  "author": "Mike Grabowski <mike@callstack.io>",
-  "repository": "github:callstack-io/haul",
-  "contributors": [
-    "Satyajit Sahoo <satyajit.sahoo@callstack.io>",
-    "Piotr Drapich <piotr.drapich@callstack.io>",
-    "Pawel Trysla <pawel.trysla@callstack.io>"
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "license": "MIT",
-  "bugs": "https://github.com/callstack-io/haul/issues",
-  "peerDependencies": {
-    "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.57.0"
+  "scripts": {
+    "lint": "eslint --ext '.js,.ts' './packages'",
+    "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../babel.config.js\"",
+    "watch": "lerna exec --parallel \"babel src --out-dir build --extensions '.js,.ts' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start --config-file=../../babel.config.js --watch\"",
+    "build:def": "lerna exec --ignore '@haul/core-legacy' \"tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./build\"",
+    "prepare": "yarn build:source && yarn build:def",
+    "typecheck": "tsc --noEmit",
+    "add-contributor": "all-contributors add",
+    "test": "jest"
   },
   "dependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
-    "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/polyfill": "^7.4.0",
-    "@babel/preset-env": "^7.4.0",
-    "@babel/register": "^7.4.0",
-    "@react-slate/components": "0.2.0",
-    "@react-slate/core": "0.7.0",
-    "@react-slate/utils": "0.2.2",
-    "@zamotany/react-proxy": "3.0.0-alpha.4",
-    "babel-loader": "^8.0.2",
-    "cache-loader": "^1.2.2",
-    "camelcase-keys": "^4.0.0",
-    "case-sensitive-paths-webpack-plugin": "^2.1.2",
-    "chalk": "1.1.3",
-    "clear": "^0.0.1",
-    "cliui": "^3.2.0",
-    "clone": "^2.1.1",
-    "core-js": "^2.5.3",
-    "decamelize": "^1.2.0",
-    "dedent": "^0.7.0",
-    "escape-string-regexp": "^1.0.5",
-    "express": "^4.15.2",
-    "hasha": "^2.2.0",
-    "hoist-non-react-statics": "^2.2.1",
-    "image-size": "^0.5.1",
-    "inquirer": "^3.0.6",
-    "loader-utils": "^1.1.0",
-    "mime-types": "^2.1.18",
-    "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1",
-    "morgan": "^1.8.1",
-    "multi-progress": "^2.0.0",
-    "node-emoji": "^1.8.1",
-    "node-fetch": "^2.0.0",
-    "open-in-editor": "^2.2.0",
-    "opn": "^5.3.0",
-    "ora": "^1.2.0",
-    "platform-select": "^1.1.0",
-    "react": "16.5.0",
-    "react-deep-force-update": "^2.0.1",
-    "react-hot-loader": "^4.3.6",
-    "resolve": "^1.3.3",
-    "resolve-from": "^4.0.0",
-    "rxjs": "^5.4.2",
-    "semver": "^5.5.0",
-    "simple-progress-webpack-plugin": "^1.1.2",
-    "source-map": "^0.5.6",
-    "strip-ansi": "^3.0.1",
-    "thread-loader": "^1.2.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.12.0",
-    "webpack-hot-middleware": "^2.22.1",
-    "ws": "^2.2.2",
-    "xpipe": "^1.0.5"
-  },
-  "devDependencies": {
-    "all-contributors-cli": "^4.5.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
-    "eslint": "^4.3.0",
-    "eslint-config-callstack-io": "^1.0.1",
-    "flow-bin": "^0.65.0",
-    "husky": "^0.13.3",
-    "jest": "^23.6.0",
-    "lint-staged": "^3.4.0",
-    "metro-react-native-babel-preset": "^0.45",
-    "react-native": "^0.57.0",
-    "rimraf": "^2.6.1",
-    "snapshot-diff": "^0.3.0",
+    "chalk": "^2.4.2",
+    "escape-string-regexp": "^2.0.0",
+    "lerna": "^3.13.2",
+    "node-fetch": "^2.3.0",
+    "rimraf": "^2.6.3",
+    "strip-ansi": "^5.2.0",
     "traverse": "^0.6.6"
   },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          },
-          "useBuiltIns": "entry",
-          "corejs": 2
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-transform-flow-strip-types",
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-object-rest-spread",
-      "@babel/plugin-transform-react-jsx"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "callstack-io",
-    "rules": {
-      "strict": 0,
-      "arrow-body-style": 0,
-      "arrow-parens": 0,
-      "class-methods-use-this": 0,
-      "flowtype/no-weak-types": 0,
-      "flowtype/require-parameter-type": 0,
-      "global-require": 0,
-      "no-alert": 0,
-      "no-confusing-arrow": 0,
-      "no-console": 0,
-      "no-constant-condition": 0,
-      "no-restricted-syntax": 0
-    },
-    "overrides": {
-      "files": "**/integration_tests/**/*.js",
-      "rules": {
-        "import/no-extraneous-dependencies": [
-          "error",
-          {
-            "devDependencies": [
-              "**/integration_tests/**"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
-    "testPathIgnorePatterns": [
-      "/integration_tests/.*/__tests__"
-    ],
-    "moduleNameMapper": {
-      "^jest/(.*)": "<rootDir>/jest/$1"
-    },
-    "testMatch": [
-      "**/*.test.js"
-    ]
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@callstack/eslint-config": "^4.2.0",
+    "@types/jest": "^24.0.11",
+    "@types/webpack": "^4.4.29",
+    "@types/node": "^11.13.4",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "all-contributors-cli": "^4.5.1",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
+    "eslint": "^5.16.0",
+    "jest": "^24.7.1",
+    "typescript": "^3.4.3"
   }
 }

@@ -1,0 +1,3 @@
+rootProject.name = 'react_native_with_haul'
+
+include ':app'

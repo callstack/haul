@@ -20,7 +20,7 @@ const run = (cmd: string, cwd?: string) => {
   const spawnOptions = { cwd };
   const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions);
 
-  if (result.status !== 0) {
+  if (result.status !== null && result.status !== 0) {
     const message = `
       ORIGINAL CMD: ${cmd}
       STDOUT: ${result.stdout && result.stdout.toString()}

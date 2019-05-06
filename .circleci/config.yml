@@ -1,54 +1,61 @@
-version: 2
+version: 2.1
+
+commands:
+  run_node_tests:
+    parameters:
+      cache_prefix:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
+          - << parameters.cache_prefix >>-dependencies
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
+      - run: yarn lint
+      - run: yarn typecheck
+      - run: yarn test -i
+
+executors:
+  node_8:
+    working_directory: ~/haul
+    docker:
+      - image: circleci/node:8
+  node_10:
+    working_directory: ~/haul
+    docker:
+      - image: circleci/node:10
+  node_latest:
+    working_directory: ~/haul
+    docker:
+      - image: circleci/node:latest
+
 jobs:
-  # Testing Node 8; running Yarn, ESLint, Flow and Jest
-  test-node-8:
-    working_directory: ~/haul
-    docker:
-      - image: circleci/node:8.6.0
+  test_node_8:
+    executor: node_8
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - node8-dependencies-{{ checksum "package.json" }}
-          - node8-dependencies
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: node8-dependencies-{{ checksum "package.json" }}
-      - run: yarn test:ci
-
-  # Testing Node 4; running just Jest, as we develop on Node >=6.
-  test-node-4:
-    working_directory: ~/haul
-    docker:
-      - image: circleci/node:4.8.4
+      - run_node_tests:
+          cache_prefix: "node_8"
+  test_node_10:
+    executor: node_10
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - node4-dependencies-{{ checksum "package.json" }}
-          - node4-dependencies
-      - run: |
-          (export PKG=eslint-config-callstack-io; npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG")
-      - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: node4-dependencies-{{ checksum "package.json" }}
-      # We use yarn to install integration_tests fixtures
-      - run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
-          export PATH="$HOME/.yarn/bin:$PATH"
-      - run: npm run jest
+      - run_node_tests:
+          cache_prefix: "node_10"
+  test_node_latest:
+    executor: node_latest
+    steps:
+      - run_node_tests:
+          cache_prefix: "node_latest"
 
-# Workflows enables us to run multiple jobs in parallel
 workflows:
   version: 2
-  node-8:
+  test:
     jobs:
-      - test-node-8
-  # Disable Node 4 because Haul is very buggy there :(
-  # node-4:
-  #   jobs:
-  #     - test-node-4
+      - test_node_8
+      - test_node_10
+      - test_node_latest

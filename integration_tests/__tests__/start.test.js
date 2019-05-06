@@ -12,12 +12,14 @@ const os = require('os');
 const { run, yarnCommand } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
-const { isPortTaken } = require('../../src/utils/haulPortHandler');
+const {
+  isPortTaken,
+} = require('../../packages/haul-core-legacy/src/utils/haulPortHandler');
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../../fixtures/react-native-with-haul'
+  '../../fixtures/react_native_with_haul'
 );
 
 let haul;
@@ -33,6 +35,7 @@ beforeAll(async done => {
   const messageBuffer = [];
 
   haul.stdout.on('data', data => {
+    // console.log(data.toString());
     const message = stripAnsi(data.toString()).trim();
 
     if (message.length > 0) {

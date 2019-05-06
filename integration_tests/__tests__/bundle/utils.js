@@ -12,7 +12,7 @@ const rimraf = require('rimraf');
 
 export const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../../../fixtures/react-native-with-haul'
+  '../../../fixtures/react_native_with_haul'
 );
 
 export function bundleForPlatform(platform: string) {
