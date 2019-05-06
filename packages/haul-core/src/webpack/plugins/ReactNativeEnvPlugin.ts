@@ -3,7 +3,9 @@ import webpack from 'webpack';
 const asyncEval = `
 // Fetch and eval async chunks
 function asyncEval(url) {
-  return fetch(url).then(res => res.text()).then(src => eval(src));
+  return fetch(url)
+    .then(res => res.text())
+    .then(src => eval(src + "\\n//# sourceURL=" + url));
 }
 `;
 
