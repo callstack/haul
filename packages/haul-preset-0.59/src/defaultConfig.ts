@@ -6,6 +6,7 @@ import {
   resolveModule,
   EnvOptions,
   Runtime,
+  ReactNativeEnvPlugin,
 } from '@haul/core';
 import path from 'path';
 import webpack from 'webpack';
@@ -38,6 +39,7 @@ export default function getDefaultConfig(
       path: assetsDest || path.join(root),
       filename: `index.${platform}.bundle`,
       publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
+      globalObject: 'this',
     },
     module: {
       rules: [
@@ -89,7 +91,6 @@ export default function getDefaultConfig(
               root,
               bundle,
             },
-            // query: { platform, root, bundle },
           },
         },
       ],
@@ -114,11 +115,11 @@ export default function getDefaultConfig(
         minimize: !!minify,
         debug: dev,
       }),
+      new ReactNativeEnvPlugin(),
     ].concat(
       dev
         ? [
             ...(hotReloading ? [new webpack.HotModuleReplacementPlugin()] : []),
-            new webpack.NamedModulesPlugin(),
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
@@ -126,10 +127,6 @@ export default function getDefaultConfig(
               moduleFilenameTemplate: '[absolute-resource-path]',
               module: true,
             } as any),
-            new webpack.BannerPlugin({
-              banner: 'if (this && !this.self) { this.self = this; };\n',
-              raw: true,
-            }),
           ]
         : [
             /**
@@ -184,8 +181,8 @@ export default function getDefaultConfig(
         new AssetResolver({ platform, runtime }),
       ],
       /**
-       * Match what React Native packager supports
-       * First entry takes precendece
+       * Match what React Native packager supports.
+       * First entry takes precedence.
        */
       mainFields: ['react-native', 'browser', 'main'],
       extensions: [`.${platform}.js`, '.native.js', '.js'],
@@ -204,7 +201,8 @@ export default function getDefaultConfig(
       concatenateModules: true,
     },
     /**
-     * Set target to webworker as it's closer to RN environment than `web`.
+     * Set target to webworker as it's closer to RN environment than `web`. It should be
+     * later tweaked by ReactNativeEnvPlugin.
      */
     target: 'webworker',
     stats: 'verbose',

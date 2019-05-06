@@ -4,7 +4,7 @@ import path from 'path';
 import dedent from 'dedent';
 import hasha from 'hasha';
 import escapeStringRegexp from 'escape-string-regexp';
-import Runtime from '../runtime/Runtime';
+import Runtime from '../../runtime/Runtime';
 import AssetResolver from '../resolvers/AssetResolver';
 
 type Config = {
