@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "init": "node ../../packages/haul/bin/haul.js init",
-    "start": "node ../../packages/haul/bin/haul.js start"
+    "init": "node ../../packages/haul-cli/bin/haul.js init",
+    "start": "node ../../packages/haul-cli/bin/haul.js start"
   },
   "dependencies": {
     "react": "16.8.3",

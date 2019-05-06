@@ -1,6 +1,6 @@
 import path from 'path';
 import escapeStringRegexp from 'escape-string-regexp';
-import Runtime from '../runtime/Runtime';
+import Runtime from '../../runtime/Runtime';
 
 type Request = {
   path: string;
