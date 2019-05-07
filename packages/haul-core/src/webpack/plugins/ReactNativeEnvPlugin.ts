@@ -19,6 +19,8 @@ export default class ReactNativeEnvPlugin {
 
   apply(compiler: webpack.Compiler) {
     if (this.bundle) {
+      // When creating static bundle (non-RAM), async chunks will be concatenated into main bundle.
+      // This will allow easy switching between RAM bundle and non-RAM static bundle.
       compiler.hooks.emit.tap('ReactNativeEnvPlugin', compilation => {
         // Skip if there is no async chunks.
         if (compilation.chunks.length === 1) {
