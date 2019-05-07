@@ -15,7 +15,8 @@ import getBabelConfigPath from './getBabelConfigPath';
 
 export default function getDefaultConfig(
   runtime: Runtime,
-  options: EnvOptions
+  options: EnvOptions,
+  inlineSourceMap?: boolean
 ) {
   const {
     platform,
@@ -119,7 +120,11 @@ export default function getDefaultConfig(
       dev
         ? [
             ...(hotReloading ? [new webpack.HotModuleReplacementPlugin()] : []),
-            new webpack.SourceMapDevToolPlugin({
+            new webpack[
+              inlineSourceMap
+                ? 'EvalSourceMapDevToolPlugin'
+                : 'SourceMapDevToolPlugin'
+            ]({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
               publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
@@ -136,6 +141,8 @@ export default function getDefaultConfig(
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
+              moduleFilenameTemplate: '[absolute-resource-path]',
+              module: true,
             }),
           ]
     ),

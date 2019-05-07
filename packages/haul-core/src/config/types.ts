@@ -22,6 +22,7 @@ export type HaulConfigBuilder = ((opts: EnvOptions) => HaulConfig) | HaulConfig;
 
 export type HaulConfig = {
   entry: string | string[];
+  inlineSourceMap?: boolean;
 };
 
 export type WebpackConfigBuilder = (
