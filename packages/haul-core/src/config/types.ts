@@ -30,8 +30,17 @@ export type WebpackConfigBuilder = (
   options: EnvOptions
 ) => webpack.Configuration;
 
+export type RamBundleDebugOptions = {
+  path: string;
+  renderBootstrap?: boolean;
+  renderModules?: boolean;
+};
+
 export type RamBundleConfig = {
-  minification?: Pick<MinifyOptions, Exclude<keyof MinifyOptions, 'sourceMap'>>;
+  debug?: RamBundleDebugOptions;
+  minification?:
+    | false
+    | Pick<MinifyOptions, Exclude<keyof MinifyOptions, 'sourceMap'>>;
 };
 
 export type ProjectConfig = {

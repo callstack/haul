@@ -33,4 +33,5 @@ export {
   ProjectConfig,
   PresetBuilder,
   RamBundleConfig,
+  RamBundleDebugOptions,
 } from './config/types';

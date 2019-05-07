@@ -17,9 +17,11 @@
     "webpack": "^4.30.0"
   },
   "dependencies": {
-    "@haul/core": "1.0.0-rc.15"
+    "@haul/core": "1.0.0-rc.15",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
+    "@types/mkdirp": "^0.5.2",
     "metro": "^0.53.1",
     "source-map": "^0.7.3",
     "terser": "^3.17.0",
