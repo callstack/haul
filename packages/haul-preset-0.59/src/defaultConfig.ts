@@ -7,6 +7,7 @@ import {
   EnvOptions,
   Runtime,
   ReactNativeTarget,
+  HaulConfig,
 } from '@haul/core';
 import path from 'path';
 import webpack from 'webpack';
@@ -15,7 +16,8 @@ import getBabelConfigPath from './getBabelConfigPath';
 
 export default function getDefaultConfig(
   runtime: Runtime,
-  options: EnvOptions
+  options: EnvOptions,
+  haulConfig: HaulConfig
 ) {
   const {
     platform,
@@ -29,7 +31,7 @@ export default function getDefaultConfig(
     hasteOptions,
     hotReloading,
   } = options;
-
+  const { inlineSourceMap } = haulConfig;
   return {
     mode: dev ? 'development' : 'production',
     context: root,
@@ -119,7 +121,11 @@ export default function getDefaultConfig(
       dev
         ? [
             ...(hotReloading ? [new webpack.HotModuleReplacementPlugin()] : []),
-            new webpack.SourceMapDevToolPlugin({
+            new webpack[
+              inlineSourceMap
+                ? 'EvalSourceMapDevToolPlugin'
+                : 'SourceMapDevToolPlugin'
+            ]({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
               publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
@@ -136,6 +142,8 @@ export default function getDefaultConfig(
             new webpack.SourceMapDevToolPlugin({
               test: /\.(js|css|(js)?bundle)($|\?)/i,
               filename: '[file].map',
+              moduleFilenameTemplate: '[absolute-resource-path]',
+              module: true,
             }),
           ]
     ),

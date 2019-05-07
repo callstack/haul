@@ -5,12 +5,12 @@ import getDefaultConfig from './defaultConfig';
 
 export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
   return (runtime: Runtime, options: EnvOptions) => {
-    const defaultWebpackConfig = getDefaultConfig(runtime, options);
-
     /**
      * Currently we support only "entry" field in config file
      */
     const { entry } = haulConfig;
+
+    const defaultWebpackConfig = getDefaultConfig(runtime, options, haulConfig);
 
     const config = {
       ...defaultWebpackConfig,
