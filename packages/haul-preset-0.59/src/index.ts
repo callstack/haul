@@ -8,13 +8,9 @@ export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
     /**
      * Currently we support only "entry" field in config file
      */
-    const { entry, inlineSourceMap } = haulConfig;
+    const { entry } = haulConfig;
 
-    const defaultWebpackConfig = getDefaultConfig(
-      runtime,
-      options,
-      inlineSourceMap
-    );
+    const defaultWebpackConfig = getDefaultConfig(runtime, options, haulConfig);
 
     const config = {
       ...defaultWebpackConfig,

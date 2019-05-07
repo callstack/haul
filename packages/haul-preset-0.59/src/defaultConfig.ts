@@ -7,6 +7,7 @@ import {
   EnvOptions,
   Runtime,
   ReactNativeTarget,
+  HaulConfig,
 } from '@haul/core';
 import path from 'path';
 import webpack from 'webpack';
@@ -16,7 +17,7 @@ import getBabelConfigPath from './getBabelConfigPath';
 export default function getDefaultConfig(
   runtime: Runtime,
   options: EnvOptions,
-  inlineSourceMap?: boolean
+  haulConfig: HaulConfig
 ) {
   const {
     platform,
@@ -30,7 +31,7 @@ export default function getDefaultConfig(
     hasteOptions,
     hotReloading,
   } = options;
-
+  const { inlineSourceMap } = haulConfig;
   return {
     mode: dev ? 'development' : 'production',
     context: root,
