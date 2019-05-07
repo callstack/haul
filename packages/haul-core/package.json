@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "ansi-fragments": "^0.2.1",
+    "concat-with-sourcemaps": "^1.1.0",
     "@haul/inspector-events": "1.0.0-rc.15",
     "@haul/core-legacy": "1.0.0-rc.15",
     "loader-utils": "^1.2.3",
@@ -26,6 +27,7 @@
     "escape-string-regexp": "^2.0.0",
     "resolve": "^1.10.1",
     "webpack": "^4.30.0",
+    "webpack-sources": "^1.3.0",
     "ws": "^6.2.1",
     "terser": "^3.17.0"
   },
@@ -34,6 +36,7 @@
     "@types/loader-utils": "^1.1.3",
     "@types/dedent": "^0.7.0",
     "@types/resolve": "^0.0.8",
-    "@types/ws": "^6.0.1"
+    "@types/ws": "^6.0.1",
+    "@types/webpack-sources": "^0.1.5"
   }
 }

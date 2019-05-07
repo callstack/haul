@@ -199,7 +199,7 @@ export default function getDefaultConfig(
       namedModules: dev,
       concatenateModules: true,
     },
-    target: ReactNativeTarget,
+    target: ReactNativeTarget({ bundle: Boolean(bundle) }),
     stats: 'verbose',
   };
 }
