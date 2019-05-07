@@ -39,7 +39,7 @@ export default class ReactNativeEnvPlugin {
           mainSource
         );
 
-        // Concatenate all chunks and it's source maps. Chunks source needs to have source mapping URL
+        // Concatenate all chunks and its source maps. Chunks source needs to have source mapping URL
         // removed, since it will be added at the end of the whole bundle.
         const concat = new Concat(true, mainSourceFilename, '\n');
         concat.add(
@@ -64,11 +64,11 @@ export default class ReactNativeEnvPlugin {
         }
 
         // Remove non-main assets
-        Object.keys(compilation.assets)
-          .filter(item => ![mainSourceFilename, mainMap].includes(item))
-          .forEach(item => {
+        Object.keys(compilation.assets).forEach(item => {
+          if (![mainSourceFilename, mainMap].includes(item)) {
             delete compilation.assets[item];
-          });
+          }
+        });
 
         // Assign concatenated bundle to main asset
         compilation.assets[mainSourceFilename] = new RawSource(
@@ -98,11 +98,12 @@ export default class ReactNativeEnvPlugin {
           // fetch + eval and return the promise so the webpack module system and bootstrapping
           // logic is not broken.
           // When creating static bundle, async chunks will be concatenated into the bundle,
-          // so by the time they are required, they should already by loaded into the module system.
+          // so by the time they are required, they should already be loaded into the module system.
           return source.replace(
             /importScripts\((.+)\)/gm,
             this.bundle
-              ? 'throw new Error("async chunks were not concatenated into the bundle")'
+              ? 'throw new Error("Invalid bundle: async chunk not loaded. ' +
+                  'Please open an issue at https://github.com/callstack/haul")'
               : 'return asyncEval(__webpack_require__.p + $1)'
           );
         }

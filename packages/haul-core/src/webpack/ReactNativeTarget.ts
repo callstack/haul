@@ -10,9 +10,9 @@ import ReactNativeEnvPlugin from './plugins/ReactNativeEnvPlugin';
  * Adding ReactNativeEnvPlugin directly to config's plugins list
  * does not result in correct bundle for some reason.
  */
-export default function ReactNativeTarget({
-  bundle,
-}: { bundle?: boolean } = {}) {
+export default function ReactNativeTarget(
+  { bundle }: { bundle: boolean } = { bundle: false }
+) {
   return (compiler: webpack.Compiler) => {
     // Load modules using require, since we don't really care about types here.
     const WebWorkerTemplatePlugin = require('webpack/lib/webworker/WebWorkerTemplatePlugin');
@@ -26,6 +26,6 @@ export default function ReactNativeTarget({
     new LoaderTargetPlugin(compiler.options.target).apply(compiler);
 
     // Apply React Native tweaks
-    new ReactNativeEnvPlugin(Boolean(bundle)).apply(compiler);
+    new ReactNativeEnvPlugin(bundle).apply(compiler);
   };
 }
