@@ -26,7 +26,8 @@
     "escape-string-regexp": "^2.0.0",
     "resolve": "^1.10.1",
     "webpack": "^4.30.0",
-    "ws": "^6.2.1"
+    "ws": "^6.2.1",
+    "terser": "^3.17.0"
   },
   "devDependencies": {
     "@types/image-size": "^0.7.0",

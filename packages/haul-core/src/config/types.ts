@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import { MinifyOptions } from 'terser';
 import Runtime from '../runtime/Runtime';
 
 export type EnvOptions = {
@@ -28,8 +29,13 @@ export type WebpackConfigBuilder = (
   options: EnvOptions
 ) => webpack.Configuration;
 
+export type RamBundleConfig = {
+  minification?: Pick<MinifyOptions, Exclude<keyof MinifyOptions, 'sourceMap'>>;
+};
+
 export type ProjectConfig = {
   webpack: webpack.Configuration | WebpackConfigBuilder;
+  ramBundle?: RamBundleConfig;
 };
 
 export type PresetBuilder = (haulConfig: HaulConfig) => WebpackConfigBuilder;
