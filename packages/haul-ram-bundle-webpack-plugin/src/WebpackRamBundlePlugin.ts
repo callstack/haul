@@ -114,7 +114,7 @@ export default class WebpackRamBundlePlugin {
 
         let code = `__webpack_require__.loadSelf(
           ${selfRegisterId}, ${renderedModule.source});`;
-        if (this.config.minification) {
+        if (this.config.minification !== false) {
           // Minify source of module
           // TODO - source map https://github.com/terser-js/terser#source-map-options
           const minifiedSource = terser.minify(

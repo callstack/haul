@@ -38,7 +38,7 @@ export type RamBundleDebugOptions = {
 export type RamBundleConfig = {
   debug?: RamBundleDebugOptions;
   minification?:
-    | boolean
+    | false
     | Pick<MinifyOptions, Exclude<keyof MinifyOptions, 'sourceMap'>>;
 };
 
