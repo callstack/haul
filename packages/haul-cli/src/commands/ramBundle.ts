@@ -10,6 +10,7 @@ import {
   getProjectConfigPath,
   getProjectConfig,
   getWebpackConfig,
+  getRamBundleConfig,
   Runtime,
 } from '@haul/core';
 
@@ -89,6 +90,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         const directory = process.cwd();
         const configPath = getProjectConfigPath(directory, config);
         const projectConfig = getProjectConfig(configPath);
+        const ramBundleConfig = getRamBundleConfig(projectConfig);
         const webpackConfig = getWebpackConfig(
           runtime,
           {
@@ -131,6 +133,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           new RamBundlePlugin({
             filename: 'ramBundle.bundle',
             fs,
+            config: ramBundleConfig,
           })
         );
 

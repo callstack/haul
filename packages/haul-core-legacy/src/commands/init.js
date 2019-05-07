@@ -138,7 +138,10 @@ async function init() {
     export default {
       webpack: createWebpackConfig(({ platform }) => ({
         entry: \`./${entry}\`
-      }))
+      })),
+      ramBundle: {
+        minification: {}
+      }
     };
   `;
 

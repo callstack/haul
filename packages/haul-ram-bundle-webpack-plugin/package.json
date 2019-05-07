@@ -13,14 +13,16 @@
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
     "metro": "^0.53.1",
+    "terser": "^3.17.0",
     "webpack": "^4.30.0"
   },
   "dependencies": {
-    "terser": "^3.17.0"
+    "@haul/core": "1.0.0-rc.15"
   },
   "devDependencies": {
     "metro": "^0.53.1",
     "source-map": "^0.7.3",
+    "terser": "^3.17.0",
     "webpack": "^4.30.0"
   }
 }

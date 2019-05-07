@@ -3,6 +3,7 @@ export { default as createPreset } from './config/createPreset';
 export { default as getProjectConfig } from './config/getProjectConfig';
 export { default as getWebpackConfig } from './config/getWebpackConfig';
 export { default as getProjectConfigPath } from './config/getProjectConfigPath';
+export { default as getRamBundleConfig } from './config/getRamBundleConfig';
 
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
@@ -31,4 +32,5 @@ export {
   WebpackConfigBuilder,
   ProjectConfig,
   PresetBuilder,
+  RamBundleConfig,
 } from './config/types';

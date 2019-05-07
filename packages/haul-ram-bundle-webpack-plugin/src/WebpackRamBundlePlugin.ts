@@ -4,6 +4,7 @@ import path from 'path';
 import webpack from 'webpack';
 import RamBundle from './RamBundle';
 import terser from 'terser';
+import { RamBundleConfig } from '@haul/core';
 
 export type Module = {
   id: string | number;
@@ -29,6 +30,7 @@ type WebpackRamBundlePluginOptions = {
   onResults?: Function;
   filename: string;
   fs?: FileSystem;
+  config: RamBundleConfig;
 };
 
 export default class WebpackRamBundlePlugin {
@@ -46,13 +48,20 @@ export default class WebpackRamBundlePlugin {
   filename: string = '';
   modules: Module[] = [];
   fs: FileSystem;
+  config: RamBundleConfig;
 
-  constructor({ debug = false, filename, fs }: WebpackRamBundlePluginOptions) {
+  constructor({
+    debug = false,
+    filename,
+    fs,
+    config,
+  }: WebpackRamBundlePluginOptions) {
     if (debug) {
       this.debugDir = path.resolve('webpack-ram-debug');
     }
     this.fs = fs || nodeFs;
     this.filename = filename;
+    this.config = config;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -110,16 +119,18 @@ export default class WebpackRamBundlePlugin {
         //   'utf-8'
         // ).toString('base64');
         // const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
-
         // Minify source of module
         // TODO - source map https://github.com/terser-js/terser#source-map-options
-        const minifiedSource = terser.minify(`__webpack_require__.loadSelf(
+        const minifiedSource = terser.minify(
+          `__webpack_require__.loadSelf(
           ${selfRegisterId}, ${
-          renderedModule.source /* .replace(
+            renderedModule.source /* .replace(
           /}\)$/gm,
           sourceMapsComment
         ) */
-        });`);
+          });`,
+          this.config.minification
+        );
 
         // Check if there is no error in minifed source
         assert(!minifiedSource.error, minifiedSource.error);
