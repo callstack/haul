@@ -30,7 +30,7 @@ type WebpackRamBundlePluginOptions = {
   onResults?: Function;
   filename: string;
   fs?: FileSystem;
-  config: RamBundleConfig;
+  config?: RamBundleConfig;
 };
 
 export default class WebpackRamBundlePlugin {
@@ -61,7 +61,7 @@ export default class WebpackRamBundlePlugin {
     }
     this.fs = fs || nodeFs;
     this.filename = filename;
-    this.config = config;
+    this.config = config || {};
   }
 
   apply(compiler: webpack.Compiler) {
