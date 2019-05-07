@@ -2,8 +2,9 @@ import assert from 'assert';
 import nodeFs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
-import RamBundle from './RamBundle';
 import terser from 'terser';
+import mkdirp from 'mkdirp';
+import RamBundle from './RamBundle';
 import { RamBundleConfig } from '@haul/core';
 
 export type Module = {
@@ -26,8 +27,6 @@ type FileSystem = {
 };
 
 type WebpackRamBundlePluginOptions = {
-  debug?: boolean;
-  onResults?: Function;
   filename: string;
   fs?: FileSystem;
   config?: RamBundleConfig;
@@ -44,24 +43,23 @@ export default class WebpackRamBundlePlugin {
     };
   }
 
-  debugDir: string | undefined;
   filename: string = '';
   modules: Module[] = [];
   fs: FileSystem;
-  config: RamBundleConfig;
+  config: RamBundleConfig = {};
 
-  constructor({
-    debug = false,
-    filename,
-    fs,
-    config,
-  }: WebpackRamBundlePluginOptions) {
-    if (debug) {
-      this.debugDir = path.resolve('webpack-ram-debug');
+  constructor({ filename, fs, config }: WebpackRamBundlePluginOptions) {
+    if (config) {
+      this.config = config;
+      if (config.debug) {
+        this.config.debug = {
+          ...config.debug,
+          path: path.resolve(config.debug.path),
+        };
+      }
     }
     this.fs = fs || nodeFs;
     this.filename = filename;
-    this.config = config || {};
   }
 
   apply(compiler: webpack.Compiler) {
@@ -114,32 +112,29 @@ export default class WebpackRamBundlePlugin {
           moduleMappings.modules[webpackModule.id] = webpackModule.index;
         }
 
-        // const sourceMaps = Buffer.from(
-        //   JSON.stringify(renderedModule.map),
-        //   'utf-8'
-        // ).toString('base64');
-        // const sourceMapsComment = `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${sourceMaps}\n})`;
-        // Minify source of module
-        // TODO - source map https://github.com/terser-js/terser#source-map-options
-        const minifiedSource = terser.minify(
-          `__webpack_require__.loadSelf(
-          ${selfRegisterId}, ${
-            renderedModule.source /* .replace(
-          /}\)$/gm,
-          sourceMapsComment
-        ) */
-          });`,
-          this.config.minification
-        );
+        let code = `__webpack_require__.loadSelf(
+          ${selfRegisterId}, ${renderedModule.source});`;
+        if (this.config.minification) {
+          // Minify source of module
+          // TODO - source map https://github.com/terser-js/terser#source-map-options
+          const minifiedSource = terser.minify(
+            `__webpack_require__.loadSelf(
+            ${selfRegisterId}, ${renderedModule.source});`,
+            typeof this.config.minification === 'boolean'
+              ? undefined
+              : this.config.minification
+          );
 
-        // Check if there is no error in minifed source
-        assert(!minifiedSource.error, minifiedSource.error);
+          // Check if there is no error in minifed source
+          assert(!minifiedSource.error, minifiedSource.error);
 
+          code = minifiedSource.code || '';
+        }
         return {
           id: webpackModule.id,
           idx: webpackModule.index,
           filename: webpackModule.resource,
-          source: minifiedSource.code || '',
+          source: code,
         };
       });
 
@@ -169,27 +164,45 @@ export default class WebpackRamBundlePlugin {
           .map(indent)
           .join('\n') + '\n';
 
-      if (this.debugDir) {
+      if (this.config.debug) {
+        mkdirp.sync(this.config.debug.path);
         const manifest = {
-          modulesLength: this.modules.length,
-          modules: this.modules.map(m => ({
-            id: m.id,
-            idx: m.idx,
-            filename: m.filename,
-          })),
+          filename: this.filename,
+          config: this.config,
+          module: {
+            mappings: moduleMappings,
+            count: this.modules.length,
+            stats: this.modules.map(m => ({
+              id: m.id,
+              idx: m.idx,
+              filename: m.filename,
+              length: m.source.length,
+            })),
+          },
         };
-        this.fs.writeFileSync(
-          path.join(this.debugDir, 'manifest.json'),
+        nodeFs.writeFileSync(
+          path.join(this.config.debug.path, 'manifest.json'),
           JSON.stringify(manifest, null, '  ')
         );
-        this.fs.writeFileSync(
-          path.join(this.debugDir, 'bootstrap.js'),
-          bootstrapCode
-        );
-        this.fs.writeFileSync(
-          path.join(this.debugDir, 'modules.js'),
-          this.modules.map(m => m.source).join('\n\n')
-        );
+        if (this.config.debug.renderBootstrap) {
+          nodeFs.writeFileSync(
+            path.join(this.config.debug.path, 'bootstrap.js'),
+            bootstrapCode
+          );
+        }
+        if (this.config.debug.renderModules) {
+          nodeFs.writeFileSync(
+            path.join(this.config.debug.path, 'modules.js'),
+            this.modules
+              .map(
+                m =>
+                  `/*** module begin: ${m.filename} ***/\n${
+                    m.source
+                  }\n/*** module end: ${m.filename} ***/`
+              )
+              .join('\n\n')
+          );
+        }
       }
 
       const outputFilename = path.isAbsolute(this.filename)

@@ -16,5 +16,12 @@ export default {
     }
 
     return config;
-  }
+  },
+  // ramBundle: {
+  //   debug: {
+  //     path: 'ram_bundle',
+  //     renderBootstrap: true,
+  //     renderModules: true,
+  //   }
+  // }
 };
