@@ -90,3 +90,4 @@ jspm_packages/
 build/
 dist/
 !**/fixtures/node_modules/
+.vscode/

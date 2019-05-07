@@ -1,6 +1,7 @@
 import assert from 'assert';
 import nodeFs from 'fs';
 import path from 'path';
+import { inspect } from 'util';
 import webpack from 'webpack';
 import terser from 'terser';
 import mkdirp from 'mkdirp';
@@ -20,6 +21,11 @@ type Compilation = webpack.compilation.Compilation & {
   mainTemplate: webpack.compilation.MainTemplate & {
     renderBootstrap: Function;
   };
+};
+
+type ModuleMappings = {
+  modules: { [key: string]: number };
+  chunks: { [key: string]: Array<number | string> };
 };
 
 type FileSystem = {
@@ -68,10 +74,7 @@ export default class WebpackRamBundlePlugin {
       // which contains additional properties.
       const compilation: Compilation = _compilation as any;
 
-      const moduleMappings: {
-        modules: { [key: string]: number };
-        chunks: { [key: string]: Array<number | string> };
-      } = {
+      const moduleMappings: ModuleMappings = {
         modules: {},
         chunks: {},
       };
@@ -118,8 +121,7 @@ export default class WebpackRamBundlePlugin {
           // Minify source of module
           // TODO - source map https://github.com/terser-js/terser#source-map-options
           const minifiedSource = terser.minify(
-            `__webpack_require__.loadSelf(
-            ${selfRegisterId}, ${renderedModule.source});`,
+            code,
             typeof this.config.minification === 'boolean'
               ? undefined
               : this.config.minification
@@ -159,50 +161,17 @@ export default class WebpackRamBundlePlugin {
       const bootstrapCode =
         `(${bootstrap.trim()})(this, ${
           typeof mainId === 'string' ? `"${mainId}"` : mainId
-        }, JSON.parse('${JSON.stringify(moduleMappings)}'));`
+        }, ${inspect(moduleMappings, {
+          depth: null,
+          maxArrayLength: null,
+          breakLength: Infinity,
+        })});`
           .split('\n')
           .map(indent)
           .join('\n') + '\n';
 
       if (this.config.debug) {
-        mkdirp.sync(this.config.debug.path);
-        const manifest = {
-          filename: this.filename,
-          config: this.config,
-          module: {
-            mappings: moduleMappings,
-            count: this.modules.length,
-            stats: this.modules.map(m => ({
-              id: m.id,
-              idx: m.idx,
-              filename: m.filename,
-              length: m.source.length,
-            })),
-          },
-        };
-        nodeFs.writeFileSync(
-          path.join(this.config.debug.path, 'manifest.json'),
-          JSON.stringify(manifest, null, '  ')
-        );
-        if (this.config.debug.renderBootstrap) {
-          nodeFs.writeFileSync(
-            path.join(this.config.debug.path, 'bootstrap.js'),
-            bootstrapCode
-          );
-        }
-        if (this.config.debug.renderModules) {
-          nodeFs.writeFileSync(
-            path.join(this.config.debug.path, 'modules.js'),
-            this.modules
-              .map(
-                m =>
-                  `/*** module begin: ${m.filename} ***/\n${
-                    m.source
-                  }\n/*** module end: ${m.filename} ***/`
-              )
-              .join('\n\n')
-          );
-        }
+        this.generateDebugFiles(moduleMappings, bootstrapCode);
       }
 
       const outputFilename = path.isAbsolute(this.filename)
@@ -214,5 +183,50 @@ export default class WebpackRamBundlePlugin {
         bundle.build(bootstrapCode, this.modules)
       );
     });
+  }
+
+  generateDebugFiles(moduleMappings: ModuleMappings, bootstrapCode: string) {
+    if (!this.config.debug) {
+      return;
+    }
+
+    mkdirp.sync(this.config.debug.path);
+    const manifest = {
+      filename: this.filename,
+      config: this.config,
+      module: {
+        mappings: moduleMappings,
+        count: this.modules.length,
+        stats: this.modules.map(m => ({
+          id: m.id,
+          idx: m.idx,
+          filename: m.filename,
+          length: m.source.length,
+        })),
+      },
+    };
+    nodeFs.writeFileSync(
+      path.join(this.config.debug.path, 'manifest.json'),
+      JSON.stringify(manifest, null, '  ')
+    );
+    if (this.config.debug.renderBootstrap) {
+      nodeFs.writeFileSync(
+        path.join(this.config.debug.path, 'bootstrap.js'),
+        bootstrapCode
+      );
+    }
+    if (this.config.debug.renderModules) {
+      nodeFs.writeFileSync(
+        path.join(this.config.debug.path, 'modules.js'),
+        this.modules
+          .map(
+            m =>
+              `/*** module begin: ${m.filename} ***/\n${
+                m.source
+              }\n/*** module end: ${m.filename} ***/`
+          )
+          .join('\n\n')
+      );
+    }
   }
 }
