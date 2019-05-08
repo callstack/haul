@@ -70,8 +70,12 @@ type DeltaBundleObject = {
 // that much unless network transfer time is the limiting factor?
 
 module.exports = function createDeltaBundle(source: string) {
+  // pre and post has to be declared, if not,
+  // app will crash when Android tries to write null to file
   const deltaObject: DeltaBundleObject = {
-    delta: [[0, source]],
+    pre: '',
+    modules: [[0, source]],
+    post: '',
   };
 
   return Buffer.from(JSON.stringify(deltaObject));

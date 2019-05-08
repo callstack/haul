@@ -102,12 +102,7 @@ module.exports = function createCompilerMiddleware(
               // This will load slower in RN, but it won't error, which is
               // nice for automated use-cases where changing the dev setting
               // is not possible.
-
-              const file =
-                result.file.type === 'Buffer'
-                  ? Buffer.from(result.file.data).toString()
-                  : result.file;
-
+              const file = result.file.toString();
               callback({
                 ...result,
                 file: createDeltaBundle(file),
