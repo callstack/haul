@@ -1,0 +1,2671 @@
+{
+  "filename": "ramBundle.bundle",
+  "config": {
+    "debug": {
+      "path": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/ram_bundle",
+      "renderBootstrap": true,
+      "renderModules": true
+    }
+  },
+  "module": {
+    "mappings": {
+      "modules": {},
+      "chunks": {
+        "0": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          148,
+          149,
+          150,
+          151,
+          152,
+          153,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194,
+          195,
+          196,
+          197,
+          198,
+          199,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          216,
+          217,
+          218,
+          219,
+          220,
+          221,
+          222,
+          223,
+          224,
+          225,
+          226,
+          227,
+          228,
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251,
+          252,
+          253,
+          254,
+          255,
+          256,
+          257,
+          258,
+          259,
+          260,
+          261,
+          262,
+          263,
+          264,
+          265,
+          266,
+          267,
+          268,
+          269,
+          270,
+          271,
+          272,
+          273,
+          274,
+          275,
+          276,
+          277,
+          278,
+          279,
+          280,
+          281,
+          282,
+          283,
+          284,
+          285,
+          286,
+          287,
+          288,
+          289,
+          290,
+          291,
+          292,
+          293,
+          294,
+          295,
+          296,
+          297,
+          298,
+          299,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309,
+          310,
+          311,
+          312,
+          313,
+          314,
+          315,
+          316,
+          317,
+          318,
+          319,
+          320,
+          321,
+          322,
+          323,
+          324,
+          325,
+          326,
+          327,
+          328,
+          329,
+          330,
+          331,
+          332,
+          333,
+          334,
+          335,
+          336,
+          337,
+          338,
+          339,
+          340,
+          341,
+          342,
+          343,
+          344,
+          345,
+          346,
+          347,
+          348,
+          349,
+          350,
+          351,
+          352,
+          353,
+          354,
+          355,
+          356,
+          357,
+          358,
+          359,
+          360,
+          361,
+          362,
+          363,
+          364,
+          365,
+          366,
+          367,
+          368,
+          369,
+          370,
+          371,
+          372,
+          373,
+          374,
+          375
+        ],
+        "1": [
+          377
+        ],
+        "2": [
+          376
+        ]
+      }
+    },
+    "count": 378,
+    "stats": [
+      {
+        "id": 0,
+        "idx": 24,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/interopRequireDefault.js",
+        "length": 107
+      },
+      {
+        "id": 1,
+        "idx": 25,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/classCallCheck.js",
+        "length": 150
+      },
+      {
+        "id": 2,
+        "idx": 26,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/createClass.js",
+        "length": 279
+      },
+      {
+        "id": 3,
+        "idx": 33,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/invariant/browser.js",
+        "length": 406
+      },
+      {
+        "id": 4,
+        "idx": 78,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/getPrototypeOf.js",
+        "length": 199
+      },
+      {
+        "id": 5,
+        "idx": 80,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/possibleConstructorReturn.js",
+        "length": 150
+      },
+      {
+        "id": 6,
+        "idx": 83,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/inherits.js",
+        "length": 299
+      },
+      {
+        "id": 7,
+        "idx": 36,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/BatchedBridge/NativeModules.js",
+        "length": 2311
+      },
+      {
+        "id": 8,
+        "idx": 149,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/react-native/React.js",
+        "length": 78
+      },
+      {
+        "id": 9,
+        "idx": 69,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/Platform.ios.js",
+        "length": 415
+      },
+      {
+        "id": 10,
+        "idx": 29,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/extends.js",
+        "length": 278
+      },
+      {
+        "id": 11,
+        "idx": 90,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/objectSpread.js",
+        "length": 395
+      },
+      {
+        "id": 12,
+        "idx": 3,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/webpack/buildin/global.js",
+        "length": 178
+      },
+      {
+        "id": 13,
+        "idx": 150,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/StyleSheet/StyleSheet.js",
+        "length": 595
+      },
+      {
+        "id": 14,
+        "idx": 172,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/View/View.js",
+        "length": 122
+      },
+      {
+        "id": 15,
+        "idx": 129,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/shims/ReactNative.js",
+        "length": 90
+      },
+      {
+        "id": 16,
+        "idx": 159,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/prop-types/index.js",
+        "length": 69
+      },
+      {
+        "id": 17,
+        "idx": 175,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/requireNativeComponent.js",
+        "length": 143
+      },
+      {
+        "id": 18,
+        "idx": 77,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/get.js",
+        "length": 308
+      },
+      {
+        "id": 19,
+        "idx": 132,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/UIManager.js",
+        "length": 1452
+      },
+      {
+        "id": 20,
+        "idx": 219,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedNode.js",
+        "length": 1235
+      },
+      {
+        "id": 21,
+        "idx": 220,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/NativeAnimatedHelper.js",
+        "length": 3268
+      },
+      {
+        "id": 22,
+        "idx": 37,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/objectWithoutProperties.js",
+        "length": 313
+      },
+      {
+        "id": 23,
+        "idx": 73,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/warning.js",
+        "length": 88
+      },
+      {
+        "id": 24,
+        "idx": 97,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/EventEmitter/NativeEventEmitter.js",
+        "length": 1071
+      },
+      {
+        "id": 25,
+        "idx": 217,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedValue.js",
+        "length": 3637
+      },
+      {
+        "id": 26,
+        "idx": 221,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedWithChildren.js",
+        "length": 1292
+      },
+      {
+        "id": 27,
+        "idx": 98,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/EventEmitter/RCTDeviceEventEmitter.js",
+        "length": 800
+      },
+      {
+        "id": 28,
+        "idx": 139,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/StyleSheet/flattenStyle.js",
+        "length": 242
+      },
+      {
+        "id": 29,
+        "idx": 156,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType.js",
+        "length": 671
+      },
+      {
+        "id": 30,
+        "idx": 218,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedInterpolation.js",
+        "length": 3530
+      },
+      {
+        "id": 31,
+        "idx": 167,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/StyleSheet/processColor.js",
+        "length": 207
+      },
+      {
+        "id": 32,
+        "idx": 243,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/createAnimatedComponent.js",
+        "length": 3345
+      },
+      {
+        "id": 33,
+        "idx": 135,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react/index.js",
+        "length": 80
+      },
+      {
+        "id": 34,
+        "idx": 39,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/slicedToArray.js",
+        "length": 131
+      },
+      {
+        "id": 35,
+        "idx": 43,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/BatchedBridge/BatchedBridge.js",
+        "length": 196
+      },
+      {
+        "id": 36,
+        "idx": 102,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/Blob.js",
+        "length": 923
+      },
+      {
+        "id": 37,
+        "idx": 187,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/UnimplementedViews/UnimplementedView.js",
+        "length": 727
+      },
+      {
+        "id": 38,
+        "idx": 199,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Text/Text.js",
+        "length": 4213
+      },
+      {
+        "id": 39,
+        "idx": 19,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/PolyfillFunctions.js",
+        "length": 420
+      },
+      {
+        "id": 40,
+        "idx": 32,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Performance/Systrace.js",
+        "length": 726
+      },
+      {
+        "id": 41,
+        "idx": 95,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EventEmitter.js",
+        "length": 1570
+      },
+      {
+        "id": 42,
+        "idx": 127,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/infoLog.js",
+        "length": 132
+      },
+      {
+        "id": 43,
+        "idx": 201,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedEdgeInsetsPropType.js",
+        "length": 158
+      },
+      {
+        "id": 44,
+        "idx": 61,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/timers-browserify/main.js",
+        "length": 854
+      },
+      {
+        "id": 45,
+        "idx": 82,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/assertThisInitialized.js",
+        "length": 180
+      },
+      {
+        "id": 46,
+        "idx": 103,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/BlobManager.js",
+        "length": 1476
+      },
+      {
+        "id": 47,
+        "idx": 117,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/regenerator/index.js",
+        "length": 67
+      },
+      {
+        "id": 48,
+        "idx": 140,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/TextInput/TextInputState.js",
+        "length": 666
+      },
+      {
+        "id": 49,
+        "idx": 166,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedViewStylePropTypes.js",
+        "length": 831
+      },
+      {
+        "id": 50,
+        "idx": 204,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/Touchable.js",
+        "length": 10176
+      },
+      {
+        "id": 51,
+        "idx": 252,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ScrollView/ScrollView.js",
+        "length": 9171
+      },
+      {
+        "id": 52,
+        "idx": 275,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/create-react-class/index.js",
+        "length": 335
+      },
+      {
+        "id": 53,
+        "idx": 45,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/toConsumableArray.js",
+        "length": 127
+      },
+      {
+        "id": 54,
+        "idx": 70,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/performanceNow.js",
+        "length": 155
+      },
+      {
+        "id": 55,
+        "idx": 106,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/fetch.js",
+        "length": 173
+      },
+      {
+        "id": 56,
+        "idx": 157,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Color/normalizeColor.js",
+        "length": 4774
+      },
+      {
+        "id": 57,
+        "idx": 181,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/resolveAssetSource.js",
+        "length": 756
+      },
+      {
+        "id": 58,
+        "idx": 216,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/AnimatedEvent.js",
+        "length": 2153
+      },
+      {
+        "id": 59,
+        "idx": 222,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/InteractionManager.js",
+        "length": 1306
+      },
+      {
+        "id": 60,
+        "idx": 224,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/AnimatedImplementation.js",
+        "length": 4354
+      },
+      {
+        "id": 61,
+        "idx": 235,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedValueXY.js",
+        "length": 1843
+      },
+      {
+        "id": 62,
+        "idx": 274,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/TouchableWithoutFeedback.js",
+        "length": 2889
+      },
+      {
+        "id": 63,
+        "idx": 328,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes.js",
+        "length": 1505
+      },
+      {
+        "id": 64,
+        "idx": 16,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/InitializeCore.js",
+        "length": 289
+      },
+      {
+        "id": 65,
+        "idx": 20,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/defineLazyObjectProperty.js",
+        "length": 353
+      },
+      {
+        "id": 66,
+        "idx": 21,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/_shouldPolyfillES6Collection.js",
+        "length": 416
+      },
+      {
+        "id": 67,
+        "idx": 22,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/_wrapObjectFreezeAndFriends.js",
+        "length": 268
+      },
+      {
+        "id": 68,
+        "idx": 23,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/Map.js",
+        "length": 3494
+      },
+      {
+        "id": 69,
+        "idx": 35,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/ExceptionsManager.js",
+        "length": 967
+      },
+      {
+        "id": 70,
+        "idx": 51,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/stringifySafe.js",
+        "length": 407
+      },
+      {
+        "id": 71,
+        "idx": 85,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/event-target-shim/lib/event-target.js",
+        "length": 1685
+      },
+      {
+        "id": 72,
+        "idx": 86,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/event-target-shim/lib/commons.js",
+        "length": 315
+      },
+      {
+        "id": 73,
+        "idx": 91,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/defineProperty.js",
+        "length": 177
+      },
+      {
+        "id": 74,
+        "idx": 93,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EmitterSubscription.js",
+        "length": 421
+      },
+      {
+        "id": 75,
+        "idx": 101,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/base64-js/index.js",
+        "length": 1438
+      },
+      {
+        "id": 76,
+        "idx": 114,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Alert/Alert.js",
+        "length": 2651
+      },
+      {
+        "id": 77,
+        "idx": 126,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/PerformanceLogger.js",
+        "length": 1320
+      },
+      {
+        "id": 78,
+        "idx": 131,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js",
+        "length": 795
+      },
+      {
+        "id": 79,
+        "idx": 138,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/differ/deepDiffer.js",
+        "length": 597
+      },
+      {
+        "id": 80,
+        "idx": 151,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/PixelRatio.js",
+        "length": 547
+      },
+      {
+        "id": 81,
+        "idx": 152,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/Dimensions.js",
+        "length": 1437
+      },
+      {
+        "id": 82,
+        "idx": 154,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/View/ReactNativeStyleAttributes.js",
+        "length": 547
+      },
+      {
+        "id": 83,
+        "idx": 155,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedImageStylePropTypes.js",
+        "length": 570
+      },
+      {
+        "id": 84,
+        "idx": 165,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Text/TextStylePropTypes.js",
+        "length": 1017
+      },
+      {
+        "id": 85,
+        "idx": 173,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Text/TextAncestor.js",
+        "length": 104
+      },
+      {
+        "id": 86,
+        "idx": 176,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js",
+        "length": 123
+      },
+      {
+        "id": 87,
+        "idx": 191,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/art/core/class.js",
+        "length": 391
+      },
+      {
+        "id": 88,
+        "idx": 194,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/View/ReactNativeViewAttributes.js",
+        "length": 665
+      },
+      {
+        "id": 89,
+        "idx": 195,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/merge.js",
+        "length": 133
+      },
+      {
+        "id": 90,
+        "idx": 202,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedStyleSheetPropType.js",
+        "length": 303
+      },
+      {
+        "id": 91,
+        "idx": 208,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/AppleTV/TVEventHandler.js",
+        "length": 708
+      },
+      {
+        "id": 92,
+        "idx": 209,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/keyMirror.js",
+        "length": 206
+      },
+      {
+        "id": 93,
+        "idx": 211,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/nullthrows/nullthrows.js",
+        "length": 262
+      },
+      {
+        "id": 94,
+        "idx": 214,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/Animated.js",
+        "length": 388
+      },
+      {
+        "id": 95,
+        "idx": 230,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedProps.js",
+        "length": 2337
+      },
+      {
+        "id": 96,
+        "idx": 237,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/animations/Animation.js",
+        "length": 768
+      },
+      {
+        "id": 97,
+        "idx": 241,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/Easing.js",
+        "length": 1548
+      },
+      {
+        "id": 98,
+        "idx": 245,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/FlatList.js",
+        "length": 5016
+      },
+      {
+        "id": 99,
+        "idx": 246,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/VirtualizedList.js",
+        "length": 25150
+      },
+      {
+        "id": 100,
+        "idx": 255,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Keyboard/Keyboard.js",
+        "length": 700
+      },
+      {
+        "id": 101,
+        "idx": 256,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/LayoutAnimation/LayoutAnimation.js",
+        "length": 1086
+      },
+      {
+        "id": 102,
+        "idx": 264,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/Image.ios.js",
+        "length": 1615
+      },
+      {
+        "id": 103,
+        "idx": 273,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/shims/NativeMethodsMixin.js",
+        "length": 158
+      },
+      {
+        "id": 104,
+        "idx": 279,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/ensurePositiveDelayProps.js",
+        "length": 221
+      },
+      {
+        "id": 105,
+        "idx": 294,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/ListView/ListViewDataSource.js",
+        "length": 4018
+      },
+      {
+        "id": 106,
+        "idx": 302,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/I18nManager.js",
+        "length": 217
+      },
+      {
+        "id": 107,
+        "idx": 145,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/react-native/react-native-implementation.js",
+        "length": 6455
+      },
+      {
+        "id": 108,
+        "idx": 4,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/@babel/runtime/helpers/interopRequireDefault.js",
+        "length": 109
+      },
+      {
+        "id": 109,
+        "idx": 5,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/@babel/runtime/helpers/toConsumableArray.js",
+        "length": 128
+      },
+      {
+        "id": 110,
+        "idx": 28,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/toIterator.js",
+        "length": 1849
+      },
+      {
+        "id": 111,
+        "idx": 49,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/ErrorUtils.js",
+        "length": 106
+      },
+      {
+        "id": 112,
+        "idx": 50,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/deepFreezeAndThrowOnMutationInDev.js",
+        "length": 96
+      },
+      {
+        "id": 113,
+        "idx": 58,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Promise.js",
+        "length": 151
+      },
+      {
+        "id": 114,
+        "idx": 60,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/promise/setimmediate/core.js",
+        "length": 1914
+      },
+      {
+        "id": 115,
+        "idx": 68,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/Timers/JSTimers.js",
+        "length": 3562
+      },
+      {
+        "id": 116,
+        "idx": 92,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/EventEmitter/MissingNativeEventEmitterShim.js",
+        "length": 915
+      },
+      {
+        "id": 117,
+        "idx": 96,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EventSubscriptionVendor.js",
+        "length": 891
+      },
+      {
+        "id": 118,
+        "idx": 100,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/binaryToBase64.js",
+        "length": 380
+      },
+      {
+        "id": 119,
+        "idx": 105,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/FormData.js",
+        "length": 691
+      },
+      {
+        "id": 120,
+        "idx": 112,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/URL.js",
+        "length": 3500
+      },
+      {
+        "id": 121,
+        "idx": 119,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/logError.js",
+        "length": 303
+      },
+      {
+        "id": 122,
+        "idx": 120,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/PermissionsAndroid/PermissionsAndroid.js",
+        "length": 2898
+      },
+      {
+        "id": 123,
+        "idx": 125,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/EventEmitter/RCTNativeAppEventEmitter.js",
+        "length": 88
+      },
+      {
+        "id": 124,
+        "idx": 137,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/object-assign/index.js",
+        "length": 967
+      },
+      {
+        "id": 125,
+        "idx": 141,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/scheduler/index.js",
+        "length": 81
+      },
+      {
+        "id": 126,
+        "idx": 146,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/warnOnce.js",
+        "length": 130
+      },
+      {
+        "id": 127,
+        "idx": 148,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ActivityIndicator/ActivityIndicator.js",
+        "length": 1088
+      },
+      {
+        "id": 128,
+        "idx": 153,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/DeviceInfo.js",
+        "length": 160
+      },
+      {
+        "id": 129,
+        "idx": 158,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedLayoutPropTypes.js",
+        "length": 2342
+      },
+      {
+        "id": 130,
+        "idx": 162,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedShadowPropTypesIOS.js",
+        "length": 214
+      },
+      {
+        "id": 131,
+        "idx": 163,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedTransformPropTypes.js",
+        "length": 1049
+      },
+      {
+        "id": 132,
+        "idx": 164,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/deprecatedPropType.js",
+        "length": 358
+      },
+      {
+        "id": 133,
+        "idx": 170,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/differ/sizesDiffer.js",
+        "length": 192
+      },
+      {
+        "id": 134,
+        "idx": 186,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.ios.js",
+        "length": 80
+      },
+      {
+        "id": 135,
+        "idx": 203,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/deprecatedCreateStrictShapeTypeChecker.js",
+        "length": 928
+      },
+      {
+        "id": 136,
+        "idx": 206,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/PooledClass.js",
+        "length": 972
+      },
+      {
+        "id": 137,
+        "idx": 212,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/TouchableNativeFeedback.ios.js",
+        "length": 1133
+      },
+      {
+        "id": 138,
+        "idx": 213,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/TouchableOpacity.js",
+        "length": 3495
+      },
+      {
+        "id": 139,
+        "idx": 249,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/RefreshControl/RefreshControl.js",
+        "length": 2001
+      },
+      {
+        "id": 140,
+        "idx": 253,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ScrollResponder.js",
+        "length": 7204
+      },
+      {
+        "id": 141,
+        "idx": 257,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/dismissKeyboard.js",
+        "length": 141
+      },
+      {
+        "id": 142,
+        "idx": 260,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ScrollView/processDecelerationRate.js",
+        "length": 195
+      },
+      {
+        "id": 143,
+        "idx": 269,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/SectionList.js",
+        "length": 1668
+      },
+      {
+        "id": 144,
+        "idx": 280,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedViewAccessibility.js",
+        "length": 586
+      },
+      {
+        "id": 145,
+        "idx": 292,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/ListView/ListView.js",
+        "length": 9599
+      },
+      {
+        "id": 146,
+        "idx": 295,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/isEmpty.js",
+        "length": 192
+      },
+      {
+        "id": 147,
+        "idx": 301,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/AppContainer.js",
+        "length": 1451
+      },
+      {
+        "id": 148,
+        "idx": 306,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Picker/PickerIOS.ios.js",
+        "length": 1736
+      },
+      {
+        "id": 149,
+        "idx": 322,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Experimental/SwipeableRow/SwipeableRow.js",
+        "length": 4976
+      },
+      {
+        "id": 150,
+        "idx": 323,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/PanResponder.js",
+        "length": 3016
+      },
+      {
+        "id": 151,
+        "idx": 339,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Linking/Linking.js",
+        "length": 948
+      },
+      {
+        "id": 152,
+        "idx": 349,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/BackHandler.ios.js",
+        "length": 575
+      },
+      {
+        "id": 153,
+        "idx": 0,
+        "length": 137
+      },
+      {
+        "id": 154,
+        "idx": 1,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/Object.es6.js",
+        "length": 278
+      },
+      {
+        "id": 155,
+        "idx": 2,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/console.js",
+        "length": 4716
+      },
+      {
+        "id": 156,
+        "idx": 6,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/@babel/runtime/helpers/arrayWithoutHoles.js",
+        "length": 162
+      },
+      {
+        "id": 157,
+        "idx": 7,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/@babel/runtime/helpers/iterableToArray.js",
+        "length": 183
+      },
+      {
+        "id": 158,
+        "idx": 8,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/@babel/runtime/helpers/nonIterableSpread.js",
+        "length": 142
+      },
+      {
+        "id": 159,
+        "idx": 9,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/error-guard.js",
+        "length": 767
+      },
+      {
+        "id": 160,
+        "idx": 10,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/Number.es6.js",
+        "length": 569
+      },
+      {
+        "id": 161,
+        "idx": 11,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/String.prototype.es6.js",
+        "length": 1274
+      },
+      {
+        "id": 162,
+        "idx": 12,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/Array.prototype.es6.js",
+        "length": 1059
+      },
+      {
+        "id": 163,
+        "idx": 13,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/Array.es6.js",
+        "length": 646
+      },
+      {
+        "id": 164,
+        "idx": 14,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/Object.es7.js",
+        "length": 493
+      },
+      {
+        "id": 165,
+        "idx": 15,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/vendor/polyfills/babelHelpers.js",
+        "length": 4284
+      },
+      {
+        "id": 166,
+        "idx": 17,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpGlobals.js",
+        "length": 278
+      },
+      {
+        "id": 167,
+        "idx": 18,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/polyfillES6Collections.js",
+        "length": 204
+      },
+      {
+        "id": 168,
+        "idx": 27,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/guid.js",
+        "length": 149
+      },
+      {
+        "id": 169,
+        "idx": 30,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/Set.js",
+        "length": 1128
+      },
+      {
+        "id": 170,
+        "idx": 31,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpSystrace.js",
+        "length": 177
+      },
+      {
+        "id": 171,
+        "idx": 34,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpErrorHandling.js",
+        "length": 311
+      },
+      {
+        "id": 172,
+        "idx": 38,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js",
+        "length": 192
+      },
+      {
+        "id": 173,
+        "idx": 40,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/arrayWithHoles.js",
+        "length": 101
+      },
+      {
+        "id": 174,
+        "idx": 41,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/iterableToArrayLimit.js",
+        "length": 296
+      },
+      {
+        "id": 175,
+        "idx": 42,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/nonIterableRest.js",
+        "length": 147
+      },
+      {
+        "id": 176,
+        "idx": 44,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js",
+        "length": 3924
+      },
+      {
+        "id": 177,
+        "idx": 46,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/arrayWithoutHoles.js",
+        "length": 162
+      },
+      {
+        "id": 178,
+        "idx": 47,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/iterableToArray.js",
+        "length": 183
+      },
+      {
+        "id": 179,
+        "idx": 48,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/nonIterableSpread.js",
+        "length": 142
+      },
+      {
+        "id": 180,
+        "idx": 52,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/Devtools/parseErrorStack.js",
+        "length": 252
+      },
+      {
+        "id": 181,
+        "idx": 53,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/stacktrace-parser/dist/stack-trace-parser.umd.js",
+        "length": 1627
+      },
+      {
+        "id": 182,
+        "idx": 54,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/checkNativeVersion.js",
+        "length": 87
+      },
+      {
+        "id": 183,
+        "idx": 55,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/ReactNativeVersionCheck.js",
+        "length": 616
+      },
+      {
+        "id": 184,
+        "idx": 56,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/ReactNativeVersion.js",
+        "length": 102
+      },
+      {
+        "id": 185,
+        "idx": 57,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/polyfillPromise.js",
+        "length": 126
+      },
+      {
+        "id": 186,
+        "idx": 59,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/promise/setimmediate/es6-extensions.js",
+        "length": 1245
+      },
+      {
+        "id": 187,
+        "idx": 62,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/setimmediate/setImmediate.js",
+        "length": 1699
+      },
+      {
+        "id": 188,
+        "idx": 63,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/node_modules/process/browser.js",
+        "length": 1709
+      },
+      {
+        "id": 189,
+        "idx": 64,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/promise/setimmediate/done.js",
+        "length": 235
+      },
+      {
+        "id": 190,
+        "idx": 65,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpRegeneratorRuntime.js",
+        "length": 197
+      },
+      {
+        "id": 191,
+        "idx": 66,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/regenerator-runtime/runtime.js",
+        "length": 6284
+      },
+      {
+        "id": 192,
+        "idx": 67,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpTimers.js",
+        "length": 350
+      },
+      {
+        "id": 193,
+        "idx": 71,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/performance.js",
+        "length": 175
+      },
+      {
+        "id": 194,
+        "idx": 72,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/ExecutionEnvironment.js",
+        "length": 340
+      },
+      {
+        "id": 195,
+        "idx": 74,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/emptyFunction.js",
+        "length": 314
+      },
+      {
+        "id": 196,
+        "idx": 75,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpXHR.js",
+        "length": 615
+      },
+      {
+        "id": 197,
+        "idx": 76,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/XMLHttpRequest.js",
+        "length": 8333
+      },
+      {
+        "id": 198,
+        "idx": 79,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/superPropBase.js",
+        "length": 163
+      },
+      {
+        "id": 199,
+        "idx": 81,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/typeof.js",
+        "length": 530
+      },
+      {
+        "id": 200,
+        "idx": 84,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/setPrototypeOf.js",
+        "length": 164
+      },
+      {
+        "id": 201,
+        "idx": 87,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/event-target-shim/lib/custom-event-target.js",
+        "length": 723
+      },
+      {
+        "id": 202,
+        "idx": 88,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/event-target-shim/lib/event-wrapper.js",
+        "length": 1431
+      },
+      {
+        "id": 203,
+        "idx": 89,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/RCTNetworking.ios.js",
+        "length": 716
+      },
+      {
+        "id": 204,
+        "idx": 94,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EventSubscription.js",
+        "length": 278
+      },
+      {
+        "id": 205,
+        "idx": 99,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/convertRequestBody.js",
+        "length": 285
+      },
+      {
+        "id": 206,
+        "idx": 104,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/BlobRegistry.js",
+        "length": 208
+      },
+      {
+        "id": 207,
+        "idx": 107,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/whatwg-fetch.js",
+        "length": 7378
+      },
+      {
+        "id": 208,
+        "idx": 108,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/WebSocket/WebSocket.js",
+        "length": 3689
+      },
+      {
+        "id": 209,
+        "idx": 109,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/WebSocket/WebSocketEvent.js",
+        "length": 190
+      },
+      {
+        "id": 210,
+        "idx": 110,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/File.js",
+        "length": 608
+      },
+      {
+        "id": 211,
+        "idx": 111,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Blob/FileReader.js",
+        "length": 1939
+      },
+      {
+        "id": 212,
+        "idx": 113,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpAlert.js",
+        "length": 154
+      },
+      {
+        "id": 213,
+        "idx": 115,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpGeolocation.js",
+        "length": 268
+      },
+      {
+        "id": 214,
+        "idx": 116,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Geolocation/Geolocation.js",
+        "length": 1427
+      },
+      {
+        "id": 215,
+        "idx": 118,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js",
+        "length": 6263
+      },
+      {
+        "id": 216,
+        "idx": 121,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpBatchedBridge.js",
+        "length": 733
+      },
+      {
+        "id": 217,
+        "idx": 122,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/HeapCapture.js",
+        "length": 357
+      },
+      {
+        "id": 218,
+        "idx": 123,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Performance/SamplingProfiler.js",
+        "length": 451
+      },
+      {
+        "id": 219,
+        "idx": 124,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/RCTLog.js",
+        "length": 650
+      },
+      {
+        "id": 220,
+        "idx": 128,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/JSDevSupportModule.js",
+        "length": 406
+      },
+      {
+        "id": 221,
+        "idx": 130,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/oss/ReactNativeRenderer-prod.js",
+        "length": 86572
+      },
+      {
+        "id": 222,
+        "idx": 133,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/UIManagerProperties.js",
+        "length": 843
+      },
+      {
+        "id": 223,
+        "idx": 134,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/EventEmitter/RCTEventEmitter.js",
+        "length": 160
+      },
+      {
+        "id": 224,
+        "idx": 136,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react/cjs/react.production.min.js",
+        "length": 7008
+      },
+      {
+        "id": 225,
+        "idx": 142,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/scheduler/cjs/scheduler.production.min.js",
+        "length": 4625
+      },
+      {
+        "id": 226,
+        "idx": 143,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Core/setUpSegmentFetcher.js",
+        "length": 354
+      },
+      {
+        "id": 227,
+        "idx": 144,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/index.js",
+        "length": 161
+      },
+      {
+        "id": 228,
+        "idx": 147,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.ios.js",
+        "length": 657
+      },
+      {
+        "id": 229,
+        "idx": 160,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/prop-types/factoryWithThrowingShims.js",
+        "length": 686
+      },
+      {
+        "id": 230,
+        "idx": 161,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/prop-types/lib/ReactPropTypesSecret.js",
+        "length": 121
+      },
+      {
+        "id": 231,
+        "idx": 168,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/StyleSheet/processTransform.js",
+        "length": 1214
+      },
+      {
+        "id": 232,
+        "idx": 169,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/MatrixMath.js",
+        "length": 6588
+      },
+      {
+        "id": 233,
+        "idx": 171,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/StyleSheet/StyleSheetValidation.js",
+        "length": 360
+      },
+      {
+        "id": 234,
+        "idx": 174,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/View/ViewNativeComponent.js",
+        "length": 105
+      },
+      {
+        "id": 235,
+        "idx": 177,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/getNativeComponentAttributes.js",
+        "length": 1714
+      },
+      {
+        "id": 236,
+        "idx": 178,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/differ/insetsDiffer.js",
+        "length": 247
+      },
+      {
+        "id": 237,
+        "idx": 179,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/differ/matricesDiffer.js",
+        "length": 317
+      },
+      {
+        "id": 238,
+        "idx": 180,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/differ/pointsDiffer.js",
+        "length": 165
+      },
+      {
+        "id": 239,
+        "idx": 182,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/AssetRegistry.js",
+        "length": 169
+      },
+      {
+        "id": 240,
+        "idx": 183,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/AssetSourceResolver.js",
+        "length": 1936
+      },
+      {
+        "id": 241,
+        "idx": 184,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/assetPathUtils.js",
+        "length": 863
+      },
+      {
+        "id": 242,
+        "idx": 185,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ActivityIndicator/RCTActivityIndicatorViewNativeComponent.js",
+        "length": 116
+      },
+      {
+        "id": 243,
+        "idx": 188,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ART/ReactNativeART.js",
+        "length": 6861
+      },
+      {
+        "id": 244,
+        "idx": 189,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/art/core/color.js",
+        "length": 4002
+      },
+      {
+        "id": 245,
+        "idx": 190,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ART/ARTSerializablePath.js",
+        "length": 678
+      },
+      {
+        "id": 246,
+        "idx": 192,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/art/core/path.js",
+        "length": 4790
+      },
+      {
+        "id": 247,
+        "idx": 193,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/art/core/transform.js",
+        "length": 1899
+      },
+      {
+        "id": 248,
+        "idx": 196,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/mergeInto.js",
+        "length": 245
+      },
+      {
+        "id": 249,
+        "idx": 197,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/core/mergeHelpers.js",
+        "length": 1121
+      },
+      {
+        "id": 250,
+        "idx": 198,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Button.js",
+        "length": 1692
+      },
+      {
+        "id": 251,
+        "idx": 200,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedTextPropTypes.js",
+        "length": 585
+      },
+      {
+        "id": 252,
+        "idx": 205,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/BoundingDimensions.js",
+        "length": 327
+      },
+      {
+        "id": 253,
+        "idx": 207,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/Position.js",
+        "length": 234
+      },
+      {
+        "id": 254,
+        "idx": 210,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/invariant.js",
+        "length": 577
+      },
+      {
+        "id": 255,
+        "idx": 215,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/AnimatedMock.js",
+        "length": 932
+      },
+      {
+        "id": 256,
+        "idx": 223,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/TaskQueue.js",
+        "length": 1666
+      },
+      {
+        "id": 257,
+        "idx": 225,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedAddition.js",
+        "length": 1087
+      },
+      {
+        "id": 258,
+        "idx": 226,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedDiffClamp.js",
+        "length": 1103
+      },
+      {
+        "id": 259,
+        "idx": 227,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedDivision.js",
+        "length": 1169
+      },
+      {
+        "id": 260,
+        "idx": 228,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedModulo.js",
+        "length": 969
+      },
+      {
+        "id": 261,
+        "idx": 229,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedMultiplication.js",
+        "length": 1093
+      },
+      {
+        "id": 262,
+        "idx": 231,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedStyle.js",
+        "length": 1798
+      },
+      {
+        "id": 263,
+        "idx": 232,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedTransform.js",
+        "length": 1589
+      },
+      {
+        "id": 264,
+        "idx": 233,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedSubtraction.js",
+        "length": 1090
+      },
+      {
+        "id": 265,
+        "idx": 234,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/nodes/AnimatedTracking.js",
+        "length": 1505
+      },
+      {
+        "id": 266,
+        "idx": 236,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/animations/DecayAnimation.js",
+        "length": 1588
+      },
+      {
+        "id": 267,
+        "idx": 238,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/animations/SpringAnimation.js",
+        "length": 4353
+      },
+      {
+        "id": 268,
+        "idx": 239,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/SpringConfig.js",
+        "length": 727
+      },
+      {
+        "id": 269,
+        "idx": 240,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/animations/TimingAnimation.js",
+        "length": 2093
+      },
+      {
+        "id": 270,
+        "idx": 242,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/bezier.js",
+        "length": 984
+      },
+      {
+        "id": 271,
+        "idx": 244,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedFlatList.js",
+        "length": 99
+      },
+      {
+        "id": 272,
+        "idx": 247,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/Batchinator.js",
+        "length": 682
+      },
+      {
+        "id": 273,
+        "idx": 248,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/FillRateHelper.js",
+        "length": 2806
+      },
+      {
+        "id": 274,
+        "idx": 250,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/RefreshControl/AndroidSwipeRefreshLayoutNativeComponent.js",
+        "length": 190
+      },
+      {
+        "id": 275,
+        "idx": 251,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/RefreshControl/RCTRefreshControlNativeComponent.js",
+        "length": 109
+      },
+      {
+        "id": 276,
+        "idx": 254,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/FrameRateLogger.js",
+        "length": 606
+      },
+      {
+        "id": 277,
+        "idx": 258,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ScrollView/ScrollViewStickyHeader.js",
+        "length": 1807
+      },
+      {
+        "id": 278,
+        "idx": 259,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ScrollView/InternalScrollViewType.js",
+        "length": 868
+      },
+      {
+        "id": 279,
+        "idx": 261,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/ViewabilityHelper.js",
+        "length": 2820
+      },
+      {
+        "id": 280,
+        "idx": 262,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/VirtualizeUtils.js",
+        "length": 1491
+      },
+      {
+        "id": 281,
+        "idx": 263,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedImage.js",
+        "length": 100
+      },
+      {
+        "id": 282,
+        "idx": 265,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedImagePropType.js",
+        "length": 577
+      },
+      {
+        "id": 283,
+        "idx": 266,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedImageSourcePropType.js",
+        "length": 343
+      },
+      {
+        "id": 284,
+        "idx": 267,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedScrollView.js",
+        "length": 99
+      },
+      {
+        "id": 285,
+        "idx": 268,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedSectionList.js",
+        "length": 100
+      },
+      {
+        "id": 286,
+        "idx": 270,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/VirtualizedSectionList.js",
+        "length": 6681
+      },
+      {
+        "id": 287,
+        "idx": 271,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedText.js",
+        "length": 99
+      },
+      {
+        "id": 288,
+        "idx": 272,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Animated/src/components/AnimatedView.js",
+        "length": 99
+      },
+      {
+        "id": 289,
+        "idx": 276,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/create-react-class/factory.js",
+        "length": 4936
+      },
+      {
+        "id": 290,
+        "idx": 277,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/create-react-class/node_modules/fbjs/lib/emptyObject.js",
+        "length": 77
+      },
+      {
+        "id": 291,
+        "idx": 278,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/create-react-class/node_modules/fbjs/lib/invariant.js",
+        "length": 433
+      },
+      {
+        "id": 292,
+        "idx": 281,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/CheckBox/CheckBox.ios.js",
+        "length": 80
+      },
+      {
+        "id": 293,
+        "idx": 282,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/DatePicker/DatePickerIOS.ios.js",
+        "length": 1784
+      },
+      {
+        "id": 294,
+        "idx": 283,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/DatePicker/RCTDatePickerNativeComponent.js",
+        "length": 105
+      },
+      {
+        "id": 295,
+        "idx": 284,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.ios.js",
+        "length": 80
+      },
+      {
+        "id": 296,
+        "idx": 285,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/ImageBackground.js",
+        "length": 1184
+      },
+      {
+        "id": 297,
+        "idx": 286,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/ensureComponentIsNative.js",
+        "length": 228
+      },
+      {
+        "id": 298,
+        "idx": 287,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/ImageEditor.js",
+        "length": 281
+      },
+      {
+        "id": 299,
+        "idx": 288,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Image/ImageStore.js",
+        "length": 779
+      },
+      {
+        "id": 300,
+        "idx": 289,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/TextInput/InputAccessoryView.js",
+        "length": 889
+      },
+      {
+        "id": 301,
+        "idx": 290,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/TextInput/RCTInputAccessoryViewNativeComponent.js",
+        "length": 118
+      },
+      {
+        "id": 302,
+        "idx": 291,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js",
+        "length": 2818
+      },
+      {
+        "id": 303,
+        "idx": 293,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Lists/ListView/InternalListViewType.js",
+        "length": 626
+      },
+      {
+        "id": 304,
+        "idx": 296,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/StaticRenderer.js",
+        "length": 445
+      },
+      {
+        "id": 305,
+        "idx": 297,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-clone-referenced-element/cloneReferencedElement.js",
+        "length": 425
+      },
+      {
+        "id": 306,
+        "idx": 298,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/MaskedView/MaskedViewIOS.ios.js",
+        "length": 1242
+      },
+      {
+        "id": 307,
+        "idx": 299,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/MaskedView/RCTMaskedViewNativeComponent.js",
+        "length": 92
+      },
+      {
+        "id": 308,
+        "idx": 300,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Modal/Modal.js",
+        "length": 2524
+      },
+      {
+        "id": 309,
+        "idx": 303,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Modal/RCTModalHostViewNativeComponent.js",
+        "length": 108
+      },
+      {
+        "id": 310,
+        "idx": 304,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Picker/Picker.js",
+        "length": 1143
+      },
+      {
+        "id": 311,
+        "idx": 305,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Picker/PickerAndroid.ios.js",
+        "length": 80
+      },
+      {
+        "id": 312,
+        "idx": 307,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Picker/RCTPickerNativeComponent.js",
+        "length": 101
+      },
+      {
+        "id": 313,
+        "idx": 308,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.ios.js",
+        "length": 458
+      },
+      {
+        "id": 314,
+        "idx": 309,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ProgressViewIOS/RCTProgressViewNativeComponent.js",
+        "length": 107
+      },
+      {
+        "id": 315,
+        "idx": 310,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/SafeAreaView/SafeAreaView.js",
+        "length": 1058
+      },
+      {
+        "id": 316,
+        "idx": 311,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/SafeAreaView/RCTSafeAreaViewNativeComponent.js",
+        "length": 94
+      },
+      {
+        "id": 317,
+        "idx": 312,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.ios.js",
+        "length": 1223
+      },
+      {
+        "id": 318,
+        "idx": 313,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/SegmentedControlIOS/RCTSegmentedControlNativeComponent.js",
+        "length": 111
+      },
+      {
+        "id": 319,
+        "idx": 314,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Slider/Slider.js",
+        "length": 1027
+      },
+      {
+        "id": 320,
+        "idx": 315,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Slider/RCTSliderNativeComponent.js",
+        "length": 101
+      },
+      {
+        "id": 321,
+        "idx": 316,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/RCTTest/SnapshotViewIOS.ios.js",
+        "length": 1014
+      },
+      {
+        "id": 322,
+        "idx": 317,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/RCTTest/RCTSnapshotNativeComponent.js",
+        "length": 103
+      },
+      {
+        "id": 323,
+        "idx": 318,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Switch/Switch.js",
+        "length": 2035
+      },
+      {
+        "id": 324,
+        "idx": 319,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Switch/SwitchNativeComponent.js",
+        "length": 156
+      },
+      {
+        "id": 325,
+        "idx": 320,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/StatusBar/StatusBar.js",
+        "length": 3885
+      },
+      {
+        "id": 326,
+        "idx": 321,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Experimental/SwipeableRow/SwipeableFlatList.js",
+        "length": 2259
+      },
+      {
+        "id": 327,
+        "idx": 324,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Interaction/TouchHistoryMath.js",
+        "length": 1067
+      },
+      {
+        "id": 328,
+        "idx": 325,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Experimental/SwipeableRow/SwipeableListView.js",
+        "length": 3001
+      },
+      {
+        "id": 329,
+        "idx": 326,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Experimental/SwipeableRow/SwipeableListViewDataSource.js",
+        "length": 1503
+      },
+      {
+        "id": 330,
+        "idx": 327,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/TextInput/TextInput.js",
+        "length": 10150
+      },
+      {
+        "id": 331,
+        "idx": 329,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/View/PlatformViewPropTypes.ios.js",
+        "length": 52
+      },
+      {
+        "id": 332,
+        "idx": 330,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/document/selection/DocumentSelectionState.js",
+        "length": 1460
+      },
+      {
+        "id": 333,
+        "idx": 331,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/mixInEventEmitter.js",
+        "length": 1502
+      },
+      {
+        "id": 334,
+        "idx": 332,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EventEmitterWithHolding.js",
+        "length": 1589
+      },
+      {
+        "id": 335,
+        "idx": 333,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/vendor/emitter/EventHolder.js",
+        "length": 1046
+      },
+      {
+        "id": 336,
+        "idx": 334,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/fbjs/lib/keyOf.js",
+        "length": 148
+      },
+      {
+        "id": 337,
+        "idx": 335,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.ios.js",
+        "length": 80
+      },
+      {
+        "id": 338,
+        "idx": 336,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Touchable/TouchableHighlight.js",
+        "length": 4349
+      },
+      {
+        "id": 339,
+        "idx": 337,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ViewPager/ViewPagerAndroid.ios.js",
+        "length": 80
+      },
+      {
+        "id": 340,
+        "idx": 338,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/WebView/WebView.ios.js",
+        "length": 8166
+      },
+      {
+        "id": 341,
+        "idx": 340,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/WebView/WebViewShared.js",
+        "length": 308
+      },
+      {
+        "id": 342,
+        "idx": 341,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/escape-string-regexp/index.js",
+        "length": 205
+      },
+      {
+        "id": 343,
+        "idx": 342,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ActionSheetIOS/ActionSheetIOS.js",
+        "length": 707
+      },
+      {
+        "id": 344,
+        "idx": 343,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/AppRegistry.js",
+        "length": 2610
+      },
+      {
+        "id": 345,
+        "idx": 344,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/BugReporting/BugReporting.js",
+        "length": 1766
+      },
+      {
+        "id": 346,
+        "idx": 345,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/BugReporting/dumpReactTree.js",
+        "length": 228
+      },
+      {
+        "id": 347,
+        "idx": 346,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Utilities/SceneTracker.js",
+        "length": 331
+      },
+      {
+        "id": 348,
+        "idx": 347,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/renderApplication.js",
+        "length": 934
+      },
+      {
+        "id": 349,
+        "idx": 348,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/ReactFabricIndicator.js",
+        "length": 610
+      },
+      {
+        "id": 350,
+        "idx": 350,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/shims/ReactFabric.js",
+        "length": 141
+      },
+      {
+        "id": 351,
+        "idx": 351,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Renderer/oss/ReactFabric-prod.js",
+        "length": 83596
+      },
+      {
+        "id": 352,
+        "idx": 352,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/FabricUIManager.js",
+        "length": 138
+      },
+      {
+        "id": 353,
+        "idx": 353,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/AppState/AppState.js",
+        "length": 1300
+      },
+      {
+        "id": 354,
+        "idx": 354,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Storage/AsyncStorage.js",
+        "length": 2385
+      },
+      {
+        "id": 355,
+        "idx": 355,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/CameraRoll/CameraRoll.js",
+        "length": 2031
+      },
+      {
+        "id": 356,
+        "idx": 356,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/Clipboard/Clipboard.js",
+        "length": 178
+      },
+      {
+        "id": 357,
+        "idx": 357,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.ios.js",
+        "length": 480
+      },
+      {
+        "id": 358,
+        "idx": 358,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/CameraRoll/ImagePickerIOS.js",
+        "length": 445
+      },
+      {
+        "id": 359,
+        "idx": 359,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Network/NetInfo.js",
+        "length": 1811
+      },
+      {
+        "id": 360,
+        "idx": 360,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/PushNotificationIOS/PushNotificationIOS.js",
+        "length": 3951
+      },
+      {
+        "id": 361,
+        "idx": 361,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Settings/Settings.ios.js",
+        "length": 789
+      },
+      {
+        "id": 362,
+        "idx": 362,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Share/Share.js",
+        "length": 1145
+      },
+      {
+        "id": 363,
+        "idx": 363,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/StatusBar/StatusBarIOS.ios.js",
+        "length": 311
+      },
+      {
+        "id": 364,
+        "idx": 364,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.ios.js",
+        "length": 330
+      },
+      {
+        "id": 365,
+        "idx": 365,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Components/ToastAndroid/ToastAndroid.ios.js",
+        "length": 168
+      },
+      {
+        "id": 366,
+        "idx": 366,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/UTFSequence.js",
+        "length": 286
+      },
+      {
+        "id": 367,
+        "idx": 367,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Vibration/Vibration.js",
+        "length": 972
+      },
+      {
+        "id": 368,
+        "idx": 368,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/Vibration/VibrationIOS.ios.js",
+        "length": 295
+      },
+      {
+        "id": 369,
+        "idx": 369,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/YellowBox/YellowBox.js",
+        "length": 478
+      },
+      {
+        "id": 370,
+        "idx": 370,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/ReactNative/takeSnapshot.js",
+        "length": 192
+      },
+      {
+        "id": 371,
+        "idx": 371,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/react-native/Libraries/DeprecatedPropTypes/DeprecatedPointPropType.js",
+        "length": 123
+      },
+      {
+        "id": 372,
+        "idx": 372,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/App.js",
+        "length": 677
+      },
+      {
+        "id": 373,
+        "idx": 373,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/node_modules/@babel/runtime/helpers/interopRequireWildcard.js",
+        "length": 355
+      },
+      {
+        "id": 374,
+        "idx": 374,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/Loading.js",
+        "length": 591
+      },
+      {
+        "id": 375,
+        "idx": 375,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/app.json",
+        "length": 114
+      },
+      {
+        "id": 376,
+        "idx": 376,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/LazyApp.js",
+        "length": 1065
+      },
+      {
+        "id": 377,
+        "idx": 377,
+        "filename": "/Users/paweltrysla/Documents/oss/haul/fixtures/exampleApp_0_59x/Container.js",
+        "length": 477
+      }
+    ]
+  }
+}

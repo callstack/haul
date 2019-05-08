@@ -8,6 +8,9 @@ import { Module } from './WebpackRamBundlePlugin';
 const NULL_TERMINATOR = Buffer.alloc(1).fill(0);
 const UNIT32_SIZE = 4;
 
+const countLines = (string: string) =>
+  (string.match(/\r\n?|\n|\u2028|\u2029/g) || []).length;
+
 type ModuleBuffer = {
   id: number;
   buffer: Buffer;
@@ -58,15 +61,61 @@ export default class RamBundle {
     this.toc = table;
   }
 
-  build(bootstraper: string, modules: Module[]) {
+  build(
+    bootstraper: string,
+    modules: Module[],
+    filename: string,
+    sourceMap: boolean
+  ): { bundle: Buffer; sourceMap: Object } {
     this.bootstrap = this.toNullTerminatedBuffer(bootstraper);
     this.buildModules(modules);
     this.buildToc();
 
-    return Buffer.concat(
+    const bundle = Buffer.concat(
       [this.header, this.toc, this.bootstrap].concat(
         this.modules.map(m => m.buffer)
       )
     );
+
+    if (sourceMap) {
+      const indexMap = {
+        version: 3,
+        file: filename,
+        sections: [] as Array<{
+          offset: { line: number; column: number };
+          map: Object;
+        }>,
+      };
+
+      const bundleParts = bundle.toString().split('\n');
+      let lineOffset =
+        bundleParts.findIndex(line =>
+          line.includes('__webpack_require__.loadSelf(')
+        ) + 1;
+      modules.forEach(sourceModule => {
+        indexMap.sections.push({
+          offset: {
+            line: lineOffset,
+            column:
+              bundleParts[lineOffset - 1].indexOf(
+                '__webpack_require__.loadSelf('
+              ) + 1,
+          },
+          map: sourceModule.map,
+        });
+
+        lineOffset += countLines(sourceModule.source);
+      });
+
+      return {
+        bundle,
+        sourceMap: indexMap,
+      };
+    }
+
+    return {
+      bundle,
+      sourceMap: {},
+    };
   }
 }

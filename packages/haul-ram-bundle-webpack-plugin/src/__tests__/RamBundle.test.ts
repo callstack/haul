@@ -9,20 +9,28 @@ test('RamBundle should create valid RAM bundle', () => {
       idx: 0,
       filename: 'index.js',
       source: 'sr(0, (function m0() { })',
+      map: {},
     },
     {
       id: 1,
       idx: 1,
       filename: 'module1.js',
       source: 'sr(1, (function m1() { })',
+      map: {},
     },
   ];
 
-  const bundle = new RamBundle();
-  const buffer = bundle.build(bootstrapper, modules);
-  expect(buffer.length).toBeGreaterThan(0);
+  const ramBundle = new RamBundle();
+  const { bundle, sourceMap } = ramBundle.build(
+    bootstrapper,
+    modules,
+    'ram.bundle',
+    false
+  );
+  expect(bundle.length).toBeGreaterThan(0);
+  expect(sourceMap).toEqual({});
 
-  const parser = new RamBundleParser(buffer);
+  const parser = new RamBundleParser(Buffer.from(bundle));
   expect(parser.getStartupCode()).toEqual(bootstrapper);
   expect(parser.getModule(0)).toEqual(modules[0].source);
   expect(parser.getModule(1)).toEqual(modules[1].source);
