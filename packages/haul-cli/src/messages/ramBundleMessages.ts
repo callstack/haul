@@ -1,7 +1,7 @@
-import { Runtime } from '@haul/core';
+import { Runtime } from '@haul-bundler/core';
 import webpack from 'webpack';
 import path from 'path';
-import getEntryFiles from '@haul/core-legacy/build/utils/getEntryFiles';
+import getEntryFiles from '@haul-bundler/core-legacy/build/utils/getEntryFiles';
 
 export function initialInformation(
   runtime: Runtime,

@@ -10,7 +10,7 @@ import {
   DEFAULT_CONFIG_FILENAME,
   DEFAULT_PORT,
   getProjectConfigPath,
-} from '@haul/core';
+} from '@haul-bundler/core';
 
 const fs = require('fs');
 const inquirer = require('inquirer');

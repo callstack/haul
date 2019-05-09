@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "types": [
-      "../../node_modules/@haul/core-legacy"
+      "../../node_modules/@haul-bundler/core-legacy"
     ]
   },
   "include": [

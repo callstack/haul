@@ -1,4 +1,4 @@
-# @haul/preset-0.59
+# @haul-bundler/preset-0.59
 
 [![Version][version]][package]   
 
@@ -13,7 +13,7 @@ You can read moe about Haul here: https://github.com/callstack/haul.
 
 <!-- badges (common) -->
 
-[license-badge]: https://img.shields.io/npm/l/@haul/preset-0.59.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@haul-bundler/preset-0.59.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com
@@ -22,5 +22,5 @@ You can read moe about Haul here: https://github.com/callstack/haul.
 [chat-badge]: https://img.shields.io/badge/chat-discord-brightgreen.svg?style=flat-square&colorB=7289DA&logo=discord
 [chat]: https://discord.gg/zwR2Cdh
 
-[version]: https://img.shields.io/npm/v/@haul/preset-0.59.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@haul/preset-0.59
+[version]: https://img.shields.io/npm/v/@haul-bundler/preset-0.59.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@haul-bundler/preset-0.59

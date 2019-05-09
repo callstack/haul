@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: '@haul/core',
+  displayName: '@haul-bundler/core',
   testPathIgnorePatterns: ['__fixtures__/.*'],
   testRegex: '/__tests__/.*\\.(test|spec)\\.js?$',
 };

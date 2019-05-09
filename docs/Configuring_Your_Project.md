@@ -9,7 +9,7 @@ In `Build Phases` edit `Bundle React Native code and images`. It should look lik
 
 ```bash
 # added by Haul
-export CLI_PATH=node_modules/@haul/cli/bin/haul.js
+export CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js
 export NODE_BINARY=node
 ../node_modules/react-native/scripts/react-native-xcode.sh
 ```
@@ -30,6 +30,6 @@ If the automatic setup didn't work for you, you can manually add the following c
 
 ```
 project.ext.react = [
-    cliPath: "node_modules/@haul/cli/bin/haul.js"
+    cliPath: "node_modules/@haul-bundler/cli/bin/haul.js"
 ]
 ```

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`init command on react-native project 1`] = `
-"import { createWebpackConfig } from \\"@haul/preset-0.57\\";
+"import { createWebpackConfig } from \\"@haul-bundler/preset-0.57\\";
 
 export default {
   webpack: createWebpackConfig(({ platform }) => ({

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-rc.15",
-  "name": "@haul/preset-0.59",
+  "name": "@haul-bundler/preset-0.59",
   "description": "Haul preset for React Native 0.59",
   "main": "build/index.js",
   "files": [
@@ -13,18 +13,18 @@
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
     "webpack": "^4.30.0",
-    "@haul/core": "1.0.0-rc.15",
-    "@haul/cli": "1.0.0-rc.15",
-    "@haul/core-legacy": "1.0.0-rc.15"
+    "@haul-bundler/core": "1.0.0-rc.15",
+    "@haul-bundler/cli": "1.0.0-rc.15",
+    "@haul-bundler/core-legacy": "1.0.0-rc.15"
   },
   "dependencies": {
     "babel-loader": "^8.0.5",
     "case-sensitive-paths-webpack-plugin": "^2.2.0"
   },
   "devDependencies": {
-    "@haul/core": "1.0.0-rc.15",
-    "@haul/core-legacy": "1.0.0-rc.15",
-    "@haul/cli": "1.0.0-rc.15",
+    "@haul-bundler/core": "1.0.0-rc.15",
+    "@haul-bundler/core-legacy": "1.0.0-rc.15",
+    "@haul-bundler/cli": "1.0.0-rc.15",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
     "webpack": "^4.30.0"
   }

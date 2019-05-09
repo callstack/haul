@@ -7,7 +7,7 @@ import { RawSource } from 'webpack-sources';
 import terser from 'terser';
 import mkdirp from 'mkdirp';
 import RamBundle from './RamBundle';
-import { RamBundleConfig } from '@haul/core';
+import { RamBundleConfig } from '@haul-bundler/core';
 
 export type Module = {
   id: string | number;

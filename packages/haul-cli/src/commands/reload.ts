@@ -1,5 +1,5 @@
-import { Runtime, DEFAULT_PORT } from '@haul/core';
-import legacyReloadCommand from '@haul/core-legacy/build/commands/reload';
+import { Runtime, DEFAULT_PORT } from '@haul-bundler/core';
+import legacyReloadCommand from '@haul-bundler/core-legacy/build/commands/reload';
 
 export default function reloadCommand(runtime: Runtime) {
   return {

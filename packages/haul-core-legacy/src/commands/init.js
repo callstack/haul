@@ -131,9 +131,9 @@ async function init() {
 
   const version = semver.parse(rnVersion);
   const config = dedent`
-    import { createWebpackConfig } from "@haul/preset-${version.major}.${
-    version.minor
-  }";
+    import { createWebpackConfig } from "@haul-bundler/preset-${
+      version.major
+    }.${version.minor}";
 
     export default {
       webpack: createWebpackConfig(({ platform }) => ({
@@ -256,7 +256,7 @@ const addToGradleBuild = async (cwd: string) => {
 
   let project = fs.readFileSync(entry).toString();
 
-  const cliString = '"node_modules/@haul/cli/bin/haul.js"';
+  const cliString = '"node_modules/@haul-bundler/cli/bin/haul.js"';
 
   const gradleConf = `
     project.ext.react = [
@@ -349,7 +349,7 @@ const addToXcodeBuild = async (cwd: string) => {
     return;
   }
 
-  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/@haul/cli/bin/haul.js\nexport NODE_BINARY=node`;
+  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\nexport NODE_BINARY=node`;
 
   project = project.replace(new RegExp(originalTask, 'g'), haulTask);
 

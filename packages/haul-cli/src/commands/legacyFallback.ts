@@ -1,7 +1,7 @@
 import path from 'path';
 import { execSync } from 'child_process';
 import { Argv } from 'yargs';
-import { Runtime } from '@haul/core';
+import { Runtime } from '@haul-bundler/core';
 
 export default function legacyFallbackCommand(runtime: Runtime) {
   return {
@@ -18,7 +18,7 @@ export default function legacyFallbackCommand(runtime: Runtime) {
       );
 
       const haulCoreLegacy = path.join(
-        path.dirname(require.resolve('@haul/core-legacy')),
+        path.dirname(require.resolve('@haul-bundler/core-legacy')),
         '../bin/cli.js'
       );
       runtime.logger.info('Resolved binary to:', haulCoreLegacy);

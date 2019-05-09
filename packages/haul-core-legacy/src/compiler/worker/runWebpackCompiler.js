@@ -4,7 +4,11 @@
  *
  * @flow
  */
-import { getProjectConfig, getWebpackConfig, Runtime } from '@haul/core';
+import {
+  getProjectConfig,
+  getWebpackConfig,
+  Runtime,
+} from '@haul-bundler/core';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');

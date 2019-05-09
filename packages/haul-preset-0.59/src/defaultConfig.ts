@@ -8,7 +8,7 @@ import {
   Runtime,
   ReactNativeTarget,
   HaulConfig,
-} from '@haul/core';
+} from '@haul-bundler/core';
 import path from 'path';
 import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
@@ -49,7 +49,7 @@ export default function getDefaultConfig(
         {
           test: /\.js$/,
           // eslint-disable-next-line no-useless-escape
-          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul|metro))/,
+          exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul-bundler|metro))/,
           use: [
             {
               loader: require.resolve('babel-loader'),
@@ -57,14 +57,14 @@ export default function getDefaultConfig(
                 extends: getBabelConfigPath(root),
                 plugins: [
                   require.resolve(
-                    '@haul/core-legacy/build/utils/fixRequireIssues'
+                    '@haul-bundler/core-legacy/build/utils/fixRequireIssues'
                   ),
                 ].concat(
                   process.env.NODE_ENV !== 'production' && hotReloading
                     ? [
                         require.resolve('react-hot-loader/babel'),
                         require.resolve(
-                          '@haul/core-legacy/build/hot/babelPlugin'
+                          '@haul-bundler/core-legacy/build/hot/babelPlugin'
                         ),
                       ]
                     : []

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-rc.15",
-  "name": "@haul/core",
+  "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
   "files": [
@@ -18,8 +18,8 @@
   "dependencies": {
     "ansi-fragments": "^0.2.1",
     "concat-with-sourcemaps": "^1.1.0",
-    "@haul/inspector-events": "1.0.0-rc.15",
-    "@haul/core-legacy": "1.0.0-rc.15",
+    "@haul-bundler/inspector-events": "1.0.0-rc.15",
+    "@haul-bundler/core-legacy": "1.0.0-rc.15",
     "loader-utils": "^1.2.3",
     "image-size": "^0.7.4",
     "dedent": "^0.7.0",

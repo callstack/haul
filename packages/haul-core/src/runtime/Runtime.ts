@@ -3,7 +3,7 @@ import {
   RuntimeCommandStartEvent,
   RuntimeUnhandledErrorEvent,
   RuntimeNodeInspectorStartedEvent,
-} from '@haul/inspector-events';
+} from '@haul-bundler/inspector-events';
 import InspectorClient from './InspectorClient';
 import Logger from './Logger';
 

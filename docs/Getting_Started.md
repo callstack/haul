@@ -7,16 +7,16 @@ sidebar_label: Add Haul to your project
 Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
-yarn add --dev @haul/cli @haul/preset-<x>.<y>
+yarn add --dev @haul-bundler/cli @haul-bundler/preset-<x>.<y>
 ```
 
-For `x` use major version and for `y` use minor version of React Native. For example `@haul/preset-0.59` for React Native `0.59.x`.
+For `x` use major version and for `y` use minor version of React Native. For example `@haul-bundler/preset-0.59` for React Native `0.59.x`.
 
 Add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
 
 ```
 project.ext.react = [
-    cliPath: "node_modules/@haul/cli/bin/haul.js"
+    cliPath: "node_modules/@haul-bundler/cli/bin/haul.js"
 ]
 ```
 

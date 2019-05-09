@@ -11,7 +11,7 @@ import {
   getWebpackConfig,
   Runtime,
   DEFAULT_CONFIG_FILENAME,
-} from '@haul/core';
+} from '@haul-bundler/core';
 
 const path = require('path');
 const webpack = require('webpack');

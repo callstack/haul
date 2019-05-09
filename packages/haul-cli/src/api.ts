@@ -1,1 +1,1 @@
-export { createWebpackConfig } from '@haul/core-legacy';
+export { createWebpackConfig } from '@haul-bundler/core-legacy';

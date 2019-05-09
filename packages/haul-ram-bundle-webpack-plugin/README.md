@@ -1,4 +1,4 @@
-# @haul/ram-bundle-webpack-plugin
+# @haul-bundler/ram-bundle-webpack-plugin
 
 [![Version][version]][package]   
 
@@ -9,14 +9,14 @@
 
 RAM bundle plugin for Haul and Webpack. This module is intended for internal use.
 
-__When using `@haul/cli ram-bundle` command, this plugin will be added and configured automatically__, based on passed options.
+__When using `@haul-bundler/cli ram-bundle` command, this plugin will be added and configured automatically__, based on passed options.
 
 You can read more about Haul here: https://github.com/callstack/haul.
 
 ## API
 
 ```ts
-import WebpackRamBundlePlugin from '@haul/ram-bundle-webpack-plugin';
+import WebpackRamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
 
 type RamBundleDebugOptions = {
   path: string;
@@ -45,7 +45,7 @@ new WebpackRamBundlePlugin({
 
 <!-- badges (common) -->
 
-[license-badge]: https://img.shields.io/npm/l/@haul/ram-bundle-webpack-plugin.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@haul-bundler/ram-bundle-webpack-plugin.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com
@@ -54,5 +54,5 @@ new WebpackRamBundlePlugin({
 [chat-badge]: https://img.shields.io/badge/chat-discord-brightgreen.svg?style=flat-square&colorB=7289DA&logo=discord
 [chat]: https://discord.gg/zwR2Cdh
 
-[version]: https://img.shields.io/npm/v/@haul/ram-bundle-webpack-plugin.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@haul/ram-bundle-webpack-plugin
+[version]: https://img.shields.io/npm/v/@haul-bundler/ram-bundle-webpack-plugin.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@haul-bundler/ram-bundle-webpack-plugin

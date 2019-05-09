@@ -1,5 +1,5 @@
-import { Runtime } from '@haul/core';
-import legacyInitCommand from '@haul/core-legacy/build/commands/init';
+import { Runtime } from '@haul-bundler/core';
+import legacyInitCommand from '@haul-bundler/core-legacy/build/commands/init';
 
 export default function initCommand(runtime: Runtime) {
   return {

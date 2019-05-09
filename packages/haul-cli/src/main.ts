@@ -1,5 +1,5 @@
 import yargs from 'yargs';
-import { Runtime, InspectorClient } from '@haul/core';
+import { Runtime, InspectorClient } from '@haul-bundler/core';
 import initCommand from './commands/init';
 import ramBundleCommand from './commands/ramBundle';
 import legacyFallbackCommand from './commands/legacyFallback';

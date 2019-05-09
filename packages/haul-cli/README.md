@@ -1,4 +1,4 @@
-# @haul/cli
+# @haul-bundler/cli
 
 [![Version][version]][package]   
 
@@ -16,7 +16,7 @@ You can read moe about Haul here: https://github.com/callstack/haul.
 Installation:
 
 ```bash
-yarn add @haul/cli
+yarn add @haul-bundler/cli
 ```
 
 Usage:
@@ -29,7 +29,7 @@ You can read more about available commands [here](../../docs/CLI%20Commands.md).
 
 <!-- badges (common) -->
 
-[license-badge]: https://img.shields.io/npm/l/@haul/core.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@haul-bundler/core.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com
@@ -38,5 +38,5 @@ You can read more about available commands [here](../../docs/CLI%20Commands.md).
 [chat-badge]: https://img.shields.io/badge/chat-discord-brightgreen.svg?style=flat-square&colorB=7289DA&logo=discord
 [chat]: https://discord.gg/zwR2Cdh
 
-[version]: https://img.shields.io/npm/v/@haul/core.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@haul/core
+[version]: https://img.shields.io/npm/v/@haul-bundler/core.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@haul-bundler/core

@@ -22,7 +22,7 @@
 
 Haul is a drop-in replacement for `react-native` CLI built on open tools like Webpack. It can act as a development server or bundle your React Native app for production.
 
-`@haul/cli` and other packages under `@haul` scope are a overhaul of `haul` package __and support only React Native 0.59.0 and above__. If you need to support older versions, please check [`master` branch](https://github.com/callstack/haul/tree/master).
+`@haul-bundler/cli` and other packages under `@haul-bundler` scope are a overhaul of `haul` package __and support only React Native 0.59.0 and above__. If you need to support older versions, please check [`master` branch](https://github.com/callstack/haul/tree/master).
 
 ## Features
 
@@ -36,11 +36,11 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
-yarn add --dev @haul/cli @haul/preset-<x>.<y> # Use major version as x and minor as y for your version of React Native
-# Example: yarn add --dev @haul/cli @haul/preset-0.59
+yarn add --dev @haul-bundler/cli @haul-bundler/preset-<x>.<y> # Use major version as x and minor as y for your version of React Native
+# Example: yarn add --dev @haul-bundler/cli @haul-bundler/preset-0.59
 
 # Traditionalist? No problem:
-npm install --save-dev @haul/cli @haul/preset-<x>.<y>
+npm install --save-dev @haul-bundler/cli @haul-bundler/preset-<x>.<y>
 ```
 
 To configure your project to use haul, run the following:
@@ -120,9 +120,9 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 <!-- badges -->
 [build-badge]: https://img.shields.io/circleci/project/github/callstack/haul/master.svg?style=flat-square
 [build]: https://circleci.com/gh/callstack/haul
-[version-badge]: https://img.shields.io/npm/v/@haul/cli.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@haul/cli
-[license-badge]: https://img.shields.io/npm/l/@haul/cli.svg?style=flat-square
+[version-badge]: https://img.shields.io/npm/v/@haul-bundler/cli.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@haul-bundler/cli
+[license-badge]: https://img.shields.io/npm/l/@haul-bundler/cli.svg?style=flat-square
 [license]: https://github.com/callstack/haul/blob/master/LICENSE
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com

@@ -1,6 +1,11 @@
-import { createPreset, EnvOptions, HaulConfig, Runtime } from '@haul/core';
+import {
+  createPreset,
+  EnvOptions,
+  HaulConfig,
+  Runtime,
+} from '@haul-bundler/core';
 import webpack from 'webpack';
-import { injectPolyfillIntoEntry } from '@haul/core-legacy/build/utils/makeReactNativeConfig';
+import { injectPolyfillIntoEntry } from '@haul-bundler/core-legacy/build/utils/makeReactNativeConfig';
 import getDefaultConfig from './defaultConfig';
 
 export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {

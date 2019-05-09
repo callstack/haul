@@ -1,4 +1,4 @@
-# @haul/inspector-events
+# @haul-bundler/inspector-events
 
 [![Version][version]][package]   
 
@@ -7,13 +7,13 @@
 [![Chat][chat-badge]][chat]
 [![Code of Conduct][coc-badge]][coc]
 
-Shared logic between `@haul/cli` and `@haul/inspector`, intended for internal use only.
+Shared logic between `@haul-bundler/cli` and `@haul-bundler/inspector`, intended for internal use only.
 
 You can read moe about Haul here: https://github.com/callstack/haul.
 
 <!-- badges (common) -->
 
-[license-badge]: https://img.shields.io/npm/l/@haul/inspector-events.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@haul-bundler/inspector-events.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com
@@ -22,5 +22,5 @@ You can read moe about Haul here: https://github.com/callstack/haul.
 [chat-badge]: https://img.shields.io/badge/chat-discord-brightgreen.svg?style=flat-square&colorB=7289DA&logo=discord
 [chat]: https://discord.gg/zwR2Cdh
 
-[version]: https://img.shields.io/npm/v/@haul/inspector-events.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@haul/inspector-events
+[version]: https://img.shields.io/npm/v/@haul-bundler/inspector-events.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@haul-bundler/inspector-events

@@ -68,6 +68,10 @@ function build({
 }
 
 describe('should build and successfully evaluate bundle', () => {
+  beforeAll(() => {
+    jest.setTimeout(10000);
+  });
+
   it('with namedModules:false', async () => {
     await build();
 
