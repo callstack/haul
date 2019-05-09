@@ -51,7 +51,7 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
       throw new Error(moduleId + ' missing in module cache');
     }
     var module = installedModules[moduleId];
-    factory.call(module.exports, module, module.exports, __webpack_require__);
+    factory.call(globalScope, module, module.exports, __webpack_require__);
 
     // Flag the module as loaded
     module.l = true;
