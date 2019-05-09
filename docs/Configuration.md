@@ -10,7 +10,7 @@ title: Configuration
 The `haul.config.js` file is a configuration used by `Haul`. The simplest config looks like this:
 
 ```js
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
   webpack: createWebpackConfig({
@@ -42,7 +42,7 @@ You should return the final configuration object to be used by `Haul` based on t
 For example, to configure your entry point according to the platform, you can do the following:
 
 ```js
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
   webpack: createWebpackConfig(({ platform }) => ({
@@ -54,13 +54,13 @@ export default {
 If you want to customize the Webpack configuration, like `loaders` etc., you can use this approach, then you can mutate config as you want.
 
 ```js
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
-  webpack: env => {
+  webpack: (runtime, env) => {
     const config = createWebpackConfig({
       entry: './index.js',
-    })(env);
+    })(runtime, env);
 
     config.plugins.push(new CaseSensitivePathsPlugin());
 

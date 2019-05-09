@@ -7,10 +7,12 @@ sidebar_label: Add Haul to your project
 Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
-yarn add --dev haul
+yarn add --dev @haul/cli @haul/preset-<x>.<y>
 ```
 
-If you're on a React Native version >= 0.43, add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
+For `x` use major version and for `y` use minor version of React Native. For example `@haul/preset-0.59` for React Native `0.59.x`.
+
+Add the following in `android/app/build.gradle` somewhere before the `apply from: "../../node_modules/react-native/react.gradle"` statement:
 
 ```
 project.ext.react = [
@@ -29,7 +31,7 @@ This will automatically add the configuration needed to make Haul work with your
 Next, you're ready to start the development server:
 
 ```bash
-yarn haul start -- --platform ios
+yarn haul start
 ```
 
 Finally, reload your app to update the bundle or run your app just like you normally would:

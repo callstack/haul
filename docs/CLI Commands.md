@@ -17,13 +17,21 @@ See [Configuration](Configuration.md) for more details on `haul.config.js`.
 
 This starts a webpack development server which will package and serve the JavaScript bundle for your React Native app.
 
-Example: `haul start --platform ios --dev false --minify true --port 3030`
+Example: `haul start --port 3030`
 
 You can specify following parameters to configure the server:
 
-### `--platform <ios|android|all>`
+### `--eager <ios,android,...|true>`
 
-Required parameter which configures the server to build the bundle for the specified platform. `all` will build the bundle for both `android` and `ios` and is slower.
+When present, the server will start compilation for given platforms without waiting for first request from the app.
+
+Examples:
+
+```bash
+yarn haul start --eager ios # Prebuild bundle for iOS only
+yarn haul start --eager # Prebuild bundle for all platforms
+yarn haul start --eager ios,windows # Prebuild bundle for iOS and Windows only
+```
 
 ### `--dev <true|false>`
 
@@ -71,4 +79,4 @@ Path to the directory to store the assets. e.g. - `build/assets`.
 
 ### `--config [path]`
 
-Path to the webpack haul config. defaults to `webpack.haul.js`.
+Path to the webpack haul config. defaults to `haul.config.js`.

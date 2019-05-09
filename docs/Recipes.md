@@ -10,13 +10,13 @@ You will need to install `ts-loader` for Haul to work with TypeScript.
 
 This is a `haul.config.js` that works with TypeScript.
 ```javascript
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
-  webpack: env => {
+  webpack: (runtime, env) => {
     const config = createWebpackConfig({
       entry: `./src/index.${env.platform}.tsx`,
-    })(env);
+    })(runtime, env);
 
     config.module.rules = [
       {
@@ -69,13 +69,13 @@ You will need `babel-loader` for this.
 Revised `haul.config.js`
 
 ```javascript
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
-  webpack: env => {
+  webpack: (runtime, env) => {
     const config = createWebpackConfig({
       entry: `./src/index.${env.platform}.tsx`,
-    })(env);
+    })(runtime, env);
 
     config.module.rules = [
       {
@@ -111,18 +111,18 @@ export default {
 ## Use Haul with react-native-windows
 If you want to use react-native-windows, you can register windows as a supported platform type for the commandline, and for windows platform builds add the react-native-windows package as an additional package to look for RN modules:
 ```js
-import { createWebpackConfig } from "haul";
+import { createWebpackConfig } from "@haul/preset-0.59";
 
 export default {
   platforms: { ios: 'iOS', android: 'Android', windows: 'Windows' },
-  webpack: env => {
+  webpack: (runtime, env) => {
     const platformSpecificOptions = env.platform === 'windows' ? {
         providesModuleNodeModules: ['react-native', 'react-native-windows']
         hasteOptions: { platforms: ['native', 'windows'] }
       } : {};
     const config = createWebpackConfig({
       entry: './index.js',
-    })({...env, ...platformSpecificOptions});
+    })(runtime, {...env, ...platformSpecificOptions});
 
     config.plugins.push(new CaseSensitivePathsPlugin());
 
