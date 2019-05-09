@@ -38,8 +38,6 @@ type WebpackRamBundlePluginOptions = {
 export default class WebpackRamBundlePlugin {
   name = 'WebpackRamBundlePlugin';
 
-  name = 'WebpackRamBundlePlugin';
-
   modules: Module[] = [];
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
