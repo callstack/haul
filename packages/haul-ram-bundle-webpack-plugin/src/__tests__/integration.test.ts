@@ -46,7 +46,10 @@ function build({
     },
     target: 'webworker',
     plugins: [
-      new RamBundlePlugin({ sourceMap, config: { minification: false } }),
+      new RamBundlePlugin({
+        sourceMap,
+        config: { minification: { enabled: false } },
+      }),
     ],
     optimization: {
       namedModules: Boolean(namedModules),
