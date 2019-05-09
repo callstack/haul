@@ -14,7 +14,8 @@
   "peerDependencies": {
     "metro": "^0.53.1",
     "terser": "^3.17.0",
-    "webpack": "^4.30.0"
+    "webpack": "^4.30.0",
+    "webpack-sources": "^1.3.0"
   },
   "dependencies": {
     "@haul/core": "1.0.0-rc.15",
@@ -22,9 +23,15 @@
   },
   "devDependencies": {
     "@types/mkdirp": "^0.5.2",
+    "@types/webpack-sources": "^0.1.5",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "babel-loader": "^8.0.5",
     "metro": "^0.53.1",
+    "metro-react-native-babel-preset": "^0.54.0",
     "source-map": "^0.7.3",
     "terser": "^3.17.0",
-    "webpack": "^4.30.0"
+    "webpack": "^4.30.0",
+    "webpack-sources": "^1.3.0"
   }
 }

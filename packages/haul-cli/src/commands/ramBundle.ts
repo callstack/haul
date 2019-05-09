@@ -1,8 +1,6 @@
 import { Arguments } from 'yargs';
 import path from 'path';
 import webpack from 'webpack';
-import nodeFs from 'fs';
-import MemoryFileSystem from 'memory-fs';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 import RamBundlePlugin from '@haul/ram-bundle-webpack-plugin';
 import * as messages from '../messages/ramBundleMessages';
@@ -49,6 +47,10 @@ export default function ramBundleCommand(runtime: Runtime) {
           'Directory name where to store assets referenced in the bundle.',
         type: 'string',
       },
+      'sourcemap-output': {
+        description: 'File name where to store generated source map',
+        type: 'string',
+      },
       config: {
         description: 'Path to the CLI configuration file',
         type: 'string',
@@ -70,6 +72,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         platform: string;
         assetsDest?: string;
         bundleOutput?: string;
+        sourcemapOutput?: string;
         progress: string;
       }>
     ) {
@@ -81,6 +84,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           platform,
           assetsDest,
           bundleOutput,
+          sourcemapOutput,
           progress,
         } = argv;
 
@@ -119,6 +123,17 @@ export default function ramBundleCommand(runtime: Runtime) {
               );
         }
 
+        if (sourcemapOutput) {
+          webpackConfig.output!.sourceMapFilename = path.isAbsolute(
+            sourcemapOutput
+          )
+            ? path.relative(webpackConfig.output!.path!, sourcemapOutput)
+            : path.relative(
+                webpackConfig.output!.path!,
+                path.join(directory, sourcemapOutput)
+              );
+        }
+
         messages.initialInformation(runtime, { config: webpackConfig });
 
         // Attach progress plugin
@@ -128,12 +143,10 @@ export default function ramBundleCommand(runtime: Runtime) {
           }) as webpack.Plugin);
         }
 
-        const fs = new MemoryFileSystem();
         webpackConfig.plugins!.push(
           new RamBundlePlugin({
-            filename: 'ramBundle.bundle',
-            fs,
             config: ramBundleConfig,
+            sourceMap: Boolean(sourcemapOutput),
           })
         );
 
@@ -143,8 +156,6 @@ export default function ramBundleCommand(runtime: Runtime) {
         });
 
         const compiler = webpack(webpackConfig);
-        compiler.outputFileSystem = fs;
-
         const stats = await new Promise<webpack.Stats>((resolve, reject) =>
           compiler.run((err, info) => {
             if (err || info.hasErrors()) {
@@ -155,21 +166,6 @@ export default function ramBundleCommand(runtime: Runtime) {
             }
           })
         );
-
-        try {
-          nodeFs.writeFileSync(
-            path.join(
-              webpackConfig.output!.path!,
-              webpackConfig.output!.filename!
-            ),
-            fs.readFileSync(
-              path.join(webpackConfig.output!.path!, 'ramBundle.bundle')
-            )
-          );
-        } catch (error) {
-          runtime.logger.error('Failed to save RAM bundle');
-          throw error;
-        }
 
         messages.bundleBuilt(runtime, {
           stats,
