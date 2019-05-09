@@ -11,7 +11,7 @@ RAM bundle plugin for Haul and Webpack. This module is intended for internal use
 
 __When using `@haul/cli ram-bundle` command, this plugin will be added and configured automatically__, based on passed options.
 
-You can read moe about Haul here: https://github.com/callstack/haul.
+You can read more about Haul here: https://github.com/callstack/haul.
 
 ## API
 
