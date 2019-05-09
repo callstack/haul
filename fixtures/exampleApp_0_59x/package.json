@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "init": "node ../../packages/haul-cli/bin/haul.js init",
-    "start": "node ../../packages/haul-cli/bin/haul.js start"
+    "start": "node ../../packages/haul-cli/bin/haul.js start",
+    "haul": "node ../../packages/haul-cli/bin/haul.js"
   },
   "dependencies": {
     "react": "16.8.3",

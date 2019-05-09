@@ -145,7 +145,13 @@ export default function ramBundleCommand(runtime: Runtime) {
 
         webpackConfig.plugins!.push(
           new RamBundlePlugin({
-            config: ramBundleConfig,
+            config: {
+              ...ramBundleConfig,
+              minification: {
+                ...ramBundleConfig.minification,
+                enabled: Boolean(minify === undefined ? !dev : minify),
+              },
+            },
             sourceMap: Boolean(sourcemapOutput),
           })
         );
