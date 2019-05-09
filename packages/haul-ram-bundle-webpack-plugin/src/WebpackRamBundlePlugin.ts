@@ -110,10 +110,6 @@ export default class WebpackRamBundlePlugin {
               ? `"${webpackModule.id}"`
               : webpackModule.id;
 
-          if (selfRegisterId === 5) {
-            fs.writeFileSync('test.js', renderedModule.source);
-          }
-
           if (typeof webpackModule.id === 'string') {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
           }
