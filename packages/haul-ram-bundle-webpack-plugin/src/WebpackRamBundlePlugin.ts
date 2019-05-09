@@ -36,15 +36,7 @@ type WebpackRamBundlePluginOptions = {
 };
 
 export default class WebpackRamBundlePlugin {
-  static applyConfigTweaks(config: webpack.Configuration) {
-    return {
-      ...config,
-      optimization: {
-        ...config.optimization,
-        namedModules: false,
-      },
-    };
-  }
+  name = 'WebpackRamBundlePlugin';
 
   name = 'WebpackRamBundlePlugin';
 

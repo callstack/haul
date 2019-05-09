@@ -3,7 +3,7 @@
   "name": "@haul/inspector",
   "description": "Haul inspector for monitoring Haul processes",
   "bin": {
-    "haul": "./bin/haul-inspector.js"
+    "haul-inspector": "./bin/haul-inspector.js"
   },
   "files": [
     "build/",
