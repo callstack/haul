@@ -18,6 +18,17 @@ export default class ReactNativeEnvPlugin {
   constructor(private bundle: boolean) {}
 
   apply(compiler: webpack.Compiler) {
+    // Skip applying tweaks if WebpackRamBundlePlugin was added, since
+    // they are not compatible with each other.
+    if (
+      compiler.options.plugins &&
+      compiler.options.plugins.some(
+        (plugin: any) => plugin.name === 'WebpackRamBundlePlugin'
+      )
+    ) {
+      return;
+    }
+
     if (this.bundle) {
       // When creating static bundle (non-RAM), async chunks will be concatenated into main bundle.
       // This will allow easy switching between RAM bundle and non-RAM static bundle.

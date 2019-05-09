@@ -46,6 +46,8 @@ export default class WebpackRamBundlePlugin {
     };
   }
 
+  name = 'WebpackRamBundlePlugin';
+
   modules: Module[] = [];
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
@@ -117,15 +119,13 @@ export default class WebpackRamBundlePlugin {
           let code = `__webpack_require__.loadSelf(${selfRegisterId}, ${
             renderedModule.source
           });`;
-          if (this.config.minification !== false) {
+
+          const { enabled = false, ...minifyOptions } =
+            this.config.minification || {};
+          if (enabled) {
             // Minify source of module
             // TODO - source map https://github.com/terser-js/terser#source-map-options
-            const minifiedSource = terser.minify(
-              code,
-              typeof this.config.minification === 'boolean'
-                ? undefined
-                : this.config.minification
-            );
+            const minifiedSource = terser.minify(code, minifyOptions);
 
             // Check if there is no error in minifed source
             assert(!minifiedSource.error, minifiedSource.error);
