@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "add-contributor": "all-contributors add",
     "test": "jest",
-    "publish": "lerna publish --skip-git"
+    "publish": "yarn prepare && node ./scripts/publish.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
