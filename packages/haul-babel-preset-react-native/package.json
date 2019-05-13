@@ -2,9 +2,10 @@
   "version": "0.2.0",
   "name": "@haul-bundler/babel-preset-react-native",
   "description": "Babel preset for React Native >=0.59 with Haul",
-  "main": "build/index.js",
+  "main": "index.js",
   "files": [
-    "build/"
+    "build/",
+    "index.js"
   ],
   "engines": {
     "node": ">=8.x"
