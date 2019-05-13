@@ -6,19 +6,11 @@ import { Module } from './WebpackRamBundlePlugin';
 import { countLines } from './utils';
 
 export default class FileRamBundle {
-  bootstrap: string;
-  modules: Module[];
-  sourceMap: boolean;
-
   constructor(
-    bootstrap: string,
-    modules: Module[],
-    sourceMap: boolean = false
-  ) {
-    this.bootstrap = bootstrap;
-    this.modules = modules;
-    this.sourceMap = sourceMap;
-  }
+    public bootstrap: string,
+    public modules: Module[],
+    public sourceMap: boolean = false
+  ) {}
 
   build({
     outputDest,

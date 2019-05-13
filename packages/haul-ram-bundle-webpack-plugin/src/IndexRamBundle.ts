@@ -24,12 +24,11 @@ export default class IndexRamBundle {
   toc: Buffer = Buffer.alloc(0);
   modules: ModuleBuffer[] = [];
   rawModules: Module[] = [];
-  sourceMap: boolean;
 
   constructor(
     bootstrap: string,
     modules: Module[],
-    sourceMap: boolean = false
+    public sourceMap: boolean = false
   ) {
     this.bootstrap = this.toNullTerminatedBuffer(bootstrap);
     this.rawModules = modules;
@@ -38,7 +37,6 @@ export default class IndexRamBundle {
       buffer: this.toNullTerminatedBuffer(m.source),
     }));
     this.header.writeUInt32LE(MAGIC_NUMBER, 0);
-    this.sourceMap = sourceMap;
   }
 
   private toNullTerminatedBuffer(body: string) {
