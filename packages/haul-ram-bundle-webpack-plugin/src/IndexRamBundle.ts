@@ -99,17 +99,12 @@ export default class IndexRamBundle {
 
       const bundleParts = bundle.toString().split('\n');
       let lineOffset =
-        bundleParts.findIndex(line =>
-          line.includes('__webpack_require__.loadSelf(')
-        ) + 1;
+        bundleParts.findIndex(line => line.includes('__haul.l(')) + 1;
       this.rawModules.forEach(sourceModule => {
         indexMap.sections.push({
           offset: {
             line: lineOffset,
-            column:
-              bundleParts[lineOffset - 1].indexOf(
-                '__webpack_require__.loadSelf('
-              ) + 1,
+            column: bundleParts[lineOffset - 1].indexOf('__haul.l(') + 1,
           },
           map: sourceModule.map,
         });

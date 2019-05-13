@@ -21,13 +21,15 @@
   },
   "dependencies": {
     "babel-loader": "^8.0.5",
-    "case-sensitive-paths-webpack-plugin": "^2.2.0"
+    "case-sensitive-paths-webpack-plugin": "^2.2.0",
+    "terser-webpack-plugin": "^1.2.3"
   },
   "devDependencies": {
     "@haul-bundler/cli": "^0.2.0",
     "@haul-bundler/core": "^0.2.0",
     "@haul-bundler/core-legacy": "^0.2.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "@types/terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.30.0"
   }
 }
