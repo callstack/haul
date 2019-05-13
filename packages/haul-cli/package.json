@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "@haul-bundler/cli",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
@@ -23,10 +23,10 @@
     "webpack": "^4.30.0"
   },
   "dependencies": {
-    "@haul-bundler/core": "^0.2.0",
-    "@haul-bundler/core-legacy": "^0.2.0",
-    "@haul-bundler/inspector-events": "^0.2.0",
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.2.0",
+    "@haul-bundler/core": "^0.3.0",
+    "@haul-bundler/core-legacy": "^0.3.0",
+    "@haul-bundler/inspector-events": "^0.3.0",
+    "@haul-bundler/ram-bundle-webpack-plugin": "^0.3.0",
     "ansi-fragments": "^0.2.1",
     "simple-progress-webpack-plugin": "^1.1.2",
     "ws": "^6.2.1",

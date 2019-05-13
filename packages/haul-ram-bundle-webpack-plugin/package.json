@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "@haul-bundler/ram-bundle-webpack-plugin",
   "description": "RAM bundle plugin for Haul and Webpack",
   "main": "build/index.js",
@@ -18,7 +18,7 @@
     "webpack-sources": "^1.3.0"
   },
   "dependencies": {
-    "@haul-bundler/core": "^0.2.0",
+    "@haul-bundler/core": "^0.3.0",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {

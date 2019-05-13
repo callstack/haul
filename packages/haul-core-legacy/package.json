@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "@haul-bundler/core-legacy",
   "description": "Haul core library (legacy)",
   "bin": {
@@ -84,7 +84,7 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "@haul-bundler/core": "^0.2.0",
+    "@haul-bundler/core": "^0.3.0",
     "flow-bin": "^0.65.0",
     "jest": "^24.7.1",
     "metro-react-native-babel-preset": "^0.45",
