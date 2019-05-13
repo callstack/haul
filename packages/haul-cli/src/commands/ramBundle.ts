@@ -32,6 +32,11 @@ export default function ramBundleCommand(runtime: Runtime) {
         description: 'Either "ios" or "android" (default: "ios")',
         type: 'string',
       },
+      'indexed-ram-bundle': {
+        description:
+          'Force the "Indexed RAM" bundle file format, even when building for android.',
+        type: 'boolean',
+      },
       minify: {
         description:
           'Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.',
@@ -73,6 +78,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         assetsDest?: string;
         bundleOutput?: string;
         sourcemapOutput?: string;
+        indexRamBundle?: boolean;
         progress: string;
       }>
     ) {
@@ -86,6 +92,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          indexRamBundle,
         } = argv;
 
         // TODO: figure out a better way to read and transpile user files on-demand
@@ -153,6 +160,10 @@ export default function ramBundleCommand(runtime: Runtime) {
               },
             },
             sourceMap: Boolean(sourcemapOutput),
+            indexRamBundle:
+              indexRamBundle === undefined
+                ? platform !== 'android'
+                : indexRamBundle,
           })
         );
 

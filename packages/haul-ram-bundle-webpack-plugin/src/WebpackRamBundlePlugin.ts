@@ -3,11 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
-import { RawSource } from 'webpack-sources';
 import terser from 'terser';
 import mkdirp from 'mkdirp';
-import RamBundle from './RamBundle';
 import { RamBundleConfig } from '@haul-bundler/core';
+import IndexRamBundle from './IndexRamBundle';
+import FileRamBundle from './FileRamBundle';
 
 export type Module = {
   id: string | number;
@@ -32,6 +32,7 @@ type ModuleMappings = {
 
 type WebpackRamBundlePluginOptions = {
   sourceMap?: boolean;
+  indexRamBundle?: boolean;
   config?: RamBundleConfig;
 };
 
@@ -41,8 +42,13 @@ export default class WebpackRamBundlePlugin {
   modules: Module[] = [];
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
+  indexRamBundle: boolean = true;
 
-  constructor({ sourceMap, config }: WebpackRamBundlePluginOptions = {}) {
+  constructor({
+    sourceMap,
+    config,
+    indexRamBundle,
+  }: WebpackRamBundlePluginOptions = {}) {
     if (config) {
       this.config = config;
       if (config.debug) {
@@ -53,6 +59,7 @@ export default class WebpackRamBundlePlugin {
       }
     }
     this.sourceMap = Boolean(sourceMap);
+    this.indexRamBundle = Boolean(indexRamBundle);
   }
 
   apply(compiler: webpack.Compiler) {
@@ -175,46 +182,32 @@ export default class WebpackRamBundlePlugin {
             .join('\n') + '\n';
 
         const outputFilename = compilation.outputOptions.filename!;
-        const outputFilePath = path.isAbsolute(outputFilename)
+        const outputDest = path.isAbsolute(outputFilename)
           ? outputFilename
           : path.join(compilation.outputOptions.path, outputFilename);
-        const sourceMapFilename = compilation.getPath(
-          compilation.outputOptions.sourceMapFilename,
-          {
-            filename: path.isAbsolute(outputFilename)
-              ? path.relative(compilation.context, outputFilename)
-              : outputFilename,
-          }
-        );
 
         if (this.config.debug) {
           this.generateDebugFiles(moduleMappings, bootstrapCode, {
+            indexRamBundle: this.indexRamBundle,
             sourceMap: this.sourceMap,
-            outputFilePath,
-            sourceMapFilename,
+            outputDest,
             outputFilename,
           });
         }
 
-        const ramBundle = new RamBundle();
-        const { bundle, sourceMap } = ramBundle.build(
-          bootstrapCode,
-          this.modules,
-          outputFilePath,
-          this.sourceMap
-        );
+        const bundle = this.indexRamBundle
+          ? new IndexRamBundle(bootstrapCode, this.modules, this.sourceMap)
+          : new FileRamBundle(bootstrapCode, this.modules, this.sourceMap);
 
         Object.keys(compilation.assets).forEach(asset => {
           delete compilation.assets[asset];
         });
-        // Cast buffer to any to avoid mismatch of types. RawSource works not only on strings
-        // but also on Buffers.
-        compilation.assets[outputFilename] = new RawSource(bundle as any);
-        if (this.sourceMap) {
-          compilation.assets[sourceMapFilename] = new RawSource(
-            JSON.stringify(sourceMap)
-          );
-        }
+
+        bundle.build({
+          outputDest,
+          outputFilename,
+          compilation,
+        });
       }
     );
   }

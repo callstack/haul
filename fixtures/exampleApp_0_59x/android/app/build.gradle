@@ -73,11 +73,9 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
-]
-
-project.ext.react = [
-  cliPath: "../../../../packages/haul-cli/bin/haul.js"
+    entryFile: "index.js",
+    bundleCommand: "ram-bundle",
+    cliPath: "../../packages/haul-cli/bin/haul.js",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -120,10 +118,19 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("../keystores/release.jks") // Android keystore file
+            storePassword "password"
+            keyAlias "key0" // name of the key to use
+            keyPassword "password"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

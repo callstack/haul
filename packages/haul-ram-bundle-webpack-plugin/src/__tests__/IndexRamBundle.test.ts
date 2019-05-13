@@ -1,7 +1,7 @@
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
-import RamBundle from '../RamBundle';
+import IndexRamBundle from '../IndexRamBundle';
 
-test('RamBundle should create valid RAM bundle', () => {
+test('IndexRamBundle should create valid RAM bundle', () => {
   const bootstrapper = '(function() { /* bootstrap */ })()';
   const modules = [
     {
@@ -20,17 +20,20 @@ test('RamBundle should create valid RAM bundle', () => {
     },
   ];
 
-  const ramBundle = new RamBundle();
-  const { bundle, sourceMap } = ramBundle.build(
-    bootstrapper,
-    modules,
-    'ram.bundle',
-    false
+  const compilation = { assets: {} };
+  const ramBundle = new IndexRamBundle(bootstrapper, modules, false);
+  ramBundle.build({
+    outputDest: '',
+    outputFilename: 'main.jsbundle',
+    compilation: compilation as any,
+  });
+  expect(compilation.assets['main.jsbundle'].source().length).toBeGreaterThan(
+    0
   );
-  expect(bundle.length).toBeGreaterThan(0);
-  expect(sourceMap).toEqual({});
 
-  const parser = new RamBundleParser(Buffer.from(bundle));
+  const parser = new RamBundleParser(
+    Buffer.from(compilation.assets['main.jsbundle'].source())
+  );
   expect(parser.getStartupCode()).toEqual(bootstrapper);
   expect(parser.getModule(0)).toEqual(modules[0].source);
   expect(parser.getModule(1)).toEqual(modules[1].source);
