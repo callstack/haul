@@ -17,7 +17,7 @@ function isTSXSource(fileName: string) {
   return !!fileName && fileName.endsWith('.tsx');
 }
 
-export default function getHaulBabelPreset(/* babel, options */) {
+export default function getHaulBabelPreset() {
   return {
     comments: false,
     compact: true,

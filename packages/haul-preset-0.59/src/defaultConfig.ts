@@ -11,6 +11,7 @@ import {
 } from '@haul-bundler/core';
 import path from 'path';
 import os from 'os';
+import isCi from 'is-ci';
 import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
@@ -203,7 +204,7 @@ export default function getDefaultConfig(
           test: /\.(js|(js)?bundle)($|\?)/i,
           cache: true,
           // Set upper limit on CPU cores, to prevent Out of Memory exception on CIs.
-          parallel: Math.max(os.cpus().length, 4) - 1,
+          parallel: isCi ? Math.max(os.cpus().length, 8) - 1 : true,
           sourceMap: true,
         }),
       ],
