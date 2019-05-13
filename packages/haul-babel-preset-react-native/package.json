@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "name": "@haul-bundler/babel-preset-react-native",
+  "description": "Babel preset for React Native >=0.59 with Haul",
+  "main": "index.js",
+  "files": [
+    "build/",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=8.x"
+  },
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "metro-react-native-babel-preset": "^0.54.0"
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
+    "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-exponentiation-operator": "^7.2.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/plugin-transform-literals": "^7.2.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/plugin-transform-react-display-name": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.2.0",
+    "@babel/plugin-transform-sticky-regex": "^7.2.0",
+    "@babel/plugin-transform-typescript": "^7.4.4",
+    "@babel/plugin-transform-unicode-regex": "^7.4.4"
+  },
+  "devDependencies": {
+    "metro-react-native-babel-preset": "^0.54.0"
+  }
+}

@@ -113,9 +113,7 @@ export default class WebpackRamBundlePlugin {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
           }
 
-          let code = `__webpack_require__.loadSelf(${selfRegisterId}, ${
-            renderedModule.source
-          });`;
+          let code = `__haul.l(${selfRegisterId}, ${renderedModule.source});`;
           let map = renderedModule.map;
           const { enabled = false, ...minifyOptions } =
             this.config.minification || {};

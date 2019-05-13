@@ -41,11 +41,14 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
     return module.exports;
   }
 
-  // Export __webpack_require__ globally
+  var __haul = {};
+
+  // Export __webpack_require__ and __haul globally
   globalScope.__webpack_require__ = __webpack_require__;
+  globalScope.__haul = __haul;
 
   // Allow module to load itself into the module cache
-  __webpack_require__.loadSelf = function loadSelf(moduleId, factory) {
+  __haul.l = function loadSelf(moduleId, factory) {
     // Make sure module is in installedModules
     if (!installedModules[moduleId]) {
       throw new Error(moduleId + ' missing in module cache');

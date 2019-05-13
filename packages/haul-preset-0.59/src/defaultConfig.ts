@@ -10,8 +10,11 @@ import {
   HaulConfig,
 } from '@haul-bundler/core';
 import path from 'path';
+import os from 'os';
+import isCi from 'is-ci';
 import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
 import getBabelConfigPath from './getBabelConfigPath';
 
 export default function getDefaultConfig(
@@ -197,12 +200,13 @@ export default function getDefaultConfig(
     optimization: {
       minimize: !!minify,
       minimizer: [
-        // new UglifyJsPlugin({
-        //   test: /\.(js|(js)?bundle)($|\?)/i,
-        //   cache: true,
-        //   parallel: true,
-        //   sourceMap: true,
-        // }),
+        new TerserWebpackPlugin({
+          test: /\.(js|(js)?bundle)($|\?)/i,
+          cache: true,
+          // Set upper limit on CPU cores, to prevent Out of Memory exception on CIs.
+          parallel: isCi ? Math.max(os.cpus().length, 8) - 1 : true,
+          sourceMap: true,
+        }),
       ],
       namedModules: dev,
       concatenateModules: true,
