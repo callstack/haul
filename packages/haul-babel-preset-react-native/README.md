@@ -9,7 +9,7 @@
 
 Babel preset for __React Native >=0.59.x__ with Haul - Webpack-based React Native bundler.
 
-You can read moe about Haul here: https://github.com/callstack/haul.
+You can read more about Haul here: https://github.com/callstack/haul.
 
 <!-- badges (common) -->
 
