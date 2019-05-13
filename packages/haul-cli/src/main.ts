@@ -1,4 +1,5 @@
 import yargs from 'yargs';
+import yargsParser from 'yargs-parser';
 import { Runtime, InspectorClient } from '@haul-bundler/core';
 import initCommand from './commands/init';
 import ramBundleCommand from './commands/ramBundle';
@@ -7,27 +8,20 @@ import reloadCommand from './commands/reload';
 import startCommand from './commands/start';
 
 export default async function main() {
-  const {
-    HAUL_INSPECTOR,
-    HAUL_INSPECTOR_PORT,
-    HAUL_INSPECTOR_HOST,
-    HAUL_INSPECTOR_WAIT,
-    NODE_INSPECTOR,
-  } = process.env;
+  const { HAUL_INSPECTOR_PORT, HAUL_INSPECTOR_HOST } = process.env;
+  const { haulInspector, nodeInspector } = yargsParser(process.argv);
 
   const runtime = new Runtime(
-    HAUL_INSPECTOR || HAUL_INSPECTOR_PORT || HAUL_INSPECTOR_HOST
+    haulInspector || HAUL_INSPECTOR_PORT || HAUL_INSPECTOR_HOST
       ? new InspectorClient(HAUL_INSPECTOR_HOST, HAUL_INSPECTOR_PORT)
       : undefined
   );
 
-  await runtime.ready(
-    Boolean(HAUL_INSPECTOR_WAIT) || HAUL_INSPECTOR === 'wait'
-  );
+  await runtime.ready(haulInspector === 'wait');
 
   // Experimental
-  if (NODE_INSPECTOR) {
-    const wait = NODE_INSPECTOR === 'wait';
+  if (nodeInspector) {
+    const wait = nodeInspector === 'wait';
     runtime.nodeInspectorStarted(wait);
     const inspector = require('inspector');
     inspector.open(undefined, undefined, wait);
