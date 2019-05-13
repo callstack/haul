@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.15",
+  "version": "0.2.0",
   "name": "@haul-bundler/cli",
   "description": "Haul is a new command line tools for React Native",
   "bin": {
@@ -10,7 +10,9 @@
     "build/",
     "bin/"
   ],
-  "engines": { "node": ">=8.x" },
+  "engines": {
+    "node": ">=8.x"
+  },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",
@@ -21,18 +23,18 @@
     "webpack": "^4.30.0"
   },
   "dependencies": {
+    "@haul-bundler/core": "^0.2.0",
+    "@haul-bundler/core-legacy": "^0.2.0",
+    "@haul-bundler/inspector-events": "^0.2.0",
+    "@haul-bundler/ram-bundle-webpack-plugin": "^0.2.0",
     "ansi-fragments": "^0.2.1",
-    "yargs": "^13.2.2",
+    "simple-progress-webpack-plugin": "^1.1.2",
     "ws": "^6.2.1",
-    "@haul-bundler/inspector-events": "1.0.0-rc.15",
-    "@haul-bundler/core-legacy": "1.0.0-rc.15",
-    "@haul-bundler/core": "1.0.0-rc.15",
-    "@haul-bundler/ram-bundle-webpack-plugin": "1.0.0-rc.15",
-    "simple-progress-webpack-plugin": "^1.1.2"
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
-    "@types/yargs": "^13.0.0",
     "@types/ws": "^6.0.1",
+    "@types/yargs": "^13.0.0",
     "webpack": "^4.30.0"
   }
 }

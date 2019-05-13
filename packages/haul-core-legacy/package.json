@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.15",
+  "version": "0.2.0",
   "name": "@haul-bundler/core-legacy",
   "description": "Haul core library (legacy)",
   "bin": {
@@ -7,7 +7,9 @@
   },
   "main": "build/index.js",
   "types": "./index.d.ts",
-  "engines": { "node": ">=8.x" },
+  "engines": {
+    "node": ">=8.x"
+  },
   "author": "Mike Grabowski <mike@callstack.com>",
   "repository": "github:callstack/haul",
   "contributors": [
@@ -18,19 +20,19 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
+    "@haul-bundler/core": "1.0.0-rc.15",
     "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.57.0",
-    "@haul-bundler/core": "1.0.0-rc.15"
+    "react-native": "^0.57.0"
   },
   "dependencies": {
     "@babel/core": "^7.4.0",
-    "@babel/register": "^7.4.0",
-    "@babel/polyfill": "^7.4.3",
-    "@babel/runtime": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
+    "@babel/runtime": "^7.4.3",
     "@react-slate/components": "0.2.0",
     "@react-slate/core": "0.7.0",
     "@react-slate/utils": "0.2.2",
@@ -82,11 +84,11 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "@haul-bundler/core": "1.0.0-rc.15",
+    "@haul-bundler/core": "^0.2.0",
     "flow-bin": "^0.65.0",
+    "jest": "^24.7.1",
     "metro-react-native-babel-preset": "^0.45",
     "react-native": "^0.57.0",
-    "jest": "^24.7.1",
     "rimraf": "^2.6.1",
     "snapshot-diff": "^0.3.0"
   }

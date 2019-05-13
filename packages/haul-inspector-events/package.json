@@ -1,12 +1,14 @@
 {
-  "version": "1.0.0-rc.15",
+  "version": "0.2.0",
   "name": "@haul-bundler/inspector-events",
   "description": "Inspector events for Haul",
   "main": "build/index.js",
   "files": [
     "build/"
   ],
-  "engines": { "node": ">=8.x" },
+  "engines": {
+    "node": ">=8.x"
+  },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",

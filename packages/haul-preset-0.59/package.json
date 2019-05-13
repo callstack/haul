@@ -1,30 +1,32 @@
 {
-  "version": "1.0.0-rc.15",
+  "version": "0.2.0",
   "name": "@haul-bundler/preset-0.59",
   "description": "Haul preset for React Native 0.59",
   "main": "build/index.js",
   "files": [
     "build/"
   ],
-  "engines": { "node": ">=8.x" },
+  "engines": {
+    "node": ">=8.x"
+  },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "webpack": "^4.30.0",
-    "@haul-bundler/core": "1.0.0-rc.15",
     "@haul-bundler/cli": "1.0.0-rc.15",
-    "@haul-bundler/core-legacy": "1.0.0-rc.15"
+    "@haul-bundler/core": "1.0.0-rc.15",
+    "@haul-bundler/core-legacy": "1.0.0-rc.15",
+    "webpack": "^4.30.0"
   },
   "dependencies": {
     "babel-loader": "^8.0.5",
     "case-sensitive-paths-webpack-plugin": "^2.2.0"
   },
   "devDependencies": {
-    "@haul-bundler/core": "1.0.0-rc.15",
-    "@haul-bundler/core-legacy": "1.0.0-rc.15",
-    "@haul-bundler/cli": "1.0.0-rc.15",
+    "@haul-bundler/cli": "^0.2.0",
+    "@haul-bundler/core": "^0.2.0",
+    "@haul-bundler/core-legacy": "^0.2.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
     "webpack": "^4.30.0"
   }
