@@ -1,3 +1,4 @@
+import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import FileRamBundle from '../FileRamBundle';
 
@@ -20,7 +21,7 @@ test('FileRamBundle should create valid RAM bundle', () => {
     },
   ];
 
-  const compilation = { assets: {} };
+  const compilation = { assets: {} as { [key: string]: RawSource } };
   const ramBundle = new FileRamBundle(bootstrapper, modules, false);
   ramBundle.build({
     outputDest: '',
@@ -28,7 +29,9 @@ test('FileRamBundle should create valid RAM bundle', () => {
     compilation: compilation as any,
   });
   expect(compilation.assets['main.jsbundle'].source()).toEqual(bootstrapper);
-  const UNBUNDLE = compilation.assets['js-modules/UNBUNDLE'].source();
+  const UNBUNDLE: Buffer = compilation.assets[
+    'js-modules/UNBUNDLE'
+  ].source() as any;
   const magicNumber = UNBUNDLE.readUInt32LE(0);
   expect(magicNumber).toEqual(MAGIC_NUMBER);
   expect(compilation.assets['js-modules/0.js'].source()).toEqual(

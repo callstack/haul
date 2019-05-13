@@ -1,3 +1,4 @@
+import { RawSource } from 'webpack-sources';
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
 import IndexRamBundle from '../IndexRamBundle';
 
@@ -20,7 +21,7 @@ test('IndexRamBundle should create valid RAM bundle', () => {
     },
   ];
 
-  const compilation = { assets: {} };
+  const compilation = { assets: {} as { [key: string]: RawSource } };
   const ramBundle = new IndexRamBundle(bootstrapper, modules, false);
   ramBundle.build({
     outputDest: '',
