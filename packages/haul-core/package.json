@@ -14,8 +14,7 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.57.0"
+    "react-native": "^0.59.0"
   },
   "dependencies": {
     "@haul-bundler/core-legacy": "^0.3.0",

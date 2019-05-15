@@ -1,5 +1,4 @@
 import { Runtime, DEFAULT_PORT } from '@haul-bundler/core';
-import legacyReloadCommand from '@haul-bundler/core-legacy/build/commands/reload';
 
 export default function reloadCommand(runtime: Runtime) {
   return {
@@ -15,7 +14,7 @@ export default function reloadCommand(runtime: Runtime) {
     async handler() {
       let exitCode = 0;
       try {
-        legacyReloadCommand.action();
+        require('@haul-bundler/core-legacy/build/commands/reload').action();
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         exitCode = 1;

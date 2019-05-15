@@ -4,6 +4,9 @@ export { default as getProjectConfig } from './config/getProjectConfig';
 export { default as getWebpackConfig } from './config/getWebpackConfig';
 export { default as getProjectConfigPath } from './config/getProjectConfigPath';
 export { default as getRamBundleConfig } from './config/getRamBundleConfig';
+export {
+  default as injectPolyfillsIntoEntry,
+} from './config/injectPolyfillsIntoEntry';
 
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
@@ -35,3 +38,7 @@ export {
   RamBundleConfig,
   RamBundleDebugOptions,
 } from './config/types';
+export {
+  default as getReactNativeVersion,
+} from './utils/getReactNativeVersion';
+export { default as parseEntry } from './utils/parseEntry';

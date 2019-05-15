@@ -73,11 +73,8 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
-]
-
-project.ext.react = [
-  cliPath: "../../../../packages/haul-cli/bin/haul.js"
+    entryFile: "index.js",
+    cliPath: "../../../../packages/haul-cli/bin/haul.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"

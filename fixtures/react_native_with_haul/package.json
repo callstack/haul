@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ../../packages/haul/bin/haul.js start",
+    "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
-    "haul": "node ../../packages/haul/bin/haul.js"
+    "haul": "node ../../packages/haul-cli/bin/haul.js"
   },
   "dependencies": {
     "react": "16.8.3",

@@ -18,8 +18,7 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "metro-react-native-babel-preset": "^0.45.0",
-    "react-native": "^0.57.0",
+    "react-native": "^0.59.0",
     "webpack": "^4.30.0"
   },
   "dependencies": {
@@ -28,12 +27,19 @@
     "@haul-bundler/inspector-events": "^0.3.0",
     "@haul-bundler/ram-bundle-webpack-plugin": "^0.3.0",
     "ansi-fragments": "^0.2.1",
+    "dedent": "^0.7.0",
+    "ora": "^3.4.0",
+    "inquirer": "^6.3.1",
+    "semver": "^6.0.0",
     "simple-progress-webpack-plugin": "^1.1.2",
     "ws": "^6.2.1",
     "yargs": "^13.2.2",
     "yargs-parser": "^13.1.0"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
+    "@types/semver": "^6.0.0",
+    "@types/inquirer": "^6.0.1",
     "@types/ws": "^6.0.1",
     "@types/yargs": "^13.0.0",
     "webpack": "^4.30.0"

@@ -168,7 +168,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         );
 
         messages.initialBundleInformation(runtime, {
-          entry: webpackConfig.entry as string[],
+          entry: webpackConfig.entry,
           dev,
         });
 

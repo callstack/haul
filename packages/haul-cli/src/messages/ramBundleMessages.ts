@@ -1,7 +1,6 @@
-import { Runtime } from '@haul-bundler/core';
+import { Runtime, parseEntry } from '@haul-bundler/core';
 import webpack from 'webpack';
 import path from 'path';
-import getEntryFiles from '@haul-bundler/core-legacy/build/utils/getEntryFiles';
 
 export function initialInformation(
   runtime: Runtime,
@@ -29,7 +28,7 @@ export function initialInformation(
 
 export function initialBundleInformation(
   runtime: Runtime,
-  { entry, dev }: { entry: string[]; dev: boolean }
+  { entry, dev }: { entry: webpack.Configuration['entry']; dev: boolean }
 ) {
   const mode = dev ? 'development' : 'production';
   runtime.logger.info(
@@ -41,7 +40,7 @@ export function initialBundleInformation(
   runtime.logger.info(
     `Starting from:\n${runtime.logger.enhanceWithColor(
       'gray',
-      getEntryFiles(entry)
+      parseEntry(entry)
     )}`
   );
 }

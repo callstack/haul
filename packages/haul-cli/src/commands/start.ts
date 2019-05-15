@@ -1,5 +1,4 @@
 import yargs from 'yargs';
-import legacyStartCommand from '@haul-bundler/core-legacy/build/commands/start';
 import {
   DEFAULT_PORT,
   DEFAULT_CONFIG_FILENAME,
@@ -89,7 +88,7 @@ export default function startCommand(runtime: Runtime): yargs.CommandModule {
       }
 
       try {
-        legacyStartCommand.action({
+        require('@haul-bundler/core-legacy/build/commands/start').action({
           port,
           dev,
           no_interactive: noInteractive,
