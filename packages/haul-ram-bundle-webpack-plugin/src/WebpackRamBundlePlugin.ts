@@ -197,9 +197,12 @@ export default class WebpackRamBundlePlugin {
           ? new IndexRamBundle(bootstrapCode, this.modules, this.sourceMap)
           : new FileRamBundle(bootstrapCode, this.modules, this.sourceMap);
 
-        Object.keys(compilation.assets).forEach(asset => {
-          delete compilation.assets[asset];
-        });
+        Object.keys(compilation.assets)
+          // Skip assets files like images, which will always be in assets/ directory
+          .filter(asset => !/assets\//.test(asset))
+          .forEach(asset => {
+            delete compilation.assets[asset];
+          });
 
         bundle.build({
           outputDest,

@@ -24,7 +24,7 @@ export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
         initializeCoreLocation: options.initializeCoreLocation,
         entry,
         dev: options.dev,
-        hotReloading: !options.hotReloading,
+        hotReloading: options.hotReloading,
       }),
       name: options.platform,
     };
