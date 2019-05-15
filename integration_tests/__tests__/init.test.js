@@ -37,8 +37,8 @@ const cleanProject = () => {
 };
 
 beforeAll(() => run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR));
-afterEach(cleanProject);
 beforeEach(cleanProject);
+afterEach(cleanProject);
 
 test('init command on react-native project', done => {
   const haul = runHaul(TEST_PROJECT_DIR, ['init']);

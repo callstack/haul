@@ -20,9 +20,6 @@ export { default as ReactNativeTarget } from './webpack/ReactNativeTarget';
 // Shared CLI utils
 export { default as Runtime } from './runtime/Runtime';
 export { default as InspectorClient } from './runtime/InspectorClient';
-export {
-  default as getReactNativeVersion,
-} from './utils/getReactNativeVersion';
 
 // Others
 export {
@@ -41,3 +38,7 @@ export {
   RamBundleConfig,
   RamBundleDebugOptions,
 } from './config/types';
+export {
+  default as getReactNativeVersion,
+} from './utils/getReactNativeVersion';
+export { default as parseEntry } from './utils/parseEntry';
