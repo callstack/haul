@@ -29,10 +29,7 @@ const PACKAGE_PATH = path.resolve(TEST_PROJECT_DIR, 'package.json');
 const ENTER_KEY = '\x0d';
 
 const cleanProject = () => {
-  run(`git checkout ${GRADLE_PATH}`);
-  run(`git checkout ${XCODE_PROJECT_PATH}`);
-  run(`git checkout ${BABEL_CONFIG_FILE_PATH}`);
-  run(`git checkout ${PACKAGE_PATH}`);
+  run(`git checkout -- ${TEST_PROJECT_DIR}`);
   rimraf.sync(CONFIG_FILE_PATH);
 };
 
@@ -51,10 +48,16 @@ test('init command on react-native project', done => {
     try {
       const haulConfig = fs.readFileSync(CONFIG_FILE_PATH, 'utf8');
       const xcodeProject = fs.readFileSync(XCODE_PROJECT_PATH, 'utf8');
+      const gradleBuild = fs.readFileSync(GRADLE_PATH, 'utf8');
       const babelConfig = fs.readFileSync(BABEL_CONFIG_FILE_PATH, 'utf8');
       const packageJson = require(PACKAGE_PATH);
       expect(haulConfig).toMatchSnapshot();
       expect(xcodeProject.match(/added by Haul/g).length).toBe(2);
+      expect(gradleBuild.match(/\nproject\.ext\.react/g).length).toBe(1);
+      expect(gradleBuild).toMatch('entryFile: "index.js",');
+      expect(gradleBuild).toMatch(
+        'cliPath: "node_modules/@haul-bundler/cli/bin/haul.js"'
+      );
       expect(babelConfig).toMatch('@haul-bundler/babel-preset-react-native');
       expect(packageJson.scripts.start).toEqual('haul start');
       done();

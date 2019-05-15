@@ -95,8 +95,9 @@ async function modifyXcodeProject(cwd: string) {
   const iosPath = path.join(cwd, 'ios');
   if (fs.existsSync(iosPath)) {
     xcodeProject = fs
-      .readdirSync(path.join(cwd, 'ios'))
+      .readdirSync(iosPath)
       .find(file => file.includes('.xcodeproj'));
+    xcodeProject = path.join(iosPath, xcodeProject || '');
   }
 
   // Otherwise, ask for path to a file
@@ -165,6 +166,7 @@ async function modifyGradleBuild(cwd: string) {
     gradleBuildFile = fs
       .readdirSync(androidPath)
       .find(file => file.includes('build.gradle'));
+    gradleBuildFile = path.join(androidPath, gradleBuildFile || '');
   }
   // Otherwise, ask for path to a file
   if (!gradleBuildFile) {
