@@ -14,10 +14,8 @@
   "repository": "github:callstack/haul",
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
-  "peerDependencies": {
-    "metro-react-native-babel-preset": "^0.54.0"
-  },
   "dependencies": {
+    "metro-react-native-babel-preset": "^0.54.0",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
@@ -35,8 +33,5 @@
     "@babel/plugin-transform-sticky-regex": "^7.2.0",
     "@babel/plugin-transform-typescript": "^7.4.4",
     "@babel/plugin-transform-unicode-regex": "^7.4.4"
-  },
-  "devDependencies": {
-    "metro-react-native-babel-preset": "^0.54.0"
   }
 }

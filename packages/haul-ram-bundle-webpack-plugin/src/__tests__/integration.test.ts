@@ -42,8 +42,7 @@ function build({
             options: {
               babelrc: false,
               configFile: false,
-              presets: ['module:metro-react-native-babel-preset'],
-              plugins: ['@babel/plugin-syntax-dynamic-import'],
+              presets: ['module:@haul-bundler/babel-preset-react-native'],
             },
           },
         },
