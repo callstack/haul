@@ -3,9 +3,9 @@ import {
   EnvOptions,
   HaulConfig,
   Runtime,
+  injectPolyfillsIntoEntry,
 } from '@haul-bundler/core';
 import webpack from 'webpack';
-import { injectPolyfillIntoEntry } from '@haul-bundler/core-legacy/build/utils/makeReactNativeConfig';
 import getDefaultConfig from './defaultConfig';
 
 export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
@@ -19,12 +19,12 @@ export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
 
     const config = {
       ...defaultWebpackConfig,
-      entry: injectPolyfillIntoEntry({
+      entry: injectPolyfillsIntoEntry({
         root: options.root,
         initializeCoreLocation: options.initializeCoreLocation,
         entry,
         dev: options.dev,
-        disableHotReloading: !options.hotReloading,
+        hotReloading: !options.hotReloading,
       }),
       name: options.platform,
     };

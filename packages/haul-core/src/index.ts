@@ -4,6 +4,9 @@ export { default as getProjectConfig } from './config/getProjectConfig';
 export { default as getWebpackConfig } from './config/getWebpackConfig';
 export { default as getProjectConfigPath } from './config/getProjectConfigPath';
 export { default as getRamBundleConfig } from './config/getRamBundleConfig';
+export {
+  default as injectPolyfillsIntoEntry,
+} from './config/injectPolyfillsIntoEntry';
 
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
