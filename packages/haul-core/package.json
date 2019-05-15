@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
@@ -17,8 +17,8 @@
     "react-native": "^0.59.0"
   },
   "dependencies": {
-    "@haul-bundler/core-legacy": "^0.3.0",
-    "@haul-bundler/inspector-events": "^0.3.0",
+    "@haul-bundler/core-legacy": "^0.4.0",
+    "@haul-bundler/inspector-events": "^0.4.0",
     "ansi-fragments": "^0.2.1",
     "concat-with-sourcemaps": "^1.1.0",
     "dedent": "^0.7.0",
