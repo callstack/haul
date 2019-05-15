@@ -3,6 +3,7 @@ import webpack from 'webpack';
 
 // JS polyfills for JSC
 // Temporary backport of https://github.com/facebook/react-native/blob/v0.55.3/rn-get-polyfills.js
+// TODO: revisit polyfills and check if we need them, since starting from RN 0.59+ we have newer JSC
 const polyfills = [
   require.resolve('../vendor/polyfills/Object.es6.js'),
   require.resolve('../vendor/polyfills/console.js'),

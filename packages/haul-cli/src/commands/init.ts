@@ -94,14 +94,9 @@ async function modifyXcodeProject(cwd: string) {
   // Does `ios/*.xcodeproj` exist?
   const iosPath = path.join(cwd, 'ios');
   if (fs.existsSync(iosPath)) {
-    const list = fs
+    xcodeProject = fs
       .readdirSync(path.join(cwd, 'ios'))
-      .filter(file => file.includes('.xcodeproj'));
-
-    // Do nothing if multiple projects were found
-    if (list.length === 1) {
-      xcodeProject = path.join(iosPath, list[0]);
-    }
+      .find(file => file.includes('.xcodeproj'));
   }
 
   // Otherwise, ask for path to a file
@@ -167,13 +162,9 @@ async function modifyGradleBuild(cwd: string) {
   // Does `android/app/build.gradle` exist?
   const androidPath = path.join(cwd, 'android/app');
   if (fs.existsSync(androidPath)) {
-    const list = fs
+    gradleBuildFile = fs
       .readdirSync(androidPath)
-      .filter(file => file.includes('build.gradle'));
-    // Do nothing if multiple projects were found
-    if (list.length === 1) {
-      gradleBuildFile = path.join(androidPath, list[0]);
-    }
+      .find(file => file.includes('build.gradle'));
   }
   // Otherwise, ask for path to a file
   if (!gradleBuildFile) {
@@ -204,7 +195,7 @@ async function modifyGradleBuild(cwd: string) {
     /project\.ext\.react = \[\n(.+)\n\]/,
     dedent`
     project.ext.react = [
-    $1
+    $1,
         cliPath: ${cliString}
     ]
     `
@@ -214,8 +205,7 @@ async function modifyGradleBuild(cwd: string) {
 }
 
 function getRunScript(scriptName: string) {
-  const runCommand = scriptName === 'start' ? 'yarn' : 'yarn run';
-  return `${runCommand} ${scriptName}`;
+  return `yarn run ${scriptName}`;
 }
 
 async function addHaulScript(cwd: string) {
