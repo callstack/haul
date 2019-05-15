@@ -3,7 +3,7 @@ import {
   getReactNativeVersion,
   DEFAULT_CONFIG_FILENAME,
 } from '@haul-bundler/core';
-import ora from 'ora';
+import ora, { Ora } from 'ora';
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
@@ -13,8 +13,8 @@ import dedent from 'dedent';
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-async function checkProject(cwd: string, runtime: Runtime) {
-  const progress = ora('Checking project files').start();
+async function checkProject(progress: Ora, cwd: string, runtime: Runtime) {
+  progress.start('Checking project files');
   await delay(1000);
 
   // Are we inside a React Native project?
@@ -44,8 +44,60 @@ async function checkProject(cwd: string, runtime: Runtime) {
   }
 }
 
-async function modifyBabelConfig(cwd: string, runtime: Runtime) {
-  const progress = ora('Updating Babel config').start();
+async function createHaulProjectConfig(
+  progress: Ora,
+  cwd: string,
+  reactNativeVersion: string,
+  runtime: Runtime
+) {
+  // Does `haul.config.js` already exist?
+  if (fs.existsSync(path.join(cwd, DEFAULT_CONFIG_FILENAME))) {
+    const result = (await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'overwrite',
+        message: `There is already a '${DEFAULT_CONFIG_FILENAME}'. Overwrite it?`,
+      },
+    ])) as { overwrite: boolean };
+
+    if (!result.overwrite) {
+      runtime.complete(0);
+    }
+  }
+
+  progress.start('Generating config files');
+
+  await delay(1000);
+
+  const version = semver.parse(reactNativeVersion);
+  if (!version) {
+    throw new Error(`Cannot parse React Native version: ${reactNativeVersion}`);
+  }
+
+  const config = dedent`
+    import { createWebpackConfig } from "@haul-bundler/preset-${
+      version.major
+    }.${version.minor}";
+
+    export default {
+      webpack: createWebpackConfig(({ platform }) => ({
+        entry: \`./index.js\`
+      }))
+    };
+  `;
+
+  fs.writeFileSync(path.join(cwd, DEFAULT_CONFIG_FILENAME), config);
+
+  progress.succeed(
+    `Generated ${runtime.logger.enhanceWithModifier(
+      'bold',
+      DEFAULT_CONFIG_FILENAME
+    )}`
+  );
+}
+
+async function modifyBabelConfig(progress: Ora, cwd: string, runtime: Runtime) {
+  progress.start('Updating Babel config');
 
   const defaultBabelConfigPaths = [
     path.join(cwd, 'babel.config.js'),
@@ -88,7 +140,7 @@ async function modifyBabelConfig(cwd: string, runtime: Runtime) {
   );
 }
 
-async function modifyXcodeProject(cwd: string) {
+async function modifyXcodeProject(progress: Ora, cwd: string) {
   let xcodeProject;
 
   // Does `ios/*.xcodeproj` exist?
@@ -117,7 +169,7 @@ async function modifyXcodeProject(cwd: string) {
     xcodeProject = path.resolve(result.entry);
   }
 
-  const progress = ora('Adding haul to your Xcode build scripts');
+  progress.start('Adding haul to your Xcode build scripts');
 
   await delay(1000);
 
@@ -158,7 +210,7 @@ async function modifyXcodeProject(cwd: string) {
   progress.succeed('Added haul to your Xcode build scripts');
 }
 
-async function modifyGradleBuild(cwd: string) {
+async function modifyGradleBuild(progress: Ora, cwd: string) {
   let gradleBuildFile;
   // Does `android/app/build.gradle` exist?
   const androidPath = path.join(cwd, 'android/app');
@@ -183,7 +235,7 @@ async function modifyGradleBuild(cwd: string) {
     ])) as { entry: string };
     gradleBuildFile = path.resolve(result.entry);
   }
-  const progress = ora('Adding haul to your build.gradle');
+  progress.start('Adding haul to your build.gradle');
   await delay(1000);
   let project = fs.readFileSync(gradleBuildFile).toString();
   const cliString = '"node_modules/@haul-bundler/cli/bin/haul.js"';
@@ -210,7 +262,7 @@ function getRunScript(scriptName: string) {
   return `yarn run ${scriptName}`;
 }
 
-async function addHaulScript(cwd: string) {
+async function addHaulScript(progress: Ora, cwd: string) {
   const packageJson = require(path.join(cwd, 'package.json'));
   const scripts = packageJson.scripts || {};
   const haulScript = Object.keys(scripts).find(
@@ -248,9 +300,7 @@ async function addHaulScript(cwd: string) {
     [scriptName]: 'haul start',
   });
 
-  const progress = ora(
-    `Adding \`${scriptName}\` script to your package.json`
-  ).start();
+  progress.start(`Adding \`${scriptName}\` script to your package.json`);
 
   await delay(1000);
 
@@ -261,57 +311,6 @@ async function addHaulScript(cwd: string) {
 
   progress.succeed(
     `You can now start Haul by running '${getRunScript(scriptName)}'`
-  );
-}
-
-async function createHaulProjectConfig(
-  cwd: string,
-  reactNativeVersion: string,
-  runtime: Runtime
-) {
-  // Does `haul.config.js` already exist?
-  if (fs.existsSync(path.join(cwd, DEFAULT_CONFIG_FILENAME))) {
-    const result = (await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'overwrite',
-        message: `There is already a '${DEFAULT_CONFIG_FILENAME}'. Overwrite it?`,
-      },
-    ])) as { overwrite: boolean };
-
-    if (!result.overwrite) {
-      runtime.complete(0);
-    }
-  }
-
-  const progress = ora('Generating config files').start();
-
-  await delay(1000);
-
-  const version = semver.parse(reactNativeVersion);
-  if (!version) {
-    throw new Error(`Cannot parse React Native version: ${reactNativeVersion}`);
-  }
-
-  const config = dedent`
-    import { createWebpackConfig } from "@haul-bundler/preset-${
-      version.major
-    }.${version.minor}";
-
-    export default {
-      webpack: createWebpackConfig(({ platform }) => ({
-        entry: \`./index.js\`
-      }))
-    };
-  `;
-
-  fs.writeFileSync(path.join(cwd, DEFAULT_CONFIG_FILENAME), config);
-
-  progress.succeed(
-    `Generated ${runtime.logger.enhanceWithModifier(
-      'bold',
-      DEFAULT_CONFIG_FILENAME
-    )}`
   );
 }
 
@@ -333,12 +332,14 @@ export default function initCommand(runtime: Runtime) {
           runtime.complete(1);
         }
 
-        await checkProject(cwd, runtime);
-        await createHaulProjectConfig(cwd, rnVersion || '', runtime);
-        await modifyBabelConfig(cwd, runtime);
-        await modifyXcodeProject(cwd);
-        await modifyGradleBuild(cwd);
-        await addHaulScript(cwd);
+        const progress = ora().start();
+
+        await checkProject(progress, cwd, runtime);
+        await createHaulProjectConfig(progress, cwd, rnVersion || '', runtime);
+        await modifyBabelConfig(progress, cwd, runtime);
+        await modifyXcodeProject(progress, cwd);
+        await modifyGradleBuild(progress, cwd);
+        await addHaulScript(progress, cwd);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         exitCode = 1;
