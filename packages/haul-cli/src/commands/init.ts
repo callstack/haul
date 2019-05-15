@@ -44,6 +44,50 @@ async function checkProject(cwd: string, runtime: Runtime) {
   }
 }
 
+async function modifyBabelConfig(cwd: string, runtime: Runtime) {
+  const progress = ora('Updating Babel config').start();
+
+  const defaultBabelConfigPaths = [
+    path.join(cwd, 'babel.config.js'),
+    path.join(cwd, '.babelrc.js'),
+    path.join(cwd, '.babelrc'),
+  ];
+
+  let babelConfigPath = defaultBabelConfigPaths.find(filePath =>
+    fs.existsSync(filePath)
+  );
+
+  if (!babelConfigPath) {
+    const result = (await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the Babel config file',
+        validate: (pathToFile: string) =>
+          fs.existsSync(pathToFile) ? true : `${pathToFile} is not a valid`,
+      },
+    ])) as { entry: string };
+
+    babelConfigPath = path.resolve(result.entry);
+  }
+
+  const babelConfig = fs.readFileSync(babelConfigPath).toString();
+  fs.writeFileSync(
+    babelConfigPath,
+    babelConfig.replace(
+      'metro-react-native-babel-preset',
+      '@haul-bundler/babel-preset-react-native'
+    )
+  );
+
+  progress.succeed(
+    `Updated Babel config at ${runtime.logger.enhanceWithModifier(
+      'bold',
+      path.relative(cwd, babelConfigPath)
+    )}`
+  );
+}
+
 async function modifyXcodeProject(cwd: string) {
   let xcodeProject;
 
@@ -110,7 +154,7 @@ async function modifyXcodeProject(cwd: string) {
     return;
   }
 
-  const haulTask = `shellScript = "# ${haulSignature}\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\nexport NODE_BINARY=node`;
+  const haulTask = `shellScript = "# ${haulSignature}\\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\\nexport NODE_BINARY=node`;
 
   project = project.replace(new RegExp(originalTask, 'g'), haulTask);
 
@@ -160,8 +204,8 @@ async function modifyGradleBuild(cwd: string) {
     /project\.ext\.react = \[\n(.+)\n\]/,
     dedent`
     project.ext.react = [
-      $1
-      cliPath: ${cliString}
+    $1
+        cliPath: ${cliString}
     ]
     `
   );
@@ -191,10 +235,9 @@ async function addHaulScript(cwd: string) {
   }
 
   let scriptName = 'start';
-
   if (
     scripts.start &&
-    scripts.start !== 'node ./node_modules/react-native/local-cli/cli.js start'
+    scripts.start !== 'node node_modules/react-native/local-cli/cli.js start'
   ) {
     const result = (await inquirer.prompt([
       {
@@ -300,6 +343,7 @@ export default function initCommand(runtime: Runtime) {
 
         await checkProject(cwd, runtime);
         await createHaulProjectConfig(cwd, rnVersion || '', runtime);
+        await modifyBabelConfig(cwd, runtime);
         await modifyXcodeProject(cwd);
         await modifyGradleBuild(cwd);
         await addHaulScript(cwd);
