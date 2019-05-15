@@ -8,8 +8,15 @@ import reloadCommand from './commands/reload';
 import startCommand from './commands/start';
 
 export default async function main() {
-  const { HAUL_INSPECTOR_PORT, HAUL_INSPECTOR_HOST } = process.env;
-  const { haulInspector, nodeInspector } = yargsParser(process.argv);
+  const {
+    HAUL_INSPECTOR,
+    HAUL_INSPECTOR_PORT,
+    HAUL_INSPECTOR_HOST,
+    NODE_INSPECTOR,
+  } = process.env;
+  let { haulInspector, nodeInspector } = yargsParser(process.argv);
+  haulInspector = haulInspector || HAUL_INSPECTOR;
+  nodeInspector = nodeInspector || NODE_INSPECTOR;
 
   const runtime = new Runtime(
     haulInspector || HAUL_INSPECTOR_PORT || HAUL_INSPECTOR_HOST
