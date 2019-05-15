@@ -13,7 +13,7 @@ const { runHaul } = require('../runHaul');
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
-  '../../fixtures/react-native-clean'
+  '../../fixtures/react_native_clean'
 );
 const CONFIG_FILE_PATH = path.resolve(TEST_PROJECT_DIR, 'haul.config.js');
 const GRADLE_PATH = path.resolve(TEST_PROJECT_DIR, 'android/app/build.gradle');
