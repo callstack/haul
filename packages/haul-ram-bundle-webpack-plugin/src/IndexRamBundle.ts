@@ -1,4 +1,3 @@
-import path from 'path';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
