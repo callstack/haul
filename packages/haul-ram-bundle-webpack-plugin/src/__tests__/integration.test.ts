@@ -53,6 +53,7 @@ function build({
       new RamBundlePlugin({
         sourceMap,
         indexRamBundle,
+        platform: 'ios',
         config: { minification: { enabled: false } },
       }),
     ],

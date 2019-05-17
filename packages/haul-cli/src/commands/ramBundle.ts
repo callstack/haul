@@ -164,6 +164,7 @@ export default function ramBundleCommand(runtime: Runtime) {
               indexedRamBundle === undefined
                 ? platform !== 'android'
                 : indexedRamBundle,
+            platform,
           })
         );
 

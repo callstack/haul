@@ -15,10 +15,12 @@ export default class FileRamBundle {
   build({
     outputDest,
     outputFilename,
+    sourceMapFilename,
     compilation,
   }: {
     outputDest: string;
     outputFilename: string;
+    sourceMapFilename: string;
     compilation: webpack.compilation.Compilation;
   }) {
     const jsModulesDir = path.join(path.dirname(outputFilename), 'js-modules');
@@ -66,15 +68,6 @@ export default class FileRamBundle {
         });
         lineOffset += countLines(sourceModule.source);
       });
-
-      const sourceMapFilename = compilation.getPath(
-        compilation.outputOptions.sourceMapFilename,
-        {
-          filename: path.isAbsolute(outputFilename)
-            ? path.relative(compilation.context, outputFilename)
-            : outputFilename,
-        }
-      );
 
       compilation.assets[sourceMapFilename] = new RawSource(
         JSON.stringify(indexMap)

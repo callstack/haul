@@ -26,6 +26,7 @@ test('IndexRamBundle should create valid RAM bundle', () => {
   ramBundle.build({
     outputDest: '',
     outputFilename: 'main.jsbundle',
+    sourceMapFilename: 'main.jsbundle.map',
     compilation: compilation as any,
   });
   expect(compilation.assets['main.jsbundle'].source().length).toBeGreaterThan(
