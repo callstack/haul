@@ -33,6 +33,7 @@ type ModuleMappings = {
 type WebpackRamBundlePluginOptions = {
   sourceMap?: boolean;
   indexRamBundle?: boolean;
+  platform: string;
   config?: RamBundleConfig;
 };
 
@@ -43,12 +44,14 @@ export default class WebpackRamBundlePlugin {
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
+  platform: string;
 
   constructor({
     sourceMap,
     config,
     indexRamBundle,
-  }: WebpackRamBundlePluginOptions = {}) {
+    platform,
+  }: WebpackRamBundlePluginOptions) {
     if (config) {
       this.config = config;
       if (config.debug) {
@@ -60,6 +63,7 @@ export default class WebpackRamBundlePlugin {
     }
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
+    this.platform = platform;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -184,6 +188,15 @@ export default class WebpackRamBundlePlugin {
           ? outputFilename
           : path.join(compilation.outputOptions.path, outputFilename);
 
+        const sourceMapFilename = compilation.getPath(
+          compilation.outputOptions.sourceMapFilename,
+          {
+            filename: path.isAbsolute(outputFilename)
+              ? path.relative(compilation.context, outputFilename)
+              : outputFilename,
+          }
+        );
+
         if (this.config.debug) {
           this.generateDebugFiles(moduleMappings, bootstrapCode, {
             indexRamBundle: this.indexRamBundle,
@@ -197,9 +210,20 @@ export default class WebpackRamBundlePlugin {
           ? new IndexRamBundle(bootstrapCode, this.modules, this.sourceMap)
           : new FileRamBundle(bootstrapCode, this.modules, this.sourceMap);
 
+        const assetRegex = ({
+          ios: /assets\//,
+          android: /drawable-.+\//,
+        } as { [key: string]: RegExp | undefined })[this.platform];
+
+        if (!assetRegex) {
+          throw new Error(
+            `Cannot create RAM bundle: unknown platform ${this.platform}`
+          );
+        }
+
         Object.keys(compilation.assets)
-          // Skip assets files like images, which will always be in assets/ directory
-          .filter(asset => !/assets\//.test(asset))
+          // Skip assets files like images
+          .filter(asset => !assetRegex.test(asset))
           .forEach(asset => {
             delete compilation.assets[asset];
           });
@@ -207,6 +231,7 @@ export default class WebpackRamBundlePlugin {
         bundle.build({
           outputDest,
           outputFilename,
+          sourceMapFilename,
           compilation,
         });
       }
