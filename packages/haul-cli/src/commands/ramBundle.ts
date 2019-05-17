@@ -78,7 +78,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         assetsDest?: string;
         bundleOutput?: string;
         sourcemapOutput?: string;
-        indexRamBundle?: boolean;
+        indexedRamBundle?: boolean;
         progress: string;
       }>
     ) {
@@ -92,7 +92,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
-          indexRamBundle,
+          indexedRamBundle,
         } = argv;
 
         // TODO: figure out a better way to read and transpile user files on-demand
@@ -161,9 +161,9 @@ export default function ramBundleCommand(runtime: Runtime) {
             },
             sourceMap: Boolean(sourcemapOutput),
             indexRamBundle:
-              indexRamBundle === undefined
+              indexedRamBundle === undefined
                 ? platform !== 'android'
-                : indexRamBundle,
+                : indexedRamBundle,
           })
         );
 
