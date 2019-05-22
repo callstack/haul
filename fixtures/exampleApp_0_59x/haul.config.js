@@ -22,6 +22,9 @@ export default {
   //     path: 'ram_bundle',
   //     renderBootstrap: true,
   //     renderModules: true,
+  //   },
+  //   assetRegex: {
+  //     ps: /assets\//,
   //   }
   // }
 };
