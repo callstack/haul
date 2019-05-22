@@ -213,6 +213,7 @@ export default class WebpackRamBundlePlugin {
         const assetRegex = ({
           ios: /assets\//,
           android: /drawable-.+\//,
+          ...(this.config.assetRegex || {}),
         } as { [key: string]: RegExp | undefined })[this.platform];
 
         if (!assetRegex) {
