@@ -54,6 +54,8 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+*.bundle
+js-modules/
 
 # Haul
 #
