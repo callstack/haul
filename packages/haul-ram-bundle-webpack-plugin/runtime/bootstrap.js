@@ -1,4 +1,8 @@
 function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-line
+  globalScope.__BUNDLE_START_TIME__ = globalScope.nativePerformanceNow
+    ? globalScope.nativePerformanceNow()
+    : Date.now();
+
   var ID_MASK_SHIFT = 16;
   var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
 
