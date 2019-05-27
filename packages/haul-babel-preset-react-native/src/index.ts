@@ -6,7 +6,10 @@ const defaultPlugins = [
   [require('@babel/plugin-transform-react-jsx')],
   [require('@babel/plugin-transform-sticky-regex')],
   [require('@babel/plugin-transform-unicode-regex')],
-  [require('@babel/plugin-transform-modules-commonjs')],
+  [
+    require('@babel/plugin-transform-modules-commonjs'),
+    { allowTopLevelThis: true },
+  ],
 ];
 
 function isTypeScriptSource(fileName: string) {
