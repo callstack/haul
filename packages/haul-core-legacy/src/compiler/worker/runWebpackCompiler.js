@@ -94,7 +94,7 @@ module.exports = function runWebpackCompiler({
   });
 
   emitter.on('start', () => {
-    compiler.watch({}, () => {});
+    compiler.watch(config.watchOptions || {}, () => {});
     emitter.emit(Events.BUILD_START);
   });
 
