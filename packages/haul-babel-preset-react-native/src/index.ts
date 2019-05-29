@@ -6,6 +6,10 @@ const defaultPlugins = [
   [require('@babel/plugin-transform-react-jsx')],
   [require('@babel/plugin-transform-sticky-regex')],
   [require('@babel/plugin-transform-unicode-regex')],
+  // For some reason native async/await don't behave correctly
+  // on RN 0.59 on both platforms, so we need to transpile it
+  // to native Promises.
+  [require('babel-plugin-transform-async-to-promises')],
   [
     require('@babel/plugin-transform-modules-commonjs'),
     { allowTopLevelThis: true },
@@ -25,8 +29,7 @@ export default function getHaulBabelPreset() {
     comments: false,
     compact: true,
     overrides: [
-      // the flow strip types plugin must go BEFORE class properties!
-      // there'll be a test case that fails if you don't.
+      // The flow strip types plugin must go BEFORE class properties!
       {
         plugins: [require('@babel/plugin-transform-flow-strip-types')],
       },
