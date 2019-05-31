@@ -22,6 +22,14 @@ type Compilation = webpack.compilation.Compilation & {
   options: webpack.Configuration;
   mainTemplate: webpack.compilation.MainTemplate & {
     renderBootstrap: Function;
+    hooks: webpack.compilation.CompilationHooks & {
+      renderWithEntry: { call: Function };
+    };
+  };
+  moduleTemplates: {
+    javascript: webpack.compilation.ModuleTemplate & {
+      render: Function;
+    };
   };
 };
 
@@ -34,7 +42,12 @@ type WebpackRamBundlePluginOptions = {
   sourceMap?: boolean;
   indexRamBundle?: boolean;
   platform: string;
+  bundleName?: string;
   config?: RamBundleConfig;
+};
+
+const variableToString = (value: string | number) => {
+  return typeof value === 'string' ? `"${value}"` : value.toString();
 };
 
 export default class WebpackRamBundlePlugin {
@@ -45,12 +58,14 @@ export default class WebpackRamBundlePlugin {
   config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
   platform: string;
+  bundleName?: string | number;
 
   constructor({
     sourceMap,
     config,
     indexRamBundle,
     platform,
+    bundleName,
   }: WebpackRamBundlePluginOptions) {
     if (config) {
       this.config = config;
@@ -64,9 +79,17 @@ export default class WebpackRamBundlePlugin {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.platform = platform;
+    this.bundleName = bundleName || 0;
   }
 
   apply(compiler: webpack.Compiler) {
+    compiler.hooks.thisCompilation.tap(
+      'WebpackRamBundlePlugin',
+      compilation => {
+        this.bundleName = compilation.outputOptions.library || this.bundleName;
+      }
+    );
+
     compiler.hooks.emit.tapPromise(
       'WebpackRamBundlePlugin',
       async _compilation => {
@@ -79,10 +102,12 @@ export default class WebpackRamBundlePlugin {
           chunks: {},
         };
 
-        let mainId;
+        let mainId: string | number | undefined;
+        let mainChunk: webpack.compilation.Chunk | undefined;
 
         (compilation.chunks as webpack.compilation.Chunk[]).forEach(chunk => {
           if (chunk.id === 'main' || chunk.name === 'main') {
+            mainChunk = chunk;
             mainId = chunk.entryModule.id;
           }
 
@@ -95,12 +120,19 @@ export default class WebpackRamBundlePlugin {
             });
         });
 
-        assert(mainId !== undefined, "Couldn't find mainId");
+        if (mainId === undefined) {
+          throw new Error(
+            "WebpackRamBundlePlugin: couldn't find main chunk's entry module id"
+          );
+        }
+        if (!mainChunk) {
+          throw new Error("WebpackRamBundlePlugin: couldn't find main chunk");
+        }
 
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
         this.modules = compilation.modules.map(webpackModule => {
-          const renderedModule = compilation.moduleTemplate
+          const renderedModule = compilation.moduleTemplates.javascript
             .render(
               webpackModule,
               compilation.dependencyTemplates,
@@ -108,10 +140,7 @@ export default class WebpackRamBundlePlugin {
             )
             .sourceAndMap();
 
-          const selfRegisterId =
-            typeof webpackModule.id === 'string'
-              ? `"${webpackModule.id}"`
-              : webpackModule.id;
+          const selfRegisterId = variableToString(webpackModule.id);
 
           if (typeof webpackModule.id === 'string') {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
@@ -166,15 +195,23 @@ export default class WebpackRamBundlePlugin {
           }; filename=${duplicatedModule ? duplicatedModule.filename : ''}`
         );
 
+        // Bundle name should be either 0 or a string from webpack config,
+        // set by `output.library` option.
+        if (this.bundleName === undefined) {
+          throw new Error(
+            'WebpackRamBundlePlugin: Cannot determine bundle name'
+          );
+        }
+
         const indent = (line: string) => `/*****/  ${line}`;
         const bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
           'utf8'
         );
-        const bootstrapCode =
-          `(${bootstrap.trim()})(this, ${
-            typeof mainId === 'string' ? `"${mainId}"` : mainId
-          }, ${inspect(moduleMappings, {
+        let bootstrapCode =
+          `(${bootstrap.trim()})(this, ${variableToString(
+            this.bundleName
+          )}, ${variableToString(mainId)}, ${inspect(moduleMappings, {
             depth: null,
             maxArrayLength: null,
             breakLength: Infinity,
@@ -182,6 +219,20 @@ export default class WebpackRamBundlePlugin {
             .split('\n')
             .map(indent)
             .join('\n') + '\n';
+
+        // Enhance bootstrapCode with additional JS from plugins that hook
+        // into `renderWithEntry` for example: webpack's `library` is used here to expose
+        // bundle as a library.
+        const renderWithEntryResults = compilation.mainTemplate.hooks.renderWithEntry.call(
+          bootstrapCode,
+          mainChunk,
+          mainChunk.hash
+        );
+        if (typeof renderWithEntryResults === 'string') {
+          bootstrapCode = renderWithEntryResults;
+        } else if ('source' in renderWithEntryResults) {
+          bootstrapCode = renderWithEntryResults.source();
+        }
 
         const outputFilename = compilation.outputOptions.filename!;
         const outputDest = path.isAbsolute(outputFilename)

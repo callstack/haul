@@ -1,19 +1,7 @@
-function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-line
+function bootstraper(globalScope, bundleName, mainId, moduleMappings) { // eslint-disable-line
   globalScope.__BUNDLE_START_TIME__ = globalScope.nativePerformanceNow
     ? globalScope.nativePerformanceNow()
     : Date.now();
-
-  var ID_MASK_SHIFT = 16;
-  var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
-
-  function unpackModuleId(moduleId) {
-    var segmentId = moduleId >>> ID_MASK_SHIFT;
-    var localId = moduleId & LOCAL_ID_MASK;
-    return {
-      segmentId: segmentId,
-      localId: localId,
-    };
-  }
 
   // The module cache
   var installedModules = {};
@@ -38,8 +26,7 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
         : moduleId;
 
     // Load module on the native side
-    var unpackedModule = unpackModuleId(moduleIntId);
-    globalScope.nativeRequire(unpackedModule.localId, unpackedModule.segmentId);
+    globalScope.nativeRequire(moduleIntId, bundleName);
 
     // Return the exports of the module
     return module.exports;
