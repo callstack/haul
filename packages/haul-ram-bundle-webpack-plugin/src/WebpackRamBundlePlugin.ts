@@ -46,7 +46,10 @@ type WebpackRamBundlePluginOptions = {
   config?: RamBundleConfig;
 };
 
-const variableToString = (value: string | number) => {
+const variableToString = (value?: string | number) => {
+  if (value === undefined) {
+    return 'undefined';
+  }
   return typeof value === 'string' ? `"${value}"` : value.toString();
 };
 
@@ -79,14 +82,14 @@ export default class WebpackRamBundlePlugin {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.platform = platform;
-    this.bundleName = bundleName || 0;
+    this.bundleName = bundleName;
   }
 
   apply(compiler: webpack.Compiler) {
     compiler.hooks.thisCompilation.tap(
       'WebpackRamBundlePlugin',
       compilation => {
-        this.bundleName = compilation.outputOptions.library || this.bundleName;
+        this.bundleName = compilation.outputOptions.library || undefined;
       }
     );
 
@@ -195,19 +198,23 @@ export default class WebpackRamBundlePlugin {
           }; filename=${duplicatedModule ? duplicatedModule.filename : ''}`
         );
 
-        // Bundle name should be either 0 or a string from webpack config,
-        // set by `output.library` option.
-        if (this.bundleName === undefined) {
-          throw new Error(
-            'WebpackRamBundlePlugin: Cannot determine bundle name'
-          );
-        }
-
         const indent = (line: string) => `/*****/  ${line}`;
         const bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
           'utf8'
         );
+
+        if (typeof this.bundleName === 'string' && !this.bundleName.length) {
+          throw new Error(
+            'WebpackRamBundlePlugin: bundle name cannot be empty string'
+          );
+        }
+
+        // `bundleName` should be either undefined or a string from webpack config,
+        // set by `output.library` option. If it's undefined, the runtime bootstrap code
+        // should use legacy behavior and unpack `moduleId` into `localId` and `segmentId`.
+        // In case of the string value, `bundleName` will be used instead of `segmentId`
+        // in the new Apennine Architecture in RN.
         let bootstrapCode =
           `(${bootstrap.trim()})(this, ${variableToString(
             this.bundleName

@@ -3,6 +3,18 @@ function bootstraper(globalScope, bundleName, mainId, moduleMappings) { // eslin
     ? globalScope.nativePerformanceNow()
     : Date.now();
 
+  var ID_MASK_SHIFT = 16;
+  var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
+
+  function unpackModuleId(moduleId) {
+    var segmentId = moduleId >>> ID_MASK_SHIFT;
+    var localId = moduleId & LOCAL_ID_MASK;
+    return {
+      segmentId: segmentId,
+      localId: localId,
+    };
+  }
+
   // The module cache
   var installedModules = {};
 
@@ -26,7 +38,15 @@ function bootstraper(globalScope, bundleName, mainId, moduleMappings) { // eslin
         : moduleId;
 
     // Load module on the native side
-    globalScope.nativeRequire(moduleIntId, bundleName);
+    if (bundleName !== undefined) {
+      globalScope.nativeRequire(moduleIntId, bundleName);
+    } else {
+      var unpackedModule = unpackModuleId(moduleIntId);
+      globalScope.nativeRequire(
+        unpackedModule.localId,
+        unpackedModule.segmentId
+      );
+    }
 
     // Return the exports of the module
     return module.exports;
