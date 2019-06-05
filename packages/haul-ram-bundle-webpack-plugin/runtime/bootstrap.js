@@ -1,4 +1,4 @@
-function bootstraper(globalScope, bundleName, mainId, moduleMappings) { // eslint-disable-line
+function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-disable-line
   globalScope.__BUNDLE_START_TIME__ = globalScope.nativePerformanceNow
     ? globalScope.nativePerformanceNow()
     : Date.now();
