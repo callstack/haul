@@ -43,6 +43,7 @@ type WebpackRamBundlePluginOptions = {
   indexRamBundle?: boolean;
   platform: string;
   bundleName?: string;
+  preloadFunction?: string;
   config?: RamBundleConfig;
 };
 
@@ -62,6 +63,7 @@ export default class WebpackRamBundlePlugin {
   indexRamBundle: boolean = true;
   platform: string;
   bundleName?: string | number;
+  preloadFunction?: string;
 
   constructor({
     sourceMap,
@@ -69,6 +71,7 @@ export default class WebpackRamBundlePlugin {
     indexRamBundle,
     platform,
     bundleName,
+    preloadFunction,
   }: WebpackRamBundlePluginOptions) {
     if (config) {
       this.config = config;
@@ -83,13 +86,14 @@ export default class WebpackRamBundlePlugin {
     this.indexRamBundle = Boolean(indexRamBundle);
     this.platform = platform;
     this.bundleName = bundleName;
+    this.preloadFunction = preloadFunction;
   }
 
   apply(compiler: webpack.Compiler) {
     compiler.hooks.thisCompilation.tap(
       'WebpackRamBundlePlugin',
       compilation => {
-        this.bundleName = compilation.outputOptions.library || undefined;
+        this.bundleName = compilation.outputOptions.library || this.bundleName;
       }
     );
 
@@ -149,7 +153,9 @@ export default class WebpackRamBundlePlugin {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
           }
 
-          let code = `__haul.l(${selfRegisterId}, ${renderedModule.source});`;
+          let code = `__haul_${this.bundleName}.l(${selfRegisterId}, ${
+            renderedModule.source
+          });`;
           let map = renderedModule.map;
           const { enabled = false, ...minifyOptions } =
             this.config.minification || {};
@@ -199,9 +205,22 @@ export default class WebpackRamBundlePlugin {
         );
 
         const indent = (line: string) => `/*****/  ${line}`;
-        const bootstrap = fs.readFileSync(
+        let bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
           'utf8'
+        );
+
+        if (this.preloadFunction) {
+          bootstrap = bootstrap.replace(
+            'function preload() {}',
+            this.preloadFunction
+          );
+        }
+
+        bootstrap = bootstrap.replace(/__haul/gm, `__haul_${this.bundleName}`);
+        bootstrap = bootstrap.replace(
+          'loadSelf',
+          `loadSelf_${this.bundleName}`
         );
 
         if (typeof this.bundleName === 'string' && !this.bundleName.length) {
@@ -215,7 +234,7 @@ export default class WebpackRamBundlePlugin {
         // should use legacy behavior and unpack `moduleId` into `localId` and `segmentId`.
         // In case of the string value, `bundleName` will be used instead of `segmentId`
         // in the new Apennine Architecture in RN.
-        let bootstrapCode =
+        bootstrap =
           `(${bootstrap.trim()})(this, ${variableToString(
             this.bundleName
           )}, ${variableToString(mainId)}, ${inspect(moduleMappings, {
@@ -231,14 +250,14 @@ export default class WebpackRamBundlePlugin {
         // into `renderWithEntry` for example: webpack's `library` is used here to expose
         // bundle as a library.
         const renderWithEntryResults = compilation.mainTemplate.hooks.renderWithEntry.call(
-          bootstrapCode,
+          bootstrap,
           mainChunk,
           mainChunk.hash
         );
         if (typeof renderWithEntryResults === 'string') {
-          bootstrapCode = renderWithEntryResults;
+          bootstrap = renderWithEntryResults;
         } else if ('source' in renderWithEntryResults) {
-          bootstrapCode = renderWithEntryResults.source();
+          bootstrap = renderWithEntryResults.source();
         }
 
         const outputFilename = compilation.outputOptions.filename!;
@@ -256,7 +275,7 @@ export default class WebpackRamBundlePlugin {
         );
 
         if (this.config.debug) {
-          this.generateDebugFiles(moduleMappings, bootstrapCode, {
+          this.generateDebugFiles(moduleMappings, bootstrap, {
             indexRamBundle: this.indexRamBundle,
             sourceMap: this.sourceMap,
             outputDest,
@@ -265,8 +284,13 @@ export default class WebpackRamBundlePlugin {
         }
 
         const bundle = this.indexRamBundle
-          ? new IndexRamBundle(bootstrapCode, this.modules, this.sourceMap)
-          : new FileRamBundle(bootstrapCode, this.modules, this.sourceMap);
+          ? new IndexRamBundle(bootstrap, this.modules, this.sourceMap)
+          : new FileRamBundle(
+              bootstrap,
+              this.modules,
+              this.sourceMap,
+              this.bundleName
+            );
 
         const assetRegex = ({
           ios: /assets\//,

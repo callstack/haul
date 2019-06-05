@@ -1,7 +1,18 @@
 function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-disable-line
-  globalScope.__BUNDLE_START_TIME__ = globalScope.nativePerformanceNow
+  const BUNDLE_START_TIME = globalScope.nativePerformanceNow
     ? globalScope.nativePerformanceNow()
     : Date.now();
+  if (bundleName !== undefined) {
+    globalScope.__BUNDLE_START_TIME__ = globalScope.__BUNDLE_START_TIME__ || {};
+    globalScope.__BUNDLE_START_TIME__[bundleName] = BUNDLE_START_TIME;
+  } else {
+    globalScope.__BUNDLE_START_TIME__ = BUNDLE_START_TIME;
+  }
+
+  // Preload function declaration - will be called before executing main bundle module.
+  // This function will receive globalScope, bundleName, mainId, moduleMappings, __webpack_require__
+  // as argument.
+  function preload() {}
 
   var ID_MASK_SHIFT = 16;
   var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
@@ -149,6 +160,8 @@ function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-
 
   // __webpack_public_path__
   __webpack_require__.p = '';
+
+  preload(globalScope, bundleName, mainId, moduleMappings, __webpack_require__);
 
   // Load entry module and return exports
   return __webpack_require__((__webpack_require__.s = mainId));
