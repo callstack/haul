@@ -1,33 +1,28 @@
-function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-disable-line
+function bootstrap(globalScope, options) { // eslint-disable-line
+  const {
+    bundleName,
+    mainModuleId,
+    moduleMappings,
+    preloadBundleNames,
+    singleBundleMode,
+  } = options;
+
   const BUNDLE_START_TIME = globalScope.nativePerformanceNow
     ? globalScope.nativePerformanceNow()
     : Date.now();
-  if (bundleName !== undefined) {
+  if (singleBundleMode) {
+    globalScope.__BUNDLE_START_TIME__ = BUNDLE_START_TIME;
+  } else {
     globalScope.__BUNDLE_START_TIME__ = globalScope.__BUNDLE_START_TIME__ || {};
     globalScope.__BUNDLE_START_TIME__[bundleName] = BUNDLE_START_TIME;
-  } else {
-    globalScope.__BUNDLE_START_TIME__ = BUNDLE_START_TIME;
   }
 
-  // Preload function declaration - will be called before executing main bundle module.
-  // This function will receive globalScope, bundleName, mainId, moduleMappings, __webpack_require__
-  // as argument.
-  function preload() {}
-
-  var ID_MASK_SHIFT = 16;
-  var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
-
-  function unpackModuleId(moduleId) {
-    var segmentId = moduleId >>> ID_MASK_SHIFT;
-    var localId = moduleId & LOCAL_ID_MASK;
-    return {
-      segmentId: segmentId,
-      localId: localId,
-    };
+  for (const bundleName in preloadBundleNames) {
+    globalScope.loadBundle(bundleName, true, true);
   }
 
   // The module cache
-  var installedModules = {};
+  const installedModules = {};
 
   // The require function
   function __webpack_require__(moduleId) {
@@ -36,38 +31,27 @@ function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-
       return installedModules[moduleId].exports;
     }
     // Create a new module (and put it into the cache)
-    var module = (installedModules[moduleId] = {
+    const module = (installedModules[moduleId] = {
       i: moduleId,
       l: false,
       exports: {},
     });
 
     // If moduleId is a string, map it to integer Id
-    var moduleIntId =
+    const moduleIntId =
       typeof moduleId === 'string'
         ? moduleMappings.modules[moduleId]
         : moduleId;
 
     // Load module on the native side
-    if (bundleName !== undefined) {
-      globalScope.nativeRequire(moduleIntId, bundleName);
-    } else {
-      var unpackedModule = unpackModuleId(moduleIntId);
-      globalScope.nativeRequire(
-        unpackedModule.localId,
-        unpackedModule.segmentId
-      );
-    }
+    globalScope.nativeRequire(moduleIntId, bundleName);
 
     // Return the exports of the module
     return module.exports;
   }
 
-  var __haul = {};
-
-  // Export __webpack_require__ and __haul globally
-  globalScope.__webpack_require__ = __webpack_require__;
-  globalScope.__haul = __haul;
+  const __haul = {};
+  globalScope[`__haul_${bundleName}`] = __haul;
 
   // Allow module to load itself into the module cache
   __haul.l = function loadSelf(moduleId, factory) {
@@ -75,18 +59,19 @@ function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-
     if (!installedModules[moduleId]) {
       throw new Error(moduleId + ' missing in module cache');
     }
-    var module = installedModules[moduleId];
+    const module = installedModules[moduleId];
     factory.call(module.exports, module, module.exports, __webpack_require__);
 
     // Flag the module as loaded
     module.l = true;
   };
+  __haul.l.name = `loadSelf_${bundleName}`;
 
   // The chunk loading function for additional chunks
   // With RAM format each async chunk is just another module
   __webpack_require__.e = function(chunkId) {
     return Promise.resolve().then(function() {
-      var moduleIds = moduleMappings.chunks[chunkId];
+      const moduleIds = moduleMappings.chunks[chunkId];
       for (var i = 0; i < moduleIds.length; i++) {
         __webpack_require__(moduleIds[i]);
       }
@@ -141,7 +126,7 @@ function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-
 
   // getDefaultExport function for compatibility with non-harmony modules
   __webpack_require__.n = function(module) {
-    var getter =
+    const getter =
       module && module.__esModule
         ? function getDefault() {
             return module['default'];
@@ -161,8 +146,6 @@ function bootstrap(globalScope, bundleName, mainId, moduleMappings) { // eslint-
   // __webpack_public_path__
   __webpack_require__.p = '';
 
-  preload(globalScope, bundleName, mainId, moduleMappings, __webpack_require__);
-
   // Load entry module and return exports
-  return __webpack_require__((__webpack_require__.s = mainId));
+  return __webpack_require__((__webpack_require__.s = mainModuleId));
 }

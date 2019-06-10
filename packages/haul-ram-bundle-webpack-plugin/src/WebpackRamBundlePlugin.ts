@@ -39,11 +39,11 @@ type ModuleMappings = {
 };
 
 type WebpackRamBundlePluginOptions = {
+  platform: string;
+  singleBundleMode?: boolean;
   sourceMap?: boolean;
   indexRamBundle?: boolean;
-  platform: string;
-  bundleName?: string;
-  preloadFunction?: string;
+  preloadBundles?: string[];
   config?: RamBundleConfig;
 };
 
@@ -62,16 +62,17 @@ export default class WebpackRamBundlePlugin {
   config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
   platform: string;
-  bundleName?: string | number;
-  preloadFunction?: string;
+  preloadBundles: string[];
+  bundleName: string = 'index';
+  singleBundleMode: boolean = true;
 
   constructor({
     sourceMap,
     config,
     indexRamBundle,
     platform,
-    bundleName,
-    preloadFunction,
+    preloadBundles,
+    singleBundleMode,
   }: WebpackRamBundlePluginOptions) {
     if (config) {
       this.config = config;
@@ -85,8 +86,8 @@ export default class WebpackRamBundlePlugin {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.platform = platform;
-    this.bundleName = bundleName;
-    this.preloadFunction = preloadFunction;
+    this.preloadBundles = preloadBundles || [];
+    this.singleBundleMode = singleBundleMode || this.singleBundleMode;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -147,15 +148,13 @@ export default class WebpackRamBundlePlugin {
             )
             .sourceAndMap();
 
-          const selfRegisterId = variableToString(webpackModule.id);
-
           if (typeof webpackModule.id === 'string') {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
           }
 
-          let code = `__haul_${this.bundleName}.l(${selfRegisterId}, ${
-            renderedModule.source
-          });`;
+          let code = `__haul_${this.bundleName}.l(${variableToString(
+            webpackModule.id
+          )}, ${renderedModule.source});`;
           let map = renderedModule.map;
           const { enabled = false, ...minifyOptions } =
             this.config.minification || {};
@@ -191,57 +190,32 @@ export default class WebpackRamBundlePlugin {
           };
         });
 
-        // Sanity check
-        const duplicatedModule = this.modules.find(m1 =>
-          this.modules.some(
-            m2 => m1.filename !== m2.filename && m1.idx === m2.idx
-          )
-        );
-        assert(
-          !duplicatedModule,
-          `Module with the same idx found: idx=${
-            duplicatedModule ? duplicatedModule.idx : -1
-          }; filename=${duplicatedModule ? duplicatedModule.filename : ''}`
-        );
-
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
           'utf8'
         );
-
-        if (this.preloadFunction) {
-          bootstrap = bootstrap.replace(
-            'function preload() {}',
-            this.preloadFunction
-          );
-        }
-
-        bootstrap = bootstrap.replace(/__haul/gm, `__haul_${this.bundleName}`);
-        bootstrap = bootstrap.replace(
-          'loadSelf',
-          `loadSelf_${this.bundleName}`
-        );
-
-        if (typeof this.bundleName === 'string' && !this.bundleName.length) {
+        if (typeof this.bundleName !== 'string' || !this.bundleName.length) {
           throw new Error(
             'WebpackRamBundlePlugin: bundle name cannot be empty string'
           );
         }
 
-        // `bundleName` should be either undefined or a string from webpack config,
-        // set by `output.library` option. If it's undefined, the runtime bootstrap code
-        // should use legacy behavior and unpack `moduleId` into `localId` and `segmentId`.
-        // In case of the string value, `bundleName` will be used instead of `segmentId`
-        // in the new Apennine Architecture in RN.
         bootstrap =
-          `(${bootstrap.trim()})(this, ${variableToString(
-            this.bundleName
-          )}, ${variableToString(mainId)}, ${inspect(moduleMappings, {
-            depth: null,
-            maxArrayLength: null,
-            breakLength: Infinity,
-          })});`
+          `(${bootstrap.trim()})(this, ${inspect(
+            {
+              bundleName: this.bundleName,
+              mainModuleId: mainId,
+              preloadBundleNames: this.preloadBundles,
+              singleBundleMode: this.singleBundleMode,
+              moduleMappings,
+            },
+            {
+              depth: null,
+              maxArrayLength: null,
+              breakLength: Infinity,
+            }
+          )});`
             .split('\n')
             .map(indent)
             .join('\n') + '\n';
@@ -289,7 +263,8 @@ export default class WebpackRamBundlePlugin {
               bootstrap,
               this.modules,
               this.sourceMap,
-              this.bundleName
+              this.bundleName,
+              this.singleBundleMode
             );
 
         const assetRegex = ({
