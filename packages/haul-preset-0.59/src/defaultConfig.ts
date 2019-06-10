@@ -6,7 +6,6 @@ import {
   resolveModule,
   EnvOptions,
   Runtime,
-  ReactNativeTarget,
   HaulConfig,
 } from '@haul-bundler/core';
 import path from 'path';
@@ -211,7 +210,9 @@ export default function getDefaultConfig(
       namedModules: dev,
       concatenateModules: true,
     },
-    target: ReactNativeTarget({ bundle: Boolean(bundle) }),
+    // Webworker environment is the closes to RN's except for `importScripts`. Further customization
+    // of the generated bundle can be done in `basic-bundle` or `ram-bundle` Webpack plugin.
+    target: 'webworker',
     stats: 'verbose',
   };
 }
