@@ -89,39 +89,38 @@ export default class WebpackBasicBundlePlugin {
       });
     }
 
-    compiler.hooks.thisCompilation.tap(
-      'WebpackBasicBundlePlugin',
-      compilation => {
-        if (!this.bundle) {
-          // Add asyncEval only when serving from packager server. When bundling async
-          // chunks will be concatenated into the bundle.
-          (compilation.mainTemplate as any).hooks.bootstrap.tap(
-            'WebpackBasicBundlePlugin',
-            (source: string) => {
-              return `${asyncEval}\n${source}`;
-            }
-          );
-        }
-
-        (compilation.mainTemplate as any).hooks.requireEnsure.tap(
+    compiler.hooks.compilation.tap('WebpackBasicBundlePlugin', compilation => {
+      if (!this.bundle) {
+        // Add asyncEval only when serving from packager server. When bundling async
+        // chunks will be concatenated into the bundle.
+        (compilation.mainTemplate as any).hooks.bootstrap.tap(
           'WebpackBasicBundlePlugin',
           (source: string) => {
-            // The is no `importScripts` in react-native. Replace it with Promise based
-            // fetch + eval and return the promise so the webpack module system and bootstrapping
-            // logic is not broken.
-            // When creating static bundle, async chunks will be concatenated into the bundle,
-            // so by the time they are required, they should already be loaded into the module system.
-            return source.replace(
-              /importScripts\((.+)\)/gm,
-              this.bundle
-                ? 'throw new Error("Invalid bundle: async chunk not loaded. ' +
-                    'Please open an issue at https://github.com/callstack/haul")'
-                : 'return asyncEval(__webpack_require__.p + $1)'
-            );
+            // throw new Error(source);
+            return `${asyncEval}\n${source}`;
           }
         );
       }
-    );
+
+      (compilation.mainTemplate as any).hooks.requireEnsure.tap(
+        'WebpackBasicBundlePlugin',
+        (source: string) => {
+          // throw new Error(typeof source);
+          // The is no `importScripts` in react-native. Replace it with Promise based
+          // fetch + eval and return the promise so the webpack module system and bootstrapping
+          // logic is not broken.
+          // When creating static bundle, async chunks will be concatenated into the bundle,
+          // so by the time they are required, they should already be loaded into the module system.
+          return source.replace(
+            /importScripts\((.+)\)/gm,
+            this.bundle
+              ? 'throw new Error("Invalid bundle: async chunk not loaded. ' +
+                  'Please open an issue at https://github.com/callstack/haul")'
+              : 'return asyncEval(__webpack_require__.p + $1)'
+          );
+        }
+      );
+    });
   }
 
   private getFilenamesFromChunks(
