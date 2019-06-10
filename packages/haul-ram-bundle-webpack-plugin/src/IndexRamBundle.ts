@@ -100,12 +100,15 @@ export default class IndexRamBundle {
 
       const bundleParts = bundle.toString().split('\n');
       let lineOffset =
-        bundleParts.findIndex(line => line.includes('__haul.l(')) + 1;
+        bundleParts.findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1;
       this.rawModules.forEach(sourceModule => {
         indexMap.sections.push({
           offset: {
             line: lineOffset,
-            column: bundleParts[lineOffset - 1].indexOf('__haul.l(') + 1,
+            column:
+              bundleParts[lineOffset - 1]
+                .split('')
+                .findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1,
           },
           map: sourceModule.map,
         });

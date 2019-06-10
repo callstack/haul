@@ -1,23 +1,18 @@
 import { Arguments } from 'yargs';
 import webpack from 'webpack';
-import RamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
+import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
 import * as messages from '../messages/bundleMessages';
-import {
-  getProjectConfigPath,
-  getProjectConfig,
-  getRamBundleConfig,
-  Runtime,
-} from '@haul-bundler/core';
+import { Runtime } from '@haul-bundler/core';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
 export default function ramBundleCommand(runtime: Runtime) {
   return {
-    command: 'ram-bundle',
-    describe: 'Create ram-bundle',
+    command: 'bundle',
+    describe:
+      'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
     builder: {
       dev: {
-        description:
-          'If false, warnings are disabled and the bundle is minified (default: true)',
+        description: 'Whether to build in development mode',
         default: true,
         type: 'boolean',
       },
@@ -27,13 +22,8 @@ export default function ramBundleCommand(runtime: Runtime) {
         type: 'string',
       },
       platform: {
-        description: 'Either "ios" or "android" (default: "ios")',
+        description: 'Platform to bundle for',
         type: 'string',
-      },
-      'indexed-ram-bundle': {
-        description:
-          'Force the "Indexed RAM" bundle file format, even when building for android.',
-        type: 'boolean',
       },
       minify: {
         description:
@@ -76,7 +66,6 @@ export default function ramBundleCommand(runtime: Runtime) {
         assetsDest?: string;
         bundleOutput?: string;
         sourcemapOutput?: string;
-        indexedRamBundle?: boolean;
         progress: string;
       }>
     ) {
@@ -90,7 +79,6 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
-          indexedRamBundle,
         } = argv;
 
         const webpackConfig = prepareWebpackConfig(runtime, {
@@ -105,29 +93,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 
-        const directory = process.cwd();
-        const configPath = getProjectConfigPath(directory, config);
-        const projectConfig = getProjectConfig(configPath);
-        const ramBundleConfig = getRamBundleConfig(projectConfig);
-
-        webpackConfig.plugins!.push(
-          new RamBundlePlugin({
-            config: {
-              ...ramBundleConfig,
-              minification: {
-                ...ramBundleConfig.minification,
-                enabled: Boolean(minify === undefined ? !dev : minify),
-              },
-            },
-            sourceMap: Boolean(sourcemapOutput),
-            indexRamBundle:
-              indexedRamBundle === undefined
-                ? platform !== 'android'
-                : indexedRamBundle,
-            platform,
-            singleBundleMode: true,
-          })
-        );
+        webpackConfig.plugins!.push(new BasicBundleWebpackPlugin(true));
 
         messages.initialBundleInformation(runtime, {
           entry: webpackConfig.entry,

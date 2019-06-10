@@ -7,7 +7,7 @@
 [![Chat][chat-badge]][chat]
 [![Code of Conduct][coc-badge]][coc]
 
-RAM bundle plugin for Haul and Webpack. This module is intended for internal use.
+RAM bundle plugin for Haul and Webpack. This module is intended for internal use. __Supports RN 0.59+__.
 
 __When using `@haul-bundler/cli ram-bundle` command, this plugin will be added and configured automatically__, based on passed options.
 
@@ -26,9 +26,6 @@ type RamBundleDebugOptions = {
 
 type RamBundleConfig = {
   debug?: RamBundleDebugOptions;
-  assetRegex?: {
-    [platform: string]: RegExp | undefined;
-  };
   minification?: { enabled: boolean } & Pick<
     MinifyOptions, // Terser minify options
     Exclude<keyof MinifyOptions, 'sourceMap'>
@@ -38,7 +35,8 @@ type RamBundleConfig = {
 new WebpackRamBundlePlugin({
   sourceMap: true, // whether to generate source maps
   indexRamBundle: true, // whether to build Indexed RAM bundle or File RAM bundle
-  platform: 'ios',
+  preloadBundles: [], // name of bundles to preload when running in multi-bundle mode
+  singleBundleMode: true, // whether to run in single-bundle mode or multi-bundle
   config: { // RamBundleConfig
     minification: {
       enabled: true, // whether to minify the source code
@@ -46,39 +44,6 @@ new WebpackRamBundlePlugin({
     },
   },
 });
-```
-
-### Support for out-of-tree platforms
-
-By default `@haul-bundler/ram-bundle-webpack-plugin` supports `ios` and `android` platforms. To add support for other platform, use `assetRegex` option together with `platform`:
-
-```ts
-new WebpackRamBundlePlugin({
-  indexRamBundle: true, // use Indexed RAM bundle
-  platform: 'my-platform',
-  config: { // RamBundleConfig
-    assetRegex: {
-      'my-platform': /resources\//, // regex for where assets for 'my-platform' will be
-    },
-  },
-});
-```
-
-If you are using the plugin with `@haul-bundler/cli`, you can specify `assetRegex` option in `haul.config.js`:
-
-```js
-import { createWebpackConfig } from "@haul-bundler/preset-0.59";
-
-export default {
-  webpack: createWebpackConfig(({ platform }) => ({
-    entry: `./index.js`
-  })),
-  ramBundle: {
-    assetRegex: {
-      'my-platform': /resources\//,
-    }
-  }
-};
 ```
 
 <!-- badges (common) -->

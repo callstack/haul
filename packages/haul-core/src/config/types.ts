@@ -38,9 +38,6 @@ export type RamBundleDebugOptions = {
 
 export type RamBundleConfig = {
   debug?: RamBundleDebugOptions;
-  assetRegex?: {
-    [platform: string]: RegExp | undefined;
-  };
   minification?: { enabled: boolean } & Pick<
     MinifyOptions,
     Exclude<keyof MinifyOptions, 'sourceMap'>

@@ -14,25 +14,14 @@ function asyncEval(url) {
 /**
  * Adds React Native specific tweaks to bootstrap logic.
  */
-export default class ReactNativeEnvPlugin {
+export default class WebpackBasicBundlePlugin {
   constructor(private bundle: boolean) {}
 
   apply(compiler: webpack.Compiler) {
-    // Skip applying tweaks if WebpackRamBundlePlugin was added, since
-    // they are not compatible with each other.
-    if (
-      compiler.options.plugins &&
-      compiler.options.plugins.some(
-        (plugin: any) => plugin.name === 'WebpackRamBundlePlugin'
-      )
-    ) {
-      return;
-    }
-
     if (this.bundle) {
-      // When creating static bundle (non-RAM), async chunks will be concatenated into main bundle.
+      // When creating basic bundle (non-RAM), async chunks will be concatenated into main bundle.
       // This will allow easy switching between RAM bundle and non-RAM static bundle.
-      compiler.hooks.emit.tap('ReactNativeEnvPlugin', compilation => {
+      compiler.hooks.emit.tap('WebpackBasicBundlePlugin', compilation => {
         // Skip if there is no async chunks.
         if (compilation.chunks.length === 1) {
           return;
@@ -74,10 +63,20 @@ export default class ReactNativeEnvPlugin {
           concat.add(null, sourceMappingMatch[0]);
         }
 
-        // Remove non-main assets
-        Object.keys(compilation.assets).forEach(item => {
-          if (![mainSourceFilename, mainMap].includes(item)) {
-            delete compilation.assets[item];
+        // Remove async chunks
+        const filesToRemove: string[] = compilation.chunks.reduce(
+          (acc, chunk) => {
+            if (chunk.name !== 'main') {
+              return [...acc, ...chunk.files];
+            }
+            return acc;
+          },
+          []
+        );
+        Object.keys(compilation.assets).forEach(assetName => {
+          const remove = filesToRemove.some(file => assetName.endsWith(file));
+          if (remove) {
+            delete compilation.assets[assetName];
           }
         });
 
@@ -90,21 +89,23 @@ export default class ReactNativeEnvPlugin {
       });
     }
 
-    compiler.hooks.thisCompilation.tap('ReactNativeEnvPlugin', compilation => {
+    compiler.hooks.compilation.tap('WebpackBasicBundlePlugin', compilation => {
       if (!this.bundle) {
         // Add asyncEval only when serving from packager server. When bundling async
         // chunks will be concatenated into the bundle.
         (compilation.mainTemplate as any).hooks.bootstrap.tap(
-          'ReactNativeEnvPlugin',
+          'WebpackBasicBundlePlugin',
           (source: string) => {
+            // throw new Error(source);
             return `${asyncEval}\n${source}`;
           }
         );
       }
 
       (compilation.mainTemplate as any).hooks.requireEnsure.tap(
-        'ReactNativeEnvPlugin',
+        'WebpackBasicBundlePlugin',
         (source: string) => {
+          // throw new Error(typeof source);
           // The is no `importScripts` in react-native. Replace it with Promise based
           // fetch + eval and return the promise so the webpack module system and bootstrapping
           // logic is not broken.

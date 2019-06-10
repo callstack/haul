@@ -22,6 +22,14 @@ type Compilation = webpack.compilation.Compilation & {
   options: webpack.Configuration;
   mainTemplate: webpack.compilation.MainTemplate & {
     renderBootstrap: Function;
+    hooks: webpack.compilation.CompilationHooks & {
+      renderWithEntry: { call: Function };
+    };
+  };
+  moduleTemplates: {
+    javascript: webpack.compilation.ModuleTemplate & {
+      render: Function;
+    };
   };
 };
 
@@ -31,10 +39,19 @@ type ModuleMappings = {
 };
 
 type WebpackRamBundlePluginOptions = {
+  platform: string;
+  singleBundleMode?: boolean;
   sourceMap?: boolean;
   indexRamBundle?: boolean;
-  platform: string;
+  preloadBundles?: string[];
   config?: RamBundleConfig;
+};
+
+const variableToString = (value?: string | number) => {
+  if (value === undefined) {
+    return 'undefined';
+  }
+  return typeof value === 'string' ? `"${value}"` : value.toString();
 };
 
 export default class WebpackRamBundlePlugin {
@@ -44,13 +61,16 @@ export default class WebpackRamBundlePlugin {
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
-  platform: string;
+  preloadBundles: string[];
+  bundleName: string = 'index';
+  singleBundleMode: boolean = true;
 
   constructor({
     sourceMap,
     config,
     indexRamBundle,
-    platform,
+    preloadBundles,
+    singleBundleMode,
   }: WebpackRamBundlePluginOptions) {
     if (config) {
       this.config = config;
@@ -63,10 +83,18 @@ export default class WebpackRamBundlePlugin {
     }
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
-    this.platform = platform;
+    this.preloadBundles = preloadBundles || [];
+    this.singleBundleMode = singleBundleMode || this.singleBundleMode;
   }
 
   apply(compiler: webpack.Compiler) {
+    compiler.hooks.thisCompilation.tap(
+      'WebpackRamBundlePlugin',
+      compilation => {
+        this.bundleName = compilation.outputOptions.library || this.bundleName;
+      }
+    );
+
     compiler.hooks.emit.tapPromise(
       'WebpackRamBundlePlugin',
       async _compilation => {
@@ -79,10 +107,12 @@ export default class WebpackRamBundlePlugin {
           chunks: {},
         };
 
-        let mainId;
+        let mainId: string | number | undefined;
+        let mainChunk: webpack.compilation.Chunk | undefined;
 
         (compilation.chunks as webpack.compilation.Chunk[]).forEach(chunk => {
           if (chunk.id === 'main' || chunk.name === 'main') {
+            mainChunk = chunk;
             mainId = chunk.entryModule.id;
           }
 
@@ -95,12 +125,19 @@ export default class WebpackRamBundlePlugin {
             });
         });
 
-        assert(mainId !== undefined, "Couldn't find mainId");
+        if (mainId === undefined) {
+          throw new Error(
+            "WebpackRamBundlePlugin: couldn't find main chunk's entry module id"
+          );
+        }
+        if (!mainChunk) {
+          throw new Error("WebpackRamBundlePlugin: couldn't find main chunk");
+        }
 
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
         this.modules = compilation.modules.map(webpackModule => {
-          const renderedModule = compilation.moduleTemplate
+          const renderedModule = compilation.moduleTemplates.javascript
             .render(
               webpackModule,
               compilation.dependencyTemplates,
@@ -108,16 +145,13 @@ export default class WebpackRamBundlePlugin {
             )
             .sourceAndMap();
 
-          const selfRegisterId =
-            typeof webpackModule.id === 'string'
-              ? `"${webpackModule.id}"`
-              : webpackModule.id;
-
           if (typeof webpackModule.id === 'string') {
             moduleMappings.modules[webpackModule.id] = webpackModule.index;
           }
 
-          let code = `__haul.l(${selfRegisterId}, ${renderedModule.source});`;
+          let code = `__haul_${this.bundleName}.l(${variableToString(
+            webpackModule.id
+          )}, ${renderedModule.source});`;
           let map = renderedModule.map;
           const { enabled = false, ...minifyOptions } =
             this.config.minification || {};
@@ -153,35 +187,49 @@ export default class WebpackRamBundlePlugin {
           };
         });
 
-        // Sanity check
-        const duplicatedModule = this.modules.find(m1 =>
-          this.modules.some(
-            m2 => m1.filename !== m2.filename && m1.idx === m2.idx
-          )
-        );
-        assert(
-          !duplicatedModule,
-          `Module with the same idx found: idx=${
-            duplicatedModule ? duplicatedModule.idx : -1
-          }; filename=${duplicatedModule ? duplicatedModule.filename : ''}`
-        );
-
         const indent = (line: string) => `/*****/  ${line}`;
-        const bootstrap = fs.readFileSync(
+        let bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
           'utf8'
         );
-        const bootstrapCode =
-          `(${bootstrap.trim()})(this, ${
-            typeof mainId === 'string' ? `"${mainId}"` : mainId
-          }, ${inspect(moduleMappings, {
-            depth: null,
-            maxArrayLength: null,
-            breakLength: Infinity,
-          })});`
+        if (typeof this.bundleName !== 'string' || !this.bundleName.length) {
+          throw new Error(
+            'WebpackRamBundlePlugin: bundle name cannot be empty string'
+          );
+        }
+
+        bootstrap =
+          `(${bootstrap.trim()})(this, ${inspect(
+            {
+              bundleName: this.bundleName,
+              mainModuleId: mainId,
+              preloadBundleNames: this.preloadBundles,
+              singleBundleMode: this.singleBundleMode,
+              moduleMappings,
+            },
+            {
+              depth: null,
+              maxArrayLength: null,
+              breakLength: Infinity,
+            }
+          )});`
             .split('\n')
             .map(indent)
             .join('\n') + '\n';
+
+        // Enhance bootstrapCode with additional JS from plugins that hook
+        // into `renderWithEntry` for example: webpack's `library` is used here to expose
+        // bundle as a library.
+        const renderWithEntryResults = compilation.mainTemplate.hooks.renderWithEntry.call(
+          bootstrap,
+          mainChunk,
+          mainChunk.hash
+        );
+        if (typeof renderWithEntryResults === 'string') {
+          bootstrap = renderWithEntryResults;
+        } else if ('source' in renderWithEntryResults) {
+          bootstrap = renderWithEntryResults.source();
+        }
 
         const outputFilename = compilation.outputOptions.filename!;
         const outputDest = path.isAbsolute(outputFilename)
@@ -198,7 +246,7 @@ export default class WebpackRamBundlePlugin {
         );
 
         if (this.config.debug) {
-          this.generateDebugFiles(moduleMappings, bootstrapCode, {
+          this.generateDebugFiles(moduleMappings, bootstrap, {
             indexRamBundle: this.indexRamBundle,
             sourceMap: this.sourceMap,
             outputDest,
@@ -207,27 +255,30 @@ export default class WebpackRamBundlePlugin {
         }
 
         const bundle = this.indexRamBundle
-          ? new IndexRamBundle(bootstrapCode, this.modules, this.sourceMap)
-          : new FileRamBundle(bootstrapCode, this.modules, this.sourceMap);
+          ? new IndexRamBundle(bootstrap, this.modules, this.sourceMap)
+          : new FileRamBundle(
+              bootstrap,
+              this.modules,
+              this.sourceMap,
+              this.bundleName,
+              this.singleBundleMode
+            );
 
-        const assetRegex = ({
-          ios: /assets\//,
-          android: /drawable-.+\//,
-          ...this.config.assetRegex,
-        } as { [key: string]: RegExp | undefined })[this.platform];
-
-        if (!assetRegex) {
-          throw new Error(
-            `Cannot create RAM bundle: unknown platform ${this.platform}`
-          );
-        }
-
-        Object.keys(compilation.assets)
-          // Skip assets files like images
-          .filter(asset => !assetRegex.test(asset))
-          .forEach(asset => {
-            delete compilation.assets[asset];
-          });
+        const filesToRemove: string[] = compilation.chunks.reduce(
+          (acc, chunk) => {
+            if (chunk.name !== 'main') {
+              return [...acc, ...chunk.files];
+            }
+            return acc;
+          },
+          []
+        );
+        Object.keys(compilation.assets).forEach(assetName => {
+          const remove = filesToRemove.some(file => assetName.endsWith(file));
+          if (remove) {
+            delete compilation.assets[assetName];
+          }
+        });
 
         bundle.build({
           outputDest,

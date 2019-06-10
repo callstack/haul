@@ -2,6 +2,7 @@ import yargs from 'yargs';
 import yargsParser from 'yargs-parser';
 import { Runtime, InspectorClient } from '@haul-bundler/core';
 import initCommand from './commands/init';
+import bundleCommand from './commands/bundle';
 import ramBundleCommand from './commands/ramBundle';
 import legacyFallbackCommand from './commands/legacyFallback';
 import reloadCommand from './commands/reload';
@@ -36,6 +37,7 @@ export default async function main() {
 
   [
     initCommand,
+    bundleCommand,
     ramBundleCommand,
     reloadCommand,
     startCommand,

@@ -9,7 +9,9 @@ export default class FileRamBundle {
   constructor(
     public bootstrap: string,
     public modules: Module[],
-    public sourceMap: boolean = false
+    public sourceMap: boolean,
+    public bundleName: string,
+    public singleBundleMode: boolean
   ) {}
 
   build({
@@ -23,7 +25,12 @@ export default class FileRamBundle {
     sourceMapFilename: string;
     compilation: webpack.compilation.Compilation;
   }) {
-    const jsModulesDir = path.join(path.dirname(outputFilename), 'js-modules');
+    const jsModulesDir = this.singleBundleMode
+      ? path.join(path.dirname(outputFilename), 'js-modules')
+      : path.join(
+          path.dirname(outputFilename),
+          `${this.bundleName}-js-modules`
+        );
     // UNBUNDLE file tells React Native it's a RAM bundle.
     const UNBUNDLE = Buffer.alloc(4);
     UNBUNDLE.writeUInt32LE(MAGIC_NUMBER, 0);

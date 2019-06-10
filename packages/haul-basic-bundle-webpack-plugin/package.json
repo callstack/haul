@@ -1,0 +1,25 @@
+{
+  "version": "0.4.2",
+  "name": "@haul-bundler/basic-bundle-webpack-plugin",
+  "description": "Basic bundle plugin for Haul and Webpack",
+  "main": "build/index.js",
+  "files": [
+    "build/"
+  ],
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "webpack": "^4.30.0",
+    "webpack-sources": "^1.3.0"
+  },
+  "dependencies": {
+    "concat-with-sourcemaps": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/webpack-sources": "^0.1.5",
+    "webpack": "^4.30.0",
+    "webpack-sources": "^1.3.0"
+  }
+}

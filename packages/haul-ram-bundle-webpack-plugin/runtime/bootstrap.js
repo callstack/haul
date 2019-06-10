@@ -1,22 +1,28 @@
-function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-line
-  globalScope.__BUNDLE_START_TIME__ = globalScope.nativePerformanceNow
+function bootstrap(globalScope, options) { // eslint-disable-line
+  const {
+    bundleName,
+    mainModuleId,
+    moduleMappings,
+    preloadBundleNames,
+    singleBundleMode,
+  } = options;
+
+  const BUNDLE_START_TIME = globalScope.nativePerformanceNow
     ? globalScope.nativePerformanceNow()
     : Date.now();
+  if (singleBundleMode) {
+    globalScope.__BUNDLE_START_TIME__ = BUNDLE_START_TIME;
+  } else {
+    globalScope.__BUNDLE_START_TIME__ = globalScope.__BUNDLE_START_TIME__ || {};
+    globalScope.__BUNDLE_START_TIME__[bundleName] = BUNDLE_START_TIME;
+  }
 
-  var ID_MASK_SHIFT = 16;
-  var LOCAL_ID_MASK = ~0 >>> ID_MASK_SHIFT;
-
-  function unpackModuleId(moduleId) {
-    var segmentId = moduleId >>> ID_MASK_SHIFT;
-    var localId = moduleId & LOCAL_ID_MASK;
-    return {
-      segmentId: segmentId,
-      localId: localId,
-    };
+  for (const bundleName in preloadBundleNames) {
+    globalScope.loadBundle(bundleName, true, true);
   }
 
   // The module cache
-  var installedModules = {};
+  const installedModules = {};
 
   // The require function
   function __webpack_require__(moduleId) {
@@ -25,31 +31,32 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
       return installedModules[moduleId].exports;
     }
     // Create a new module (and put it into the cache)
-    var module = (installedModules[moduleId] = {
+    const module = (installedModules[moduleId] = {
       i: moduleId,
       l: false,
       exports: {},
     });
 
     // If moduleId is a string, map it to integer Id
-    var moduleIntId =
+    const moduleIntId =
       typeof moduleId === 'string'
         ? moduleMappings.modules[moduleId]
         : moduleId;
 
     // Load module on the native side
-    var unpackedModule = unpackModuleId(moduleIntId);
-    globalScope.nativeRequire(unpackedModule.localId, unpackedModule.segmentId);
+    if (singleBundleMode) {
+      // Use 0 as a segementId to be compatible with RN 0.59.
+      globalScope.nativeRequire(moduleIntId, 0);
+    } else {
+      globalScope.nativeRequire(moduleIntId, bundleName);
+    }
 
     // Return the exports of the module
     return module.exports;
   }
 
-  var __haul = {};
-
-  // Export __webpack_require__ and __haul globally
-  globalScope.__webpack_require__ = __webpack_require__;
-  globalScope.__haul = __haul;
+  const __haul = {};
+  globalScope[`__haul_${bundleName}`] = __haul;
 
   // Allow module to load itself into the module cache
   __haul.l = function loadSelf(moduleId, factory) {
@@ -57,18 +64,19 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
     if (!installedModules[moduleId]) {
       throw new Error(moduleId + ' missing in module cache');
     }
-    var module = installedModules[moduleId];
+    const module = installedModules[moduleId];
     factory.call(module.exports, module, module.exports, __webpack_require__);
 
     // Flag the module as loaded
     module.l = true;
   };
+  __haul.l.name = `loadSelf_${bundleName}`;
 
   // The chunk loading function for additional chunks
   // With RAM format each async chunk is just another module
   __webpack_require__.e = function(chunkId) {
     return Promise.resolve().then(function() {
-      var moduleIds = moduleMappings.chunks[chunkId];
+      const moduleIds = moduleMappings.chunks[chunkId];
       for (var i = 0; i < moduleIds.length; i++) {
         __webpack_require__(moduleIds[i]);
       }
@@ -123,7 +131,7 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
 
   // getDefaultExport function for compatibility with non-harmony modules
   __webpack_require__.n = function(module) {
-    var getter =
+    const getter =
       module && module.__esModule
         ? function getDefault() {
             return module['default'];
@@ -144,5 +152,5 @@ function bootstraper(globalScope, mainId, moduleMappings) { // eslint-disable-li
   __webpack_require__.p = '';
 
   // Load entry module and return exports
-  return __webpack_require__((__webpack_require__.s = mainId));
+  return __webpack_require__((__webpack_require__.s = mainModuleId));
 }

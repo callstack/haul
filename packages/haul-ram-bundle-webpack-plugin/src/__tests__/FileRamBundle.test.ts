@@ -22,7 +22,13 @@ test('FileRamBundle should create valid RAM bundle', () => {
   ];
 
   const compilation = { assets: {} as { [key: string]: RawSource } };
-  const ramBundle = new FileRamBundle(bootstrapper, modules, false);
+  const ramBundle = new FileRamBundle(
+    bootstrapper,
+    modules,
+    false,
+    'index',
+    true
+  );
   ramBundle.build({
     outputDest: '',
     outputFilename: 'main.jsbundle',
