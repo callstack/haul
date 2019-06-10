@@ -44,7 +44,12 @@ function bootstrap(globalScope, options) { // eslint-disable-line
         : moduleId;
 
     // Load module on the native side
-    globalScope.nativeRequire(moduleIntId, bundleName);
+    if (singleBundleMode) {
+      // Use 0 as a segementId to be compatible with RN 0.59.
+      globalScope.nativeRequire(moduleIntId, 0);
+    } else {
+      globalScope.nativeRequire(moduleIntId, bundleName);
+    }
 
     // Return the exports of the module
     return module.exports;
