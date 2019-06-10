@@ -61,7 +61,6 @@ export default class WebpackRamBundlePlugin {
   sourceMap: boolean = false;
   config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
-  platform: string;
   preloadBundles: string[];
   bundleName: string = 'index';
   singleBundleMode: boolean = true;
@@ -70,7 +69,6 @@ export default class WebpackRamBundlePlugin {
     sourceMap,
     config,
     indexRamBundle,
-    platform,
     preloadBundles,
     singleBundleMode,
   }: WebpackRamBundlePluginOptions) {
@@ -85,7 +83,6 @@ export default class WebpackRamBundlePlugin {
     }
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
-    this.platform = platform;
     this.preloadBundles = preloadBundles || [];
     this.singleBundleMode = singleBundleMode || this.singleBundleMode;
   }
@@ -267,24 +264,21 @@ export default class WebpackRamBundlePlugin {
               this.singleBundleMode
             );
 
-        const assetRegex = ({
-          ios: /assets\//,
-          android: /drawable-.+\//,
-          ...this.config.assetRegex,
-        } as { [key: string]: RegExp | undefined })[this.platform];
-
-        if (!assetRegex) {
-          throw new Error(
-            `Cannot create RAM bundle: unknown platform ${this.platform}`
-          );
-        }
-
-        Object.keys(compilation.assets)
-          // Skip assets files like images
-          .filter(asset => !assetRegex.test(asset))
-          .forEach(asset => {
-            delete compilation.assets[asset];
-          });
+        const filesToRemove: string[] = compilation.chunks.reduce(
+          (acc, chunk) => {
+            if (chunk.name !== 'main') {
+              return [...acc, ...chunk.files];
+            }
+            return acc;
+          },
+          []
+        );
+        Object.keys(compilation.assets).forEach(assetName => {
+          const remove = filesToRemove.some(file => assetName.endsWith(file));
+          if (remove) {
+            delete compilation.assets[assetName];
+          }
+        });
 
         bundle.build({
           outputDest,

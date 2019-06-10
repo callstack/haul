@@ -63,10 +63,20 @@ export default class WebpackBasicBundlePlugin {
           concat.add(null, sourceMappingMatch[0]);
         }
 
-        // Remove non-main assets
-        Object.keys(compilation.assets).forEach(item => {
-          if (![mainSourceFilename, mainMap].includes(item)) {
-            delete compilation.assets[item];
+        // Remove async chunks
+        const filesToRemove: string[] = compilation.chunks.reduce(
+          (acc, chunk) => {
+            if (chunk.name !== 'main') {
+              return [...acc, ...chunk.files];
+            }
+            return acc;
+          },
+          []
+        );
+        Object.keys(compilation.assets).forEach(assetName => {
+          const remove = filesToRemove.some(file => assetName.endsWith(file));
+          if (remove) {
+            delete compilation.assets[assetName];
           }
         });
 

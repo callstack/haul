@@ -125,6 +125,7 @@ export default function ramBundleCommand(runtime: Runtime) {
                 ? platform !== 'android'
                 : indexedRamBundle,
             platform,
+            singleBundleMode: true,
           })
         );
 
