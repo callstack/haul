@@ -18,6 +18,10 @@ You can read more about Haul here: https://github.com/callstack/haul.
 ## API
 
 ```ts
+import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
+
+const bundle = true; // set true when generating static bundle and false when serving from packager server
+new BasicBundleWebpackPlugin(bundle);
 ```
 
 <!-- badges (common) -->

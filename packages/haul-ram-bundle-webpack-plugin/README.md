@@ -7,7 +7,7 @@
 [![Chat][chat-badge]][chat]
 [![Code of Conduct][coc-badge]][coc]
 
-RAM bundle plugin for Haul and Webpack. This module is intended for internal use.
+RAM bundle plugin for Haul and Webpack. This module is intended for internal use. __Supports RN 0.59+__.
 
 __When using `@haul-bundler/cli ram-bundle` command, this plugin will be added and configured automatically__, based on passed options.
 
