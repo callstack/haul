@@ -15,7 +15,7 @@ function asyncEval(url) {
  * Adds React Native specific tweaks to bootstrap logic.
  */
 export default class WebpackBasicBundlePlugin {
-  constructor(private bundle: boolean) {}
+  constructor(private bundle: boolean, private sourceMap: boolean) {}
 
   apply(compiler: webpack.Compiler) {
     if (this.bundle) {
@@ -45,7 +45,7 @@ export default class WebpackBasicBundlePlugin {
         concat.add(
           mainSourceFilename,
           mainSource.replace(new RegExp(sourceMappingRegex, 'g'), ''),
-          compilation.assets[mainMap].source()
+          this.sourceMap ? compilation.assets[mainMap].source() : undefined
         );
         asyncChunks.forEach(chunk => {
           concat.add(
@@ -54,7 +54,7 @@ export default class WebpackBasicBundlePlugin {
               new RegExp(sourceMappingRegex, 'g'),
               ''
             ),
-            compilation.assets[chunk.map].source()
+            this.sourceMap ? compilation.assets[chunk.map].source() : undefined
           );
         });
 

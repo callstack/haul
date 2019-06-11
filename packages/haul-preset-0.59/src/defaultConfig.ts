@@ -159,20 +159,18 @@ export default function getDefaultConfig(
          * platform's require additional packages also provide haste modules
          */
         new HasteResolver({
-          directories: (providesModuleNodeModules || ['react-native']).map(
-            (_: any) => {
-              if (typeof _ === 'string') {
-                if (_ === 'react-native') {
-                  return path.join(
-                    resolveModule(root, 'react-native'),
-                    'Libraries'
-                  );
-                }
-                return resolveModule(root, _);
+          directories: providesModuleNodeModules.map((_: any) => {
+            if (typeof _ === 'string') {
+              if (_ === 'react-native') {
+                return path.join(
+                  resolveModule(root, 'react-native'),
+                  'Libraries'
+                );
               }
-              return path.join(resolveModule(root, _.name), _.directory);
+              return resolveModule(root, _);
             }
-          ),
+            return path.join(resolveModule(root, _.name), _.directory);
+          }),
           hasteOptions: hasteOptions || {},
         }),
         /**

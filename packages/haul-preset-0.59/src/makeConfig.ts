@@ -16,6 +16,20 @@ import webpack from 'webpack';
 import path from 'path';
 import getDefaultConfig from './defaultConfig';
 
+function makeAbsolute(
+  root: string,
+  value: string | string[]
+): string | string[] {
+  const resolve = (v: string): string =>
+    path.isAbsolute(v) ? v : path.join(root, v);
+
+  if (typeof value === 'string') {
+    return resolve(value);
+  }
+
+  return value.map(item => resolve(item));
+}
+
 export default function makeConfig(
   projectConfig: ProjectConfig
 ): NormalizedProjectConfigBuilder {
@@ -52,9 +66,17 @@ export default function makeConfig(
         minifyOptions: bundleConfig.minifyOptions || undefined,
         sourceMap: bundleConfig.sourceMap || false,
         dllDependencies: bundleConfig.dllDependencies || [],
-        providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [],
+        providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
+          'react-native',
+        ],
         hasteOptions: bundleConfig.hasteOptions || {},
       };
+
+      // Make sure all entries are absolute.
+      normalizedBundleConfig.entry = makeAbsolute(
+        normalizedBundleConfig.root,
+        normalizedBundleConfig.entry
+      );
 
       let webpackConfig = getDefaultConfig(runtime, normalizedBundleConfig, {
         bundle: Boolean(env.bundle),
@@ -64,7 +86,10 @@ export default function makeConfig(
       // Tweak bundle when creating static bundle
       if (env.bundle && normalizedBundleConfig.type === 'basic-bundle') {
         (webpackConfig.plugins as webpack.Plugin[]).push(
-          new BasicBundleWebpackPlugin(Boolean(env.bundle))
+          new BasicBundleWebpackPlugin(
+            Boolean(env.bundle),
+            Boolean(normalizedBundleConfig.sourceMap)
+          )
         );
       } else if (env.bundle) {
         (webpackConfig.plugins as webpack.Plugin[]).push(
