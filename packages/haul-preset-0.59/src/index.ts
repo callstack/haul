@@ -32,3 +32,5 @@ export const createWebpackConfig = createPreset((haulConfig: HaulConfig) => {
     return (config as unknown) as webpack.Configuration;
   };
 });
+
+export { default as withPolyfills } from './withPolyfills';
