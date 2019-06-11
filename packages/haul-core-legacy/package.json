@@ -21,7 +21,6 @@
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
     "@haul-bundler/core": "^0.4.2",
-    "@haul-bundler/basic-bundle-webpack-plugin": "^0.4.2",
     "react-native": "^0.59.0"
   },
   "dependencies": {

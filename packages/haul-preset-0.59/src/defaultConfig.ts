@@ -1,12 +1,10 @@
 import {
   AssetResolver,
   HasteResolver,
-  DEFAULT_PORT,
   ASSET_LOADER_PATH,
   resolveModule,
-  EnvOptions,
   Runtime,
-  HaulConfig,
+  NormalizedBundleConfig,
 } from '@haul-bundler/core';
 import path from 'path';
 import os from 'os';
@@ -18,31 +16,29 @@ import getBabelConfigPath from './getBabelConfigPath';
 
 export default function getDefaultConfig(
   runtime: Runtime,
-  options: EnvOptions,
-  haulConfig: HaulConfig
-) {
+  bundleConfig: NormalizedBundleConfig,
+  { bundle, port, host }: { bundle: boolean; port: number; host: string }
+): webpack.Configuration {
   const {
+    entry,
     platform,
     root,
     assetsDest,
     dev,
     minify,
-    bundle,
-    port,
     providesModuleNodeModules,
     hasteOptions,
-    hotReloading,
-  } = options;
-  const { inlineSourceMap } = haulConfig;
+    sourceMap,
+  } = bundleConfig;
   return {
     mode: dev ? 'development' : 'production',
     context: root,
     devtool: false,
-    entry: [],
+    entry,
     output: {
       path: assetsDest || path.join(root),
       filename: `index.${platform}.bundle`,
-      publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
+      publicPath: `http://${host}:${port}/`,
       globalObject: 'this',
     },
     module: {
@@ -61,16 +57,7 @@ export default function getDefaultConfig(
                   require.resolve(
                     '@haul-bundler/core-legacy/build/utils/fixRequireIssues'
                   ),
-                ].concat(
-                  process.env.NODE_ENV !== 'production' && hotReloading
-                    ? [
-                        require.resolve('react-hot-loader/babel'),
-                        require.resolve(
-                          '@haul-bundler/core-legacy/build/hot/babelPlugin'
-                        ),
-                      ]
-                    : []
-                ),
+                ],
                 /**
                  * to improve the rebuild speeds
                  * This enables caching results in ./node_modules/.cache/babel-loader/
@@ -119,36 +106,41 @@ export default function getDefaultConfig(
         minimize: !!minify,
         debug: dev,
       }),
-    ].concat(
-      dev
-        ? [
-            ...(hotReloading ? [new webpack.HotModuleReplacementPlugin()] : []),
-            new webpack[
-              inlineSourceMap
-                ? 'EvalSourceMapDevToolPlugin'
-                : 'SourceMapDevToolPlugin'
-            ]({
-              test: /\.(js|css|(js)?bundle)($|\?)/i,
-              filename: '[file].map',
-              publicPath: `http://localhost:${port || DEFAULT_PORT}/`,
-              moduleFilenameTemplate: '[absolute-resource-path]',
-              module: true,
-            } as any),
-          ]
-        : [
-            /**
-             * By default, sourcemaps are only generated with *.js files
-             * We need to use the plugin to configure *.bundle (Android, iOS - development)
-             * and *.jsbundle (iOS - production) to emit sourcemap
-             */
-            new webpack.SourceMapDevToolPlugin({
-              test: /\.(js|css|(js)?bundle)($|\?)/i,
-              filename: '[file].map',
-              moduleFilenameTemplate: '[absolute-resource-path]',
-              module: true,
-            }),
-          ]
-    ),
+    ]
+      .concat(
+        sourceMap && dev
+          ? [
+              new webpack[
+                sourceMap === 'inline'
+                  ? 'EvalSourceMapDevToolPlugin'
+                  : 'SourceMapDevToolPlugin'
+              ]({
+                test: /\.(js|css|(js)?bundle)($|\?)/i,
+                filename: '[file].map',
+                publicPath: `http://${host}:${port}/`,
+                moduleFilenameTemplate: '[absolute-resource-path]',
+                module: true,
+              } as any),
+            ]
+          : []
+      )
+      .concat(
+        sourceMap && !dev
+          ? [
+              /**
+               * By default, sourcemaps are only generated with *.js files
+               * We need to use the plugin to configure *.bundle (Android, iOS - development)
+               * and *.jsbundle (iOS - production) to emit sourcemap
+               */
+              new webpack.SourceMapDevToolPlugin({
+                test: /\.(js|css|(js)?bundle)($|\?)/i,
+                filename: '[file].map',
+                moduleFilenameTemplate: '[absolute-resource-path]',
+                module: true,
+              }),
+            ]
+          : []
+      ),
     resolve: {
       alias:
         process.env.NODE_ENV === 'production'
@@ -168,7 +160,7 @@ export default function getDefaultConfig(
          */
         new HasteResolver({
           directories: (providesModuleNodeModules || ['react-native']).map(
-            _ => {
+            (_: any) => {
               if (typeof _ === 'string') {
                 if (_ === 'react-native') {
                   return path.join(

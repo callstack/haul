@@ -25,8 +25,6 @@
     "@haul-bundler/core": "^0.4.2",
     "@haul-bundler/core-legacy": "^0.4.2",
     "@haul-bundler/inspector-events": "^0.4.2",
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.4.2",
-    "@haul-bundler/basic-bundle-webpack-plugin": "^0.4.2",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "inquirer": "^6.3.1",

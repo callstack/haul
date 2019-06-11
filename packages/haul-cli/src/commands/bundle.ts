@@ -90,10 +90,10 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          bundleType: 'basic-bundle',
+          singleBundleMode: true,
         });
         messages.initialInformation(runtime, { config: webpackConfig });
-
-        webpackConfig.plugins!.push(new BasicBundleWebpackPlugin(true));
 
         messages.initialBundleInformation(runtime, {
           entry: webpackConfig.entry,

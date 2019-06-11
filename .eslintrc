@@ -1,3 +1,6 @@
 {
-  "extends": "@callstack/eslint-config/node"
+  "extends": "@callstack/eslint-config/node",
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/types.ts"]}]
+  }
 }

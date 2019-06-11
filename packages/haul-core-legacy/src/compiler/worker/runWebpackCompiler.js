@@ -5,11 +5,10 @@
  * @flow
  */
 import {
-  getProjectConfig,
+  getNormalizedProjectConfigBuilder,
   getWebpackConfig,
   Runtime,
 } from '@haul-bundler/core';
-import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
@@ -43,12 +42,12 @@ module.exports = function runWebpackCompiler({
   );
   runtime.logger = loggerProxy;
 
-  const projectConfig = getProjectConfig(configPath);
-  const config = getWebpackConfig(
-    runtime,
-    { ...configOptions, platform },
-    projectConfig
-  );
+  const projectConfig = getNormalizedProjectConfigBuilder(configPath)(runtime, {
+    ...configOptions,
+    platform,
+  });
+  const config =
+    projectConfig.webpackConfigs.index || projectConfig.webpackConfigs.main;
 
   let lastPercent = -1;
 
@@ -66,7 +65,6 @@ module.exports = function runWebpackCompiler({
           emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
         }
       }),
-      new BasicBundleWebpackPlugin(false),
     ],
   });
 
