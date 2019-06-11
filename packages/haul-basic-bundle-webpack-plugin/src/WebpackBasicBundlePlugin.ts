@@ -84,8 +84,10 @@ export default class WebpackBasicBundlePlugin {
         compilation.assets[mainSourceFilename] = new RawSource(
           concat.content.toString('utf8')
         );
-        // Assign concatenated source maps to main source map.
-        compilation.assets[mainMap] = new RawSource(concat.sourceMap || '');
+        if (this.sourceMap) {
+          // Assign concatenated source maps to main source map.
+          compilation.assets[mainMap] = new RawSource(concat.sourceMap || '');
+        }
       });
     }
 

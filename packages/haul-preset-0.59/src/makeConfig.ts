@@ -55,6 +55,7 @@ export default function makeConfig(
       // TODO: add `dll: boolean` flag and push DllPlugin
       // TODO: use dllDependencies and push DllReferencePlugin
       // TODO: use `library` and `libraryTarget` options when necessary
+      // TODO: use minifyOptions to configure terser for basic bundle
       const normalizedBundleConfig = {
         entry: bundleConfig.entry,
         type: bundleConfig.type || env.bundleType || 'basic-bundle',
@@ -64,7 +65,7 @@ export default function makeConfig(
         assetsDest: bundleConfig.assetsDest || env.assetsDest || '',
         minify: bundleConfig.minify || Boolean(env.minify),
         minifyOptions: bundleConfig.minifyOptions || undefined,
-        sourceMap: bundleConfig.sourceMap || false,
+        sourceMap: bundleConfig.sourceMap || !bundleConfig.dev,
         dllDependencies: bundleConfig.dllDependencies || [],
         providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
           'react-native',

@@ -96,9 +96,10 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
-          bundleType: indexedRamBundle
-            ? 'indexed-ram-bundle'
-            : 'file-ram-bundle',
+          bundleType:
+            !indexedRamBundle && platform == 'android'
+              ? 'file-ram-bundle'
+              : 'indexed-ram-bundle',
           singleBundleMode: true,
         });
         messages.initialInformation(runtime, { config: webpackConfig });
