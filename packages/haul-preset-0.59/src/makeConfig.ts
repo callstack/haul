@@ -54,6 +54,7 @@ export default function makeConfig(
         minify: bundleConfig.minify || Boolean(env.minify),
         minifyOptions: bundleConfig.minifyOptions || undefined,
         sourceMap: bundleConfig.sourceMap || !dev,
+        app: Boolean(bundleConfig.app),
         dll: Boolean(bundleConfig.dll),
         dependsOn: bundleConfig.dependsOn || [],
         providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
@@ -140,6 +141,9 @@ export default function makeConfig(
             ),
           })
         );
+      } else if (normalizedBundleConfig.app) {
+        webpackConfig.output!.library = bundleName;
+        webpackConfig.output!.libraryTarget = 'this';
       }
 
       normalizedBundleConfig.dependsOn.forEach((dllBundleName: string) => {
