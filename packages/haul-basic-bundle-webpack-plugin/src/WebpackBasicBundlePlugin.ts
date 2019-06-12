@@ -15,11 +15,23 @@ function asyncEval(url) {
  * Adds React Native specific tweaks to bootstrap logic.
  */
 export default class WebpackBasicBundlePlugin {
-  constructor(
-    private bundle: boolean,
-    private sourceMap: boolean,
-    private preloadBundles: string[]
-  ) {}
+  bundle: boolean;
+  sourceMap: boolean;
+  preloadBundles: string[];
+
+  constructor({
+    bundle,
+    sourceMap,
+    preloadBundles,
+  }: {
+    bundle: boolean;
+    sourceMap?: boolean;
+    preloadBundles?: string[];
+  }) {
+    this.bundle = bundle;
+    this.sourceMap = Boolean(sourceMap);
+    this.preloadBundles = preloadBundles || [];
+  }
 
   apply(compiler: webpack.Compiler) {
     if (this.bundle) {

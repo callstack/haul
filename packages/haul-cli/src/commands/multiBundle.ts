@@ -163,15 +163,15 @@ function sortBundlesByDependencies(
 
   const addDllDependencies = (deps: string[]) => {
     deps.forEach(depName => {
-      addDllDependencies(projectConfig.bundles[depName].dllDependencies);
+      addDllDependencies(projectConfig.bundles[depName].dependsOn);
       dlls.add(depName);
     });
   };
 
   for (const bundleName in projectConfig.bundles) {
-    const { dll, dllDependencies } = projectConfig.bundles[bundleName];
+    const { dll, dependsOn } = projectConfig.bundles[bundleName];
     if (dll) {
-      addDllDependencies(dllDependencies);
+      addDllDependencies(dependsOn);
       dlls.add(bundleName);
     } else if (bundleName === 'index' || bundleName === 'host') {
       host = bundleName;

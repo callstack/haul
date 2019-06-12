@@ -37,7 +37,7 @@ export type BundleConfig = {
   >;
   sourceMap?: boolean | 'inline';
   dll?: boolean;
-  dllDependencies?: string[];
+  dependsOn?: string[];
   providesModuleNodeModules?: Array<
     string | { name: string; directory: string }
   >;

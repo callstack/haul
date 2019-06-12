@@ -5,9 +5,9 @@ Object {
   "bundles": Object {
     "index": Object {
       "assetsDest": "",
+      "dependsOn": Array [],
       "dev": true,
       "dll": false,
-      "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
@@ -203,9 +203,9 @@ Object {
   "bundles": Object {
     "index": Object {
       "assetsDest": "",
+      "dependsOn": Array [],
       "dev": true,
       "dll": false,
-      "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
@@ -407,9 +407,9 @@ Object {
   "bundles": Object {
     "index": Object {
       "assetsDest": "",
+      "dependsOn": Array [],
       "dev": true,
       "dll": false,
-      "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",

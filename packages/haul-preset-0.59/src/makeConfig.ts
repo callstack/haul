@@ -55,7 +55,7 @@ export default function makeConfig(
         minifyOptions: bundleConfig.minifyOptions || undefined,
         sourceMap: bundleConfig.sourceMap || !dev,
         dll: Boolean(bundleConfig.dll),
-        dllDependencies: bundleConfig.dllDependencies || [],
+        dependsOn: bundleConfig.dependsOn || [],
         providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
           'react-native',
         ],
@@ -70,11 +70,11 @@ export default function makeConfig(
       // Tweak bundle when creating static bundle
       if (env.bundle && normalizedBundleConfig.type === 'basic-bundle') {
         (webpackConfig.plugins as webpack.Plugin[]).push(
-          new BasicBundleWebpackPlugin(
-            Boolean(env.bundle),
-            Boolean(normalizedBundleConfig.sourceMap),
-            normalizedBundleConfig.dllDependencies
-          )
+          new BasicBundleWebpackPlugin({
+            bundle: Boolean(env.bundle),
+            sourceMap: Boolean(normalizedBundleConfig.sourceMap),
+            preloadBundles: normalizedBundleConfig.dependsOn,
+          })
         );
       } else if (env.bundle) {
         (webpackConfig.plugins as webpack.Plugin[]).push(
@@ -85,7 +85,7 @@ export default function makeConfig(
             indexRamBundle:
               normalizedBundleConfig.type === 'indexed-ram-bundle',
             singleBundleMode: env.singleBundleMode,
-            preloadBundles: normalizedBundleConfig.dllDependencies,
+            preloadBundles: normalizedBundleConfig.dependsOn,
           })
         );
       }
@@ -142,20 +142,18 @@ export default function makeConfig(
         );
       }
 
-      normalizedBundleConfig.dllDependencies.forEach(
-        (dllBundleName: string) => {
-          webpackConfig.plugins!.push(
-            new webpack.DllReferencePlugin({
-              context: normalizedBundleConfig.root,
-              manifest: path.join(
-                webpackConfig.output!.path!,
-                `${dllBundleName}.manifest.json`
-              ),
-              sourceType: 'this',
-            })
-          );
-        }
-      );
+      normalizedBundleConfig.dependsOn.forEach((dllBundleName: string) => {
+        webpackConfig.plugins!.push(
+          new webpack.DllReferencePlugin({
+            context: normalizedBundleConfig.root,
+            manifest: path.join(
+              webpackConfig.output!.path!,
+              `${dllBundleName}.manifest.json`
+            ),
+            sourceType: 'this',
+          })
+        );
+      });
 
       const { transform } = bundleConfig;
       if (transform) {
