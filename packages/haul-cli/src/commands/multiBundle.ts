@@ -9,7 +9,7 @@ import {
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 
-export default function ramBundleCommand(runtime: Runtime) {
+export default function multiBundleCommand(runtime: Runtime) {
   return {
     command: 'multi-bundle',
     describe: 'Create multiple bundles to be used in multi-bundle mode',

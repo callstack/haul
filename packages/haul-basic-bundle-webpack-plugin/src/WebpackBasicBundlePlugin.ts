@@ -117,7 +117,7 @@ export default class WebpackBasicBundlePlugin {
             const preload = this.preloadBundles.length
               ? `${this.preloadBundles.map(
                   bundleName =>
-                    `this.bundleRegistryLoad("${bundleName}", true, true)\n`
+                    `this.bundleRegistryLoad("${bundleName}", true, true);\n`
                 )}\n`
               : '';
             return `${preload}${asyncEval}\n${source}`;
