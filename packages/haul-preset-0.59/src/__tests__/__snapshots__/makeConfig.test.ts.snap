@@ -107,28 +107,7 @@ Object {
       "optimization": Object {
         "concatenateModules": true,
         "minimize": false,
-        "minimizer": Array [
-          TerserPlugin {
-            "options": Object {
-              "cache": true,
-              "cacheKeys": [Function],
-              "chunkFilter": [Function],
-              "exclude": undefined,
-              "extractComments": false,
-              "include": undefined,
-              "minify": undefined,
-              "parallel": true,
-              "sourceMap": true,
-              "terserOptions": Object {
-                "output": Object {
-                  "comments": /\\^\\\\\\*\\*!\\|@preserve\\|@license\\|@cc_on/i,
-                },
-              },
-              "test": /\\\\\\.\\(js\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-              "warningsFilter": [Function],
-            },
-          },
-        ],
+        "minimizer": Array [],
         "namedModules": true,
       },
       "output": Object {
@@ -324,28 +303,7 @@ Object {
       "optimization": Object {
         "concatenateModules": true,
         "minimize": false,
-        "minimizer": Array [
-          TerserPlugin {
-            "options": Object {
-              "cache": true,
-              "cacheKeys": [Function],
-              "chunkFilter": [Function],
-              "exclude": undefined,
-              "extractComments": false,
-              "include": undefined,
-              "minify": undefined,
-              "parallel": true,
-              "sourceMap": true,
-              "terserOptions": Object {
-                "output": Object {
-                  "comments": /\\^\\\\\\*\\*!\\|@preserve\\|@license\\|@cc_on/i,
-                },
-              },
-              "test": /\\\\\\.\\(js\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-              "warningsFilter": [Function],
-            },
-          },
-        ],
+        "minimizer": Array [],
         "namedModules": true,
       },
       "output": Object {
@@ -548,28 +506,7 @@ Object {
       "optimization": Object {
         "concatenateModules": true,
         "minimize": false,
-        "minimizer": Array [
-          TerserPlugin {
-            "options": Object {
-              "cache": true,
-              "cacheKeys": [Function],
-              "chunkFilter": [Function],
-              "exclude": undefined,
-              "extractComments": false,
-              "include": undefined,
-              "minify": undefined,
-              "parallel": true,
-              "sourceMap": true,
-              "terserOptions": Object {
-                "output": Object {
-                  "comments": /\\^\\\\\\*\\*!\\|@preserve\\|@license\\|@cc_on/i,
-                },
-              },
-              "test": /\\\\\\.\\(js\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-              "warningsFilter": [Function],
-            },
-          },
-        ],
+        "minimizer": Array [],
         "namedModules": true,
       },
       "output": Object {

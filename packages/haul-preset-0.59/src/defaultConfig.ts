@@ -193,7 +193,7 @@ export default function getDefaultConfig(
           test: /\.(js|(js)?bundle)($|\?)/i,
           cache: true,
           // Set upper limit on CPU cores, to prevent Out of Memory exception on CIs.
-          parallel: isCi ? Math.max(os.cpus().length, 8) - 1 : true,
+          parallel: isCi ? Math.min(os.cpus().length, 8) - 1 : true,
           sourceMap: true,
         }),
       ],

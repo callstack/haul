@@ -10,6 +10,11 @@ function hasPlugin(webpackConfig: any, pluginName: string) {
   );
 }
 
+function tweakConfig(config: any) {
+  config.webpackConfigs.index.optimization.minimizer = [];
+  return replacePathsInObject(config);
+}
+
 describe('makeConfig', () => {
   describe('with single bundle', () => {
     it('should create config for basic-bundle', () => {
@@ -33,7 +38,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
       ).toBeTruthy();
-      expect(replacePathsInObject(config)).toMatchSnapshot();
+      expect(tweakConfig(config)).toMatchSnapshot();
     });
 
     it('should create config for indexed-ram-bundle', () => {
@@ -58,7 +63,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
       ).toBeTruthy();
-      expect(replacePathsInObject(config)).toMatchSnapshot();
+      expect(tweakConfig(config)).toMatchSnapshot();
     });
 
     it('should create config for file-ram-bundle', () => {
@@ -83,7 +88,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
       ).toBeTruthy();
-      expect(replacePathsInObject(config)).toMatchSnapshot();
+      expect(tweakConfig(config)).toMatchSnapshot();
     });
   });
 
