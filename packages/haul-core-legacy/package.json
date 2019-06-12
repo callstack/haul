@@ -1,5 +1,5 @@
 {
-  "version": "0.4.3",
+  "version": "0.5.0-alpha.0",
   "name": "@haul-bundler/core-legacy",
   "description": "Haul core library (legacy)",
   "bin": {
@@ -83,7 +83,7 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "@haul-bundler/core": "^0.4.2",
+    "@haul-bundler/core": "^0.5.0-alpha.0",
     "jest": "^24.7.1",
     "react-native": "^0.59.0",
     "rimraf": "^2.6.1",

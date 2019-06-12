@@ -1,5 +1,5 @@
 {
-  "version": "0.4.2",
+  "version": "0.5.0-alpha.0",
   "name": "@haul-bundler/preset-0.59",
   "description": "Haul preset for React Native 0.59",
   "main": "build/index.js",
@@ -19,17 +19,17 @@
     "webpack": "^4.30.0"
   },
   "dependencies": {
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.4.2",
-    "@haul-bundler/basic-bundle-webpack-plugin": "^0.4.2",
+    "@haul-bundler/basic-bundle-webpack-plugin": "^0.5.0-alpha.0",
+    "@haul-bundler/ram-bundle-webpack-plugin": "^0.5.0-alpha.0",
     "babel-loader": "^8.0.5",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "is-ci": "^2.0.0",
-    "terser-webpack-plugin": "^1.2.3",
-    "lodash.get": "^4.4.2"
+    "lodash.get": "^4.4.2",
+    "terser-webpack-plugin": "^1.2.3"
   },
   "devDependencies": {
-    "@haul-bundler/cli": "^0.4.2",
-    "@haul-bundler/core": "^0.4.2",
+    "@haul-bundler/cli": "^0.5.0-alpha.0",
+    "@haul-bundler/core": "^0.5.0-alpha.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
     "@types/is-ci": "^1.1.0",
     "@types/lodash.get": "^4.4.6",

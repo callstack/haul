@@ -18,31 +18,13 @@ You can read more about Haul here: https://github.com/callstack/haul.
 ```ts
 import WebpackRamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
 
-type RamBundleDebugOptions = {
-  path: string;
-  renderBootstrap?: boolean;
-  renderModules?: boolean;
-};
-
-type RamBundleConfig = {
-  debug?: RamBundleDebugOptions;
-  minification?: { enabled: boolean } & Pick<
-    MinifyOptions, // Terser minify options
-    Exclude<keyof MinifyOptions, 'sourceMap'>
-  >;
-};
-
 new WebpackRamBundlePlugin({
   sourceMap: true, // whether to generate source maps
   indexRamBundle: true, // whether to build Indexed RAM bundle or File RAM bundle
   preloadBundles: [], // name of bundles to preload when running in multi-bundle mode
   singleBundleMode: true, // whether to run in single-bundle mode or multi-bundle
-  config: { // RamBundleConfig
-    minification: {
-      enabled: true, // whether to minify the source code
-      // ... other minifier (Terser) options
-    },
-  },
+  minify: true, // enables minifcation
+  minifyOptions: { /* ... */ } // Terser minify options (excluding `sourceMap`)
 });
 ```
 
