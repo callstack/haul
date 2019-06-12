@@ -4,6 +4,7 @@ exports[`makeConfig with single bundle should create config for basic-bundle 1`]
 Object {
   "bundles": Object {
     "index": Object {
+      "app": false,
       "assetsDest": "",
       "dependsOn": Array [],
       "dev": true,
@@ -202,6 +203,7 @@ exports[`makeConfig with single bundle should create config for file-ram-bundle 
 Object {
   "bundles": Object {
     "index": Object {
+      "app": false,
       "assetsDest": "",
       "dependsOn": Array [],
       "dev": true,
@@ -406,6 +408,7 @@ exports[`makeConfig with single bundle should create config for indexed-ram-bund
 Object {
   "bundles": Object {
     "index": Object {
+      "app": false,
       "assetsDest": "",
       "dependsOn": Array [],
       "dev": true,
