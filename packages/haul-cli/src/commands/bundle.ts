@@ -1,6 +1,5 @@
 import { Arguments } from 'yargs';
 import webpack from 'webpack';
-import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
 import * as messages from '../messages/bundleMessages';
 import { Runtime } from '@haul-bundler/core';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';

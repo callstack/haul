@@ -4,8 +4,6 @@ import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
 import terser, { MinifyOptions } from 'terser';
-// import mkdirp from 'mkdirp';
-// import { RamBundleConfig } from '@haul-bundler/core';
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
 
@@ -276,53 +274,4 @@ export default class WebpackRamBundlePlugin {
       }
     );
   }
-
-  // generateDebugFiles(
-  //   moduleMappings: ModuleMappings,
-  //   bootstrapCode: string,
-  //   extraData: Object
-  // ) {
-  //   if (!this.config.debug) {
-  //     return;
-  //   }
-
-  //   mkdirp.sync(this.config.debug.path);
-  //   const manifest = {
-  //     ...extraData,
-  //     config: this.config,
-  //     module: {
-  //       mappings: moduleMappings,
-  //       count: this.modules.length,
-  //       stats: this.modules.map(m => ({
-  //         id: m.id,
-  //         idx: m.idx,
-  //         filename: m.filename,
-  //         length: m.source.length,
-  //       })),
-  //     },
-  //   };
-  //   fs.writeFileSync(
-  //     path.join(this.config.debug.path, 'manifest.json'),
-  //     JSON.stringify(manifest, null, '  ')
-  //   );
-  //   if (this.config.debug.renderBootstrap) {
-  //     fs.writeFileSync(
-  //       path.join(this.config.debug.path, 'bootstrap.js'),
-  //       bootstrapCode
-  //     );
-  //   }
-  //   if (this.config.debug.renderModules) {
-  //     fs.writeFileSync(
-  //       path.join(this.config.debug.path, 'modules.js'),
-  //       this.modules
-  //         .map(
-  //           m =>
-  //             `/*** module begin: ${m.filename} ***/\n${
-  //               m.source
-  //             }\n/*** module end: ${m.filename} ***/`
-  //         )
-  //         .join('\n\n')
-  //     );
-  //   }
-  // }
 }
