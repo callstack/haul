@@ -1,6 +1,7 @@
 import makeConfig from '../makeConfig';
 import withPolyfills from '../withPolyfills';
-import { replacePathsInObject } from 'jest/helpers';
+// @ts-ignore
+import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line
 import { Runtime, ProjectConfig, EnvOptions } from '@haul-bundler/core';
 
 function hasPlugin(webpackConfig: any, pluginName: string) {
