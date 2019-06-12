@@ -1,5 +1,6 @@
 import makeConfig from '../makeConfig';
 import withPolyfills from '../withPolyfills';
+import { replacePathsInObject } from 'jest/helpers';
 import { Runtime, ProjectConfig, EnvOptions } from '@haul-bundler/core';
 
 function hasPlugin(webpackConfig: any, pluginName: string) {
@@ -31,7 +32,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
       ).toBeTruthy();
-      expect(config).toMatchSnapshot();
+      expect(replacePathsInObject(config)).toMatchSnapshot();
     });
 
     it('should create config for indexed-ram-bundle', () => {
@@ -56,7 +57,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
       ).toBeTruthy();
-      expect(config).toMatchSnapshot();
+      expect(replacePathsInObject(config)).toMatchSnapshot();
     });
 
     it('should create config for file-ram-bundle', () => {
@@ -81,7 +82,7 @@ describe('makeConfig', () => {
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
       ).toBeTruthy();
-      expect(config).toMatchSnapshot();
+      expect(replacePathsInObject(config)).toMatchSnapshot();
     });
   });
 

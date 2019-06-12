@@ -8,17 +8,17 @@ Object {
       "dev": true,
       "dllDependencies": Array [],
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -27,7 +27,7 @@ Object {
       "providesModuleNodeModules": Array [
         "react-native",
       ],
-      "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "sourceMap": false,
       "type": "basic-bundle",
     },
@@ -38,20 +38,20 @@ Object {
   },
   "webpackConfigs": Object {
     "index": Object {
-      "context": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "devtool": false,
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "mode": "development",
       "module": Object {
@@ -66,12 +66,12 @@ Object {
             "test": /\\\\\\.js\\$/,
             "use": Array [
               Object {
-                "loader": "/Users/paweltrysla/Documents/oss/haul/node_modules/babel-loader/lib/index.js",
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
                 "options": Object {
                   "cacheDirectory": true,
                   "extends": undefined,
                   "plugins": Array [
-                    "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
                   ],
                 },
               },
@@ -80,11 +80,11 @@ Object {
           Object {
             "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
             "use": Object {
-              "loader": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core/build/webpack/loaders/assetLoader",
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
               "options": Object {
                 "bundle": true,
                 "platform": "ios",
-                "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
                 "runtime": Runtime {
                   "inspectorClient": undefined,
                   "logger": Logger {
@@ -134,7 +134,7 @@ Object {
       "output": Object {
         "filename": "index.ios.bundle",
         "globalObject": "this",
-        "path": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
         "publicPath": "http://localhost:8081/",
       },
       "plugins": Array [
@@ -184,7 +184,7 @@ Object {
           HasteResolver {
             "options": Object {
               "directories": Array [
-                "/Users/paweltrysla/Documents/oss/haul/node_modules/react-native/Libraries",
+                "<<NODE_MODULE>>/react-native/Libraries",
               ],
               "hasteOptions": Object {},
             },
@@ -225,17 +225,17 @@ Object {
       "dev": true,
       "dllDependencies": Array [],
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -244,7 +244,7 @@ Object {
       "providesModuleNodeModules": Array [
         "react-native",
       ],
-      "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "sourceMap": false,
       "type": "file-ram-bundle",
     },
@@ -255,20 +255,20 @@ Object {
   },
   "webpackConfigs": Object {
     "index": Object {
-      "context": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "devtool": false,
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "mode": "development",
       "module": Object {
@@ -283,12 +283,12 @@ Object {
             "test": /\\\\\\.js\\$/,
             "use": Array [
               Object {
-                "loader": "/Users/paweltrysla/Documents/oss/haul/node_modules/babel-loader/lib/index.js",
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
                 "options": Object {
                   "cacheDirectory": true,
                   "extends": undefined,
                   "plugins": Array [
-                    "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
                   ],
                 },
               },
@@ -297,11 +297,11 @@ Object {
           Object {
             "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
             "use": Object {
-              "loader": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core/build/webpack/loaders/assetLoader",
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
               "options": Object {
                 "bundle": true,
                 "platform": "ios",
-                "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
                 "runtime": Runtime {
                   "inspectorClient": undefined,
                   "logger": Logger {
@@ -351,7 +351,7 @@ Object {
       "output": Object {
         "filename": "index.ios.bundle",
         "globalObject": "this",
-        "path": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
         "publicPath": "http://localhost:8081/",
       },
       "plugins": Array [
@@ -408,7 +408,7 @@ Object {
           HasteResolver {
             "options": Object {
               "directories": Array [
-                "/Users/paweltrysla/Documents/oss/haul/node_modules/react-native/Libraries",
+                "<<NODE_MODULE>>/react-native/Libraries",
               ],
               "hasteOptions": Object {},
             },
@@ -449,17 +449,17 @@ Object {
       "dev": true,
       "dllDependencies": Array [],
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -468,7 +468,7 @@ Object {
       "providesModuleNodeModules": Array [
         "react-native",
       ],
-      "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "sourceMap": false,
       "type": "indexed-ram-bundle",
     },
@@ -479,20 +479,20 @@ Object {
   },
   "webpackConfigs": Object {
     "index": Object {
-      "context": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
       "devtool": false,
       "entry": Array [
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/node_modules/react-native/Libraries/Core/InitializeCore.js",
-        "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__/index.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
       ],
       "mode": "development",
       "module": Object {
@@ -507,12 +507,12 @@ Object {
             "test": /\\\\\\.js\\$/,
             "use": Array [
               Object {
-                "loader": "/Users/paweltrysla/Documents/oss/haul/node_modules/babel-loader/lib/index.js",
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
                 "options": Object {
                   "cacheDirectory": true,
                   "extends": undefined,
                   "plugins": Array [
-                    "/Users/paweltrysla/Documents/oss/haul/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
                   ],
                 },
               },
@@ -521,11 +521,11 @@ Object {
           Object {
             "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
             "use": Object {
-              "loader": "/Users/paweltrysla/Documents/oss/haul/packages/haul-core/build/webpack/loaders/assetLoader",
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
               "options": Object {
                 "bundle": true,
                 "platform": "ios",
-                "root": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
                 "runtime": Runtime {
                   "inspectorClient": undefined,
                   "logger": Logger {
@@ -575,7 +575,7 @@ Object {
       "output": Object {
         "filename": "index.ios.bundle",
         "globalObject": "this",
-        "path": "/Users/paweltrysla/Documents/oss/haul/packages/haul-preset-0.59/src/__tests__",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
         "publicPath": "http://localhost:8081/",
       },
       "plugins": Array [
@@ -632,7 +632,7 @@ Object {
           HasteResolver {
             "options": Object {
               "directories": Array [
-                "/Users/paweltrysla/Documents/oss/haul/node_modules/react-native/Libraries",
+                "<<NODE_MODULE>>/react-native/Libraries",
               ],
               "hasteOptions": Object {},
             },
