@@ -16,20 +16,6 @@ import webpack from 'webpack';
 import path from 'path';
 import getDefaultConfig from './defaultConfig';
 
-function makeAbsolute(
-  root: string,
-  value: string | string[]
-): string | string[] {
-  const resolve = (v: string): string =>
-    path.isAbsolute(v) ? v : path.join(root, v);
-
-  if (typeof value === 'string') {
-    return resolve(value);
-  }
-
-  return value.map(item => resolve(item));
-}
-
 export default function makeConfig(
   projectConfig: ProjectConfig
 ): NormalizedProjectConfigBuilder {
@@ -59,8 +45,7 @@ export default function makeConfig(
       const dev = bundleConfig.dev || env.dev;
       const root = bundleConfig.root || env.root;
       const normalizedBundleConfig = {
-        // Make sure all entries are absolute.
-        entry: makeAbsolute(root, bundleConfig.entry),
+        entry: bundleConfig.entry,
         type: bundleConfig.type || env.bundleType || 'basic-bundle',
         platform: bundleConfig.platform || env.platform,
         root,
@@ -69,6 +54,7 @@ export default function makeConfig(
         minify: bundleConfig.minify || Boolean(env.minify),
         minifyOptions: bundleConfig.minifyOptions || undefined,
         sourceMap: bundleConfig.sourceMap || !dev,
+        dll: Boolean(bundleConfig.dll),
         dllDependencies: bundleConfig.dllDependencies || [],
         providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
           'react-native',
@@ -126,6 +112,12 @@ export default function makeConfig(
               webpackConfig.output!.path!,
               path.join(normalizedBundleConfig.root, env.sourcemapOutput)
             );
+      }
+
+      if (!env.singleBundleMode) {
+        webpackConfig.output!.filename = `${bundleName}.${
+          normalizedBundleConfig.platform
+        }.bundle`;
       }
 
       const { transform } = bundleConfig;

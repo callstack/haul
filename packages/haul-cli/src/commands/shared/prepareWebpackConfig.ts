@@ -16,7 +16,7 @@ export type Options = {
   bundleOutput?: string;
   sourcemapOutput?: string;
   progress: string;
-  bundleType: EnvOptions['bundleType'];
+  bundleType?: EnvOptions['bundleType'];
   singleBundleMode: boolean;
 };
 
