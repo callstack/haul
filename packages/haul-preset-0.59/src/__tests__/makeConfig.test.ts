@@ -3,7 +3,9 @@ import withPolyfills from '../withPolyfills';
 import { Runtime, ProjectConfig, EnvOptions } from '@haul-bundler/core';
 
 function hasPlugin(webpackConfig: any, pluginName: string) {
-  return webpackConfig.plugins.some(p => p.constructor.name === pluginName);
+  return webpackConfig.plugins.some(
+    (p: any) => p.constructor.name === pluginName
+  );
 }
 
 describe('makeConfig', () => {
