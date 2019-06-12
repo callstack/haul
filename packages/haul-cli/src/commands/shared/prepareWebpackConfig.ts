@@ -24,9 +24,6 @@ export default function prepareWebpackConfig(
   runtime: Runtime,
   options: Options
 ): webpack.Configuration {
-  // TODO: figure out a better way to read and transpile user files on-demand
-  require('@haul-bundler/core-legacy/build/babelRegister');
-
   const directory = process.cwd();
   const configPath = getProjectConfigPath(directory, options.config);
   const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(

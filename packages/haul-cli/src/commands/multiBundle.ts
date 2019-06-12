@@ -74,9 +74,6 @@ export default function ramBundleCommand(runtime: Runtime) {
           progress,
         } = argv;
 
-        // TODO: figure out a better way to read and transpile user files on-demand
-        require('@haul-bundler/core-legacy/build/babelRegister');
-
         const directory = process.cwd();
         const configPath = getProjectConfigPath(directory, config);
         const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(

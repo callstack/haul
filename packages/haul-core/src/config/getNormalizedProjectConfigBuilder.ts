@@ -3,6 +3,9 @@ import { NormalizedProjectConfigBuilder } from './types';
 export default function getNormalizedProjectConfigBuilder(
   configPath?: string
 ): NormalizedProjectConfigBuilder {
+  // TODO: figure out a better way to read and transpile user files on-demand
+  require('@haul-bundler/core-legacy/build/babelRegister');
+
   let config;
 
   /**
