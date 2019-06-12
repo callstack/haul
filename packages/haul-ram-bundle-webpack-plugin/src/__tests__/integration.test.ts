@@ -53,7 +53,7 @@ function build({
       new RamBundlePlugin({
         sourceMap,
         indexRamBundle,
-        minify: true,
+        minify: false,
       }),
     ],
     optimization: {

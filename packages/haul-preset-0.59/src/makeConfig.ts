@@ -56,28 +56,25 @@ export default function makeConfig(
       // TODO: use dllDependencies and push DllReferencePlugin
       // TODO: use `library` and `libraryTarget` options when necessary
       // TODO: use minifyOptions to configure terser for basic bundle
+      const dev = bundleConfig.dev || env.dev;
+      const root = bundleConfig.root || env.root;
       const normalizedBundleConfig = {
-        entry: bundleConfig.entry,
+        // Make sure all entries are absolute.
+        entry: makeAbsolute(root, bundleConfig.entry),
         type: bundleConfig.type || env.bundleType || 'basic-bundle',
         platform: bundleConfig.platform || env.platform,
-        root: bundleConfig.root || env.root,
-        dev: bundleConfig.dev || env.dev,
+        root,
+        dev,
         assetsDest: bundleConfig.assetsDest || env.assetsDest || '',
         minify: bundleConfig.minify || Boolean(env.minify),
         minifyOptions: bundleConfig.minifyOptions || undefined,
-        sourceMap: bundleConfig.sourceMap || !bundleConfig.dev,
+        sourceMap: bundleConfig.sourceMap || !dev,
         dllDependencies: bundleConfig.dllDependencies || [],
         providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
           'react-native',
         ],
         hasteOptions: bundleConfig.hasteOptions || {},
       };
-
-      // Make sure all entries are absolute.
-      normalizedBundleConfig.entry = makeAbsolute(
-        normalizedBundleConfig.root,
-        normalizedBundleConfig.entry
-      );
 
       let webpackConfig = getDefaultConfig(runtime, normalizedBundleConfig, {
         bundle: Boolean(env.bundle),
