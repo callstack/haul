@@ -34,7 +34,7 @@ export function initialBundleInformation(
   runtime.logger.info(
     `Starting from:\n${runtime.logger.enhanceWithColor(
       'gray',
-      parseEntry(webpackConfig.entry)
+      ((parseEntry(webpackConfig.entry!) as unknown) as string)
         .split('\n')
         .map((line: string) => `${' '.repeat(7)}${line}`)
         .join('\n')

@@ -6,6 +6,7 @@ Object {
     "index": Object {
       "assetsDest": "",
       "dev": true,
+      "dll": false,
       "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
@@ -18,7 +19,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -51,7 +52,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "mode": "development",
       "module": Object {
@@ -142,6 +143,7 @@ Object {
         },
         WebpackBasicBundlePlugin {
           "bundle": true,
+          "preloadBundles": Array [],
           "sourceMap": false,
         },
       ],
@@ -202,6 +204,7 @@ Object {
     "index": Object {
       "assetsDest": "",
       "dev": true,
+      "dll": false,
       "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
@@ -214,7 +217,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -247,7 +250,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "mode": "development",
       "module": Object {
@@ -405,6 +408,7 @@ Object {
     "index": Object {
       "assetsDest": "",
       "dev": true,
+      "dll": false,
       "dllDependencies": Array [],
       "entry": Array [
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
@@ -417,7 +421,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "hasteOptions": Object {},
       "minify": false,
@@ -450,7 +454,7 @@ Object {
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
         "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
         "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
-        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+        "index.js",
       ],
       "mode": "development",
       "module": Object {

@@ -30,21 +30,21 @@ export default makeConfig({
     },
     shared_app_dll: {
       dll: true,
-      entry: './src/sharedBase.js',
+      entry: './src/sharedApp.js',
     },
     shared_base_dll: {
       dll: true,
-      entry: './src/sharedApp.js',
+      entry: './src/sharedBase.js',
     },
     app0: {
       entry: './src/app0.js',
       transform: resolveReactNative,
-      dllDependencies: ['base_dll', 'shared_dll'],
+      dllDependencies: ['base_dll', 'shared_app_dll'],
     },
     app1: {
       entry: './src/app1.js',
       transform: resolveReactNative,
-      dllDependencies: ['base_dll', 'shared_dll'],
+      dllDependencies: ['base_dll', 'shared_app_dll'],
     },
   },
 });

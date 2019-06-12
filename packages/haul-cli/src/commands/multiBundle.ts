@@ -1,13 +1,13 @@
 import { Arguments } from 'yargs';
 import webpack from 'webpack';
-import * as messages from '../messages/multiBundleMessages';
 import {
   Runtime,
   getProjectConfigPath,
   getNormalizedProjectConfigBuilder,
-  ProjectConfig,
   NormalizedProjectConfig,
 } from '@haul-bundler/core';
+import * as messages from '../messages/multiBundleMessages';
+import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 
 export default function ramBundleCommand(runtime: Runtime) {
   return {
@@ -31,7 +31,7 @@ export default function ramBundleCommand(runtime: Runtime) {
       },
       'assets-dest': {
         description:
-          'Directory name where to store assets referenced in the bundle.',
+          'Directory name where to store bundles and assets referenced in the bundle.',
         type: 'string',
       },
       'sourcemap-output': {
@@ -105,6 +105,14 @@ export default function ramBundleCommand(runtime: Runtime) {
         for (const bundleName of sortBundlesByDependencies(projectConfig)) {
           try {
             const webpackConfig = projectConfig.webpackConfigs[bundleName];
+
+            // Attach progress plugin
+            if (progress !== 'none') {
+              webpackConfig.plugins!.push(new SimpleProgressWebpackPlugin({
+                format: progress,
+              }) as webpack.Plugin);
+            }
+
             messages.initialBundleInformation(runtime, {
               bundleName,
               webpackConfig,

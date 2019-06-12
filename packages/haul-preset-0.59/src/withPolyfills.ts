@@ -23,7 +23,7 @@ type Options = {
 export default function withPolyfills(
   entry: string | string[],
   {
-    root = '',
+    root = process.cwd(),
     initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
   }: Options = {}
 ): string[] {
