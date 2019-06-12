@@ -128,8 +128,7 @@ export default function multiBundleCommand(runtime: Runtime) {
         );
         runtime.complete();
       } catch (error) {
-        runtime.logger.error(error.message);
-        runtime.logger.error(error.stack);
+        runtime.logger.error(error);
         runtime.complete(1);
       }
     },
