@@ -1,0 +1,603 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`makeConfig with single bundle should create config for basic-bundle 1`] = `
+Object {
+  "bundles": Object {
+    "index": Object {
+      "assetsDest": "",
+      "dev": true,
+      "dllDependencies": Array [],
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "hasteOptions": Object {},
+      "minify": false,
+      "minifyOptions": undefined,
+      "platform": "ios",
+      "providesModuleNodeModules": Array [
+        "react-native",
+      ],
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "sourceMap": false,
+      "type": "basic-bundle",
+    },
+  },
+  "server": Object {
+    "host": "localhost",
+    "port": 8081,
+  },
+  "webpackConfigs": Object {
+    "index": Object {
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "devtool": false,
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "mode": "development",
+      "module": Object {
+        "rules": Array [
+          Object {
+            "parser": Object {
+              "requireEnsure": false,
+            },
+          },
+          Object {
+            "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|@haul-bundler\\|metro\\)\\)/,
+            "test": /\\\\\\.js\\$/,
+            "use": Array [
+              Object {
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+                "options": Object {
+                  "cacheDirectory": true,
+                  "extends": undefined,
+                  "plugins": Array [
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                  ],
+                },
+              },
+            ],
+          },
+          Object {
+            "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+            "use": Object {
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
+              "options": Object {
+                "bundle": true,
+                "platform": "ios",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+                "runtime": Runtime {
+                  "inspectorClient": undefined,
+                  "logger": Logger {
+                    "debug": [Function],
+                    "done": [Function],
+                    "enhanceWithColor": [Function],
+                    "enhanceWithModifier": [Function],
+                    "error": [Function],
+                    "info": [Function],
+                    "inspectorClient": undefined,
+                    "print": [Function],
+                    "warn": [Function],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      "optimization": Object {
+        "concatenateModules": true,
+        "minimize": false,
+        "minimizer": Array [],
+        "namedModules": true,
+      },
+      "output": Object {
+        "filename": "index.ios.bundle",
+        "globalObject": "this",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+        "publicPath": "http://localhost:8081/",
+      },
+      "plugins": Array [
+        CaseSensitivePathsPlugin {
+          "fsOperations": 0,
+          "options": Object {},
+          "pathCache": Object {},
+          "primed": false,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "__DEV__": true,
+            "process.env": Object {
+              "NODE_ENV": "\\"development\\"",
+            },
+          },
+        },
+        LoaderOptionsPlugin {
+          "options": Object {
+            "debug": true,
+            "minimize": false,
+            "test": Object {
+              "test": [Function],
+            },
+          },
+        },
+        WebpackBasicBundlePlugin {
+          "bundle": true,
+          "sourceMap": false,
+        },
+      ],
+      "resolve": Object {
+        "alias": Object {
+          "react-proxy": "@zamotany/react-proxy",
+        },
+        "extensions": Array [
+          ".ios.js",
+          ".native.js",
+          ".js",
+        ],
+        "mainFields": Array [
+          "react-native",
+          "browser",
+          "main",
+        ],
+        "plugins": Array [
+          HasteResolver {
+            "options": Object {
+              "directories": Array [
+                "<<NODE_MODULE>>/react-native/Libraries",
+              ],
+              "hasteOptions": Object {},
+            },
+          },
+          AssetResolver {
+            "options": Object {
+              "platform": "ios",
+              "runtime": Runtime {
+                "inspectorClient": undefined,
+                "logger": Logger {
+                  "debug": [Function],
+                  "done": [Function],
+                  "enhanceWithColor": [Function],
+                  "enhanceWithModifier": [Function],
+                  "error": [Function],
+                  "info": [Function],
+                  "inspectorClient": undefined,
+                  "print": [Function],
+                  "warn": [Function],
+                },
+              },
+            },
+          },
+        ],
+      },
+      "stats": "verbose",
+      "target": "webworker",
+    },
+  },
+}
+`;
+
+exports[`makeConfig with single bundle should create config for file-ram-bundle 1`] = `
+Object {
+  "bundles": Object {
+    "index": Object {
+      "assetsDest": "",
+      "dev": true,
+      "dllDependencies": Array [],
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "hasteOptions": Object {},
+      "minify": false,
+      "minifyOptions": undefined,
+      "platform": "ios",
+      "providesModuleNodeModules": Array [
+        "react-native",
+      ],
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "sourceMap": false,
+      "type": "file-ram-bundle",
+    },
+  },
+  "server": Object {
+    "host": "localhost",
+    "port": 8081,
+  },
+  "webpackConfigs": Object {
+    "index": Object {
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "devtool": false,
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "mode": "development",
+      "module": Object {
+        "rules": Array [
+          Object {
+            "parser": Object {
+              "requireEnsure": false,
+            },
+          },
+          Object {
+            "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|@haul-bundler\\|metro\\)\\)/,
+            "test": /\\\\\\.js\\$/,
+            "use": Array [
+              Object {
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+                "options": Object {
+                  "cacheDirectory": true,
+                  "extends": undefined,
+                  "plugins": Array [
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                  ],
+                },
+              },
+            ],
+          },
+          Object {
+            "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+            "use": Object {
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
+              "options": Object {
+                "bundle": true,
+                "platform": "ios",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+                "runtime": Runtime {
+                  "inspectorClient": undefined,
+                  "logger": Logger {
+                    "debug": [Function],
+                    "done": [Function],
+                    "enhanceWithColor": [Function],
+                    "enhanceWithModifier": [Function],
+                    "error": [Function],
+                    "info": [Function],
+                    "inspectorClient": undefined,
+                    "print": [Function],
+                    "warn": [Function],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      "optimization": Object {
+        "concatenateModules": true,
+        "minimize": false,
+        "minimizer": Array [],
+        "namedModules": true,
+      },
+      "output": Object {
+        "filename": "index.ios.bundle",
+        "globalObject": "this",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+        "publicPath": "http://localhost:8081/",
+      },
+      "plugins": Array [
+        CaseSensitivePathsPlugin {
+          "fsOperations": 0,
+          "options": Object {},
+          "pathCache": Object {},
+          "primed": false,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "__DEV__": true,
+            "process.env": Object {
+              "NODE_ENV": "\\"development\\"",
+            },
+          },
+        },
+        LoaderOptionsPlugin {
+          "options": Object {
+            "debug": true,
+            "minimize": false,
+            "test": Object {
+              "test": [Function],
+            },
+          },
+        },
+        WebpackRamBundlePlugin {
+          "bundleName": "index",
+          "indexRamBundle": false,
+          "minify": false,
+          "minifyOptions": undefined,
+          "modules": Array [],
+          "name": "WebpackRamBundlePlugin",
+          "preloadBundles": Array [],
+          "singleBundleMode": true,
+          "sourceMap": false,
+        },
+      ],
+      "resolve": Object {
+        "alias": Object {
+          "react-proxy": "@zamotany/react-proxy",
+        },
+        "extensions": Array [
+          ".ios.js",
+          ".native.js",
+          ".js",
+        ],
+        "mainFields": Array [
+          "react-native",
+          "browser",
+          "main",
+        ],
+        "plugins": Array [
+          HasteResolver {
+            "options": Object {
+              "directories": Array [
+                "<<NODE_MODULE>>/react-native/Libraries",
+              ],
+              "hasteOptions": Object {},
+            },
+          },
+          AssetResolver {
+            "options": Object {
+              "platform": "ios",
+              "runtime": Runtime {
+                "inspectorClient": undefined,
+                "logger": Logger {
+                  "debug": [Function],
+                  "done": [Function],
+                  "enhanceWithColor": [Function],
+                  "enhanceWithModifier": [Function],
+                  "error": [Function],
+                  "info": [Function],
+                  "inspectorClient": undefined,
+                  "print": [Function],
+                  "warn": [Function],
+                },
+              },
+            },
+          },
+        ],
+      },
+      "stats": "verbose",
+      "target": "webworker",
+    },
+  },
+}
+`;
+
+exports[`makeConfig with single bundle should create config for indexed-ram-bundle 1`] = `
+Object {
+  "bundles": Object {
+    "index": Object {
+      "assetsDest": "",
+      "dev": true,
+      "dllDependencies": Array [],
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "hasteOptions": Object {},
+      "minify": false,
+      "minifyOptions": undefined,
+      "platform": "ios",
+      "providesModuleNodeModules": Array [
+        "react-native",
+      ],
+      "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "sourceMap": false,
+      "type": "indexed-ram-bundle",
+    },
+  },
+  "server": Object {
+    "host": "localhost",
+    "port": 8081,
+  },
+  "webpackConfigs": Object {
+    "index": Object {
+      "context": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+      "devtool": false,
+      "entry": Array [
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/console.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/error-guard.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Number.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/String.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.prototype.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Array.es6.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/Object.es7.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/vendor/polyfills/babelHelpers.js",
+        "<<NODE_MODULE>>/react-native/Libraries/Core/InitializeCore.js",
+        "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__/index.js",
+      ],
+      "mode": "development",
+      "module": Object {
+        "rules": Array [
+          Object {
+            "parser": Object {
+              "requireEnsure": false,
+            },
+          },
+          Object {
+            "exclude": /node_modules\\(\\?!\\.\\*\\[\\\\/\\\\\\\\\\]\\(react\\|@react-navigation\\|@react-native-community\\|@expo\\|pretty-format\\|@haul-bundler\\|metro\\)\\)/,
+            "test": /\\\\\\.js\\$/,
+            "use": Array [
+              Object {
+                "loader": "<<NODE_MODULE>>/babel-loader/lib/index.js",
+                "options": Object {
+                  "cacheDirectory": true,
+                  "extends": undefined,
+                  "plugins": Array [
+                    "<<REPLACED>>/packages/haul-core-legacy/build/utils/fixRequireIssues.js",
+                  ],
+                },
+              },
+            ],
+          },
+          Object {
+            "test": /\\\\\\.\\(aac\\|aiff\\|bmp\\|caf\\|gif\\|html\\|jpeg\\|jpg\\|m4a\\|m4v\\|mov\\|mp3\\|mp4\\|mpeg\\|mpg\\|obj\\|otf\\|pdf\\|png\\|psd\\|svg\\|ttf\\|wav\\|webm\\|webp\\)\\$/,
+            "use": Object {
+              "loader": "<<REPLACED>>/packages/haul-core/build/webpack/loaders/assetLoader",
+              "options": Object {
+                "bundle": true,
+                "platform": "ios",
+                "root": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+                "runtime": Runtime {
+                  "inspectorClient": undefined,
+                  "logger": Logger {
+                    "debug": [Function],
+                    "done": [Function],
+                    "enhanceWithColor": [Function],
+                    "enhanceWithModifier": [Function],
+                    "error": [Function],
+                    "info": [Function],
+                    "inspectorClient": undefined,
+                    "print": [Function],
+                    "warn": [Function],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      "optimization": Object {
+        "concatenateModules": true,
+        "minimize": false,
+        "minimizer": Array [],
+        "namedModules": true,
+      },
+      "output": Object {
+        "filename": "index.ios.bundle",
+        "globalObject": "this",
+        "path": "<<REPLACED>>/packages/haul-preset-0.59/src/__tests__",
+        "publicPath": "http://localhost:8081/",
+      },
+      "plugins": Array [
+        CaseSensitivePathsPlugin {
+          "fsOperations": 0,
+          "options": Object {},
+          "pathCache": Object {},
+          "primed": false,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "__DEV__": true,
+            "process.env": Object {
+              "NODE_ENV": "\\"development\\"",
+            },
+          },
+        },
+        LoaderOptionsPlugin {
+          "options": Object {
+            "debug": true,
+            "minimize": false,
+            "test": Object {
+              "test": [Function],
+            },
+          },
+        },
+        WebpackRamBundlePlugin {
+          "bundleName": "index",
+          "indexRamBundle": true,
+          "minify": false,
+          "minifyOptions": undefined,
+          "modules": Array [],
+          "name": "WebpackRamBundlePlugin",
+          "preloadBundles": Array [],
+          "singleBundleMode": true,
+          "sourceMap": false,
+        },
+      ],
+      "resolve": Object {
+        "alias": Object {
+          "react-proxy": "@zamotany/react-proxy",
+        },
+        "extensions": Array [
+          ".ios.js",
+          ".native.js",
+          ".js",
+        ],
+        "mainFields": Array [
+          "react-native",
+          "browser",
+          "main",
+        ],
+        "plugins": Array [
+          HasteResolver {
+            "options": Object {
+              "directories": Array [
+                "<<NODE_MODULE>>/react-native/Libraries",
+              ],
+              "hasteOptions": Object {},
+            },
+          },
+          AssetResolver {
+            "options": Object {
+              "platform": "ios",
+              "runtime": Runtime {
+                "inspectorClient": undefined,
+                "logger": Logger {
+                  "debug": [Function],
+                  "done": [Function],
+                  "enhanceWithColor": [Function],
+                  "enhanceWithModifier": [Function],
+                  "error": [Function],
+                  "info": [Function],
+                  "inspectorClient": undefined,
+                  "print": [Function],
+                  "warn": [Function],
+                },
+              },
+            },
+          },
+        ],
+      },
+      "stats": "verbose",
+      "target": "webworker",
+    },
+  },
+}
+`;

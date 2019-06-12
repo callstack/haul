@@ -1,13 +1,7 @@
 import { Arguments } from 'yargs';
 import webpack from 'webpack';
-import RamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
 import * as messages from '../messages/bundleMessages';
-import {
-  getProjectConfigPath,
-  getProjectConfig,
-  getRamBundleConfig,
-  Runtime,
-} from '@haul-bundler/core';
+import { Runtime } from '@haul-bundler/core';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
 export default function ramBundleCommand(runtime: Runtime) {
@@ -102,32 +96,13 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          bundleType:
+            !indexedRamBundle && platform == 'android'
+              ? 'file-ram-bundle'
+              : 'indexed-ram-bundle',
+          singleBundleMode: true,
         });
         messages.initialInformation(runtime, { config: webpackConfig });
-
-        const directory = process.cwd();
-        const configPath = getProjectConfigPath(directory, config);
-        const projectConfig = getProjectConfig(configPath);
-        const ramBundleConfig = getRamBundleConfig(projectConfig);
-
-        webpackConfig.plugins!.push(
-          new RamBundlePlugin({
-            config: {
-              ...ramBundleConfig,
-              minification: {
-                ...ramBundleConfig.minification,
-                enabled: Boolean(minify === undefined ? !dev : minify),
-              },
-            },
-            sourceMap: Boolean(sourcemapOutput),
-            indexRamBundle:
-              indexedRamBundle === undefined
-                ? platform !== 'android'
-                : indexedRamBundle,
-            platform,
-            singleBundleMode: true,
-          })
-        );
 
         messages.initialBundleInformation(runtime, {
           entry: webpackConfig.entry,

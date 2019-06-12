@@ -3,9 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
-import terser from 'terser';
-import mkdirp from 'mkdirp';
-import { RamBundleConfig } from '@haul-bundler/core';
+import terser, { MinifyOptions } from 'terser';
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
 
@@ -39,12 +37,15 @@ type ModuleMappings = {
 };
 
 type WebpackRamBundlePluginOptions = {
-  platform: string;
   singleBundleMode?: boolean;
   sourceMap?: boolean;
   indexRamBundle?: boolean;
   preloadBundles?: string[];
-  config?: RamBundleConfig;
+  minify?: boolean;
+  minifyOptions?: Pick<
+    MinifyOptions,
+    Exclude<keyof MinifyOptions, 'sourceMap'>
+  >;
 };
 
 const variableToString = (value?: string | number) => {
@@ -59,32 +60,27 @@ export default class WebpackRamBundlePlugin {
 
   modules: Module[] = [];
   sourceMap: boolean = false;
-  config: RamBundleConfig = {};
   indexRamBundle: boolean = true;
   preloadBundles: string[];
   bundleName: string = 'index';
   singleBundleMode: boolean = true;
+  minify: boolean = false;
+  minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
 
   constructor({
     sourceMap,
-    config,
     indexRamBundle,
     preloadBundles,
     singleBundleMode,
+    minify,
+    minifyOptions,
   }: WebpackRamBundlePluginOptions) {
-    if (config) {
-      this.config = config;
-      if (config.debug) {
-        this.config.debug = {
-          ...config.debug,
-          path: path.resolve(config.debug.path),
-        };
-      }
-    }
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.preloadBundles = preloadBundles || [];
     this.singleBundleMode = singleBundleMode || this.singleBundleMode;
+    this.minify = minify || this.minify;
+    this.minifyOptions = minifyOptions;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -153,11 +149,9 @@ export default class WebpackRamBundlePlugin {
             webpackModule.id
           )}, ${renderedModule.source});`;
           let map = renderedModule.map;
-          const { enabled = false, ...minifyOptions } =
-            this.config.minification || {};
-          if (enabled) {
+          if (this.minify) {
             const minifiedSource = terser.minify(code, {
-              ...minifyOptions,
+              ...this.minifyOptions,
               sourceMap: {
                 content: renderedModule.map,
               },
@@ -245,15 +239,6 @@ export default class WebpackRamBundlePlugin {
           }
         );
 
-        if (this.config.debug) {
-          this.generateDebugFiles(moduleMappings, bootstrap, {
-            indexRamBundle: this.indexRamBundle,
-            sourceMap: this.sourceMap,
-            outputDest,
-            outputFilename,
-          });
-        }
-
         const bundle = this.indexRamBundle
           ? new IndexRamBundle(bootstrap, this.modules, this.sourceMap)
           : new FileRamBundle(
@@ -288,54 +273,5 @@ export default class WebpackRamBundlePlugin {
         });
       }
     );
-  }
-
-  generateDebugFiles(
-    moduleMappings: ModuleMappings,
-    bootstrapCode: string,
-    extraData: Object
-  ) {
-    if (!this.config.debug) {
-      return;
-    }
-
-    mkdirp.sync(this.config.debug.path);
-    const manifest = {
-      ...extraData,
-      config: this.config,
-      module: {
-        mappings: moduleMappings,
-        count: this.modules.length,
-        stats: this.modules.map(m => ({
-          id: m.id,
-          idx: m.idx,
-          filename: m.filename,
-          length: m.source.length,
-        })),
-      },
-    };
-    fs.writeFileSync(
-      path.join(this.config.debug.path, 'manifest.json'),
-      JSON.stringify(manifest, null, '  ')
-    );
-    if (this.config.debug.renderBootstrap) {
-      fs.writeFileSync(
-        path.join(this.config.debug.path, 'bootstrap.js'),
-        bootstrapCode
-      );
-    }
-    if (this.config.debug.renderModules) {
-      fs.writeFileSync(
-        path.join(this.config.debug.path, 'modules.js'),
-        this.modules
-          .map(
-            m =>
-              `/*** module begin: ${m.filename} ***/\n${
-                m.source
-              }\n/*** module end: ${m.filename} ***/`
-          )
-          .join('\n\n')
-      );
-    }
   }
 }

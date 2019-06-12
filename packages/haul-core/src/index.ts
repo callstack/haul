@@ -1,13 +1,8 @@
 // Preset & project utils
-export { default as createPreset } from './config/createPreset';
-export { default as getProjectConfig } from './config/getProjectConfig';
-export { default as getWebpackConfig } from './config/getWebpackConfig';
-export { default as getProjectConfigPath } from './config/getProjectConfigPath';
-export { default as getRamBundleConfig } from './config/getRamBundleConfig';
 export {
-  default as injectPolyfillsIntoEntry,
-} from './config/injectPolyfillsIntoEntry';
-
+  default as getNormalizedProjectConfigBuilder,
+} from './config/getNormalizedProjectConfigBuilder';
+export { default as getProjectConfigPath } from './config/getProjectConfigPath';
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
 export { default as HasteResolver } from './webpack/resolvers/HasteResolver';
@@ -26,13 +21,14 @@ export {
 } from './constants';
 export {
   EnvOptions,
-  HaulConfigBuilder,
-  HaulConfig,
-  WebpackConfigBuilder,
+  ServerConfig,
+  BundleConfig,
+  NormalizedBundleConfig,
+  WebpackConfigTransform,
+  BundleConfigBuilder,
   ProjectConfig,
-  PresetBuilder,
-  RamBundleConfig,
-  RamBundleDebugOptions,
+  NormalizedProjectConfig,
+  NormalizedProjectConfigBuilder,
 } from './config/types';
 export {
   default as getReactNativeVersion,

@@ -75,15 +75,17 @@ async function createHaulProjectConfig(
   }
 
   const config = dedent`
-    import { createWebpackConfig } from "@haul-bundler/preset-${
+    import { withPolyfills, makeConfig } from "@haul-bundler/preset-${
       version.major
     }.${version.minor}";
 
-    export default {
-      webpack: createWebpackConfig(({ platform }) => ({
-        entry: \`./index.js\`
-      }))
-    };
+    export default makeConfig({
+      bundles: {
+        index: {
+          entry: withPolyfills('./index.js'),
+        },
+      },
+    });
   `;
 
   fs.writeFileSync(path.join(cwd, DEFAULT_CONFIG_FILENAME), config);

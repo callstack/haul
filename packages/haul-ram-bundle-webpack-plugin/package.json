@@ -18,13 +18,11 @@
     "webpack-sources": "^1.3.0"
   },
   "dependencies": {
-    "@haul-bundler/core": "^0.4.2",
-    "mkdirp": "^0.5.1"
+    "@haul-bundler/core": "^0.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@haul-bundler/babel-preset-react-native": "^0.4.2",
-    "@types/mkdirp": "^0.5.2",
     "@types/webpack-sources": "^0.1.5",
     "babel-loader": "^8.0.5",
     "metro": "^0.53.1",

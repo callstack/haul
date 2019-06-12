@@ -1,10 +1,9 @@
-import path from 'path';
 import webpack from 'webpack';
 import {
   getProjectConfigPath,
-  getProjectConfig,
-  getWebpackConfig,
+  getNormalizedProjectConfigBuilder,
   Runtime,
+  EnvOptions,
 } from '@haul-bundler/core';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 
@@ -17,6 +16,8 @@ export type Options = {
   bundleOutput?: string;
   sourcemapOutput?: string;
   progress: string;
+  bundleType: EnvOptions['bundleType'];
+  singleBundleMode: boolean;
 };
 
 export default function prepareWebpackConfig(
@@ -28,44 +29,29 @@ export default function prepareWebpackConfig(
 
   const directory = process.cwd();
   const configPath = getProjectConfigPath(directory, options.config);
-  const projectConfig = getProjectConfig(configPath);
-  const webpackConfig = getWebpackConfig(
-    runtime,
-    {
-      platform: options.platform,
-      root: directory,
-      dev: options.dev,
-      minify: options.minify === undefined ? !options.dev : options.minify,
-      bundle: true,
-      assetsDest: options.assetsDest,
-    },
-    projectConfig
+  const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
+    configPath
   );
+  const projectConfig = normalizedProjectConfigBuilder(runtime, {
+    platform: options.platform,
+    root: directory,
+    dev: options.dev,
+    bundleType: options.bundleType,
+    singleBundleMode: options.singleBundleMode,
+    assetsDest: options.assetsDest,
+    bundleOutput: options.bundleOutput,
+    sourcemapOutput: options.sourcemapOutput,
+    minify: options.minify === undefined ? !options.dev : options.minify,
+    bundle: true,
+  });
 
-  if (options.assetsDest) {
-    webpackConfig.output!.path = path.isAbsolute(options.assetsDest)
-      ? options.assetsDest
-      : path.join(directory, options.assetsDest);
-  }
+  const webpackConfig =
+    projectConfig.webpackConfigs.index || projectConfig.webpackConfigs.main;
 
-  if (options.bundleOutput) {
-    webpackConfig.output!.filename = path.isAbsolute(options.bundleOutput)
-      ? path.relative(webpackConfig.output!.path!, options.bundleOutput)
-      : path.relative(
-          webpackConfig.output!.path!,
-          path.join(directory, options.bundleOutput)
-        );
-  }
-
-  if (options.sourcemapOutput) {
-    webpackConfig.output!.sourceMapFilename = path.isAbsolute(
-      options.sourcemapOutput
-    )
-      ? path.relative(webpackConfig.output!.path!, options.sourcemapOutput)
-      : path.relative(
-          webpackConfig.output!.path!,
-          path.join(directory, options.sourcemapOutput)
-        );
+  if (!webpackConfig) {
+    throw new Error(
+      'Cannot find webpack config `index` nor `main`. Make sure you have bundle config for `index` or `main'
+    );
   }
 
   // Attach progress plugin

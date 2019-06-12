@@ -1,6 +1,8 @@
-import { ProjectConfig } from './types';
+import { NormalizedProjectConfigBuilder } from './types';
 
-export default function getProjectConfig(configPath?: string): ProjectConfig {
+export default function getNormalizedProjectConfigBuilder(
+  configPath?: string
+): NormalizedProjectConfigBuilder {
   let config;
 
   /**
@@ -14,5 +16,5 @@ export default function getProjectConfig(configPath?: string): ProjectConfig {
     config = config.__esModule ? config.default : config;
   }
 
-  return config as ProjectConfig;
+  return config as NormalizedProjectConfigBuilder;
 }
