@@ -7,6 +7,7 @@ import ramBundleCommand from './commands/ramBundle';
 import legacyFallbackCommand from './commands/legacyFallback';
 import reloadCommand from './commands/reload';
 import startCommand from './commands/start';
+import multiBundleCommand from './commands/multiBundle';
 
 export default async function main() {
   const {
@@ -41,6 +42,7 @@ export default async function main() {
     ramBundleCommand,
     reloadCommand,
     startCommand,
+    multiBundleCommand,
     legacyFallbackCommand,
   ]
     .reduce((yargsInstance, commandBuilder) => {

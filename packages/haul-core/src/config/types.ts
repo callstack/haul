@@ -13,7 +13,7 @@ export type EnvOptions = {
   platform: string;
   root: string;
   dev: boolean;
-  bundleType: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
+  bundleType?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
   singleBundleMode: boolean;
   assetsDest?: string;
   bundleOutput?: string;
@@ -36,7 +36,9 @@ export type BundleConfig = {
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
   sourceMap?: boolean | 'inline';
-  dllDependencies?: string[];
+  dll?: boolean;
+  app?: boolean;
+  dependsOn?: string[];
   providesModuleNodeModules?: Array<
     string | { name: string; directory: string }
   >;

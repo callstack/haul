@@ -37,7 +37,6 @@ export default function getDefaultConfig(
     entry,
     output: {
       path: assetsDest || path.join(root),
-      filename: `index.${platform}.bundle`,
       publicPath: `http://${host}:${port}/`,
       globalObject: 'this',
     },
