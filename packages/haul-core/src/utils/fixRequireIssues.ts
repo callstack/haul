@@ -1,14 +1,7 @@
-/**
- * Copyright 2017-present, Callstack.
- * All rights reserved.
- *
- * @noflow
- */
-
-function fixRequireIssue() {
+module.exports = function fixRequireIssue() {
   return {
     visitor: {
-      AssignmentExpression(path) {
+      AssignmentExpression(path: any) {
         if (path.node.operator === '=') {
           const { left } = path.node;
 
@@ -31,6 +24,4 @@ function fixRequireIssue() {
       },
     },
   };
-}
-
-module.exports = fixRequireIssue;
+};

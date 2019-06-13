@@ -4,7 +4,7 @@ import {
   Runtime,
   getProjectConfigPath,
   getNormalizedProjectConfigBuilder,
-  NormalizedProjectConfig,
+  sortBundlesByDependencies,
 } from '@haul-bundler/core';
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
@@ -90,15 +90,6 @@ export default function multiBundleCommand(runtime: Runtime) {
           bundle: true,
         });
 
-        if (
-          !projectConfig.webpackConfigs.index &&
-          !projectConfig.webpackConfigs.host
-        ) {
-          throw new Error(
-            'Cannot find webpack config `index` nor `host`. Make sure you have bundle config for `index` or `host'
-          );
-        }
-
         for (const bundleName of sortBundlesByDependencies(projectConfig)) {
           try {
             const webpackConfig = projectConfig.webpackConfigs[bundleName];
@@ -148,33 +139,4 @@ function build(webpackConfig: webpack.Configuration) {
       }
     })
   );
-}
-
-function sortBundlesByDependencies(
-  projectConfig: NormalizedProjectConfig
-): string[] {
-  const dlls: Set<string> = new Set();
-  let host: string = 'index';
-  const apps: string[] = [];
-
-  const addDllDependencies = (deps: string[]) => {
-    deps.forEach(depName => {
-      addDllDependencies(projectConfig.bundles[depName].dependsOn);
-      dlls.add(depName);
-    });
-  };
-
-  for (const bundleName in projectConfig.bundles) {
-    const { dll, dependsOn } = projectConfig.bundles[bundleName];
-    if (dll) {
-      addDllDependencies(dependsOn);
-      dlls.add(bundleName);
-    } else if (bundleName === 'index' || bundleName === 'host') {
-      host = bundleName;
-    } else {
-      apps.push(bundleName);
-    }
-  }
-
-  return [...dlls.values(), host, ...apps];
 }

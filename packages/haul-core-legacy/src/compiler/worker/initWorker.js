@@ -36,11 +36,11 @@ module.exports = function initWorker({
 
   const outputPath = JSON.parse(options).configOptions.assetsDest;
 
-  webSocket.on('open', () => {
+  webSocket.on('open', async () => {
     let compiler;
 
     try {
-      compiler = runWebpackCompiler({
+      compiler = await runWebpackCompiler({
         platform,
         options,
         fs: {

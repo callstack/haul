@@ -4,7 +4,8 @@
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
   "files": [
-    "build/"
+    "build/",
+    "assets/"
   ],
   "engines": {
     "node": ">=8.x"
@@ -17,6 +18,10 @@
     "react-native": "^0.59.0"
   },
   "dependencies": {
+    "@hapi/hapi": "^18.3.1",
+    "@hapi/joi": "^15.0.3",
+    "@hapi/boom": "^7.4.2",
+    "@hapi/inert": "^5.2.0",
     "@haul-bundler/core-legacy": "^0.5.0-alpha.0",
     "@haul-bundler/inspector-events": "^0.5.0-alpha.0",
     "ansi-fragments": "^0.2.1",
@@ -25,17 +30,24 @@
     "hasha": "^5.0.0",
     "image-size": "^0.7.4",
     "loader-utils": "^1.2.3",
+    "open": "^6.0.0",
+    "open-in-editor": "^2.2.0",
+    "platform-select": "^1.1.2",
     "resolve": "^1.10.1",
     "terser": "^3.17.0",
+    "utility-types": "^3.7.0",
     "webpack": "^4.30.0",
     "ws": "^6.2.1"
   },
   "devDependencies": {
+    "@types/hapi__hapi": "^18.0.2",
+    "@types/hapi__joi": "^15.0.1",
+    "@types/hapi__boom": "^7.4.0",
+    "@types/hapi__inert": "^5.2.0",
     "@types/dedent": "^0.7.0",
     "@types/image-size": "^0.7.0",
     "@types/loader-utils": "^1.1.3",
     "@types/resolve": "^0.0.8",
-    "@types/ws": "^6.0.1",
-    "utility-types": "^3.7.0"
+    "@types/ws": "^6.0.1"
   }
 }

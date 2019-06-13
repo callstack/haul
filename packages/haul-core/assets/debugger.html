@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
 
-  <link rel="icon" type="image/png" href="/haul_icon.ico" />
+  <link rel="icon" type="image/png" href="/assets/haul_icon.ico" />
 
   <title>Haul Debugger</title>
 
@@ -58,7 +58,7 @@
           // This worker will run the application javascript code,
           // making sure that it's run in an environment without a global
           // document, to make it consistent with the JSC executor environment.
-          worker = new Worker('debuggerWorker.js');
+          worker = new Worker('/assets/debuggerWorker.js');
           worker.onmessage = function (message) {
             ws.send(JSON.stringify(message.data));
           };
@@ -277,7 +277,7 @@
 <body>
   <main>
     <div class="logo-haul">
-      <img src="/haul_logo.png" alt="Haul logo">
+      <img src="/assets/haul_logo.png" alt="Haul logo">
     </div>
 
     <div class="status">

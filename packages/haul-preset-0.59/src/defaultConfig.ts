@@ -54,7 +54,7 @@ export default function getDefaultConfig(
                 extends: getBabelConfigPath(root),
                 plugins: [
                   require.resolve(
-                    '@haul-bundler/core-legacy/build/utils/fixRequireIssues'
+                    '@haul-bundler/core/build/utils/fixRequireIssues'
                   ),
                 ],
                 /**

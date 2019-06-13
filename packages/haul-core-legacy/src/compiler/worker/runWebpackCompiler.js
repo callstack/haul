@@ -4,14 +4,18 @@
  *
  * @flow
  */
-import { getNormalizedProjectConfigBuilder, Runtime } from '@haul-bundler/core';
+import {
+  sortBundlesByDependencies,
+  getNormalizedProjectConfigBuilder,
+  Runtime,
+} from '@haul-bundler/core';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
 
 const Events = require('../events');
 
-module.exports = function runWebpackCompiler({
+module.exports = async function runWebpackCompiler({
   platform,
   options,
   fs,
@@ -42,27 +46,51 @@ module.exports = function runWebpackCompiler({
     ...configOptions,
     platform,
   });
-  const config =
-    projectConfig.webpackConfigs.index || projectConfig.webpackConfigs.main;
 
-  let lastPercent = -1;
+  const apps = [];
+  const bundles = sortBundlesByDependencies(projectConfig);
+  let totalProgress = 0;
+  let bundlesBuilt = 0;
 
-  /**
-   * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
-   */
-  const compiler = webpack({
-    ...config,
-    plugins: [
-      ...config.plugins,
-      new webpack.ProgressPlugin(percent => {
-        const newPercent = percent.toFixed(2);
-        if (newPercent !== lastPercent) {
-          lastPercent = newPercent;
-          emitter.emit(Events.BUILD_PROGRESS, { progress: newPercent });
-        }
-      }),
-    ],
-  });
+  for (const bundleName of bundles) {
+    let config = projectConfig.webpackConfigs[bundleName];
+    /**
+     * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
+     */
+    let lastLocalProgress = 0;
+    config = {
+      ...config,
+      plugins: [
+        ...config.plugins,
+        new webpack.ProgressPlugin(localProgress => {
+          if (lastLocalProgress !== localProgress) {
+            totalProgress = (bundlesBuilt + localProgress) / bundles.length;
+            if (localProgress === 1) {
+              bundlesBuilt++;
+            }
+            emitter.emit(Events.BUILD_PROGRESS, { progress: totalProgress });
+            lastLocalProgress = localProgress;
+          }
+        }),
+      ],
+    };
+
+    if (projectConfig.bundles[bundleName].dll) {
+      await new Promise((resolve, reject) =>
+        webpack(config).run(err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        })
+      );
+    } else {
+      apps.push(config);
+    }
+  }
+
+  const compiler = webpack(apps);
 
   // As of Webpack 4.12.0, |outputFileSystem| must be set since there is no
   // fallback despite the documentation stating otherwise.
@@ -76,13 +104,6 @@ module.exports = function runWebpackCompiler({
     },
   });
 
-  compiler.hooks.failed.intercept({
-    call: message => {
-      console.log(message); // save whole error with stack trace into artifacts
-      emitter.emit(Events.BUILD_FAILED, { message: message.toString() });
-    },
-  });
-
   compiler.hooks.invalid.intercept({
     tap() {
       emitter.emit(Events.BUILD_START);
@@ -90,7 +111,12 @@ module.exports = function runWebpackCompiler({
   });
 
   emitter.on('start', () => {
-    compiler.watch(config.watchOptions || {}, () => {});
+    compiler.run(error => {
+      if (error) {
+        console.log(error); // save whole error with stack trace into artifacts
+        emitter.emit(Events.BUILD_FAILED, { message: error.toString() });
+      }
+    });
     emitter.emit(Events.BUILD_START);
   });
 

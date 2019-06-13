@@ -69,7 +69,7 @@ export default function makeConfig(
       });
 
       // Tweak bundle when creating static bundle
-      if (env.bundle && normalizedBundleConfig.type === 'basic-bundle') {
+      if (normalizedBundleConfig.type === 'basic-bundle') {
         (webpackConfig.plugins as webpack.Plugin[]).push(
           new BasicBundleWebpackPlugin({
             bundle: Boolean(env.bundle),

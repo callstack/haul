@@ -3,10 +3,19 @@ import {
   DEFAULT_PORT,
   DEFAULT_CONFIG_FILENAME,
   INTERACTIVE_MODE_DEFAULT,
+  getProjectConfigPath,
+  getNormalizedProjectConfigBuilder,
+  Server,
 } from '@haul-bundler/core';
 import { Runtime } from '@haul-bundler/core';
+import inquirer from 'inquirer';
+import net from 'net';
+import { exec } from 'child_process';
+import path from 'path';
+import os from 'os';
+import fs from 'fs';
 
-export default function startCommand(runtime: Runtime): yargs.CommandModule {
+export default function startCommand(runtime: Runtime) {
   return {
     command: 'start',
     describe: 'Starts a new webpack server',
@@ -16,21 +25,18 @@ export default function startCommand(runtime: Runtime): yargs.CommandModule {
         default: DEFAULT_PORT,
         type: 'number',
       },
-      d: {
-        alias: 'dev',
+      dev: {
         description: 'Whether to build in development mode',
         default: true,
         type: 'boolean',
       },
-      n: {
-        alias: 'no-interactive',
+      'no-interactive': {
         description:
           'Disables prompting the user if the port is already in use',
         default: !INTERACTIVE_MODE_DEFAULT,
         type: 'boolean',
       },
-      m: {
-        alias: 'minify',
+      minify: {
         description: `Whether to minify the bundle, 'true' by default when dev=false`,
         type: 'boolean',
       },
@@ -49,24 +55,9 @@ export default function startCommand(runtime: Runtime): yargs.CommandModule {
         default: 'false',
         type: 'string',
       },
-      r: {
-        alias: 'hotReloading',
-        description: 'Enables hot reloading',
-        default: true,
-        type: 'boolean',
-      },
     },
-    async handler(argv: yargs.Arguments) {
-      const {
-        port,
-        dev,
-        'no-interactive': noInteractive,
-        minify,
-        assetsDest,
-        config,
-        eager,
-        hotReloading,
-      } = (argv as unknown) as {
+    async handler(
+      argv: yargs.Arguments<{
         port: number;
         dev: boolean;
         'no-interactive'?: boolean;
@@ -74,36 +65,164 @@ export default function startCommand(runtime: Runtime): yargs.CommandModule {
         assetsDest?: string;
         config: string;
         eager: string;
-        hotReloading: boolean;
-      };
-
-      let exitCode = 0;
-
+      }>
+    ) {
       let parsedEager;
-      const list = (eager || '').split(',').map(item => item.trim());
+      const list = (argv.eager || '').split(',').map(item => item.trim());
       if (list.length === 1 && (list[0] === 'true' || list[0] === 'false')) {
-        parsedEager = list[0] === 'true' ? true : false;
+        parsedEager = list[0] === 'true' ? ['ios', 'android'] : [];
       } else {
         parsedEager = list;
       }
 
-      try {
-        require('@haul-bundler/core-legacy/build/commands/start').action({
-          port,
-          dev,
-          no_interactive: noInteractive,
-          minify: minify === undefined ? !dev : minify,
+      const directory = process.cwd();
+
+      let assetsDest;
+      if (argv.assetsDest) {
+        assetsDest = path.isAbsolute(argv.assetsDest)
+          ? argv.assetsDest
+          : path.join(directory, argv.assetsDest);
+      } else {
+        assetsDest = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
+      }
+
+      const configPath = getProjectConfigPath(directory, argv.config);
+      const projectConfig = getNormalizedProjectConfigBuilder(configPath)(
+        runtime,
+        {
+          platform: '',
+          root: directory,
+          dev: argv.dev,
+          singleBundleMode: false,
           assetsDest,
-          config,
+          minify: argv.minify === undefined ? !argv.dev : argv.minify,
+          bundle: false,
+        }
+      );
+
+      try {
+        const isTaken = await isPortTaken(
+          projectConfig.server.port,
+          projectConfig.server.host
+        );
+        if (isTaken) {
+          if (!argv.noInteractive) {
+            const { userChoice } = await inquirer.prompt({
+              type: 'list',
+              name: 'userChoice',
+              message: `Port ${
+                projectConfig.server.port
+              } is already in use. What should we do?`,
+              choices: [
+                `Kill process using port ${
+                  projectConfig.server.port
+                } and start Haul`,
+                'Quit',
+              ],
+            });
+            if (userChoice === 'Quit') {
+              runtime.complete(0);
+            }
+            try {
+              await killProcess(projectConfig.server.port);
+            } catch (e) {
+              runtime.logger.error(
+                `Could not kill process! Reason: \n ${e.message}`
+              );
+              runtime.complete(1);
+            }
+            runtime.logger.info(`Successfully killed processes.`);
+          } else {
+            runtime.logger.error(
+              `Could not spawn process! Reason: Port ${
+                projectConfig.server.port
+              } already in use.`
+            );
+            runtime.complete(1);
+          }
+        }
+
+        new Server(runtime, configPath, {
+          dev: argv.dev,
+          noInteractive: Boolean(argv.noInteractive),
+          minify: argv.minify === undefined ? !argv.dev : argv.minify,
+          assetsDest,
+          root: directory,
           eager: parsedEager,
-          hotReloading,
-        });
+        }).listen(projectConfig.server.host, projectConfig.server.port);
+
+        runtime.complete(0);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
-        exitCode = 1;
-      } finally {
-        runtime.complete(exitCode);
+        runtime.complete(1);
       }
     },
   };
+}
+
+/*
+ * Check if the port is already in use
+ */
+function isPortTaken(port: number, host: string): Promise<boolean> {
+  return new Promise(resolve => {
+    const portTester = net
+      .createServer()
+      .once('error', () => {
+        return resolve(true);
+      })
+      .once('listening', () => {
+        portTester.close();
+        resolve(false);
+      })
+      .listen(port, host);
+  });
+}
+
+function killProcess(port: number): Promise<boolean> {
+  /*
+   * Based on platform, decide what service
+   * should be used to find process PID
+   */
+  const serviceToUse =
+    process.platform === 'win32'
+      ? `netstat -ano | findstr :${port}`
+      : `lsof -n -i:${port} | grep LISTEN`;
+
+  return new Promise(resolve => {
+    /*
+     * Find PID that is listening at given port
+     */
+    exec(serviceToUse, (error, stdout) => {
+      if (error) {
+        /*
+         * Error happens if no process found at given port
+         */
+        resolve(false);
+        return;
+      }
+      /*
+       * If no error, port is in use
+       * And that port is used only by one process
+       */
+      const PIDInfo = stdout
+        .trim()
+        .split('\n')[0]
+        .split(' ')
+        .filter(entry => entry);
+
+      /* macOSX/Linux: PID is placed at index 1
+       * Windows: PID is placed at last index
+       */
+      const index = process.platform === 'win32' ? PIDInfo.length - 1 : 1;
+
+      const PID = PIDInfo[index];
+
+      /*
+       * Kill process
+       */
+      process.kill(parseInt(PID, 10), 9);
+
+      resolve(true);
+    });
+  });
 }

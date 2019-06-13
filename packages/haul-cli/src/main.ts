@@ -4,7 +4,6 @@ import { Runtime, InspectorClient } from '@haul-bundler/core';
 import initCommand from './commands/init';
 import bundleCommand from './commands/bundle';
 import ramBundleCommand from './commands/ramBundle';
-import legacyFallbackCommand from './commands/legacyFallback';
 import reloadCommand from './commands/reload';
 import startCommand from './commands/start';
 import multiBundleCommand from './commands/multiBundle';
@@ -43,7 +42,6 @@ export default async function main() {
     reloadCommand,
     startCommand,
     multiBundleCommand,
-    legacyFallbackCommand,
   ]
     .reduce((yargsInstance, commandBuilder) => {
       const commandModule = commandBuilder(runtime) as yargs.CommandModule;

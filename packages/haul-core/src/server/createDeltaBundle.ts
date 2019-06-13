@@ -1,18 +1,11 @@
-/**
- * Copyright 2017-present, Callstack.
- * All rights reserved.
- *
- * @flow
- */
-
 // The delta format is implemented in com.facebook.react.devsupport.BundleDeltaClient
 type DeltaModuleEntry = [number, string | null];
-type DeltaModuleMap = DeltaModuleEntry[];
+type DeltaModuleMap = DeltaModuleEntry[] | string;
 type DeltaBundleObject = {
-  id?: string,
-  pre?: DeltaModuleMap,
-  delta?: DeltaModuleMap,
-  post?: DeltaModuleMap,
+  id?: string;
+  pre?: DeltaModuleMap;
+  modules?: DeltaModuleMap;
+  post?: DeltaModuleMap;
 };
 
 // The logic it uses is quite simple: the app keeps an initially empty copy of this data:
@@ -69,7 +62,7 @@ type DeltaBundleObject = {
 // asset and module hashes in the same way, but it would probably not help
 // that much unless network transfer time is the limiting factor?
 
-module.exports = function createDeltaBundle(source: string) {
+export default function createDeltaBundle(source: string) {
   // pre and post has to be declared, if not,
   // app will crash when Android tries to write null to file
   const deltaObject: DeltaBundleObject = {
@@ -79,4 +72,4 @@ module.exports = function createDeltaBundle(source: string) {
   };
 
   return Buffer.from(JSON.stringify(deltaObject));
-};
+}
