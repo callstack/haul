@@ -2,6 +2,7 @@ import React from 'react';
 import { render, Color, Box, Text } from 'ink';
 import { EventEmitter } from 'events';
 import { inspect } from 'util';
+import throttle from 'lodash.throttle';
 import {
   LOG,
   RESPONSE_FAILED,
@@ -14,6 +15,23 @@ import {
 } from './events';
 import Logger from '../runtime/Logger';
 
+type Log =
+  | {
+      timestamp: number;
+      level: string;
+      args: any[];
+      type: 'runtimeLog';
+      key: number;
+    }
+  | {
+      timestamp: number;
+      method: string;
+      url: string;
+      statusCode: number;
+      extra: string[];
+      type: 'requestResponse';
+      key: number;
+    };
 type State = {
   windowHeight: number;
   compilations: {
@@ -22,22 +40,7 @@ type State = {
       running: boolean;
     };
   };
-  logs: Array<
-    | {
-        timestamp: number;
-        level: string;
-        args: any[];
-        type: 'runtimeLog';
-      }
-    | {
-        timestamp: number;
-        method: string;
-        url: string;
-        statusCode: number;
-        extra: string[];
-        type: 'requestResponse';
-      }
-  >;
+  logs: Log[];
 };
 
 export default function renderUI(
@@ -53,66 +56,57 @@ export default function renderUI(
 
     componentDidMount() {
       let index = 0;
-      this.props.serverEvents.on(LOG, ({ level, args }) => {
+      const pushLog = (log: Log) => {
         this.setState(state => ({
-          logs: [
-            ...state.logs,
-            {
-              timestamp: Date.now() + index++,
-              level,
-              args,
-              type: 'runtimeLog',
-            },
-          ],
+          logs: [...state.logs, log].slice(-100),
         }));
+      };
+
+      const makeCommonLogData = () => ({
+        timestamp: Date.now(),
+        key: Date.now() + index,
+      });
+
+      this.props.serverEvents.on(LOG, ({ level, args }) => {
+        pushLog({
+          level,
+          args,
+          type: 'runtimeLog',
+          ...makeCommonLogData(),
+        });
       });
 
       this.props.serverEvents.on(REQUEST_FAILED, ({ request, event }) => {
-        this.setState(state => ({
-          logs: [
-            ...state.logs,
-            {
-              timestamp: Date.now() + index++,
-              method: request.method,
-              url: request.path,
-              statusCode: request.response.statusCode,
-              extra: event,
-              type: 'requestResponse',
-            },
-          ],
-        }));
+        pushLog({
+          method: request.method,
+          url: request.path,
+          statusCode: request.response.statusCode,
+          extra: event,
+          type: 'requestResponse',
+          ...makeCommonLogData(),
+        });
       });
 
       this.props.serverEvents.on(RESPONSE_FAILED, ({ request }) => {
-        this.setState(state => ({
-          logs: [
-            ...state.logs,
-            {
-              timestamp: Date.now() + index++,
-              method: request.method,
-              url: request.path,
-              statusCode: request.response.statusCode,
-              type: 'requestResponse',
-              extra: [],
-            },
-          ],
-        }));
+        pushLog({
+          method: request.method,
+          url: request.path,
+          statusCode: request.response.statusCode,
+          type: 'requestResponse',
+          extra: [],
+          ...makeCommonLogData(),
+        });
       });
 
       this.props.serverEvents.on(RESPONSE_COMPLETE, ({ request }) => {
-        this.setState(state => ({
-          logs: [
-            ...state.logs,
-            {
-              timestamp: Date.now() + index++,
-              method: request.method,
-              url: request.path,
-              statusCode: request.response.statusCode,
-              type: 'requestResponse',
-              extra: [],
-            },
-          ],
-        }));
+        pushLog({
+          method: request.method,
+          url: request.path,
+          statusCode: request.response.statusCode,
+          type: 'requestResponse',
+          extra: [],
+          ...makeCommonLogData(),
+        });
       });
 
       this.props.serverEvents.on(COMPILATION_START, ({ platform }) => {
@@ -129,17 +123,17 @@ export default function renderUI(
 
       this.props.serverEvents.on(
         COMPILATION_PROGRESS,
-        ({ platform, progress }) => {
+        throttle(({ platform, progress }) => {
           this.setState(state => ({
             compilations: {
               ...state.compilations,
               [platform]: {
                 running: true,
-                progress,
+                progress: Math.max(Math.min(progress, 1), 0),
               },
             },
           }));
-        }
+        }, 20)
       );
 
       this.props.serverEvents.on(
@@ -158,10 +152,10 @@ export default function renderUI(
               {
                 level: Logger.Level.Error,
                 args: [message],
-                timestamp: Date.now() + index++,
                 type: 'runtimeLog',
-              },
-            ],
+                ...makeCommonLogData(),
+              } as Log,
+            ].slice(-100),
           }));
         }
       );
@@ -182,10 +176,10 @@ export default function renderUI(
               ...errors.map((error: string) => ({
                 level: Logger.Level.Error,
                 args: [error],
-                timestamp: Date.now() + index++,
                 type: 'runtimeLog',
+                ...makeCommonLogData(),
               })),
-            ],
+            ].slice(-100),
           }));
         }
       );
@@ -238,16 +232,12 @@ export default function renderUI(
             {this.state.logs.slice(-logsRenderLength).map(log => {
               if (log.type === 'runtimeLog') {
                 return (
-                  <RuntimeLog
-                    key={log.timestamp}
-                    level={log.level}
-                    args={log.args}
-                  />
+                  <RuntimeLog key={log.key} level={log.level} args={log.args} />
                 );
               } else if (log.type === 'requestResponse') {
                 return (
                   <RequestResponseLog
-                    key={log.timestamp}
+                    key={log.key}
                     method={log.method}
                     url={log.url}
                     statusCode={log.statusCode}

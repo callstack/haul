@@ -20,6 +20,7 @@ import {
   RESPONSE_FAILED,
   LOG,
 } from './events';
+import setupLiveReload from './setupLiveReload';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
@@ -127,9 +128,9 @@ export default class Server {
       }
     });
 
-    // // live reload
     // // symbolicate
     // // debugger worker
+    setupLiveReload(this.runtime, server, this.compiler);
     setupDevtoolRoutes(this.runtime, server, {
       isDebuggerConnected: () => true, // TODO: use debugger worker socket
     });
