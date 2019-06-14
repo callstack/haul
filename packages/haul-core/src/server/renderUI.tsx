@@ -2,7 +2,6 @@ import React from 'react';
 import { render, Color, Box, Text } from 'ink';
 import { EventEmitter } from 'events';
 import { inspect } from 'util';
-import { terminal, tty } from 'terminal-kit';
 import {
   LOG,
   RESPONSE_FAILED,
@@ -47,7 +46,7 @@ export default function renderUI(
 ) {
   class Root extends React.Component<{ serverEvents: EventEmitter }, State> {
     state: State = {
-      windowHeight: tty.getOutput().rows,
+      windowHeight: process.stdout.rows!,
       compilations: {},
       logs: [],
     };

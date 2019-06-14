@@ -9,12 +9,25 @@ const { runHaul } = require('../runHaul');
 const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
+const net = require('net');
 const { run, yarnCommand } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
-const {
-  isPortTaken,
-} = require('../../packages/haul-core-legacy/src/utils/haulPortHandler');
+
+function isPortTaken(port: number, host: string): Promise<boolean> {
+  return new Promise(resolve => {
+    const portTester = net
+      .createServer()
+      .once('error', () => {
+        return resolve(true);
+      })
+      .once('listening', () => {
+        portTester.close();
+        resolve(false);
+      })
+      .listen(port, host);
+  });
+}
 
 const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
 const TEST_PROJECT_DIR = path.resolve(
