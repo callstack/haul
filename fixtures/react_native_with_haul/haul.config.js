@@ -4,6 +4,7 @@ export default makeConfig({
   bundles: {
     index: {
       entry: withPolyfills('./index.js'),
+      sourceMap: true,
       transform({ config }) {
         return {
           ...config,

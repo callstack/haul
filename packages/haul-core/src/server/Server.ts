@@ -21,6 +21,7 @@ import {
   LOG,
 } from './events';
 import setupLiveReload from './setupLiveReload';
+import setupSymbolication from './setupSymbolication';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
@@ -130,6 +131,7 @@ export default class Server {
 
     // // symbolicate
     // // debugger worker
+    setupSymbolication(this.runtime, server);
     setupLiveReload(this.runtime, server, this.compiler);
     setupDevtoolRoutes(this.runtime, server, {
       isDebuggerConnected: () => true, // TODO: use debugger worker socket
