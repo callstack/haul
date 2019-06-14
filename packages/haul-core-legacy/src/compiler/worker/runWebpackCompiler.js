@@ -113,7 +113,6 @@ module.exports = async function runWebpackCompiler({
   emitter.on('start', () => {
     compiler.watch({}, error => {
       if (error) {
-        console.log(error); // save whole error with stack trace into artifacts
         emitter.emit(Events.BUILD_FAILED, { message: error.toString() });
       }
     });

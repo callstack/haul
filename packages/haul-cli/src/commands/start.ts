@@ -150,8 +150,6 @@ export default function startCommand(runtime: Runtime) {
           root: directory,
           eager: parsedEager,
         }).listen(projectConfig.server.host, projectConfig.server.port);
-
-        runtime.complete(0);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         runtime.complete(1);
@@ -220,7 +218,7 @@ function killProcess(port: number): Promise<boolean> {
       /*
        * Kill process
        */
-      process.kill(parseInt(PID, 10), 9);
+      process.kill(parseInt(PID, 10), 'SIGKILL');
 
       resolve(true);
     });

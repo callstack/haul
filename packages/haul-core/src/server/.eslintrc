@@ -1,0 +1,6 @@
+{
+  "extends": "@callstack/eslint-config",
+  "rules": {
+    "react-native/no-raw-text": 0
+  }
+}

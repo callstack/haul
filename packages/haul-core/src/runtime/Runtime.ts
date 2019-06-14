@@ -4,6 +4,7 @@ import {
   RuntimeUnhandledErrorEvent,
   RuntimeNodeInspectorStartedEvent,
 } from '@haul-bundler/inspector-events';
+import { terminal } from 'terminal-kit';
 import InspectorClient from './InspectorClient';
 import Logger from './Logger';
 
@@ -47,10 +48,10 @@ export default class Runtime {
   }
 
   complete(exitCode: number = 0) {
-    process.exitCode = exitCode;
     if (this.inspectorClient) {
       this.inspectorClient.emitEvent(new RuntimeCompleteEvent(exitCode));
       this.inspectorClient.close();
     }
+    terminal.processExit(exitCode);
   }
 }

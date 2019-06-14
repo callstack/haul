@@ -1,14 +1,25 @@
 import { EnvOptions } from '../config/types';
 import { Assign } from 'utility-types';
 import Hapi from '@hapi/hapi';
-import Joi from '@hapi/joi';
-import Boom from '@hapi/boom';
+import { EventEmitter } from 'events';
 // @ts-ignore
 import Compiler from '@haul-bundler/core-legacy/build/compiler/Compiler';
+import { terminal } from 'terminal-kit';
 import Runtime from '../runtime/Runtime';
-import runAdbReverse from '../utils/runAdbReverse';
-import createDeltaBundle from './createDeltaBundle';
 import setupDevtoolRoutes from './setupDevtoolRoutes';
+import setupCompilerRoutes from './setupCompilerRoutes';
+import renderUI from './renderUI';
+import {
+  EAGER_COMPILATION_REQUEST,
+  COMPILATION_START,
+  COMPILATION_PROGRESS,
+  COMPILATION_FAILED,
+  COMPILATION_FINISHED,
+  REQUEST_FAILED,
+  RESPONSE_COMPLETE,
+  RESPONSE_FAILED,
+  LOG,
+} from './events';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
@@ -17,6 +28,9 @@ type ServerEnvOptions = Assign<
 
 export default class Server {
   compiler: any;
+  serverEvents = new EventEmitter();
+  server: Hapi.Server | undefined;
+  resetConsole = () => {};
 
   constructor(
     private runtime: Runtime,
@@ -24,98 +38,67 @@ export default class Server {
     private options: ServerEnvOptions
   ) {}
 
-  makeCompilerRoute(port: number): Hapi.ServerRoute {
-    let hasRunAdbReverse = false;
-    let hasWarnedDelta = false;
-
-    const bundleRegex = /^([^.]+)(\.\w+)?\.(bundle|delta)$/;
-
-    return {
-      method: 'GET',
-      path: '/{any*}',
-      options: {
-        validate: {
-          query: {
-            platform: Joi.string(),
-            minify: Joi.boolean(),
-            dev: Joi.boolean(),
-          },
-        },
-      },
-      handler: async (request, h) => {
-        if (!bundleRegex.test(request.path)) {
-          return new Promise(resolve => {
-            const filename = request.path;
-            this.compiler.emit(Compiler.Events.REQUEST_FILE, {
-              filename,
-              callback: (result: {
-                file?: any;
-                errors: string[];
-                mimeType: string;
-              }) => {
-                resolve(
-                  makeResponseFromCompilerResults(h, filename, '', result)
-                );
-              },
-            });
-          });
-        } else {
-          let [, bundleName, platform, bundleType] = bundleRegex.exec(
-            request.path
-          ) || ['', '', '', ''];
-          if (platform) {
-            platform = platform.slice(1);
-          } else {
-            platform = request.query.platform as string;
-          }
-
-          if (!hasRunAdbReverse && platform === 'android') {
-            await runAdbReverse(this.runtime, port);
-            hasRunAdbReverse = true;
-          }
-
-          if (bundleType === 'delta' && !hasWarnedDelta) {
-            this.runtime.logger.warn(
-              'Your app requested a delta bundle, this has minimal support in Haul'
-            );
-            hasWarnedDelta = true;
-          }
-
-          return new Promise(resolve => {
-            const filename = `${bundleName}.${platform}.bundle`;
-            this.compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
-              filename,
-              platform,
-              callback: (result: {
-                file?: any;
-                errors: string[];
-                mimeType: string;
-              }) => {
-                resolve(
-                  makeResponseFromCompilerResults(
-                    h,
-                    filename,
-                    bundleType,
-                    result
-                  )
-                );
-              },
-            });
-          });
-        }
-      },
-    };
-  }
-
-  makeLiveReloadRoutes(): Hapi.ServerRoute[] {
-    return [];
-  }
-
-  async listen(host: string, port: number) {
-    this.compiler = new Compiler({
+  createCompiler() {
+    const compiler = new Compiler({
       configPath: this.configPath,
       configOptions: this.options,
     });
+
+    compiler.on(
+      Compiler.Events.BUILD_START,
+      ({ platform }: { platform: string }) => {
+        this.serverEvents.emit(COMPILATION_START, { platform });
+      }
+    );
+
+    compiler.on(
+      Compiler.Events.BUILD_PROGRESS,
+      ({ progress, platform }: { platform: string; progress: number }) => {
+        this.serverEvents.emit(COMPILATION_PROGRESS, { platform, progress });
+      }
+    );
+
+    compiler.on(
+      Compiler.Events.BUILD_FAILED,
+      ({ platform, message }: { platform: string; message: string }) => {
+        this.serverEvents.emit(COMPILATION_FAILED, { platform, message });
+      }
+    );
+
+    compiler.on(
+      Compiler.Events.BUILD_FINISHED,
+      ({ platform, errors }: { platform: string; errors: string[] }) => {
+        this.serverEvents.emit(COMPILATION_FINISHED, { platform, errors });
+      }
+    );
+
+    return compiler;
+  }
+
+  attachProcessEventsListeners() {
+    const createListener = (exitCode: number) => (error: any) => {
+      this.resetConsole();
+      if (error) {
+        this.runtime.logger.error(error);
+      }
+      this.compiler.terminate();
+      terminal.fullscreen(false); // switch back to main screen buffer
+      this.runtime.complete(exitCode);
+    };
+
+    process.on('uncaughtException', createListener(1));
+    process.on('unhandledRejection', createListener(1));
+    process.on('SIGINT', createListener(0));
+    process.on('SIGTERM', createListener(2));
+  }
+
+  async listen(host: string, port: number) {
+    this.runtime.logger.proxy((level, ...args) => {
+      this.serverEvents.emit(LOG, { level, args });
+    });
+    this.resetConsole = this.hijackConsole();
+    this.compiler = this.createCompiler();
+    this.attachProcessEventsListeners();
 
     const server = new Hapi.Server({
       port,
@@ -127,131 +110,65 @@ export default class Server {
 
     await server.register(require('@hapi/inert'));
 
-    process.on('uncaughtException', async err => {
-      this.runtime.logger.error(err);
-      this.compiler.terminate();
-      await server.stop();
-      this.runtime.complete(1);
-    });
-
-    process.on('unhandledRejection', async err => {
-      this.runtime.logger.error(err);
-      this.compiler.terminate();
-      await server.stop();
-      this.runtime.complete(1);
-    });
-
-    process.on('SIGINT', async () => {
-      this.compiler.terminate();
-      await server.stop();
-      this.runtime.complete(0);
-    });
-
-    process.on('SIGTERM', async () => {
-      this.compiler.terminate();
-      await server.stop();
-      this.runtime.complete(2);
-    });
-
     server.events.on(
       { name: 'request', channels: 'error' },
       (request, event) => {
-        this.runtime.logger.error(
-          `${this.runtime.logger.enhanceWithModifier(
-            'bold',
-            request.method.toUpperCase()
-          )} ${request.path} failed: ${this.runtime.logger.enhanceWithColor(
-            'red',
-            event.tags
-          )}`
-        );
+        this.serverEvents.emit(REQUEST_FAILED, { request, event });
       }
     );
 
     server.events.on('response', request => {
-      if (request.path !== '/status' && 'statusCode' in request.response) {
-        const platform = request.query.platform
-          ? this.runtime.logger.enhanceWithColor(
-              'blue',
-              `[${request.query.platform}]`
-            )
-          : '';
-
-        const message = `${this.runtime.logger.enhanceWithModifier(
-          'bold',
-          request.method.toUpperCase()
-        )} ${
-          request.path
-        } ${platform} - ${this.runtime.logger.enhanceWithModifier(
-          'dim',
-          request.response.statusCode
-        )}`;
-
-        if (request.response.statusCode < 300) {
-          this.runtime.logger.done(message);
-        } else if (request.response.statusCode < 400) {
-          this.runtime.logger.warn(message);
+      if ('statusCode' in request.response) {
+        if (request.response.statusCode < 400) {
+          this.serverEvents.emit(RESPONSE_COMPLETE, { request });
         } else {
-          this.runtime.logger.error(message);
+          this.serverEvents.emit(RESPONSE_FAILED, { request });
         }
       }
     });
 
-    // live reload
-    // symbolicate
-    // debugger worker
-    server.route(this.makeLiveReloadRoutes());
+    // // live reload
+    // // symbolicate
+    // // debugger worker
     setupDevtoolRoutes(this.runtime, server, {
       isDebuggerConnected: () => true, // TODO: use debugger worker socket
     });
-    server.route(this.makeCompilerRoute(port));
+    setupCompilerRoutes(this.runtime, server, this.compiler, { port });
 
     await server.start();
-    this.runtime.logger.done(`Packager server running on ${server.info.uri}`);
+    terminal.fullscreen(true); // Switch to alternate screen buffer
+    renderUI(this.serverEvents, { port, host });
+
+    setTimeout(() => {
+      this.runtime.logger.info('random log');
+    }, 1000);
 
     this.options.eager.forEach(platform => {
+      this.serverEvents.emit(EAGER_COMPILATION_REQUEST, { platform });
       this.compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
-        filename: `/index.${platform}.bundle`, // NOTE: maybe the entry bundle is arbitary
+        filename: `/index.${platform}.bundle`, // NOTE: maybe the entry bundle is arbitrary
         platform,
         callback() {},
       });
     });
   }
-}
 
-function makeResponseFromCompilerResults(
-  h: Hapi.ResponseToolkit,
-  filename: string,
-  bundleType: string,
-  result: {
-    file?: any;
-    errors: string[];
-    mimeType: string;
-  }
-) {
-  if (result.errors) {
-    return Boom.badImplementation(`File ${filename} not found`);
-  } else if (!result.file) {
-    return Boom.notFound(`File ${filename} not found`);
-  }
+  hijackConsole() {
+    /* eslint-disable no-console */
+    const log = console.log;
+    const error = console.error;
 
-  let file;
-  if (bundleType === 'delta') {
-    // We have a bundle, but RN is expecting a delta bundle.
-    // Convert full bundle into the simplest delta possible.
-    // This will load slower in RN, but it won't error, which is
-    // nice for automated use-cases where changing the dev setting
-    // is not possible.
-    file = createDeltaBundle(result.file.toString());
-  } else {
-    file =
-      result.file.type === 'Buffer'
-        ? Buffer.from(result.file.data)
-        : result.file;
-  }
+    console.log = (...args) => {
+      this.serverEvents.emit(LOG, { level: 'info', args });
+    };
+    console.error = (...args) => {
+      this.serverEvents.emit(LOG, { level: 'error', args });
+    };
 
-  return h
-    .response(file.toString())
-    .type(result.mimeType)
-    .code(200);
+    return () => {
+      console.log = log;
+      console.error = error;
+    };
+    /* eslint-enable no-console */
+  }
 }
