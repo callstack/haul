@@ -79,19 +79,25 @@ export default class Server {
 
   attachProcessEventsListeners() {
     const createListener = (exitCode: number) => (error: any) => {
-      this.resetConsole();
-      if (error) {
-        this.runtime.logger.error(error);
-      }
-      this.compiler.terminate();
-      terminal.fullscreen(false); // switch back to main screen buffer
-      this.runtime.complete(exitCode);
+      this.exit(exitCode, error);
     };
 
     process.on('uncaughtException', createListener(1));
     process.on('unhandledRejection', createListener(1));
     process.on('SIGINT', createListener(0));
     process.on('SIGTERM', createListener(2));
+  }
+
+  exit(exitCode: number, error: any | undefined) {
+    this.resetConsole();
+    if (error) {
+      this.runtime.logger.error(error);
+    }
+    this.compiler.terminate();
+    if (!this.options.noInteractive) {
+      terminal.fullscreen(false); // switch back to main screen buffer
+    }
+    this.runtime.complete(exitCode);
   }
 
   async listen(host: string, port: number) {
@@ -143,8 +149,10 @@ export default class Server {
     });
 
     await server.start();
-    terminal.fullscreen(true); // Switch to alternate screen buffer
-    renderUI(this.serverEvents, { port, host });
+    if (!this.options.noInteractive) {
+      terminal.fullscreen(true); // Switch to alternate screen buffer
+      renderUI(this.serverEvents, { port, host });
+    }
 
     this.options.eager.forEach(platform => {
       this.serverEvents.emit(EAGER_COMPILATION_REQUEST, { platform });
@@ -157,6 +165,10 @@ export default class Server {
   }
 
   hijackConsole() {
+    if (this.options.noInteractive) {
+      return () => {};
+    }
+
     /* eslint-disable no-console */
     const log = console.log;
     const error = console.error;

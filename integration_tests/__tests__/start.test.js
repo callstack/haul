@@ -5,78 +5,54 @@
  * @flow
  */
 
-const { runHaul } = require('../runHaul');
 const { cleanup } = require('../utils');
 const path = require('path');
 const os = require('os');
-const net = require('net');
-const { run, yarnCommand } = require('../utils');
 const fetch = require('node-fetch');
 const stripAnsi = require('strip-ansi');
+const { spawn } = require('child_process');
 
-function isPortTaken(port: number, host: string): Promise<boolean> {
-  return new Promise(resolve => {
-    const portTester = net
-      .createServer()
-      .once('error', () => {
-        return resolve(true);
-      })
-      .once('listening', () => {
-        portTester.close();
-        resolve(false);
-      })
-      .listen(port, host);
-  });
-}
-
-const TEMP_DIR = path.resolve(os.tmpdir(), 'start_test');
+const TEMP_DIR = path.join(os.tmpdir(), 'haul-start-');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
   '../../fixtures/react_native_with_haul'
 );
+const BIN = path.join(__dirname, '../runStart.js');
 
-let haul;
-beforeAll(async done => {
-  const isTaken = await isPortTaken(8081);
-  if (isTaken) {
-    done.fail('Port is already in use. Cannot run Haul in test env');
-  }
+describe('packager server', () => {
+  let server;
+  beforeAll(done => {
+    server = spawn('node', [BIN, TEST_PROJECT_DIR], {
+      env: process.env,
+      stdio: 'pipe',
+      cwd: TEST_PROJECT_DIR,
+    });
 
-  run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR);
-  haul = runHaul(TEST_PROJECT_DIR, ['start']);
+    server.stderr.on('data', data => {
+      done.fail(data.toString());
+    });
 
-  const messageBuffer = [];
+    server.stdout.on('data', data => {
+      const message = stripAnsi(data.toString()).trim();
 
-  haul.stdout.on('data', data => {
-    // console.log(data.toString());
-    const message = stripAnsi(data.toString()).trim();
-
-    if (message.length > 0) {
-      messageBuffer.push(message);
-    }
-
-    if (message.match(/ERROR/g)) {
-      done.fail(message);
-    }
-
-    if (message.match('running')) {
-      done();
-    }
+      if (message.match(/RUNNING/g)) {
+        done();
+      }
+    });
   });
+
+  afterAll(() => {
+    cleanup(TEMP_DIR);
+    server.kill();
+  });
+
+  it('compile bundle for iOS platform', () => testPlatform('ios'));
+
+  it('compile bundle for Android platform', () => testPlatform('android'));
+
+  it('compile bundle for both platforms', () =>
+    Promise.all([testPlatform('ios'), testPlatform('android')]));
 });
-beforeEach(() => cleanup(TEMP_DIR));
-afterEach(() => cleanup(TEMP_DIR));
-afterAll(() => {
-  haul.kill();
-});
-
-test('starts server and bundling iOS platform', () => testPlatform('ios'));
-
-test('starts server and bundling Android platform', () =>
-  testPlatform('android'));
-
-test('starts server and bundling all platforms', () =>
-  Promise.all([testPlatform('ios'), testPlatform('android')]));
 
 async function testPlatform(platform) {
   const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
