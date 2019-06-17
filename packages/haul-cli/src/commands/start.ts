@@ -149,6 +149,7 @@ export default function startCommand(runtime: Runtime) {
           assetsDest,
           root: directory,
           eager: parsedEager,
+          bundleNames: Object.keys(projectConfig.bundles),
         }).listen(projectConfig.server.host, projectConfig.server.port);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);

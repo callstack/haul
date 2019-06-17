@@ -25,7 +25,7 @@ import setupSymbolication from './setupSymbolication';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
-  { noInteractive: boolean; eager: string[] }
+  { noInteractive: boolean; eager: string[]; bundleNames: string[] }
 >;
 
 export default class Server {
@@ -129,22 +129,22 @@ export default class Server {
       }
     });
 
-    // // symbolicate
-    // // debugger worker
-    setupSymbolication(this.runtime, server);
+    // TODO: refactor and add debugger worker websocket client
+    setupSymbolication(this.runtime, server, {
+      bundleNames: this.options.bundleNames,
+    });
     setupLiveReload(this.runtime, server, this.compiler);
     setupDevtoolRoutes(this.runtime, server, {
       isDebuggerConnected: () => true, // TODO: use debugger worker socket
     });
-    setupCompilerRoutes(this.runtime, server, this.compiler, { port });
+    setupCompilerRoutes(this.runtime, server, this.compiler, {
+      port,
+      bundleNames: this.options.bundleNames,
+    });
 
     await server.start();
     terminal.fullscreen(true); // Switch to alternate screen buffer
     renderUI(this.serverEvents, { port, host });
-
-    setTimeout(() => {
-      this.runtime.logger.info('random log');
-    }, 1000);
 
     this.options.eager.forEach(platform => {
       this.serverEvents.emit(EAGER_COMPILATION_REQUEST, { platform });

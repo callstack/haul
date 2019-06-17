@@ -18,28 +18,6 @@ type ReactNativeSymbolicatePayload = {
 };
 
 /**
- * Creates a SourceMapConsumer so we can query it.
- */
-async function createSourceMapConsumer(runtime: Runtime, url: string) {
-  const response = await fetch(url);
-  const sourceMap = await response.text();
-
-  // we stop here if we couldn't find that map
-  if (!sourceMap) {
-    runtime.logger.warn('Unable to find source map.');
-    return null;
-  }
-
-  // feed the raw source map into our consumer
-  try {
-    return new SourceMapConsumer(sourceMap);
-  } catch (err) {
-    runtime.logger.error('There was a problem reading the source map', err);
-    return null;
-  }
-}
-
-/**
  * Gets the stack frames that React Native wants us to convert.
  */
 function getRequestedFrames(
@@ -67,9 +45,72 @@ function getRequestedFrames(
   return newStack;
 }
 
+type SourceMapConsumers = {
+  [platform: string]: {
+    [bundleName: string]: SourceMapConsumer | undefined;
+  };
+};
+
+let sourceMapConsumers: SourceMapConsumers = {};
+
+async function getSourceMapConsumers(
+  runtime: Runtime,
+  platform: string,
+  bundleNames: string[],
+  baseUrl: string
+): Promise<SourceMapConsumers> {
+  if (!sourceMapConsumers[platform]) {
+    sourceMapConsumers[platform] = (await Promise.all(
+      bundleNames.map(bundleName =>
+        createSourceMapConsumer(
+          runtime,
+          `${baseUrl}${bundleName}.${platform}.bundle.map`
+        )
+      )
+    )).reduce(
+      (acc, sourceMapConsumer, index) => ({
+        ...acc,
+        [bundleNames[index]]: sourceMapConsumer,
+      }),
+      {}
+    );
+
+    runtime.logger.info(
+      `Source map consumers for ${platform} bundles: ${bundleNames.join(
+        ', '
+      )} created`
+    );
+  }
+
+  return sourceMapConsumers;
+}
+
+/**
+ * Creates a SourceMapConsumer so we can query it.
+ */
+async function createSourceMapConsumer(runtime: Runtime, url: string) {
+  const response = await fetch(url);
+  const sourceMap = await response.text();
+
+  // we stop here if we couldn't find that map
+  if (!sourceMap) {
+    runtime.logger.warn('Unable to find source map.');
+    return undefined;
+  }
+
+  // feed the raw source map into our consumer
+  try {
+    return new SourceMapConsumer(sourceMap);
+  } catch (err) {
+    runtime.logger.error('There was a problem reading the source map', err);
+    return undefined;
+  }
+}
+
 export default function setupSymbolication(
   runtime: Runtime,
-  server: Hapi.Server
+  server: Hapi.Server,
+  { bundleNames }: { bundleNames: string[] }
 ) {
   server.route({
     method: 'POST',
@@ -87,37 +128,37 @@ export default function setupSymbolication(
         request.payload as ReactNativeSymbolicatePayload
       );
       if (!unconvertedFrames || unconvertedFrames.length === 0) {
+        runtime.logger.warn('Cannot symbolicate an empty stack frames');
         return h.response().code(400);
       }
 
-      // grab the platform and filename from the first frame (e.g. index.ios.bundle?platform=ios&dev=true&minify=false:69825:16)
-      const filenameMatch = unconvertedFrames[0].file.match(/\/(\D+)\?/);
+      //TODO: replace with getBundleDataFromURL
       const platformMatch = unconvertedFrames[0].file.match(
         /platform=([a-zA-Z]*)/
       );
-
-      const filename: string | null = filenameMatch && filenameMatch[1];
       const platform: string | null = platformMatch && platformMatch[1];
-
-      if (!filename || !platform) {
+      if (!platform) {
+        runtime.logger.warn(
+          `Cannot detect platform from initial frame: ${
+            unconvertedFrames[0].file
+          }`
+        );
         return h.response().code(400);
       }
 
-      const [name, ...rest] = filename.split('.');
-      const bundleName = `${name}.${platform}.${rest[rest.length - 1]}`;
-
       // grab our source map consumer
-      const consumer = await createSourceMapConsumer(
+      const consumers = await getSourceMapConsumers(
         runtime,
-        `http://localhost:${request.info.host.split(':')[1]}/${bundleName}.map`
+        platform,
+        bundleNames,
+        `http://localhost:${request.info.host.split(':')[1]}/`
       );
 
-      if (!consumer) {
+      if (!consumers || !consumers[platform]) {
+        runtime.logger.error('No source map consumers were created');
         return h.response().code(500);
       }
 
-      // the base directory
-      // const root = getConfig(configPath, configOptions, platform).context;
       let convertedFrames: ReactNativeStackFrame[] = [];
       try {
         // error error on the wall, who's the fairest stack of all?
@@ -130,8 +171,24 @@ export default function setupSymbolication(
               return originalFrame;
             }
 
+            // TODO: replace with getBundleDataFromURL
+            const bundleNameMatch = originalFrame.file.match(
+              /^https?:\/\/[^/]+\/([^.]+)/
+            );
+            if (!bundleNameMatch) {
+              return originalFrame;
+            }
+            const bundleName = bundleNameMatch[1];
+            const targetConsumer = consumers[platform][bundleName];
+            if (!targetConsumer) {
+              runtime.logger.warn(
+                `SourceMapConsumer for ${bundleName} was not initialized`
+              );
+              return originalFrame;
+            }
+
             // find the original home of this line of code.
-            const lookup = consumer.originalPositionFor({
+            const lookup = targetConsumer.originalPositionFor({
               line: originalFrame.lineNumber,
               column: originalFrame.column,
             });

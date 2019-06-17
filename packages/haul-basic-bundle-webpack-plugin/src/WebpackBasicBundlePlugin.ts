@@ -108,22 +108,20 @@ export default class WebpackBasicBundlePlugin {
     }
 
     compiler.hooks.compilation.tap('WebpackBasicBundlePlugin', compilation => {
-      if (!this.bundle) {
-        // Add asyncEval only when serving from packager server. When bundling async
-        // chunks will be concatenated into the bundle.
-        (compilation.mainTemplate as any).hooks.bootstrap.tap(
-          'WebpackBasicBundlePlugin',
-          (source: string) => {
-            const preload = this.preloadBundles.length
-              ? `${this.preloadBundles.map(
-                  bundleName =>
-                    `this.bundleRegistryLoad("${bundleName}", true, true);\n`
-                )}\n`
-              : '';
-            return `${preload}${asyncEval}\n${source}`;
-          }
-        );
-      }
+      (compilation.mainTemplate as any).hooks.bootstrap.tap(
+        'WebpackBasicBundlePlugin',
+        (source: string) => {
+          const preload = this.preloadBundles.length
+            ? `${this.preloadBundles.map(
+                bundleName =>
+                  `this.bundleRegistryLoad("${bundleName}", true, true);\n`
+              )}\n`
+            : '';
+          // Add asyncEval only when serving from packager server. When bundling async
+          // chunks will be concatenated into the bundle.
+          return `${preload}${this.bundle ? '' : asyncEval}\n${source}`;
+        }
+      );
 
       (compilation.mainTemplate as any).hooks.requireEnsure.tap(
         'WebpackBasicBundlePlugin',

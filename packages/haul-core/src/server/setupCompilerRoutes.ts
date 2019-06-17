@@ -11,7 +11,7 @@ export default function setupCompilerRoutes(
   runtime: Runtime,
   server: Hapi.Server,
   compiler: any,
-  { port }: { port: number }
+  { port, bundleNames }: { port: number; bundleNames: string[] }
 ) {
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
@@ -40,11 +40,12 @@ export default function setupCompilerRoutes(
               errors: string[];
               mimeType: string;
             }) => {
-              resolve(makeResponseFromCompilerResults(h, filename, '', result));
+              resolve(makeResponseFromCompilerResults(h, { filename }, result));
             },
           });
         });
       } else {
+        // TODO: replace with getBundleDataFromURL
         let [, bundleName, platform, bundleType] = bundleRegex.exec(
           request.path
         ) || ['', '', '', ''];
@@ -77,7 +78,11 @@ export default function setupCompilerRoutes(
               mimeType: string;
             }) => {
               resolve(
-                makeResponseFromCompilerResults(h, filename, bundleType, result)
+                makeResponseFromCompilerResults(
+                  h,
+                  { filename, bundleType, bundleNames },
+                  result
+                )
               );
             },
           });
@@ -89,8 +94,11 @@ export default function setupCompilerRoutes(
 
 function makeResponseFromCompilerResults(
   h: Hapi.ResponseToolkit,
-  filename: string,
-  bundleType: string,
+  {
+    filename,
+    bundleType,
+    bundleNames,
+  }: { filename: string; bundleType?: string; bundleNames?: string[] },
   result: {
     file?: any;
     errors: string[];
@@ -118,8 +126,18 @@ function makeResponseFromCompilerResults(
         : result.file;
   }
 
-  return h
+  const response = h
     .response(file.toString())
     .type(result.mimeType)
     .code(200);
+
+  // Add bundle names when running in multi-bundle mode.
+  if (bundleNames && bundleNames.length > 1) {
+    response.header(
+      'X-multi-bundle',
+      bundleNames.filter(name => !filename.includes(name)).join(',')
+    );
+  }
+
+  return response;
 }

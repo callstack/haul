@@ -97,15 +97,6 @@ export default function makeConfig(
           : path.join(normalizedBundleConfig.root, env.assetsDest);
       }
 
-      if (env.bundleOutput) {
-        webpackConfig.output!.filename = path.isAbsolute(env.bundleOutput)
-          ? path.relative(webpackConfig.output!.path!, env.bundleOutput)
-          : path.relative(
-              webpackConfig.output!.path!,
-              path.join(normalizedBundleConfig.root, env.bundleOutput)
-            );
-      }
-
       if (env.sourcemapOutput) {
         webpackConfig.output!.sourceMapFilename = path.isAbsolute(
           env.sourcemapOutput
@@ -117,47 +108,78 @@ export default function makeConfig(
             );
       }
 
-      if (!webpackConfig.output!.filename) {
-        if (env.singleBundleMode) {
+      if (env.singleBundleMode) {
+        // In single-bundle mode, `bundleOutput` will point to a file.
+        if (env.bundleOutput) {
+          webpackConfig.output!.filename = path.isAbsolute(env.bundleOutput)
+            ? path.relative(webpackConfig.output!.path!, env.bundleOutput)
+            : path.relative(
+                webpackConfig.output!.path!,
+                path.join(normalizedBundleConfig.root, env.bundleOutput)
+              );
+        } else {
           webpackConfig.output!.filename = `index.${
             normalizedBundleConfig.platform
           }.bundle`;
-        } else {
-          webpackConfig.output!.filename = `${bundleName}.${
-            normalizedBundleConfig.platform
-          }.bundle`;
         }
-      }
+      } else {
+        const bundleFilename = `${bundleName}.${
+          normalizedBundleConfig.platform
+        }.bundle`;
+        let bundleOutputDirectory = webpackConfig.output!.path!;
+        if (env.bundleOutput) {
+          // `bundleOutput` should be a directory, but for backward-compatibility,
+          // we also handle the case with a filename.
+          bundleOutputDirectory =
+            path.extname(env.bundleOutput) === ''
+              ? env.bundleOutput
+              : path.dirname(env.bundleOutput);
+          bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
+            ? bundleOutputDirectory
+            : path.join(normalizedBundleConfig.root, bundleOutputDirectory);
 
-      if (normalizedBundleConfig.dll) {
-        webpackConfig.output!.library = bundleName;
-        webpackConfig.output!.libraryTarget = 'this';
-        webpackConfig.plugins!.push(
-          new webpack.DllPlugin({
-            name: bundleName,
-            path: path.join(
-              webpackConfig.output!.path!,
-              `${bundleName}.manifest.json`
-            ),
-          })
-        );
-      } else if (normalizedBundleConfig.app) {
-        webpackConfig.output!.library = bundleName;
-        webpackConfig.output!.libraryTarget = 'this';
-      }
+          const targetBundleOutput = path.join(
+            bundleOutputDirectory,
+            bundleFilename
+          );
+          webpackConfig.output!.filename = path.relative(
+            webpackConfig.output!.path!,
+            targetBundleOutput
+          );
+        } else {
+          webpackConfig.output!.filename = bundleFilename;
+        }
 
-      normalizedBundleConfig.dependsOn.forEach((dllBundleName: string) => {
-        webpackConfig.plugins!.push(
-          new webpack.DllReferencePlugin({
-            context: normalizedBundleConfig.root,
-            manifest: path.join(
-              webpackConfig.output!.path!,
-              `${dllBundleName}.manifest.json`
-            ),
-            sourceType: 'this',
-          })
-        );
-      });
+        if (normalizedBundleConfig.dll) {
+          webpackConfig.output!.library = bundleName;
+          webpackConfig.output!.libraryTarget = 'this';
+          webpackConfig.plugins!.push(
+            new webpack.DllPlugin({
+              name: bundleName,
+              path: path.join(
+                bundleOutputDirectory,
+                `${bundleName}.manifest.json`
+              ),
+            })
+          );
+        } else if (normalizedBundleConfig.app) {
+          webpackConfig.output!.library = bundleName;
+          webpackConfig.output!.libraryTarget = 'this';
+        }
+
+        normalizedBundleConfig.dependsOn.forEach((dllBundleName: string) => {
+          webpackConfig.plugins!.push(
+            new webpack.DllReferencePlugin({
+              context: normalizedBundleConfig.root,
+              manifest: path.join(
+                bundleOutputDirectory,
+                `${dllBundleName}.manifest.json`
+              ),
+              sourceType: 'this',
+            })
+          );
+        });
+      }
 
       const { transform } = bundleConfig;
       if (transform) {

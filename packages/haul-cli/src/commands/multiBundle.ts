@@ -29,6 +29,11 @@ export default function multiBundleCommand(runtime: Runtime) {
           'Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.',
         type: 'boolean',
       },
+      'bundle-output': {
+        description:
+          'Directory where to store generated bundles (filename is omitted if specified)',
+        type: 'string',
+      },
       'assets-dest': {
         description:
           'Directory name where to store bundles and assets referenced in the bundle.',
@@ -70,6 +75,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           minify,
           platform,
           assetsDest,
+          bundleOutput,
           sourcemapOutput,
           progress,
         } = argv;
@@ -84,6 +90,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           root: directory,
           dev,
           singleBundleMode: false,
+          bundleOutput,
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
