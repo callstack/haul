@@ -7,6 +7,7 @@
     "lib": ["es2016"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "jsx": "react",
     "outDir": "build",
     "sourceMap": true,
     "declaration": true,
