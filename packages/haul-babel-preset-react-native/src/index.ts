@@ -14,6 +14,7 @@ const defaultPlugins = [
     require('@babel/plugin-transform-modules-commonjs'),
     { allowTopLevelThis: true },
   ],
+  [require('./transforms/superMemberArrowFunction').default],
 ];
 
 function isTypeScriptSource(fileName: string) {
