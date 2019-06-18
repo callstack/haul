@@ -46,11 +46,11 @@ describe('packager server', () => {
     server.kill();
   });
 
-  it('compile bundle for iOS platform', () => testPlatform('ios'));
+  it.skip('compile bundle for iOS platform', () => testPlatform('ios'));
 
-  it('compile bundle for Android platform', () => testPlatform('android'));
+  it.skip('compile bundle for Android platform', () => testPlatform('android'));
 
-  it('compile bundle for both platforms', () =>
+  it.skip('compile bundle for both platforms', () =>
     Promise.all([testPlatform('ios'), testPlatform('android')]));
 });
 
