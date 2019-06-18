@@ -6,6 +6,7 @@ import Compiler from '@haul-bundler/core-legacy/build/compiler/Compiler';
 import runAdbReverse from '../utils/runAdbReverse';
 import createDeltaBundle from './createDeltaBundle';
 import Runtime from '../runtime/Runtime';
+import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
 export default function setupCompilerRoutes(
   runtime: Runtime,
@@ -45,15 +46,24 @@ export default function setupCompilerRoutes(
           });
         });
       } else {
-        // TODO: replace with getBundleDataFromURL
-        let [, bundleName, platform, bundleType] = bundleRegex.exec(
-          request.path
-        ) || ['', '', '', ''];
-        if (platform) {
-          platform = platform.slice(1);
-        } else {
-          platform = request.query.platform as string;
+        const {
+          name: bundleName,
+          platform,
+          type: bundleType,
+        } = getBundleDataFromURL(request.url.href);
+        if (!platform) {
+          const message = `Cannot detect platform parameter in URL: ${
+            request.path
+          }`;
+          runtime.logger.error(message);
+          return Boom.badImplementation(message);
         }
+
+        runtime.logger.info(
+          `Compiling ${
+            bundleType === 'bundle' ? bundleType : `${bundleType} bundle`
+          } "${bundleName}" for platform ${platform}`
+        );
 
         if (!hasRunAdbReverse && platform === 'android') {
           await runAdbReverse(runtime, port);

@@ -3,6 +3,7 @@ import Joi from '@hapi/joi';
 import Runtime from '../runtime/Runtime';
 import { SourceMapConsumer } from 'source-map';
 import fetch from 'node-fetch';
+import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
 type ReactNativeStackFrame = {
   lineNumber: number;
@@ -132,11 +133,7 @@ export default function setupSymbolication(
         return h.response().code(400);
       }
 
-      //TODO: replace with getBundleDataFromURL
-      const platformMatch = unconvertedFrames[0].file.match(
-        /platform=([a-zA-Z]*)/
-      );
-      const platform: string | null = platformMatch && platformMatch[1];
+      const { platform } = getBundleDataFromURL(unconvertedFrames[0].file);
       if (!platform) {
         runtime.logger.warn(
           `Cannot detect platform from initial frame: ${
@@ -171,14 +168,13 @@ export default function setupSymbolication(
               return originalFrame;
             }
 
-            // TODO: replace with getBundleDataFromURL
-            const bundleNameMatch = originalFrame.file.match(
-              /^https?:\/\/[^/]+\/([^.]+)/
+            const { name: bundleName } = getBundleDataFromURL(
+              originalFrame.file
             );
-            if (!bundleNameMatch) {
+            if (!bundleName) {
               return originalFrame;
             }
-            const bundleName = bundleNameMatch[1];
+
             const targetConsumer = consumers[platform][bundleName];
             if (!targetConsumer) {
               runtime.logger.warn(
