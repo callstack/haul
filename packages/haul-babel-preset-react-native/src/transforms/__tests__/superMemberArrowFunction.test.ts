@@ -1,4 +1,5 @@
 import superMemberArrowFunction from '../superMemberArrowFunction';
+// @ts-ignore
 import classProperties from '@babel/plugin-proposal-class-properties';
 import { transformSync } from '@babel/core';
 
@@ -28,7 +29,7 @@ describe('superMemberArrowFunction transform', () => {
       plugins: [superMemberArrowFunction, classProperties],
       babelrc: false,
       configFile: false,
-    });
+    }) || { code: '' };
 
     expect(code).toMatch('await Super.prototype.superFn1.call(this);');
     expect(code).toMatch('Super.prototype.superFn2.call(this, 123, 456);');
