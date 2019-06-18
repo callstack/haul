@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`superMemberArrowFunction transform should replace \`super\` with <Super>.prototype 1`] = `
+"function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class Derived extends Super {
+  constructor(...args) {
+    super(...args);
+
+    _defineProperty(this, \\"derivedFn1\\", async () => {
+      await Super.prototype.superFn1.call(this);
+    });
+
+    _defineProperty(this, \\"derivedFn2\\", () => {
+      Super.prototype.superFn2.call(this, 123, 456);
+    });
+  }
+
+  async derivedFn3() {
+    await super.superFn3();
+  }
+
+  derivedFn4() {
+    super.superFn4();
+  }
+
+}"
+`;
