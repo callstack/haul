@@ -16,7 +16,8 @@ export default function setupDevtoolRoutes(
     method: 'GET',
     path: '/launch-js-devtools',
     handler: request => {
-      if (isDebuggerConnected()) {
+      // Open debugger page only if it's not already open.
+      if (!isDebuggerConnected()) {
         launchBrowser(
           runtime,
           `http://localhost:${request.raw.req.socket.localPort}/debugger-ui`
