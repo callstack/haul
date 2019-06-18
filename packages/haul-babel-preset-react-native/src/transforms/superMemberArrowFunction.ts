@@ -40,7 +40,7 @@ export default function superMemberArrowFunction() {
           Super(path) {
             let parentFunctionPath = path.getFunctionParent();
 
-            // Check if parent function is a arrow function as a class property.
+            // Check if parent function is an arrow function as a class property.
             if (
               parentFunctionPath.isArrowFunctionExpression() &&
               parentFunctionPath.parentPath.isClassProperty()
