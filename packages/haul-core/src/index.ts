@@ -12,6 +12,9 @@ export { default as resolveModule } from './webpack/resolvers/resolveModule';
 export { default as Runtime } from './runtime/Runtime';
 export { default as InspectorClient } from './runtime/InspectorClient';
 
+// Packager server
+export { default as Server } from './server/Server';
+
 // Others
 export {
   DEFAULT_CONFIG_FILENAME,
@@ -34,3 +37,6 @@ export {
   default as getReactNativeVersion,
 } from './utils/getReactNativeVersion';
 export { default as parseEntry } from './utils/parseEntry';
+export {
+  default as sortBundlesByDependencies,
+} from './utils/sortBundlesByDependencies';

@@ -165,7 +165,7 @@ describe('makeConfig', () => {
     const config = makeConfig(projectConfig)(runtime, env);
     expect(
       hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
-    ).toBeFalsy();
+    ).toBeTruthy();
     expect(
       hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
     ).toBeFalsy();

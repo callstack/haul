@@ -1,0 +1,13 @@
+{
+  "extends": "@callstack/eslint-config",
+  "rules": {
+    "react-native/no-raw-text": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts", ".tsx"]
+      }
+    }
+  }
+}
