@@ -1,9 +1,9 @@
 
-const path = require('path');
-const os = require('os');
-const AssetResolver = require('../../AssetResolver');
-const HasteResolver = require('../../HasteResolver');
-import Runtime from '../../../runtime/Runtime';
+import path from 'path';
+import os from 'os';
+import AssetResolver from '../../AssetResolver';
+import HasteResolver from '../../HasteResolver';
+import Runtime from '../../../../runtime/Runtime';
 
 const runtime = new Runtime();
 
