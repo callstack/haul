@@ -1,7 +1,9 @@
 import { EnvOptions } from '../config/types';
 import { Assign } from 'utility-types';
 import Hapi from '@hapi/hapi';
+import http from 'http';
 import { EventEmitter } from 'events';
+import ws from 'ws';
 // @ts-ignore
 import Compiler from '@haul-bundler/core-legacy/build/compiler/Compiler';
 import { terminal } from 'terminal-kit';
@@ -22,6 +24,8 @@ import {
 } from './events';
 import setupLiveReload from './setupLiveReload';
 import setupSymbolication from './setupSymbolication';
+import createWebsocketProxy from './websocketProxy';
+import WebSocketDebuggerProxy from './WebSocketDebuggerProxy';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
@@ -32,6 +36,7 @@ export default class Server {
   compiler: any;
   serverEvents = new EventEmitter();
   server: Hapi.Server | undefined;
+  httpServer: http.Server = http.createServer();
   resetConsole = () => {};
 
   constructor(
@@ -116,6 +121,16 @@ export default class Server {
       },
     });
 
+    const webSocketServer = new ws.Server({ server: server.listener });
+    const webSocketProxy = createWebsocketProxy(
+      webSocketServer,
+      '/debugger-proxy'
+    );
+    const debuggerProxy = new WebSocketDebuggerProxy(
+      this.runtime,
+      webSocketProxy
+    );
+
     await server.register(require('@hapi/inert'));
 
     server.events.on(
@@ -135,13 +150,12 @@ export default class Server {
       }
     });
 
-    // TODO: refactor and add debugger worker websocket client
     setupSymbolication(this.runtime, server, {
       bundleNames: this.options.bundleNames,
     });
     setupLiveReload(this.runtime, server, this.compiler);
     setupDevtoolRoutes(this.runtime, server, {
-      isDebuggerConnected: () => true, // TODO: use debugger worker socket
+      isDebuggerConnected: () => debuggerProxy.isDebuggerConnected(),
     });
     setupCompilerRoutes(this.runtime, server, this.compiler, {
       port,

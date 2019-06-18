@@ -22,15 +22,36 @@
  * react-native-safe-module
  */
 
-onmessage = (function() {
+function getPlatformFromURL(url) {
+  let platform = (url.match(/platform=([a-zA-Z]*)/) || ['', undefined])[1];
+  if (!platform) {
+    // Try to get platform from bundle filename
+    const [, filename] = /^https?:\/\/.+\/(.+)$/.exec(url) || [
+      '',
+      '',
+    ];
+    const segments = filename.split('.');
+    if (segments.length > 2) {
+      platform = segments[segments.length - 2];
+    }
+  }
+
+  if (!platform) {
+    throw new Error(`Cannot detect platform from URL: ${url}`);
+  }
+
+  return platform;
+}
+
+onmessage = (() => {
   let visibilityState;
 
   const messageQueue = [];
   let shouldQueueMessages = false;
 
-  const showVisibilityWarning = (function() {
+  const showVisibilityWarning = (() => {
     let hasWarned = false;
-    return function() {
+    return () => {
       // Wait until `YellowBox` gets initialized before displaying the warning.
       if (hasWarned || console.warn.toString().includes('[native code]')) {
         return;
@@ -43,7 +64,7 @@ onmessage = (function() {
     };
   })();
 
-  const processEnqueuedMessages = function() {
+  const processEnqueuedMessages = () => {
     while (messageQueue.length) {
       const messageProcess = messageQueue.shift();
       messageProcess();
@@ -57,12 +78,35 @@ onmessage = (function() {
         self[key] = JSON.parse(message.inject[key]);
       }
 
+      // Detect platform from initial bundle URL
+      const platform = getPlatformFromURL(message.url);
+      const loadedBundles = [];
+      self.bundleRegistryLoad = (bundleName, sync) => {
+        if (loadedBundles.includes(bundleName)) {
+          return;
+        }
+
+        // TODO: add async variant support
+
+        const url = `${self.location.origin}/${bundleName}.bundle?platform=${platform}`
+        try {
+          importScripts(url);
+        } catch (error) {
+          console.log(`Failed to evaluate additional bundle ${bundleName}`);
+          throw error;
+        }
+      }
+
       shouldQueueMessages = true;
 
       try {
         importScripts(message.url)
       } catch (e) {
-        self.ErrorUtils.reportFatalError(e);
+        if (self.ErrorUtils) {
+          self.ErrorUtils.reportFatalError(e);
+        } else {
+          console.error(e);
+        }
       } finally {
         self.postMessage({ replyID: message.id });
         processEnqueuedMessages();
@@ -73,18 +117,16 @@ onmessage = (function() {
     },
   };
 
-  return function(message) {
-    const processMessage = function() {
+  return (message) => {
+    const processMessage = () => {
       if (visibilityState === 'hidden') {
         showVisibilityWarning();
       }
 
       const obj = message.data;
-
-      const sendReply = function(result, error) {
+      const sendReply = (result, error) => {
         postMessage({ replyID: obj.id, result, error });
       };
-
       const handler = messageHandlers[obj.method];
 
       // Special cased handlers

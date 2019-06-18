@@ -114,7 +114,7 @@ export default class WebpackBasicBundlePlugin {
           const preload = this.preloadBundles.length
             ? `${this.preloadBundles.map(
                 bundleName =>
-                  `this.bundleRegistryLoad("${bundleName}", true, true);\n`
+                  `if (!this["${bundleName}"]) { this.bundleRegistryLoad("${bundleName}", true, true); }\n`
               )}\n`
             : '';
           // Add asyncEval only when serving from packager server. When bundling async
