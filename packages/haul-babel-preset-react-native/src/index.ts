@@ -27,8 +27,7 @@ function isTSXSource(fileName: string) {
 
 export default function getHaulBabelPreset() {
   return {
-    comments: false,
-    compact: true,
+    compact: false,
     overrides: [
       // The flow strip types plugin must go BEFORE class properties!
       {
