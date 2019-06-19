@@ -66,7 +66,7 @@ export default function createDeltaBundle(source: string) {
   // pre and post has to be declared, if not,
   // app will crash when Android tries to write null to file
   const deltaObject: DeltaBundleObject = {
-    // Put bundle in `pre` segments, so that the stack trace will be correct.
+    // Put bundle in `pre` segment, so that the stack trace will be correct.
     // RN when building bundle code from `pre`, `modules` and `post` will add `\n` as a separator
     // between them, which results in stacktrace incorrectly having +1 line offset. By putting bundle
     // in `pre` we ensure that the generated bundle won't have any prefix.
