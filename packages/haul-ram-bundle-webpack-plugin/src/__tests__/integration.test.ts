@@ -93,7 +93,6 @@ async function enhanceFrameWithSourceMaps(frame: string, indexSourceMap: any) {
   } = consumer.originalPositionFor({
     column: parseInt(column, 10),
     line: parseInt(line, 10),
-    bias: SourceMapConsumer.LEAST_UPPER_BOUND,
   });
   return `at ${origName || name} (${source}:${origLine}:${
     origColumn ? origColumn + 1 : column
@@ -239,10 +238,8 @@ describe('Indexed RAM bundle should build and successfully evaluate bundle', () 
       indexSourceMap
     );
 
-    expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:13');
-    expect(mappedFrame2).not.toMatch('null');
-    // TODO: figure out what is wrong with source maps
-    // expect(mappedFrame1).toMatch('__fixtures__/crashFn.async.js:5:5');
+    expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:9');
+    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:5');
   });
 });
 
@@ -391,9 +388,7 @@ describe('File RAM bundle should build and successfully evaluate bundle', () => 
       indexSourceMap
     );
 
-    expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:13');
-    expect(mappedFrame2).not.toMatch('null');
-    // TODO: figure out what is wrong with source maps
-    // expect(mappedFrame1).toMatch('__fixtures__/crashFn.async.js:5:5');
+    expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:9');
+    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:5');
   });
 });
