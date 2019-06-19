@@ -3,9 +3,9 @@ type DeltaModuleEntry = [number, string | null];
 type DeltaModuleMap = DeltaModuleEntry[] | string;
 type DeltaBundleObject = {
   id?: string;
-  pre?: DeltaModuleMap;
+  pre?: string;
   modules?: DeltaModuleMap;
-  post?: DeltaModuleMap;
+  post?: string;
 };
 
 // The logic it uses is quite simple: the app keeps an initially empty copy of this data:
@@ -66,8 +66,14 @@ export default function createDeltaBundle(source: string) {
   // pre and post has to be declared, if not,
   // app will crash when Android tries to write null to file
   const deltaObject: DeltaBundleObject = {
-    pre: '',
-    modules: [[0, source]],
+    // Put bundle in `pre` segments, so that the stack trace will be correct.
+    // RN when building bundle code from `pre`, `modules` and `post` will add `\n` as a separator
+    // between them, which results in stacktrace incorrectly having +1 line offset. By putting bundle
+    // in `pre` we ensure that the generated bundle won't have any prefix.
+    pre: source,
+    // We still need to send some modules, otherwise RN will treat it as an empty delta bundle
+    // and won't read it.
+    modules: [[0, '']],
     post: '',
   };
 
