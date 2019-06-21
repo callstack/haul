@@ -23,11 +23,11 @@ export default function setupCompilerRoutes(
     path: '/{any*}',
     options: {
       validate: {
-        query: {
+        query: Joi.object({
           platform: Joi.string(),
           minify: Joi.boolean(),
           dev: Joi.boolean(),
-        },
+        }).unknown(true),
       },
     },
     handler: async (request, h) => {
