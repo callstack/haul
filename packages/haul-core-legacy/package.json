@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0-alpha.1",
+  "version": "0.5.0-alpha.2",
   "name": "@haul-bundler/core-legacy",
   "description": "Haul core library (legacy)",
   "bin": {
@@ -20,7 +20,7 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "@haul-bundler/core": "^0.5.0-alpha.1",
+    "@haul-bundler/core": "^0.5.0-alpha.2",
     "react-native": "^0.59.0"
   },
   "dependencies": {
@@ -83,7 +83,7 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "@haul-bundler/core": "^0.5.0-alpha.1",
+    "@haul-bundler/core": "^0.5.0-alpha.2",
     "jest": "^24.7.1",
     "react-native": "^0.59.0",
     "rimraf": "^2.6.1",
