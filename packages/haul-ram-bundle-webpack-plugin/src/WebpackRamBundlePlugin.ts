@@ -55,6 +55,9 @@ const variableToString = (value?: string | number) => {
   return typeof value === 'string' ? `"${value}"` : value.toString();
 };
 
+const hasValue = (value: any): boolean =>
+  typeof value === 'undefined' ? false : true;
+
 export default class WebpackRamBundlePlugin {
   name = 'WebpackRamBundlePlugin';
 
@@ -78,8 +81,10 @@ export default class WebpackRamBundlePlugin {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.preloadBundles = preloadBundles || [];
-    this.singleBundleMode = singleBundleMode || this.singleBundleMode;
-    this.minify = minify || this.minify;
+    this.singleBundleMode = hasValue(singleBundleMode)
+      ? Boolean(singleBundleMode)
+      : this.singleBundleMode;
+    this.minify = hasValue(minify) ? Boolean(minify) : this.minify;
     this.minifyOptions = minifyOptions;
   }
 

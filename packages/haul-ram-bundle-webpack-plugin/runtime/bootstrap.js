@@ -19,7 +19,7 @@ function bootstrap(globalScope, options) { // eslint-disable-line
 
   for (const bundleName in preloadBundleNames) {
     if (!globalScope[bundleName]) {
-      globalScope.loadBundle(bundleName, true, true);
+      globalScope.bundleRegistryLoad(bundleName, true, true);
     }
   }
 
