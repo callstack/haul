@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0-alpha.2",
+  "version": "0.5.0-alpha.3",
   "name": "@haul-bundler/inspector-events",
   "description": "Inspector events for Haul",
   "main": "build/index.js",

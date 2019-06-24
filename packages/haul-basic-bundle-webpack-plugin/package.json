@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0-alpha.2",
+  "version": "0.5.0-alpha.3",
   "name": "@haul-bundler/basic-bundle-webpack-plugin",
   "description": "Basic bundle plugin for Haul and Webpack",
   "main": "build/index.js",
