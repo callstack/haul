@@ -22,137 +22,170 @@
  * react-native-safe-module
  */
 
-function getPlatformFromURL(url) {
-  let platform = (url.match(/platform=([a-zA-Z]*)/) || ['', undefined])[1];
-  if (!platform) {
-    // Try to get platform from bundle filename
-    const [, filename] = /^https?:\/\/.+\/(.+)$/.exec(url) || [
-      '',
-      '',
-    ];
-    const segments = filename.split('.');
-    if (segments.length > 2) {
-      platform = segments[segments.length - 2];
+class DebuggerWorker {
+  constructor() {
+    this.shouldQueueMessages = false;
+    this.messageQueue = [];
+    this.visibilityState = undefined;
+    this.hasWarned = false;
+    this.platform = undefined;
+
+    self.bundleRegistryLoad = (...args) => this.bundleRegistryLoad(...args);
+  }
+
+  bundleRegistryOnLoad(bundleName) {
+    if (typeof __fbBatchedBridge === 'object') {
+      // Notify BundleRegistry that bundle was loaded. For some reason `__callFunction`
+      // must be used instead of `callFunctionReturnFlushedQueue`. Otherwise the native side
+      // would never receive event to update the UI, which would remain unchanged.
+      __fbBatchedBridge.__callFunction(
+        'BundleRegistry',
+        'bundleRegistryOnLoad',
+        [bundleName]
+      );
     }
   }
 
-  if (!platform) {
-    throw new Error(`Cannot detect platform from URL: ${url}`);
+  loadScript(bundleName, url) {
+    try {
+      importScripts(url);
+      this.bundleRegistryOnLoad(bundleName);
+    } catch (error) {
+      console.error(`Failed to evaluate additional bundle: ${bundleName} (${url})`);
+      throw error;
+    }
   }
 
-  return platform;
+  bundleRegistryLoad(bundleName, sync) {
+    if (self[bundleName]) {
+      return;
+    }
+
+    const url = `${self.location.origin}/${bundleName}.bundle?platform=${this.platform}`;
+    if (sync) {
+      this.loadScript(bundleName, url);
+    } else {
+      // Fake async bundle loading, since it has no point when debugging and causes bugs.
+      setTimeout(() => {
+        this.loadScript(bundleName, url);
+      }, 0);
+    }
+  };
+
+  showVisibilityWarning() {
+    // Wait until `YellowBox` gets initialized before displaying the warning.
+    if (this.hasWarned || console.warn.toString().includes('[native code]')) {
+      return;
+    }
+    this.hasWarned = true;
+    const warning = 'Remote debugger is in a background tab which may cause apps to ' +
+      'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
+      'a separate window).';
+    console.warn(warning);
+  }
+
+  getPlatformFromURL(url) {
+    let platform = (url.match(/platform=([a-zA-Z]*)/) || ['', undefined])[1];
+    if (!platform) {
+      // Try to get platform from bundle filename
+      const [, filename] = /^https?:\/\/.+\/(.+)$/.exec(url) || [
+        '',
+        '',
+      ];
+      const segments = filename.split('.');
+      if (segments.length > 2) {
+        platform = segments[segments.length - 2];
+      }
+    }
+  
+    if (!platform) {
+      throw new Error(`Cannot detect platform from URL: ${url}`);
+    }
+  
+    return platform;
+  }
+
+  executeApplicationScript(message, sendReply) {
+    for (const key in message.inject) {
+      self[key] = JSON.parse(message.inject[key]);
+    }
+
+    // Detect platform from initial bundle URL
+    if (!this.platform) {
+      this.platform = this.getPlatformFromURL(message.url);
+    }
+
+    this.shouldQueueMessages = true;
+
+    try {
+      importScripts(message.url)
+    } catch (e) {
+      if (self.ErrorUtils) {
+        self.ErrorUtils.reportFatalError(e);
+      } else {
+        console.error(e);
+      }
+    } finally {
+      sendReply(null, null);
+      this.processEnqueuedMessages();
+    }
+  }
+
+  setDebuggerVisibility({ visibilityState }) {
+    this.visibilityState = visibilityState;
+  }
+
+  processMessage(message) {
+    if (this.visibilityState === 'hidden') {
+      this.showVisibilityWarning();
+    }
+
+    const { data } = message;
+    const sendReply = (result, error) => {
+      self.postMessage({ replyID: data.id, result, error });
+    };
+    const handler = this[data.method];
+
+    // Special cased handlers
+    if (handler) {
+      handler.call(this, data, sendReply);
+      return;
+    }
+
+    // Other methods get called on the bridge
+    let returnValue = [[], [], [], 0];
+    try {
+      if (typeof __fbBatchedBridge === 'object') {
+        returnValue = __fbBatchedBridge[data.method].apply(
+          null,
+          data.arguments
+        );
+      }
+    } finally {
+      sendReply(JSON.stringify(returnValue));
+    }
+  }
+
+  processEnqueuedMessages() {
+    while (this.messageQueue.length) {
+      const message = this.messageQueue.shift();
+      this.processMessage(message);
+    }
+    this.shouldQueueMessages = false;
+  }
+
+  handleMessage(message) {
+    if (this.shouldQueueMessages) {
+      this.messageQueue.push(message);
+    } else {
+      this.processMessage(message);
+    }
+  }
 }
 
 onmessage = (() => {
-  let visibilityState;
-
-  const messageQueue = [];
-  let shouldQueueMessages = false;
-
-  const showVisibilityWarning = (() => {
-    let hasWarned = false;
-    return () => {
-      // Wait until `YellowBox` gets initialized before displaying the warning.
-      if (hasWarned || console.warn.toString().includes('[native code]')) {
-        return;
-      }
-      hasWarned = true;
-      const warning = 'Remote debugger is in a background tab which may cause apps to ' +
-        'perform slowly. Fix this by foregrounding the tab (or opening it in ' +
-        'a separate window).';
-      console.warn(warning);
-    };
-  })();
-
-  const processEnqueuedMessages = () => {
-    while (messageQueue.length) {
-      const messageProcess = messageQueue.shift();
-      messageProcess();
-    }
-    shouldQueueMessages = false;
-  };
-
-  const messageHandlers = {
-    executeApplicationScript(message, sendReply) {
-      for (const key in message.inject) {
-        self[key] = JSON.parse(message.inject[key]);
-      }
-
-      // Detect platform from initial bundle URL
-      const platform = getPlatformFromURL(message.url);
-      const loadedBundles = [];
-      self.bundleRegistryLoad = (bundleName, sync) => {
-        if (loadedBundles.includes(bundleName)) {
-          return;
-        }
-
-        // TODO: add async variant support
-
-        const url = `${self.location.origin}/${bundleName}.bundle?platform=${platform}`
-        try {
-          importScripts(url);
-        } catch (error) {
-          console.log(`Failed to evaluate additional bundle ${bundleName}`);
-          throw error;
-        }
-      }
-
-      shouldQueueMessages = true;
-
-      try {
-        importScripts(message.url)
-      } catch (e) {
-        if (self.ErrorUtils) {
-          self.ErrorUtils.reportFatalError(e);
-        } else {
-          console.error(e);
-        }
-      } finally {
-        self.postMessage({ replyID: message.id });
-        processEnqueuedMessages();
-      }
-    },
-    setDebuggerVisibility(message) {
-      visibilityState = message.visibilityState;
-    },
-  };
-
+  const worker = new DebuggerWorker();
   return (message) => {
-    const processMessage = () => {
-      if (visibilityState === 'hidden') {
-        showVisibilityWarning();
-      }
-
-      const obj = message.data;
-      const sendReply = (result, error) => {
-        postMessage({ replyID: obj.id, result, error });
-      };
-      const handler = messageHandlers[obj.method];
-
-      // Special cased handlers
-      if (handler) {
-        handler(obj, sendReply);
-        return;
-      }
-
-      // Other methods get called on the bridge
-      let returnValue = [[], [], [], 0];
-      try {
-        if (typeof __fbBatchedBridge === 'object') {
-          returnValue = __fbBatchedBridge[obj.method].apply(
-            null,
-            obj.arguments
-          );
-        }
-      } finally {
-        sendReply(JSON.stringify(returnValue));
-      }
-    };
-
-    if (shouldQueueMessages) {
-      messageQueue.push(processMessage);
-    } else {
-      processMessage();
-    }
+    worker.handleMessage(message);
   };
 })();

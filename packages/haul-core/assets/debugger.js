@@ -97,12 +97,14 @@ class DebuggerManager {
       }
       case '$disconnected': {
         this.stop();
-        this.updateStatus(Status.INITIAL_MESSAGE());
+        this.updateStatus(Status.INITIAL());
         break;
       }
       default: {
         // Otherwise, pass through to the worker.
-        this.worker.postMessage(command);
+        if (this.worker) {
+          this.worker.postMessage(command);
+        }
       }
     }
   }
