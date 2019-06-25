@@ -17,7 +17,7 @@ function bootstrap(globalScope, options) { // eslint-disable-line
     globalScope.__BUNDLE_START_TIME__[bundleName] = BUNDLE_START_TIME;
   }
 
-  for (const bundleName in preloadBundleNames) {
+  for (const bundleName of preloadBundleNames) {
     if (!globalScope[bundleName]) {
       globalScope.bundleRegistryLoad(bundleName, true, true);
     }
