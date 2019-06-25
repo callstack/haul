@@ -183,12 +183,13 @@ export default function makeConfig(
 
       const { transform } = bundleConfig;
       if (transform) {
-        webpackConfig = transform({
-          bundleName,
-          config: webpackConfig,
-          env,
-          runtime,
-        });
+        webpackConfig =
+          transform({
+            bundleName,
+            config: webpackConfig,
+            env,
+            runtime,
+          }) || webpackConfig;
       }
 
       normalizedBundleConfigs[bundleName] = normalizedBundleConfig;
