@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0-alpha.3",
+  "version": "0.5.0",
   "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
@@ -22,8 +22,8 @@
     "@hapi/hapi": "^18.3.1",
     "@hapi/inert": "^5.2.0",
     "@hapi/joi": "^15.0.3",
-    "@haul-bundler/core-legacy": "^0.5.0-alpha.3",
-    "@haul-bundler/inspector-events": "^0.5.0-alpha.3",
+    "@haul-bundler/core-legacy": "^0.5.0",
+    "@haul-bundler/inspector-events": "^0.5.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "escape-string-regexp": "^2.0.0",

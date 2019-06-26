@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0-alpha.3",
+  "version": "0.5.0",
   "name": "@haul-bundler/babel-preset-react-native",
   "description": "Babel preset for React Native >=0.59 with Haul",
   "main": "index.js",
@@ -25,6 +25,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-syntax-export-default-from": "^7.2.0",
+    "@babel/plugin-transform-async-to-generator": "^7.4.4",
     "@babel/plugin-transform-exponentiation-operator": "^7.2.0",
     "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "@babel/plugin-transform-literals": "^7.2.0",
@@ -35,7 +36,6 @@
     "@babel/plugin-transform-sticky-regex": "^7.2.0",
     "@babel/plugin-transform-typescript": "^7.4.4",
     "@babel/plugin-transform-unicode-regex": "^7.4.4",
-    "@babel/plugin-transform-async-to-generator": "^7.4.4",
     "@babel/template": "^7.4.4",
     "metro-react-native-babel-preset": "^0.54.0"
   },
