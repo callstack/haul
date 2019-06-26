@@ -4,7 +4,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const opn = require('opn');
+const open = require('open');
 const select = require('platform-select');
 const logger = require('../../logger');
 
@@ -12,7 +12,7 @@ const logger = require('../../logger');
  * Launches given `url` in browser based on platform
  */
 const launchBrowser = url => {
-  const open = app => () => opn(url, { app });
+  const openBrowserWindow = app => () => open(url, { app });
 
   /**
    * Run Chrome (Chrome Canary) or supported platform.
@@ -23,17 +23,17 @@ const launchBrowser = url => {
   select(
     {
       // try to find & run Google Chrome
-      darwin: open('google chrome'),
-      win32: open('chrome'),
-      _: open('google-chrome'),
+      darwin: openBrowserWindow('google chrome'),
+      win32: openBrowserWindow('chrome'),
+      _: openBrowserWindow('google-chrome'),
     },
     {
       // On macOS let's try to find & run Canary
-      darwin: open('google chrome canary'),
+      darwin: openBrowserWindow('google chrome canary'),
     },
     {
       // No Canary / Chrome, let's run Safari
-      darwin: open('safari'),
+      darwin: openBrowserWindow('safari'),
     }
   ).catch(e => {
     console.log(e); // print error to artifacts
