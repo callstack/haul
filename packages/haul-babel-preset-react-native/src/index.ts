@@ -9,7 +9,6 @@ const defaultPlugins = [
   // For some reason native async/await don't behave correctly
   // on RN 0.59 on both platforms, so we need to transpile it
   // to native Promises.
-  // [require('babel-plugin-transform-async-to-promises')],
   [require('./transforms/superMemberArrowFunction').default],
   [require('@babel/plugin-transform-async-to-generator')],
 ];
