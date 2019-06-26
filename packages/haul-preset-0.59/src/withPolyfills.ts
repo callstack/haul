@@ -12,7 +12,6 @@ const polyfills = [
   require.resolve('./vendor/polyfills/Array.prototype.es6.js'),
   require.resolve('./vendor/polyfills/Array.es6.js'),
   require.resolve('./vendor/polyfills/Object.es7.js'),
-  require.resolve('./vendor/polyfills/babelHelpers.js'),
 ];
 
 type Options = {

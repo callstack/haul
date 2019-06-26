@@ -35,8 +35,8 @@
     "@babel/plugin-transform-sticky-regex": "^7.2.0",
     "@babel/plugin-transform-typescript": "^7.4.4",
     "@babel/plugin-transform-unicode-regex": "^7.4.4",
+    "@babel/plugin-transform-async-to-generator": "^7.4.4",
     "@babel/template": "^7.4.4",
-    "babel-plugin-transform-async-to-promises": "^0.8.11",
     "metro-react-native-babel-preset": "^0.54.0"
   },
   "devDependencies": {

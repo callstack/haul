@@ -9,12 +9,9 @@ const defaultPlugins = [
   // For some reason native async/await don't behave correctly
   // on RN 0.59 on both platforms, so we need to transpile it
   // to native Promises.
-  [require('babel-plugin-transform-async-to-promises')],
-  [
-    require('@babel/plugin-transform-modules-commonjs'),
-    { allowTopLevelThis: true },
-  ],
+  // [require('babel-plugin-transform-async-to-promises')],
   [require('./transforms/superMemberArrowFunction').default],
+  [require('@babel/plugin-transform-async-to-generator')],
 ];
 
 function isTypeScriptSource(fileName: string) {
@@ -35,6 +32,15 @@ export default function getHaulBabelPreset() {
       },
       {
         plugins: defaultPlugins,
+      },
+      {
+        test: /node_modules\/react-native/,
+        plugins: [
+          [
+            require('@babel/plugin-transform-modules-commonjs'),
+            { allowTopLevelThis: true },
+          ],
+        ],
       },
       {
         test: isTypeScriptSource,
