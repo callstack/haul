@@ -239,7 +239,7 @@ describe('Indexed RAM bundle should build and successfully evaluate bundle', () 
     );
 
     expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:9');
-    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:5');
+    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:16');
   });
 });
 
@@ -389,6 +389,6 @@ describe('File RAM bundle should build and successfully evaluate bundle', () => 
     );
 
     expect(mappedFrame1).toMatch('__fixtures__/nestedCrashFn.esm.js:4:9');
-    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:5');
+    expect(mappedFrame2).toMatch('__fixtures__/crashFn.async.js:5:16');
   });
 });

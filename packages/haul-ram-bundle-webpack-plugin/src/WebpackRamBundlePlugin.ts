@@ -126,6 +126,11 @@ export default class WebpackRamBundlePlugin {
             });
         });
 
+        // Omit chunks mapping if there's only a single main chunk
+        if (compilation.chunks.length === 1) {
+          moduleMappings.chunks = {};
+        }
+
         if (mainId === undefined) {
           throw new Error(
             "WebpackRamBundlePlugin: couldn't find main chunk's entry module id"
@@ -228,6 +233,14 @@ export default class WebpackRamBundlePlugin {
           bootstrap = renderWithEntryResults;
         } else if ('source' in renderWithEntryResults) {
           bootstrap = renderWithEntryResults.source();
+        }
+
+        if (this.minify) {
+          const { error, code } = terser.minify(bootstrap);
+          if (error) {
+            throw error;
+          }
+          bootstrap = code || '';
         }
 
         const outputFilename = compilation.outputOptions.filename!;

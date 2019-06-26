@@ -53,7 +53,10 @@ export default function makeConfig(
         assetsDest: bundleConfig.assetsDest || env.assetsDest || '',
         minify: bundleConfig.minify || Boolean(env.minify),
         minifyOptions: bundleConfig.minifyOptions || undefined,
-        sourceMap: bundleConfig.sourceMap || !dev,
+        sourceMap:
+          typeof bundleConfig.sourceMap !== 'undefined'
+            ? bundleConfig.sourceMap
+            : Boolean(dev || env.bundle),
         app: Boolean(bundleConfig.app),
         dll: Boolean(bundleConfig.dll),
         dependsOn: bundleConfig.dependsOn || [],
