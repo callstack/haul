@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0",
+  "version": "0.6.0",
   "name": "@haul-bundler/inspector",
   "description": "Haul inspector for monitoring Haul processes",
   "bin": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "dependencies": {
-    "@haul-bundler/inspector-events": "^0.5.0",
+    "@haul-bundler/inspector-events": "^0.6.0",
     "ansi-fragments": "^0.2.1",
     "ws": "^6.2.1",
     "yargs": "^13.2.2"
