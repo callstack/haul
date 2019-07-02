@@ -66,6 +66,11 @@ export default function makeConfig(
         hasteOptions: bundleConfig.hasteOptions || {},
       };
 
+      // Force basic-bundle type when serving from packager server.
+      if (!env.bundle) {
+        normalizedBundleConfig.type = 'basic-bundle';
+      }
+
       let webpackConfig = getDefaultConfig(runtime, normalizedBundleConfig, {
         bundle: Boolean(env.bundle),
         ...normalizedServerConfig,
@@ -80,7 +85,7 @@ export default function makeConfig(
             preloadBundles: normalizedBundleConfig.dependsOn,
           })
         );
-      } else if (env.bundle) {
+      } else {
         (webpackConfig.plugins as webpack.Plugin[]).push(
           new RamBundlePlugin({
             minify: normalizedBundleConfig.minify,
