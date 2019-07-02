@@ -117,16 +117,18 @@ class DebuggerWorker {
 
     this.shouldQueueMessages = true;
 
+    let error;
     try {
       importScripts(message.url)
     } catch (e) {
+      error = e;
       if (self.ErrorUtils) {
         self.ErrorUtils.reportFatalError(e);
       } else {
         console.error(e);
       }
     } finally {
-      sendReply(null, null);
+      sendReply(null, error);
       this.processEnqueuedMessages();
     }
   }

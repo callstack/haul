@@ -19,7 +19,7 @@ export default function sortBundlesByDependencies(
     if (dll) {
       addDllDependencies(dependsOn);
       dlls.add(bundleName);
-    } else if (bundleName === 'index' || bundleName === 'host') {
+    } else if (['index', 'main', 'host'].includes(bundleName)) {
       host = bundleName;
     } else {
       apps.push(bundleName);

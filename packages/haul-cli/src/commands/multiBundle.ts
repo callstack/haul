@@ -80,6 +80,8 @@ export default function multiBundleCommand(runtime: Runtime) {
           progress,
         } = argv;
 
+        process.env.HAUL_PLATFORM = platform;
+
         const directory = process.cwd();
         const configPath = getProjectConfigPath(directory, config);
         const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
