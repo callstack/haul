@@ -80,6 +80,8 @@ export default function ramBundleCommand(runtime: Runtime) {
           progress,
         } = argv;
 
+        process.env.HAUL_PLATFORM = platform;
+
         const webpackConfig = prepareWebpackConfig(runtime, {
           config,
           dev,

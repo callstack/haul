@@ -30,7 +30,16 @@ export default function getHaulBabelPreset() {
         plugins: [require('@babel/plugin-transform-flow-strip-types')],
       },
       {
-        plugins: defaultPlugins,
+        plugins: defaultPlugins.concat(
+          process.env.HAUL_PLATFORM
+            ? [
+                [
+                  require('./transforms/stripDeadPlatformSelect'),
+                  { platform: process.env.HAUL_PLATFORM },
+                ],
+              ]
+            : []
+        ),
       },
       {
         test: /node_modules\/react-native/,

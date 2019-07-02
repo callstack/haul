@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stripDeadPlatformSelect transform should remove non-matching platforms but leave Platform.select 1`] = `
+"const defaults = {
+  default: 'default'
+};
+const value = Platform.select({ ...defaults
+});"
+`;
+
+exports[`stripDeadPlatformSelect transform should remove non-matching platforms but leave Platform.select with method 1`] = `
+"const value = Platform.select({
+  android() {}
+
+});"
+`;
+
+exports[`stripDeadPlatformSelect transform should remove non-matching platforms but leave Platform.select with unknown cases 1 1`] = `
+"const value = Platform.select({
+  ['andr' + 'oid']: () => {}
+});"
+`;
+
+exports[`stripDeadPlatformSelect transform should remove non-matching platforms but leave Platform.select with unknown cases and default case 1`] = `
+"const value = Platform.select({
+  default: 'default',
+
+  ['andr' + 'oid']() {}
+
+});"
+`;
+
+exports[`stripDeadPlatformSelect transform should replace Platform.select with value for default case if there is no matching platform 1`] = `
+"const value = {
+  test: true
+};"
+`;
+
+exports[`stripDeadPlatformSelect transform should replace Platform.select with value for matching platform 1`] = `
+"const defaults = {
+  default: 'default'
+};
+
+const value = () => {};"
+`;

@@ -137,7 +137,7 @@ export default class WebpackBasicBundlePlugin {
             this.bundle
               ? 'throw new Error("Invalid bundle: async chunk not loaded. ' +
                   'Please open an issue at https://github.com/callstack/haul")'
-              : 'return asyncEval(__webpack_require__.p + $1)'
+              : 'return asyncEval($1)'
           );
         }
       );

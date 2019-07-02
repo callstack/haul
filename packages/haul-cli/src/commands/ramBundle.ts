@@ -87,6 +87,8 @@ export default function ramBundleCommand(runtime: Runtime) {
           indexedRamBundle,
         } = argv;
 
+        process.env.HAUL_PLATFORM = platform;
+
         const webpackConfig = prepareWebpackConfig(runtime, {
           config,
           dev,
