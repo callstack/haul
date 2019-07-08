@@ -17,7 +17,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "escape-string-regexp": "^2.0.0",
-    "lerna": "^3.13.2",
+    "lerna": "^3.15.0",
     "node-fetch": "^2.3.0",
     "rimraf": "^2.6.3",
     "strip-ansi": "^5.2.0",

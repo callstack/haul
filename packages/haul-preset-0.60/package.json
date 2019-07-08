@@ -1,7 +1,7 @@
 {
   "version": "0.6.1",
-  "name": "@haul-bundler/preset-0.59",
-  "description": "Haul preset for React Native 0.59",
+  "name": "@haul-bundler/preset-0.60",
+  "description": "Haul preset for React Native 0.60",
   "main": "build/index.js",
   "files": [
     "build/"

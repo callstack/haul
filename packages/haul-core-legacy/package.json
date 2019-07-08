@@ -83,7 +83,6 @@
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "@haul-bundler/core": "^0.6.0",
     "jest": "^24.7.1",
     "react-native": "^0.59.0",
     "rimraf": "^2.6.1",
