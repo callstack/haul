@@ -9,7 +9,7 @@
 
 Project preset with support for __React Native 0.60.x__ for Haul - Webpack-based React Native bundler.
 
-You can read moe about Haul here: https://github.com/callstack/haul.
+You can read more about Haul here: https://github.com/callstack/haul.
 
 <!-- badges (common) -->
 
