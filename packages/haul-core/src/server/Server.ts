@@ -29,7 +29,12 @@ import WebSocketDebuggerProxy from './WebSocketDebuggerProxy';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
-  { noInteractive: boolean; eager: string[]; bundleNames: string[] }
+  {
+    noInteractive: boolean;
+    eager: string[];
+    bundleNames: string[];
+    platforms: string[];
+  }
 >;
 
 export default class Server {
@@ -48,7 +53,14 @@ export default class Server {
   createCompiler() {
     const compiler = new Compiler({
       configPath: this.configPath,
-      configOptions: this.options,
+      configOptions: {
+        ...this.options,
+        bundleTarget: 'server',
+        bundleMode:
+          this.options.bundleNames.length > 1
+            ? 'multi-bundle'
+            : 'single-bundle',
+      },
     });
 
     compiler.on(
@@ -160,6 +172,7 @@ export default class Server {
     setupCompilerRoutes(this.runtime, server, this.compiler, {
       port,
       bundleNames: this.options.bundleNames,
+      platforms: this.options.platforms,
     });
 
     await server.start();

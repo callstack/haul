@@ -82,7 +82,7 @@ export default function getDefaultConfig(
               runtime,
               platform,
               root,
-              bundle: Boolean(env.bundle),
+              bundle: env.bundleTarget === 'file',
             },
           },
         },

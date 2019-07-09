@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import path from 'path';
 import makeConfigFactory from '../makeConfigFactory';
 import { Runtime, ProjectConfig, EnvOptions } from '../../';
 // @ts-ignore
@@ -43,11 +44,11 @@ const runtime = new Runtime();
 
 describe('makeConfig', () => {
   describe('with single bundle', () => {
-    const baseEnv = {
+    const baseEnv: EnvOptions = {
       platform: 'ios',
       root: __dirname,
       dev: false,
-      singleBundleMode: true,
+      bundleMode: 'single-bundle',
     };
 
     it('should create config for basic-bundle', () => {
@@ -124,7 +125,7 @@ describe('makeConfig', () => {
       const env: EnvOptions = {
         ...baseEnv,
         bundleType: 'indexed-ram-bundle',
-        bundle: true,
+        bundleTarget: 'file',
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
@@ -143,7 +144,7 @@ describe('makeConfig', () => {
       const env: EnvOptions = {
         ...baseEnv,
         bundleType: 'file-ram-bundle',
-        bundle: true,
+        bundleTarget: 'file',
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
@@ -199,6 +200,7 @@ describe('makeConfig', () => {
       const env: EnvOptions = {
         ...baseEnv,
         bundleType: 'indexed-ram-bundle',
+        bundleTarget: 'server',
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
@@ -208,15 +210,76 @@ describe('makeConfig', () => {
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
       ).toBeFalsy();
     });
+
+    it('should use filename from bundleOutput instead of templates', () => {
+      const projectConfig: ProjectConfig = {
+        bundles: {
+          index: {
+            entry: 'index.js',
+          },
+        },
+      };
+      const env: EnvOptions = {
+        ...baseEnv,
+        bundleType: 'basic-bundle',
+        bundleOutput: path.join(__dirname, 'main.jsbundle'),
+      };
+      const config = makeConfig(projectConfig)(runtime, env);
+      expect(config.webpackConfigs.index.output!.filename).toEqual(
+        'main.jsbundle'
+      );
+    });
+
+    it('should allow to overwrite bundle name', () => {
+      const projectConfig: ProjectConfig = {
+        bundles: {
+          index: {
+            name: 'main',
+            entry: 'index.js',
+          },
+        },
+      };
+      const env: EnvOptions = {
+        ...baseEnv,
+        bundleType: 'basic-bundle',
+      };
+      const config = makeConfig(projectConfig)(runtime, env);
+      expect(config.webpackConfigs.main.output!.filename).toEqual(
+        'main.jsbundle'
+      );
+    });
+
+    it('should use custom template', () => {
+      const projectConfig: ProjectConfig = {
+        templates: {
+          filename: {
+            ios: '[bundleName].[platform].[type].[mode].jsbundle',
+          },
+        },
+        bundles: {
+          main: {
+            entry: 'index.js',
+          },
+        },
+      };
+      const env: EnvOptions = {
+        ...baseEnv,
+        bundleType: 'basic-bundle',
+      };
+      const config = makeConfig(projectConfig)(runtime, env);
+      expect(config.webpackConfigs.main.output!.filename).toEqual(
+        'main.ios.default.prod.jsbundle'
+      );
+    });
   });
 
   describe('with multiple bundles', () => {
-    const baseEnv = {
+    const baseEnv: EnvOptions = {
       platform: 'ios',
       root: __dirname,
       dev: false,
-      singleBundleMode: false,
-      bundle: true,
+      bundleMode: 'multi-bundle',
+      bundleTarget: 'file',
     };
 
     it('should create config', () => {
@@ -278,7 +341,7 @@ describe('makeConfig', () => {
       };
       const env: EnvOptions = {
         ...baseEnv,
-        bundle: false,
+        bundleTarget: 'server',
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(

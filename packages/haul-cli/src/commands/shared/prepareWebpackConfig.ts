@@ -17,7 +17,7 @@ export type Options = {
   sourcemapOutput?: string;
   progress: string;
   bundleType?: EnvOptions['bundleType'];
-  singleBundleMode: boolean;
+  bundleMode: EnvOptions['bundleMode'];
 };
 
 export default function prepareWebpackConfig(
@@ -34,12 +34,12 @@ export default function prepareWebpackConfig(
     root: directory,
     dev: options.dev,
     bundleType: options.bundleType,
-    singleBundleMode: options.singleBundleMode,
+    bundleMode: options.bundleMode,
+    bundleTarget: 'file',
     assetsDest: options.assetsDest,
     bundleOutput: options.bundleOutput,
     sourcemapOutput: options.sourcemapOutput,
     minify: options.minify === undefined ? !options.dev : options.minify,
-    bundle: true,
   });
 
   const webpackConfig =

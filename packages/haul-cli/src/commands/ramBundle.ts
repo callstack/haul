@@ -102,7 +102,7 @@ export default function ramBundleCommand(runtime: Runtime) {
             !indexedRamBundle && platform == 'android'
               ? 'file-ram-bundle'
               : 'indexed-ram-bundle',
-          singleBundleMode: true,
+          bundleMode: 'single-bundle',
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 

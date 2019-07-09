@@ -12,7 +12,11 @@ export default function setupCompilerRoutes(
   runtime: Runtime,
   server: Hapi.Server,
   compiler: any,
-  { port, bundleNames }: { port: number; bundleNames: string[] }
+  {
+    port,
+    bundleNames,
+    platforms,
+  }: { port: number; bundleNames: string[]; platforms: string[] }
 ) {
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
@@ -57,6 +61,14 @@ export default function setupCompilerRoutes(
           }`;
           runtime.logger.error(message);
           return Boom.badImplementation(message);
+        }
+
+        if (!platforms.includes(platform)) {
+          const message = `Platform "${platform}" is not supported - only: ${platforms
+            .map(platform => `"${platform}"`)
+            .join(', ')} are available.`;
+          runtime.logger.error(message);
+          return Boom.badRequest(message);
         }
 
         runtime.logger.info(

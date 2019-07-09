@@ -91,12 +91,12 @@ export default function multiBundleCommand(runtime: Runtime) {
           platform,
           root: directory,
           dev,
-          singleBundleMode: false,
+          bundleMode: 'multi-bundle',
+          bundleTarget: 'file',
           bundleOutput,
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
-          bundle: true,
         });
 
         for (const bundleName of sortBundlesByDependencies(projectConfig)) {
