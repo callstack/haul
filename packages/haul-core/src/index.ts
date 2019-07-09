@@ -3,6 +3,10 @@ export {
   default as getNormalizedProjectConfigBuilder,
 } from './config/getNormalizedProjectConfigBuilder';
 export { default as getProjectConfigPath } from './config/getProjectConfigPath';
+export { default as withPolyfillsFactory } from './preset/withPolyfillsFactory';
+export { default as getBabelConfigPath } from './preset/getBabelConfigPath';
+export { default as makeConfigFactory } from './preset/makeConfigFactory';
+
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
 export { default as HasteResolver } from './webpack/resolvers/HasteResolver';

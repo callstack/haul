@@ -56,9 +56,12 @@ export type WebpackConfigTransform = (params: {
   config: webpack.Configuration;
   env: EnvOptions;
   runtime: Runtime;
-}) => webpack.Configuration;
+}) => webpack.Configuration | void;
 
-export type BundleConfigBuilder = (env: EnvOptions) => BundleConfig;
+export type BundleConfigBuilder = (
+  env: EnvOptions,
+  runtime: Runtime
+) => BundleConfig;
 
 export type ProjectConfig = {
   server?: ServerConfig;
