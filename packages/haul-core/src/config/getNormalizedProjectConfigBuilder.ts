@@ -19,5 +19,11 @@ export default function getNormalizedProjectConfigBuilder(
     config = config.__esModule ? config.default : config;
   }
 
+  if (typeof config !== 'function') {
+    throw new Error(
+      `Exported value from ${configPath} does not seem to be a valid Haul config - did you forget to use "makeConfig"?`
+    );
+  }
+
   return config as NormalizedProjectConfigBuilder;
 }

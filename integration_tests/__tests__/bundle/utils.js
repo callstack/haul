@@ -16,21 +16,26 @@ export const TEST_PROJECT_DIR = path.resolve(
 );
 
 export function bundleForPlatform(platform: string) {
-  const bundlePath = path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle`);
+  const bundlePath = path.resolve(
+    TEST_PROJECT_DIR,
+    platform === 'ios' ? 'index.jsbundle' : 'index.android.bundle'
+  );
   const { stdout } = runHaulSync(TEST_PROJECT_DIR, [
     'bundle',
     '--platform',
     platform,
   ]);
   // $FlowFixMe
-  if (stdout.match(/ERROR/g)) {
+  if (stdout.match(/(error ▶︎ |ERROR)/g)) {
     throw new Error(stdout);
   }
 
   return bundlePath;
 }
 
-export function cleanup(platform: 'ios' | 'android') {
-  rimraf.sync(path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle`));
-  rimraf.sync(path.resolve(TEST_PROJECT_DIR, `index.${platform}.bundle.map`));
+export function cleanup(platform: string) {
+  const filename =
+    platform === 'ios' ? 'index.jsbundle' : 'index.android.bundle';
+  rimraf.sync(path.resolve(TEST_PROJECT_DIR, filename));
+  rimraf.sync(path.resolve(TEST_PROJECT_DIR, `${filename}.map`));
 }

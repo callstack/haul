@@ -1,3 +1,7 @@
+import get from 'lodash.get';
+import merge from 'lodash.merge';
+import webpack from 'webpack';
+import path from 'path';
 import {
   Runtime,
   EnvOptions,
@@ -9,11 +13,14 @@ import {
   DEFAULT_PORT,
   NormalizedBundleConfig,
 } from '../';
-import RamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
-import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
-import get from 'lodash.get';
-import webpack from 'webpack';
-import path from 'path';
+import getSourceMapPlugin from './utils/getSourceMapPlugin';
+import {
+  NormalizedServerConfig,
+  NormalizedTemplatesConfig,
+} from '../config/types';
+import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
+import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
+import getBundlePlugin from './utils/getBundlePlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -21,6 +28,14 @@ type GetDefaultConfig = (
   bundleName: string,
   normalizedProjectConfig: NormalizedProjectConfig
 ) => webpack.Configuration;
+
+const defaultTemplateConfig: NormalizedTemplatesConfig = {
+  filename: {
+    ios: '[bundleName].jsbundle',
+    android: '[bundleName].[platform].bundle',
+    __server__: '[bundleName].[platform].bundle',
+  },
+};
 
 export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
   return function makeConfig(
@@ -30,7 +45,15 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
       const normalizedServerConfig = {
         port: get(projectConfig, 'server.port', DEFAULT_PORT),
         host: get(projectConfig, 'server.host', 'localhost'),
-      };
+      } as NormalizedServerConfig;
+
+      const normalizedTemplatesConfig = merge(
+        {},
+        defaultTemplateConfig,
+        projectConfig.templates
+      ) as NormalizedTemplatesConfig;
+
+      const platforms = projectConfig.platforms || ['ios', 'android'];
 
       const normalizedBundleConfigs: {
         [bundleName: string]: NormalizedBundleConfig;
@@ -51,11 +74,16 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         const dev = bundleConfig.dev || env.dev;
         const root = bundleConfig.root || env.root;
         const normalizedBundleConfig = {
+          name: bundleConfig.name || bundleName,
           entry:
             typeof bundleConfig.entry === 'string'
               ? [bundleConfig.entry]
               : bundleConfig.entry,
-          type: bundleConfig.type || env.bundleType || 'basic-bundle',
+          type:
+            // Force basic-bundle type when serving from packager server.
+            env.bundleTarget === 'server'
+              ? 'basic-bundle'
+              : bundleConfig.type || env.bundleType || 'basic-bundle',
           platform: bundleConfig.platform || env.platform,
           root,
           dev,
@@ -75,56 +103,37 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           hasteOptions: bundleConfig.hasteOptions || {},
         };
 
-        // Force basic-bundle type when serving from packager server.
-        if (!env.bundle) {
-          normalizedBundleConfig.type = 'basic-bundle';
+        // Make sure the target platform is supported. Do not run this check when target is set
+        // to server, since the initial configuration loading is done with `platform` set
+        // to "".
+        if (
+          !platforms.includes(normalizedBundleConfig.platform) &&
+          env.bundleTarget !== 'server'
+        ) {
+          throw new Error(
+            `Platform "${
+              normalizedBundleConfig.platform
+            }" is not supported - only: ${platforms
+              .map(platform => `"${platform}"`)
+              .join(', ')} are available.`
+          );
         }
-
-        const partialNormalizedProjectConfig = {
-          server: normalizedServerConfig,
-          bundles: {
-            // Pass only it's own normalized bundle config
-            [bundleName]: normalizedBundleConfig,
-          },
-          webpackConfigs: {},
-        };
 
         let webpackConfig = getDefaultConfig(
           runtime,
           env,
-          bundleName,
-          partialNormalizedProjectConfig
+          normalizedBundleConfig.name,
+          {
+            server: normalizedServerConfig,
+            platforms,
+            templates: normalizedTemplatesConfig,
+            bundles: {
+              // Pass only it's own normalized bundle config
+              [normalizedBundleConfig.name]: normalizedBundleConfig,
+            },
+            webpackConfigs: {},
+          }
         );
-
-        webpackConfig.plugins = (webpackConfig.plugins || [])
-          .concat(getSourceMapPlugin(
-            bundleName,
-            partialNormalizedProjectConfig
-          ) as webpack.Plugin)
-          .filter(Boolean);
-
-        // Tweak bundle when creating static bundle
-        if (normalizedBundleConfig.type === 'basic-bundle') {
-          (webpackConfig.plugins as webpack.Plugin[]).push(
-            new BasicBundleWebpackPlugin({
-              bundle: Boolean(env.bundle),
-              sourceMap: Boolean(normalizedBundleConfig.sourceMap),
-              preloadBundles: normalizedBundleConfig.dependsOn,
-            })
-          );
-        } else {
-          (webpackConfig.plugins as webpack.Plugin[]).push(
-            new RamBundlePlugin({
-              minify: normalizedBundleConfig.minify,
-              minifyOptions: normalizedBundleConfig.minifyOptions,
-              sourceMap: Boolean(normalizedBundleConfig.sourceMap),
-              indexRamBundle:
-                normalizedBundleConfig.type === 'indexed-ram-bundle',
-              singleBundleMode: env.singleBundleMode,
-              preloadBundles: normalizedBundleConfig.dependsOn,
-            })
-          );
-        }
 
         if (env.assetsDest) {
           webpackConfig.output!.path = path.isAbsolute(env.assetsDest)
@@ -143,125 +152,57 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
               );
         }
 
-        if (env.singleBundleMode) {
-          // In single-bundle mode, `bundleOutput` will point to a file.
-          if (env.bundleOutput) {
-            webpackConfig.output!.filename = path.isAbsolute(env.bundleOutput)
-              ? path.relative(webpackConfig.output!.path!, env.bundleOutput)
-              : path.relative(
-                  webpackConfig.output!.path!,
-                  path.join(normalizedBundleConfig.root, env.bundleOutput)
-                );
-          } else {
-            webpackConfig.output!.filename = `index.${
-              normalizedBundleConfig.platform
-            }.bundle`;
-          }
-        } else {
-          const bundleFilename = `${bundleName}.${
-            normalizedBundleConfig.platform
-          }.bundle`;
-          let bundleOutputDirectory = webpackConfig.output!.path!;
-          if (env.bundleOutput) {
-            // `bundleOutput` should be a directory, but for backward-compatibility,
-            // we also handle the case with a filename.
-            bundleOutputDirectory =
-              path.extname(env.bundleOutput) === ''
-                ? env.bundleOutput
-                : path.dirname(env.bundleOutput);
-            bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
-              ? bundleOutputDirectory
-              : path.join(normalizedBundleConfig.root, bundleOutputDirectory);
+        webpackConfig.plugins = (webpackConfig.plugins || [])
+          .concat(getSourceMapPlugin(
+            normalizedBundleConfig,
+            normalizedServerConfig
+          ) as webpack.Plugin)
+          .filter(Boolean);
 
-            const targetBundleOutput = path.join(
-              bundleOutputDirectory,
-              bundleFilename
-            );
-            webpackConfig.output!.filename = path.relative(
-              webpackConfig.output!.path!,
-              targetBundleOutput
-            );
-          } else {
-            webpackConfig.output!.filename = bundleFilename;
-          }
+        webpackConfig.plugins = (webpackConfig.plugins || []).concat(
+          getBundlePlugin(env, normalizedBundleConfig)
+        );
 
-          if (normalizedBundleConfig.dll) {
-            webpackConfig.output!.library = bundleName;
-            webpackConfig.output!.libraryTarget = 'this';
-            webpackConfig.plugins!.push(
-              new webpack.DllPlugin({
-                name: bundleName,
-                path: path.join(
-                  bundleOutputDirectory,
-                  `${bundleName}.manifest.json`
-                ),
-              })
-            );
-          } else if (normalizedBundleConfig.app) {
-            webpackConfig.output!.library = bundleName;
-            webpackConfig.output!.libraryTarget = 'this';
-          }
-
-          normalizedBundleConfig.dependsOn.forEach((dllBundleName: string) => {
-            webpackConfig.plugins!.push(
-              new webpack.DllReferencePlugin({
-                context: normalizedBundleConfig.root,
-                manifest: path.join(
-                  bundleOutputDirectory,
-                  `${dllBundleName}.manifest.json`
-                ),
-                sourceType: 'this',
-              })
-            );
-          });
+        if (env.bundleMode === 'single-bundle') {
+          applySingleBundleTweaks(
+            env,
+            normalizedTemplatesConfig,
+            normalizedBundleConfig,
+            webpackConfig
+          );
+        } else if (env.bundleMode === 'multi-bundle') {
+          applyMultiBundleTweaks(
+            env,
+            normalizedTemplatesConfig,
+            normalizedBundleConfig,
+            webpackConfig
+          );
         }
 
         const { transform } = bundleConfig;
         if (transform) {
           webpackConfig =
             transform({
-              bundleName,
+              bundleName: normalizedBundleConfig.name,
               config: webpackConfig,
               env,
               runtime,
             }) || webpackConfig;
         }
 
-        normalizedBundleConfigs[bundleName] = normalizedBundleConfig;
-        webpackConfigs[bundleName] = webpackConfig;
+        normalizedBundleConfigs[
+          normalizedBundleConfig.name
+        ] = normalizedBundleConfig;
+        webpackConfigs[normalizedBundleConfig.name] = webpackConfig;
       });
 
       return {
         server: normalizedServerConfig,
+        platforms,
+        templates: normalizedTemplatesConfig,
         bundles: normalizedBundleConfigs,
         webpackConfigs,
-      } as NormalizedProjectConfig;
+      };
     };
   };
-}
-
-function getSourceMapPlugin(
-  bundleName: string,
-  { server, bundles }: NormalizedProjectConfig
-) {
-  const baseOptions = {
-    test: /\.(js|css|(js)?bundle)($|\?)/i,
-    filename: '[file].map',
-    moduleFilenameTemplate: '[absolute-resource-path]',
-    module: true,
-  };
-
-  if (bundles[bundleName].sourceMap === 'inline') {
-    return new webpack.EvalSourceMapDevToolPlugin({
-      ...baseOptions,
-      publicPath: `http://${server.host}:${server.port}/`,
-    } as webpack.EvalSourceMapDevToolPluginOptions);
-  } else if (bundles[bundleName].sourceMap) {
-    return new webpack.SourceMapDevToolPlugin({
-      ...baseOptions,
-      publicPath: `http://${server.host}:${server.port}/`,
-    } as webpack.SourceMapDevToolPluginOptions);
-  }
-
-  return undefined;
 }

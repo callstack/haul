@@ -92,7 +92,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           sourcemapOutput,
           progress,
           bundleType: 'basic-bundle',
-          singleBundleMode: true,
+          bundleMode: 'single-bundle',
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 

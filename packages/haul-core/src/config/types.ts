@@ -8,22 +8,25 @@ export type ServerConfig = {
   host?: string;
 };
 
+export type NormalizedServerConfig = DeepNonNullable<ServerConfig>;
+
 // Options received from the CLI arguments/options.
 export type EnvOptions = {
   platform: string;
   root: string;
   dev: boolean;
   bundleType?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
-  singleBundleMode: boolean;
+  bundleMode: 'single-bundle' | 'multi-bundle';
+  bundleTarget?: 'file' | 'server';
   assetsDest?: string;
   bundleOutput?: string;
   sourcemapOutput?: string;
   minify?: boolean;
-  bundle?: boolean;
   port?: number;
 };
 
 export type BundleConfig = {
+  name?: string;
   entry: string | string[];
   type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
   platform?: string;
@@ -46,6 +49,12 @@ export type BundleConfig = {
   transform?: WebpackConfigTransform;
 };
 
+export type TemplatesConfig = {
+  filename: { [platform: string]: string };
+};
+
+export type NormalizedTemplatesConfig = TemplatesConfig;
+
 export type NormalizedBundleConfig = Overwrite<
   Pick<DeepNonNullable<BundleConfig>, Exclude<keyof BundleConfig, 'transform'>>,
   { minifyOptions: BundleConfig['minifyOptions'] }
@@ -65,11 +74,15 @@ export type BundleConfigBuilder = (
 
 export type ProjectConfig = {
   server?: ServerConfig;
+  platforms?: string[];
+  templates?: TemplatesConfig;
   bundles: { [bundleName: string]: BundleConfigBuilder | BundleConfig };
 };
 
 export type NormalizedProjectConfig = {
-  server: DeepNonNullable<ServerConfig>;
+  server: NormalizedServerConfig;
+  platforms: string[];
+  templates: NormalizedTemplatesConfig;
   bundles: { [bundleName: string]: NormalizedBundleConfig };
   webpackConfigs: { [bundleName: string]: webpack.Configuration };
 };

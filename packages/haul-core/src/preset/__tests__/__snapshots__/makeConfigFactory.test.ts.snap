@@ -17,6 +17,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "app",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -37,6 +38,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "base_dll",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -59,6 +61,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "index",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -68,9 +71,20 @@ Object {
       "type": "basic-bundle",
     },
   },
+  "platforms": Array [
+    "ios",
+    "android",
+  ],
   "server": Object {
     "host": "localhost",
     "port": 8081,
+  },
+  "templates": Object {
+    "filename": Object {
+      "__server__": "[bundleName].[platform].bundle",
+      "android": "[bundleName].[platform].bundle",
+      "ios": "[bundleName].jsbundle",
+    },
   },
   "webpackConfigs": Object {
     "app": Object {
@@ -81,7 +95,7 @@ Object {
       ],
       "mode": "production",
       "output": Object {
-        "filename": "app.ios.bundle",
+        "filename": "app.jsbundle",
         "globalObject": "this",
         "library": "app",
         "libraryTarget": "this",
@@ -114,7 +128,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -152,7 +165,7 @@ Object {
       ],
       "mode": "production",
       "output": Object {
-        "filename": "base_dll.ios.bundle",
+        "filename": "base_dll.jsbundle",
         "globalObject": "this",
         "library": "base_dll",
         "libraryTarget": "this",
@@ -185,7 +198,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -220,7 +232,7 @@ Object {
       ],
       "mode": "production",
       "output": Object {
-        "filename": "index.ios.bundle",
+        "filename": "index.jsbundle",
         "globalObject": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
@@ -251,7 +263,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -296,6 +307,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "app",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -316,6 +328,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "base_dll",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -338,6 +351,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "index",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -347,9 +361,20 @@ Object {
       "type": "basic-bundle",
     },
   },
+  "platforms": Array [
+    "ios",
+    "android",
+  ],
   "server": Object {
     "host": "localhost",
     "port": 8081,
+  },
+  "templates": Object {
+    "filename": Object {
+      "__server__": "[bundleName].[platform].bundle",
+      "android": "[bundleName].[platform].bundle",
+      "ios": "[bundleName].jsbundle",
+    },
   },
   "webpackConfigs": Object {
     "app": Object {
@@ -393,7 +418,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -458,7 +482,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -518,7 +541,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",
@@ -561,6 +583,7 @@ Object {
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
+      "name": "index",
       "platform": "ios",
       "providesModuleNodeModules": Array [
         "react-native",
@@ -570,9 +593,20 @@ Object {
       "type": "basic-bundle",
     },
   },
+  "platforms": Array [
+    "ios",
+    "android",
+  ],
   "server": Object {
     "host": "localhost",
     "port": 8081,
+  },
+  "templates": Object {
+    "filename": Object {
+      "__server__": "[bundleName].[platform].bundle",
+      "android": "[bundleName].[platform].bundle",
+      "ios": "[bundleName].jsbundle",
+    },
   },
   "webpackConfigs": Object {
     "index": Object {
@@ -583,7 +617,7 @@ Object {
       ],
       "mode": "production",
       "output": Object {
-        "filename": "index.ios.bundle",
+        "filename": "index.jsbundle",
         "globalObject": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
@@ -614,7 +648,6 @@ Object {
             "filename": "[file].map",
             "module": true,
             "moduleFilenameTemplate": "[absolute-resource-path]",
-            "publicPath": "http://localhost:8081/",
             "test": /\\\\\\.\\(js\\|css\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
           },
           "sourceMapFilename": "[file].map",

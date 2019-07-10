@@ -93,10 +93,10 @@ export default function startCommand(runtime: Runtime) {
           platform: '',
           root: directory,
           dev: argv.dev,
-          singleBundleMode: false,
+          bundleMode: 'multi-bundle',
+          bundleTarget: 'server',
           assetsDest,
           minify: argv.minify === undefined ? !argv.dev : argv.minify,
-          bundle: false,
         }
       );
 
@@ -149,6 +149,7 @@ export default function startCommand(runtime: Runtime) {
           assetsDest,
           root: directory,
           eager: parsedEager,
+          platforms: projectConfig.platforms,
           bundleNames: Object.keys(projectConfig.bundles),
         }).listen(projectConfig.server.host, projectConfig.server.port);
       } catch (error) {
