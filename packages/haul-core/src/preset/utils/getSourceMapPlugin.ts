@@ -21,10 +21,7 @@ export default function getSourceMapPlugin(
       publicPath: `http://${serverConfig.host}:${serverConfig.port}/`,
     } as webpack.EvalSourceMapDevToolPluginOptions);
   } else if (bundleConfig.sourceMap) {
-    return new webpack.SourceMapDevToolPlugin({
-      ...baseOptions,
-      publicPath: `http://${serverConfig.host}:${serverConfig.port}/`,
-    } as webpack.SourceMapDevToolPluginOptions);
+    return new webpack.SourceMapDevToolPlugin(baseOptions);
   }
 
   return undefined;

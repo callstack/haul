@@ -170,7 +170,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             normalizedBundleConfig,
             webpackConfig
           );
-        } else {
+        } else if (env.bundleMode === 'multi-bundle') {
           applyMultiBundleTweaks(
             env,
             normalizedTemplatesConfig,
