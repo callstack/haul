@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0",
   "name": "@haul-bundler/ram-bundle-webpack-plugin",
   "description": "RAM bundle plugin for Haul and Webpack",
   "main": "build/index.js",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "@haul-bundler/core": "^0.6.0",
+    "@haul-bundler/core": "^0.7.0",
     "metro": "^0.53.1",
     "terser": "^3.17.0",
     "webpack": "^4.30.0",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
-    "@haul-bundler/babel-preset-react-native": "^0.6.0",
+    "@haul-bundler/babel-preset-react-native": "^0.7.0",
     "@types/webpack-sources": "^0.1.5",
     "babel-loader": "^8.0.5",
     "metro": "^0.53.1",
