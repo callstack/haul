@@ -128,7 +128,7 @@ function makeResponseFromCompilerResults(
   }
 ) {
   if (result.errors) {
-    return Boom.badImplementation(`File ${filename} not found`);
+    return h.response({ errors: result.errors }).code(500);
   } else if (!result.file) {
     return Boom.notFound(`File ${filename} not found`);
   }
