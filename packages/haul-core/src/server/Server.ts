@@ -185,7 +185,6 @@ export default class Server {
       this.runtime.logger.done(
         `Packager server running on http://${host}:${port}`
       );
-      console.log('1234567890'.repeat(20));
     }
 
     this.options.eager.forEach(platform => {
