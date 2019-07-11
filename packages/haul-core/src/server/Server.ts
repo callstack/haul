@@ -1,8 +1,7 @@
 import { EnvOptions } from '../config/types';
 import { Assign } from 'utility-types';
-import Hapi from '@hapi/hapi';
+import Hapi, { ResponseObject } from '@hapi/hapi';
 import http from 'http';
-import { EventEmitter } from 'events';
 import ws from 'ws';
 // @ts-ignore
 import Compiler from '@haul-bundler/core-legacy/build/compiler/Compiler';
@@ -10,22 +9,13 @@ import { terminal } from 'terminal-kit';
 import Runtime from '../runtime/Runtime';
 import setupDevtoolRoutes from './setupDevtoolRoutes';
 import setupCompilerRoutes from './setupCompilerRoutes';
-import renderUI from './renderUI';
-import {
-  EAGER_COMPILATION_REQUEST,
-  COMPILATION_START,
-  COMPILATION_PROGRESS,
-  COMPILATION_FAILED,
-  COMPILATION_FINISHED,
-  REQUEST_FAILED,
-  RESPONSE_COMPLETE,
-  RESPONSE_FAILED,
-  LOG,
-} from './events';
 import setupLiveReload from './setupLiveReload';
 import setupSymbolication from './setupSymbolication';
 import createWebsocketProxy from './websocketProxy';
 import WebSocketDebuggerProxy from './WebSocketDebuggerProxy';
+import UserInterface from './UserInterface';
+import Logger from '../runtime/Logger';
+import { container, color, modifier, pad, AnsiColor } from 'ansi-fragments';
 
 type ServerEnvOptions = Assign<
   Pick<EnvOptions, 'dev' | 'minify' | 'assetsDest' | 'root'>,
@@ -39,10 +29,11 @@ type ServerEnvOptions = Assign<
 
 export default class Server {
   compiler: any;
-  serverEvents = new EventEmitter();
   server: Hapi.Server | undefined;
   httpServer: http.Server = http.createServer();
   resetConsole = () => {};
+  disposeLoggerProxy = () => {};
+  ui = new UserInterface(terminal);
 
   constructor(
     private runtime: Runtime,
@@ -66,28 +57,48 @@ export default class Server {
     compiler.on(
       Compiler.Events.BUILD_START,
       ({ platform }: { platform: string }) => {
-        this.serverEvents.emit(COMPILATION_START, { platform });
+        this.ui.updateCompilationProgress(platform, {
+          running: true,
+          value: 0,
+        });
       }
     );
 
     compiler.on(
       Compiler.Events.BUILD_PROGRESS,
       ({ progress, platform }: { platform: string; progress: number }) => {
-        this.serverEvents.emit(COMPILATION_PROGRESS, { platform, progress });
+        this.ui.updateCompilationProgress(platform, {
+          running: true,
+          value: progress,
+        });
       }
     );
 
     compiler.on(
       Compiler.Events.BUILD_FAILED,
       ({ platform, message }: { platform: string; message: string }) => {
-        this.serverEvents.emit(COMPILATION_FAILED, { platform, message });
+        this.ui.updateCompilationProgress(platform, {
+          running: false,
+          value: 0,
+        });
+        this.ui.addLogItem(
+          this.runtime.logger.enhance(Logger.Level.Error, message)
+        );
       }
     );
 
     compiler.on(
       Compiler.Events.BUILD_FINISHED,
       ({ platform, errors }: { platform: string; errors: string[] }) => {
-        this.serverEvents.emit(COMPILATION_FINISHED, { platform, errors });
+        this.ui.updateCompilationProgress(platform, {
+          running: false,
+          value: 1,
+        });
+        errors.forEach(error => {
+          this.ui.addLogItem(
+            this.runtime.logger.enhance(Logger.Level.Error, error)
+          );
+        });
       }
     );
 
@@ -106,20 +117,20 @@ export default class Server {
   }
 
   exit(exitCode: number, error: any | undefined) {
+    if (!this.options.noInteractive) {
+      this.ui.dispose(exitCode, false);
+    }
     this.resetConsole();
+    this.disposeLoggerProxy();
     if (error) {
       this.runtime.logger.error(error);
-    }
-    this.compiler.terminate();
-    if (!this.options.noInteractive) {
-      terminal.fullscreen(false); // switch back to main screen buffer
     }
     this.runtime.complete(exitCode);
   }
 
   async listen(host: string, port: number) {
-    this.runtime.logger.proxy((level, ...args) => {
-      this.serverEvents.emit(LOG, { level, args });
+    this.disposeLoggerProxy = this.runtime.logger.proxy((level, ...args) => {
+      this.ui.addLogItem(this.runtime.logger.enhance(level, ...args));
     });
     this.resetConsole = this.hijackConsole();
     this.compiler = this.createCompiler();
@@ -145,19 +156,12 @@ export default class Server {
 
     await server.register(require('@hapi/inert'));
 
-    server.events.on(
-      { name: 'request', channels: 'error' },
-      (request, event) => {
-        this.serverEvents.emit(REQUEST_FAILED, { request, event });
-      }
-    );
-
     server.events.on('response', request => {
       if ('statusCode' in request.response) {
         if (request.response.statusCode < 400) {
-          this.serverEvents.emit(RESPONSE_COMPLETE, { request });
+          this.logServerEvent(request);
         } else {
-          this.serverEvents.emit(RESPONSE_FAILED, { request });
+          this.logServerEvent(request);
         }
       }
     });
@@ -177,12 +181,13 @@ export default class Server {
 
     await server.start();
     if (!this.options.noInteractive) {
-      terminal.fullscreen(true); // Switch to alternate screen buffer
-      renderUI(this.serverEvents, { port, host });
+      this.ui.start(this.options.platforms);
+      this.runtime.logger.done(
+        `Packager server running on http://${host}:${port}`
+      );
     }
 
     this.options.eager.forEach(platform => {
-      this.serverEvents.emit(EAGER_COMPILATION_REQUEST, { platform });
       this.compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
         filename: `/index.${platform}.bundle`, // NOTE: maybe the entry bundle is arbitrary
         platform,
@@ -201,10 +206,15 @@ export default class Server {
     const error = console.error;
 
     console.log = (...args) => {
-      this.serverEvents.emit(LOG, { level: 'info', args });
+      this.ui.addLogItem(
+        this.runtime.logger.enhance(Logger.Level.Info, ...args)
+      );
     };
+
     console.error = (...args) => {
-      this.serverEvents.emit(LOG, { level: 'error', args });
+      this.ui.addLogItem(
+        this.runtime.logger.enhance(Logger.Level.Error, ...args)
+      );
     };
 
     return () => {
@@ -212,5 +222,25 @@ export default class Server {
       console.error = error;
     };
     /* eslint-enable no-console */
+  }
+
+  logServerEvent(request: Hapi.Request, event?: Hapi.RequestEvent) {
+    const { statusCode } = request.response as ResponseObject;
+    let logColor: AnsiColor = 'green';
+    if (statusCode >= 300 && statusCode < 400) {
+      logColor = 'yellow';
+    } else if (statusCode >= 400) {
+      logColor = 'red';
+    }
+    this.ui.addLogItem(
+      container(
+        color(logColor, modifier('bold', request.method.toUpperCase())),
+        pad(1),
+        request.path,
+        pad(1),
+        color('gray', statusCode.toString()),
+        event ? event.tags.join(' ') : ''
+      ).build()
+    );
   }
 }

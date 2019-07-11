@@ -31,7 +31,6 @@
     "escape-string-regexp": "^2.0.0",
     "hasha": "^5.0.0",
     "image-size": "^0.7.4",
-    "ink": "^2.2.0",
     "loader-utils": "^1.2.3",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
@@ -40,7 +39,6 @@
     "open": "^6.0.0",
     "open-in-editor": "^2.2.0",
     "platform-select": "^1.1.2",
-    "react": "^16.8.6",
     "resolve": "^1.10.1",
     "source-map": "^0.7.3",
     "terminal-kit": "^1.28.1",
@@ -61,7 +59,6 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.throttle": "^4.1.6",
     "@types/node-fetch": "^2.3.6",
-    "@types/react": "^16.8.20",
     "@types/resolve": "^0.0.8",
     "@types/terminal-kit": "^1.28.0",
     "@types/ws": "^6.0.1"

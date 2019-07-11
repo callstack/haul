@@ -111,12 +111,12 @@ module.exports = async function runWebpackCompiler({
   });
 
   emitter.on('start', () => {
+    emitter.emit(Events.BUILD_START);
     compiler.watch({}, error => {
       if (error) {
         emitter.emit(Events.BUILD_FAILED, { message: error.toString() });
       }
     });
-    emitter.emit(Events.BUILD_START);
   });
 
   return emitter;

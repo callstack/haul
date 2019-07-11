@@ -71,6 +71,18 @@ export default class Logger {
     ).build();
   };
 
+  enhance = (level: LoggerLevel, ...args: unknown[]) => {
+    return container(
+      color(levelToColorMappings[level], modifier('bold', level)),
+      pad(1),
+      '▶︎',
+      pad(1),
+      args
+        .map(item => (typeof item === 'string' ? item : inspect(item)))
+        .join(' ')
+    ).build();
+  };
+
   private createLoggingFunction(level: LoggerLevel) {
     return (...args: unknown[]) => {
       if (this.inspectorClient) {
@@ -80,17 +92,7 @@ export default class Logger {
       if (this.proxyHandler) {
         this.proxyHandler(level, ...args);
       } else {
-        this.print(
-          container(
-            color(levelToColorMappings[level], modifier('bold', level)),
-            pad(1),
-            '▶︎',
-            pad(1),
-            args
-              .map(item => (typeof item === 'string' ? item : inspect(item)))
-              .join(' ')
-          ).build()
-        );
+        this.print(this.enhance(level, ...args));
       }
     };
   }
