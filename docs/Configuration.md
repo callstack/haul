@@ -61,14 +61,14 @@ Project configuration object (the one accepted by `makeConfig` function) consist
   When providing the value, you need to specify all of the available platforms, for example to __add__ `windows` your need to pass `['windows', 'ios', 'android']`.
 * `templates?: TemplateConfig` (_optional_) - Customize templates for given platform:
   * `filename?: { [platform: string]: string }` (_optional_) - Customize bundle filename for given platform.
-    Defaults to:
+    If `--bundle-output` is provided, the __filename will be inferred__ from it using `path.basename()`, otherwise it will defaults to:
     ```js
     {
       ios: '[bundleName].jsbundle',
       android: '[bundleName].[platform].bundle',
     }
     ```
-    You can add your own platform with a template, for example: `{ windows: '[bundleName].resource' }`.
+    You can add your own platform with a template, for example: `{ 'my-platform': '[bundleName].resource' }`.
 
     You can use `[bundleName]`, `[platform]`, `[mode]` (`prod` or `dev`) and `[type]` (`default`, `app` or `dll`) placeholders in a template.
 * `bundles: { [bundleName: string]: BundleConfigBuilder | BundleConfig }` (__required__) - An object where the property name (a key) will become bundle name and a bundle config or a bundle config builder. See below for bundle config reference.
@@ -130,7 +130,7 @@ export default makeConfig({
 
 ### Out-of-tree platform
 
-To add support for out-of-tree platform, there are 2 properties that's need to be defined: `platfroms` and `templates.filename`.
+To add support for out-of-tree platform, there are 2 properties that's need to be defined: `platforms` and `templates.filename`.
 
 For the platform `custom`, here's how the config would look like:
 
@@ -153,6 +153,8 @@ export default makeConfig({
 ```
 
 This config will allow you to run `bundle`, `ram-bundle` and `multi-bundle` (__experimental__) with `--platform custom`.
+
+Remember that, if the `--bundle-output` is provided, the `templates.filename.custom` won't be used, instead the filename will be inferred from the `--bundle-output` argument.
 
 Please note that by providing `platforms` array, no defaults will be added, meaning `ios` and `android` are no loger supported. To add support for `ios` and `android` alongside `custom` use `['custom', 'ios', 'android']`:
 
