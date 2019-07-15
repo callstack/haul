@@ -24,12 +24,12 @@ To release a new update, we have to bundle our app, then use CodePush CLI to sen
 
 There are two bundle methods: with or without assets. Refer to table below to see which Haul command You should use:
 
-| Platform/option   | Command                                                                                                                                           |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| Android wo/assets | haul bundle --platform android --entry-file \<entryFile> --bundle-output \<outputDir>/index.android.bundle --dev false                            |
-| Android w/assets  | haul bundle --platform android --entry-file \<entryFile> --bundle-output \<outputDir>/index.android.bundle --assets-dest \<outputDir> --dev false |
-| iOS wo/assets     | haul bundle --platform ios --entry-file \<entryFile> --bundle-output \<outputDir>/main.jsbundle --dev false                                       |
-| iOS w/assets      | haul bundle --platform ios --entry-file \<entryFile> --bundle-output \<outputDir>/main.jsbundle --assets-dest \<outputDir> --dev false            |
+| Platform/option    | Command                                                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Android w/o assets | haul bundle --platform android --entry-file \<entryFile> --bundle-output \<outputDir>/index.android.bundle --dev false                            |
+| Android w/assets   | haul bundle --platform android --entry-file \<entryFile> --bundle-output \<outputDir>/index.android.bundle --assets-dest \<outputDir> --dev false |
+| iOS w/o assets     | haul bundle --platform ios --entry-file \<entryFile> --bundle-output \<outputDir>/main.jsbundle --dev false                                       |
+| iOS w/assets       | haul bundle --platform ios --entry-file \<entryFile> --bundle-output \<outputDir>/main.jsbundle --assets-dest \<outputDir> --dev false            |
 
 <sub>
   Notes:
