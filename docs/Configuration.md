@@ -44,7 +44,7 @@ Decorate the entry file(s) with React Native polyfills. You can specify custom `
 
 | Name      | Type                                                 | Description                                                                                                                                                                                                                                              |
 | --------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`   | `string | string[]`                                  | Entry file(s) path(s)                                                                                                                                                                                                                                    |
+| `entry`   | `string` / `string[]`                                | Entry file(s) path(s)                                                                                                                                                                                                                                    |
 | `options` | `{ root?: string; initializeCoreLocation?: string }` | Specify custom path to `InitializeCore.js` file. `root` and `initializeCoreLocation` are joined together using `path.join`. Defaults: `root` - `process.cwd()`, `initializeCoreLocation` - `node_modules/react-native/Libraries/Core/InitializeCore.js`. |
 | _returns_ | `string[]`                                           | Entry file(s) with polyfill paths                                                                                                                                                                                                                        |
 
@@ -110,7 +110,7 @@ The bundle configuration consist of the following properties:
   }
   ```
 
-  More information can be found in [Customize Webpack config recipe](#customizewebpackconfig).
+  More information can be found in [Customize Webpack config recipe](#customize-webpack-config).
 
 If you want to provide the bundle config based on received CLI arguments, you can do so, by using `BundleConfigBuilder`:
 
