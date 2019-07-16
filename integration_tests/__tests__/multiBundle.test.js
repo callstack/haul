@@ -1,13 +1,9 @@
-/**
- * Copyright 2017-present, Callstack.
- * All rights reserved.
- */
-
 import path from 'path';
 import fetch from 'node-fetch';
 import stripAnsi from 'strip-ansi';
-import { run, yarnCommand } from '../utils';
-import { runHaul } from '../runHaul';
+import fs from 'fs';
+import { run, yarnCommand, cleanup } from '../utils';
+import { runHaul, runHaulSync } from '../runHaul';
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
@@ -45,14 +41,80 @@ describe('in multi-bundle mode', () => {
       server.kill();
     });
 
-    it('compile bundles for iOS platform', async () => {
+    it('compile bundles for iOS', async () => {
       const bundles = await fetchBundles('ios');
       assertBundles(bundles);
     });
 
-    it('compile bundles for Android platform', async () => {
+    it('compile bundles for Android', async () => {
       const bundles = await fetchBundles('android');
       assertBundles(bundles);
+    });
+  });
+
+  describe('multi-bundle command', () => {
+    afterAll(() => {
+      cleanup(path.join(TEST_PROJECT_DIR, 'dist_ios'));
+      cleanup(path.join(TEST_PROJECT_DIR, 'dist_android'));
+    });
+
+    it('compile bundles for iOS', () => {
+      compileBundles('ios');
+
+      assertBundles(
+        {
+          host: fs
+            .readFileSync(
+              path.join(TEST_PROJECT_DIR, 'dist_ios/index.jsbundle')
+            )
+            .toString(),
+          baseDll: fs
+            .readFileSync(
+              path.join(TEST_PROJECT_DIR, 'dist_ios/base_dll.jsbundle')
+            )
+            .toString(),
+          app0: fs
+            .readFileSync(path.join(TEST_PROJECT_DIR, 'dist_ios/app0.jsbundle'))
+            .toString(),
+          app1: fs
+            .readFileSync(path.join(TEST_PROJECT_DIR, 'dist_ios/app1.jsbundle'))
+            .toString(),
+        },
+        true
+      );
+    });
+
+    it('compile bundles for Android', () => {
+      compileBundles('android');
+
+      assertBundles(
+        {
+          host: fs
+            .readFileSync(
+              path.join(TEST_PROJECT_DIR, 'dist_android/index.android.bundle')
+            )
+            .toString(),
+          baseDll: fs
+            .readFileSync(
+              path.join(
+                TEST_PROJECT_DIR,
+                'dist_android/base_dll.android.bundle'
+              )
+            )
+            .toString(),
+          app0: fs
+            .readFileSync(
+              path.join(TEST_PROJECT_DIR, 'dist_android/app0.android.bundle')
+            )
+            .toString(),
+          app1: fs
+            .readFileSync(
+              path.join(TEST_PROJECT_DIR, 'dist_android/app1.android.bundle')
+            )
+            .toString(),
+        },
+        true
+      );
     });
   });
 });
@@ -83,7 +145,7 @@ async function fetchBundles(platform) {
   };
 }
 
-function assertBundles(bundles) {
+function assertBundles(bundles, staticBundles = false) {
   expect(bundles.baseDll).toMatch('this["base_dll"] =');
   expect(bundles.baseDll).toMatch('node_modules/react');
   expect(bundles.baseDll).toMatch('node_modules/react-native');
@@ -109,12 +171,34 @@ function assertBundles(bundles) {
   );
   expect(bundles.app1).toMatch('dll-reference base_dll');
   expect(bundles.app1).toMatch('./src/app1');
-  expect(bundles.app1).toMatch('function asyncEval');
-  expect(bundles.app1).toMatch(
-    /return asyncEval\("" \+ chunkId \+ "\.app1\.(ios|android)\.bundle"\);/g
-  );
+  if (staticBundles) {
+    expect(bundles.app1).toMatch('throw new Error("Invalid bundle');
+  } else {
+    expect(bundles.app1).toMatch('function asyncEval');
+    expect(bundles.app1).toMatch(
+      /return asyncEval\("" \+ chunkId \+ "\.app1\.(ios|android)\.bundle"\);/g
+    );
 
-  expect(bundles.app1Chunk).toMatch('this["webpackChunkapp1"]');
-  expect(bundles.app1Chunk).toMatch('./src/async.js');
-  expect(bundles.app1Chunk).not.toMatch('base_dll');
+    expect(bundles.app1Chunk).toMatch('this["webpackChunkapp1"]');
+    expect(bundles.app1Chunk).toMatch('./src/async.js');
+    expect(bundles.app1Chunk).not.toMatch('base_dll');
+  }
+}
+
+function compileBundles(platform) {
+  const { stdout } = runHaulSync(TEST_PROJECT_DIR, [
+    'multi-bundle',
+    '--platform',
+    platform,
+    '--dev',
+    'true',
+    '--bundle-output',
+    `dist_${platform}`,
+    '--assets-dest',
+    'dist_ios',
+  ]);
+
+  if (stdout.match(/(error ▶︎ |ERROR)/g)) {
+    throw new Error(stdout);
+  }
 }

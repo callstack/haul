@@ -14,6 +14,7 @@ export default makeConfig({
         './src/BundleRegistry.js'
       ]),
       dll: true,
+      type: 'indexed-ram-bundle',
     },
     app0: {
       entry: './src/app0',
