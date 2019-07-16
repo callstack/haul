@@ -146,7 +146,7 @@ export default function startCommand(runtime: Runtime) {
           dev: argv.dev,
           noInteractive: Boolean(argv.noInteractive),
           minify: argv.minify === undefined ? !argv.dev : argv.minify,
-          assetsDest,
+          assetsDest: tempDir,
           root: directory,
           eager: parsedEager,
           platforms: projectConfig.platforms,
