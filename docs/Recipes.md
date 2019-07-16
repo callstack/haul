@@ -67,7 +67,7 @@ And a corresponding (example) `tsconfig.json`
 }
 ```
 
-Please note, that if you want to use synthetic defaults imports, aka things like `import React from 'react'` instead of `import * as React from 'react'` you will need to:
+Please note, that if you want to use synthetic default imports, a.k.a. things like `import React from 'react'` instead of `import * as React from 'react'` you will need to:
 
 1. Add `"allowSyntheticDefaultImports": true` to `tsconfig.json`.
 2. Pass the compiled TS files through Babel (you will need `babel-loader` for this - `yarn add --dev babel-loader`).
