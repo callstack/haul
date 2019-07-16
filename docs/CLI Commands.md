@@ -91,7 +91,7 @@ Path to use for a source map file, e.g. - `build/index.android.bundle.map`.
 
 #### `--config [path]`
 
-Path to the webpack haul config. defaults to `haul.config.js`.
+Path to the webpack haul config. Defaults to `haul.config.js`.
 
 ## `haul ram-bundle`
 
