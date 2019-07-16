@@ -4,13 +4,11 @@
  */
 
 import path from 'path';
-import os from 'os';
 import fetch from 'node-fetch';
 import stripAnsi from 'strip-ansi';
-import { cleanup } from '../utils';
+import { run, yarnCommand } from '../utils';
 import { runHaul } from '../runHaul';
 
-const TEMP_DIR = path.join(os.tmpdir(), 'haul-start-');
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,
   '../../fixtures/react_native_with_haul'
@@ -21,6 +19,8 @@ describe('packager server', () => {
   let disposed = false;
 
   beforeAll(done => {
+    run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR);
+
     server = runHaul(TEST_PROJECT_DIR, ['start']);
 
     server.stderr.on('data', data => {
@@ -38,7 +38,6 @@ describe('packager server', () => {
   });
 
   afterAll(() => {
-    cleanup(TEMP_DIR);
     disposed = true;
     server.kill();
   });
