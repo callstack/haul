@@ -11,7 +11,7 @@ export default function runAdbReverse(
     exec(command, error => {
       if (error) {
         // Get just the error message
-        const message = error.message.split('error:')[1];
+        const message = error.message.split('error:')[1] || error.message;
         runtime.logger.warn(`Failed to run: ${command} - ${message.trim()}`);
         resolve();
         return;
