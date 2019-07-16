@@ -164,7 +164,7 @@ This config will allow you to run `bundle`, `ram-bundle` and `multi-bundle` (**e
 
 Remember that, if the `--bundle-output` is provided, the `templates.filename.custom` won't be used, instead the filename will be inferred from the `--bundle-output` argument.
 
-Please note that by providing `platforms` array, no defaults will be added, meaning `ios` and `android` are no loger supported. To add support for `ios` and `android` alongside `custom` use `['custom', 'ios', 'android']`:
+> Please note that by providing `platforms` array, no defaults will be added, meaning `ios` and `android` are no loger supported. To add support for `ios` and `android` alongside `custom` use `['custom', 'ios', 'android']`:
 
 ```js
 import {makeConfig, withPolyfills} from '@haul-bundler/preset-0.59';
