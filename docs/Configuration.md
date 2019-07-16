@@ -269,7 +269,7 @@ To build static bundles run `multi-bundle` command instead of `bundle` or `ram-b
 
 The host logic is up to the user to provide, based on the use case, but here's a example implementation:
 
-```js
+```jsx
 import React from 'react';
 import {AppRegistry, BundleRegistry, View, Text, Linking} from 'react-native';
 import {
