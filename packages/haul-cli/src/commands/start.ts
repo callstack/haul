@@ -40,9 +40,9 @@ export default function startCommand(runtime: Runtime) {
         description: `Whether to minify the bundle, 'true' by default when dev=false`,
         type: 'boolean',
       },
-      assetsDest: {
+      tempDir: {
         description:
-          'Path to directory where to store generated assets, eg. /tmp/dist',
+          'Path to directory where to store temporary files, eg. /tmp/dist',
         type: 'string',
       },
       config: {
@@ -62,7 +62,7 @@ export default function startCommand(runtime: Runtime) {
         dev: boolean;
         'no-interactive'?: boolean;
         minify?: boolean;
-        assetsDest?: string;
+        tempDir?: string;
         config: string;
         eager: string;
       }>
@@ -77,13 +77,13 @@ export default function startCommand(runtime: Runtime) {
 
       const directory = process.cwd();
 
-      let assetsDest;
-      if (argv.assetsDest) {
-        assetsDest = path.isAbsolute(argv.assetsDest)
-          ? argv.assetsDest
-          : path.join(directory, argv.assetsDest);
+      let tempDir: string;
+      if (argv.tempDir) {
+        tempDir = path.isAbsolute(argv.tempDir)
+          ? argv.tempDir
+          : path.join(directory, argv.tempDir);
       } else {
-        assetsDest = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
+        tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
       }
 
       const configPath = getProjectConfigPath(directory, argv.config);
@@ -95,7 +95,7 @@ export default function startCommand(runtime: Runtime) {
           dev: argv.dev,
           bundleMode: 'multi-bundle',
           bundleTarget: 'server',
-          assetsDest,
+          assetsDest: tempDir,
           minify: argv.minify === undefined ? !argv.dev : argv.minify,
         }
       );

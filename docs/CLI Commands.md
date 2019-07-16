@@ -41,7 +41,7 @@ Whether to minify the bundle while serving. This will make the bundling process 
 
 Port on which the server should run. defaults to `8081`.
 
-#### `--assets-dest <string>`
+#### `--temp-dir <string>`
 
 Path to directory where to store temporary files. By default Haul will use a random temporary directory provided by the OS.
 
@@ -138,5 +138,3 @@ Path to use for a source map file, e.g. - `build/index.android.bundle.map`.
 #### `--config [path]`
 
 Path to the webpack haul config. defaults to `haul.config.js`.
-
-
