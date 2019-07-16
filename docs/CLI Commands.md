@@ -11,7 +11,7 @@ See [Configuration](Configuration.md) for more details on `haul.config.js`.
 
 ## `haul start`
 
-This starts a webpack development server which will package and serve the JavaScript bundle for your React Native app.
+This starts a packager server, which will build and serve the JavaScript development bundle for your React Native app.
 
 Example: `haul start --port 3030`
 
@@ -47,7 +47,7 @@ Path to directory where to store temporary files. By default Haul will use a ran
 
 #### `--config [path]`
 
-Path to the webpack Haul config. defaults to `haul.config.js`.
+Path to Haul config. Defaults to `haul.config.js`.
 
 ### `--no-interactive <true|false>`
 
