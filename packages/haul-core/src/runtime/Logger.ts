@@ -1,4 +1,6 @@
 import { inspect } from 'util';
+import fs from 'fs';
+import path from 'path';
 import { LoggerEvent } from '@haul-bundler/inspector-events';
 import {
   container,
@@ -40,9 +42,25 @@ export default class Logger {
   static LevelColorMapping = levelToColorMappings;
 
   private proxyHandler: ProxyHandler | undefined;
+  private logFile: number | undefined;
+  private logAsJson = false;
   public minLoggingLevel: LoggerLevel = LoggerLevel.Info;
 
   constructor(private inspectorClient?: InspectorClient) {}
+
+  enableFileLogging(filename: string, { json }: { json: boolean }) {
+    const absFilename = path.isAbsolute(filename)
+      ? filename
+      : path.resolve(filename);
+    this.logFile = fs.openSync(absFilename, 'a');
+    this.logAsJson = json;
+  }
+
+  dispose() {
+    if (this.logFile !== undefined) {
+      fs.closeSync(this.logFile);
+    }
+  }
 
   info = this.createLoggingFunction(LoggerLevel.Info);
   warn = this.createLoggingFunction(LoggerLevel.Warn);
@@ -63,21 +81,11 @@ export default class Logger {
   };
 
   enhanceWithColor = (enhancer: AnsiColor, ...args: unknown[]) => {
-    return color(
-      enhancer,
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
-    ).build();
+    return color(enhancer, stringify(args).join(' ')).build();
   };
 
   enhanceWithModifier = (enhancer: AnsiModifier, ...args: unknown[]) => {
-    return modifier(
-      enhancer,
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
-    ).build();
+    return modifier(enhancer, stringify(args).join(' ')).build();
   };
 
   enhance = (level: LoggerLevel, ...args: unknown[]) => {
@@ -86,9 +94,7 @@ export default class Logger {
       pad(1),
       '▶︎',
       pad(1),
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
+      stringify(args).join(' ')
     ).build();
   };
 
@@ -96,6 +102,18 @@ export default class Logger {
     return (...args: unknown[]) => {
       if (this.inspectorClient) {
         this.inspectorClient.emitEvent(new LoggerEvent(level, args));
+      }
+
+      if (this.logFile !== undefined) {
+        fs.appendFileSync(
+          this.logFile,
+          (this.logAsJson
+            ? JSON.stringify({ timestamp: new Date(), level, messages: args })
+            : `[${new Date().toISOString()}] ${level}: ${stringify(
+                args
+              ).join()}`) + '\n',
+          'utf8'
+        );
       }
 
       if (
@@ -110,4 +128,8 @@ export default class Logger {
       }
     };
   }
+}
+
+function stringify(args: any[]) {
+  return args.map(item => (typeof item === 'string' ? item : inspect(item)));
 }

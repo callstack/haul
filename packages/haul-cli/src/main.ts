@@ -57,6 +57,12 @@ export default async function main() {
             runtime.logger.minLoggingLevel = Logger.Level.Debug;
           }
 
+          if (args[0].outputFile && typeof args[0].outputFile === 'string') {
+            runtime.logger.enableFileLogging(args[0].outputFile, {
+              json: Boolean(args[0].json),
+            });
+          }
+
           try {
             const results = commandModule.handler(...args) as
               | undefined
@@ -79,7 +85,15 @@ export default async function main() {
     .alias('h', 'help')
     .alias('v', 'version')
     .option('verbose', {
-      describe: 'Print all logs including debug messages',
+      describe: 'Print all logs including debug messages.',
+      type: 'boolean',
+    })
+    .option('output-file <filename>', {
+      describe: 'Log all messages to a file.',
+      type: 'string',
+    })
+    .option('json', {
+      describe: 'When --output-file is set, log each message as a JSON object.',
       type: 'boolean',
     })
     .version().argv;
