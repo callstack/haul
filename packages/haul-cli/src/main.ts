@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import yargsParser from 'yargs-parser';
-import { Runtime, InspectorClient } from '@haul-bundler/core';
+import { Logger, Runtime, InspectorClient } from '@haul-bundler/core';
 import initCommand from './commands/init';
 import bundleCommand from './commands/bundle';
 import ramBundleCommand from './commands/ramBundle';
@@ -52,6 +52,11 @@ export default async function main() {
             commandModule.command || 'unknown',
             process.argv
           );
+
+          if (args[0].verbose) {
+            runtime.logger.minLoggingLevel = Logger.Level.Debug;
+          }
+
           try {
             const results = commandModule.handler(...args) as
               | undefined
@@ -73,5 +78,9 @@ export default async function main() {
     .help('h')
     .alias('h', 'help')
     .alias('v', 'version')
+    .option('verbose', {
+      describe: 'Print all logs including debug messages',
+      type: 'boolean',
+    })
     .version().argv;
 }
