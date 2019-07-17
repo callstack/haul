@@ -29,7 +29,7 @@ export default function reloadCommand(runtime: Runtime) {
 
         await new Promise(resolve => {
           const req = http.request(requestOptions, () => {
-            runtime.logger.done('Sent reload request');
+            runtime.logger.done('Sent reload request.');
             resolve();
           });
 
@@ -37,7 +37,7 @@ export default function reloadCommand(runtime: Runtime) {
             const error = e.toString();
             if (error.includes('connect ECONNREFUSED')) {
               runtime.logger.error(
-                `Reload request failed. Make sure Haul is up.`
+                `Reload request failed. Please make sure the packager server is running.`
               );
             } else {
               runtime.logger.error(e);
