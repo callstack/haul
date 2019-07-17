@@ -39,7 +39,7 @@ Whether to minify the bundle while serving. This will make the bundling process 
 
 #### `--port [number]`
 
-Port on which the server should run. defaults to `8081`.
+Port on which the server should run. Defaults to `8081`.
 
 #### `--temp-dir <string>`
 
@@ -138,3 +138,11 @@ Path to use for a source map file, e.g. - `build/index.android.bundle.map`.
 #### `--config [path]`
 
 Path to the webpack haul config. defaults to `haul.config.js`.
+
+## `reload`
+
+Sends reload request to all devices that enabled live reload.
+
+#### `--port <number>`
+
+Port on which the packager server is running. Defaults to `8081`.
