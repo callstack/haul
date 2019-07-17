@@ -43,15 +43,17 @@ export default class Logger {
 
   private proxyHandler: ProxyHandler | undefined;
   private logFile: number | undefined;
+  private logAsJson = false;
   public minLoggingLevel: LoggerLevel = LoggerLevel.Info;
 
   constructor(private inspectorClient?: InspectorClient) {}
 
-  enableFileLogging(filename: string) {
+  enableFileLogging(filename: string, { json }: { json: boolean }) {
     const absFilename = path.isAbsolute(filename)
       ? filename
       : path.resolve(filename);
     this.logFile = fs.openSync(absFilename, 'a');
+    this.logAsJson = json;
   }
 
   dispose() {
@@ -79,21 +81,11 @@ export default class Logger {
   };
 
   enhanceWithColor = (enhancer: AnsiColor, ...args: unknown[]) => {
-    return color(
-      enhancer,
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
-    ).build();
+    return color(enhancer, stringify(args).join(' ')).build();
   };
 
   enhanceWithModifier = (enhancer: AnsiModifier, ...args: unknown[]) => {
-    return modifier(
-      enhancer,
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
-    ).build();
+    return modifier(enhancer, stringify(args).join(' ')).build();
   };
 
   enhance = (level: LoggerLevel, ...args: unknown[]) => {
@@ -102,9 +94,7 @@ export default class Logger {
       pad(1),
       '▶︎',
       pad(1),
-      args
-        .map(item => (typeof item === 'string' ? item : inspect(item)))
-        .join(' ')
+      stringify(args).join(' ')
     ).build();
   };
 
@@ -117,8 +107,11 @@ export default class Logger {
       if (this.logFile !== undefined) {
         fs.appendFileSync(
           this.logFile,
-          JSON.stringify({ timestamp: new Date(), level, messages: args }) +
-            '\n',
+          (this.logAsJson
+            ? JSON.stringify({ timestamp: new Date(), level, messages: args })
+            : `[${new Date().toISOString()}] ${level}: ${stringify(
+                args
+              ).join()}`) + '\n',
           'utf8'
         );
       }
@@ -135,4 +128,8 @@ export default class Logger {
       }
     };
   }
+}
+
+function stringify(args: any[]) {
+  return args.map(item => (typeof item === 'string' ? item : inspect(item)));
 }
