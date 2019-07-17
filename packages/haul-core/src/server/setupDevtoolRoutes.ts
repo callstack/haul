@@ -36,6 +36,7 @@ export default function setupDevtoolRoutes(
           file: Joi.string().required(),
           lineNumber: Joi.number().required(),
           column: Joi.number().required(),
+          methodName: Joi.string().required(),
         },
       },
     },
