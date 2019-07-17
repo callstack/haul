@@ -98,7 +98,7 @@ export default function setupDevtoolRoutes(
 
   server.route({
     method: 'GET',
-    path: '/assets/{param*}',
+    path: '/haul_assets/{param*}',
     handler: {
       directory: {
         path: path.join(__dirname, '../../assets'),

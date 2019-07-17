@@ -11,7 +11,6 @@ const EventEmitter = require('events');
 const fs = require('fs');
 
 const Events = require('./events');
-const logger = require('../logger');
 const Fork = require('./Fork');
 const TaskQueue = require('./TaskQueue');
 
@@ -29,10 +28,11 @@ module.exports = class Compiler extends EventEmitter {
   forks: { [key: Platform]: Fork };
   tasks: TaskQueue;
 
-  constructor(options: *) {
+  constructor(options: *, logger) {
     super();
     this.forks = {};
     this.tasks = new TaskQueue();
+    this.logger = logger;
 
     this.on(Events.REQUEST_BUNDLE, ({ platform, filename, callback }) => {
       if (!this.forks[platform]) {
@@ -143,9 +143,9 @@ module.exports = class Compiler extends EventEmitter {
     });
 
     fork.on(Events.LOG, ({ message, logger: type }) => {
-      logger[type] && logger[type](message);
+      this.logger[type] && this.logger[type](message);
 
-      this.emit(Events.BUILD_START, { platform, message, logger });
+      this.emit(Events.BUILD_START, { platform, message });
     });
 
     fork.on(Events.BUILD_START, payload => {
