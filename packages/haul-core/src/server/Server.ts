@@ -42,17 +42,20 @@ export default class Server {
   ) {}
 
   createCompiler() {
-    const compiler = new Compiler({
-      configPath: this.configPath,
-      configOptions: {
-        ...this.options,
-        bundleTarget: 'server',
-        bundleMode:
-          this.options.bundleNames.length > 1
-            ? 'multi-bundle'
-            : 'single-bundle',
+    const compiler = new Compiler(
+      {
+        configPath: this.configPath,
+        configOptions: {
+          ...this.options,
+          bundleTarget: 'server',
+          bundleMode:
+            this.options.bundleNames.length > 1
+              ? 'multi-bundle'
+              : 'single-bundle',
+        },
       },
-    });
+      this.runtime.logger
+    );
 
     compiler.on(
       Compiler.Events.BUILD_START,

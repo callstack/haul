@@ -149,7 +149,7 @@ function makeResponseFromCompilerResults(
   }
 
   const response = h
-    .response(file.toString())
+    .response(file)
     .type(result.mimeType)
     .code(200);
 
