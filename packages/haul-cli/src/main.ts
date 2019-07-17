@@ -57,6 +57,10 @@ export default async function main() {
             runtime.logger.minLoggingLevel = Logger.Level.Debug;
           }
 
+          if (args[0].dump) {
+            runtime.logger.enableFileLogging(args[0].dump);
+          }
+
           try {
             const results = commandModule.handler(...args) as
               | undefined
@@ -81,6 +85,10 @@ export default async function main() {
     .option('verbose', {
       describe: 'Print all logs including debug messages',
       type: 'boolean',
+    })
+    .option('dump <filename>', {
+      describe: 'Dump all logs and messages as JSON to a file',
+      type: 'string',
     })
     .version().argv;
 }

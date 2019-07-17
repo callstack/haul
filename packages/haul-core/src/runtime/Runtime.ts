@@ -48,6 +48,7 @@ export default class Runtime {
   }
 
   complete(exitCode: number = 0) {
+    this.logger.dispose();
     if (this.inspectorClient) {
       this.inspectorClient.emitEvent(new RuntimeCompleteEvent(exitCode));
       this.inspectorClient.close();

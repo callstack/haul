@@ -1,4 +1,6 @@
 import { inspect } from 'util';
+import fs from 'fs';
+import path from 'path';
 import { LoggerEvent } from '@haul-bundler/inspector-events';
 import {
   container,
@@ -40,9 +42,23 @@ export default class Logger {
   static LevelColorMapping = levelToColorMappings;
 
   private proxyHandler: ProxyHandler | undefined;
+  private logFile: number | undefined;
   public minLoggingLevel: LoggerLevel = LoggerLevel.Info;
 
   constructor(private inspectorClient?: InspectorClient) {}
+
+  enableFileLogging(filename: string) {
+    const absFilename = path.isAbsolute(filename)
+      ? filename
+      : path.resolve(filename);
+    this.logFile = fs.openSync(absFilename, 'a');
+  }
+
+  dispose() {
+    if (this.logFile !== undefined) {
+      fs.closeSync(this.logFile);
+    }
+  }
 
   info = this.createLoggingFunction(LoggerLevel.Info);
   warn = this.createLoggingFunction(LoggerLevel.Warn);
@@ -96,6 +112,15 @@ export default class Logger {
     return (...args: unknown[]) => {
       if (this.inspectorClient) {
         this.inspectorClient.emitEvent(new LoggerEvent(level, args));
+      }
+
+      if (this.logFile !== undefined) {
+        fs.appendFileSync(
+          this.logFile,
+          JSON.stringify({ timestamp: new Date(), level, messages: args }) +
+            '\n',
+          'utf8'
+        );
       }
 
       if (
