@@ -11,12 +11,20 @@ import {
 import InspectorClient from './InspectorClient';
 
 enum LoggerLevel {
+  Debug = 'debug',
   Info = 'info',
   Warn = 'warn',
   Error = 'error',
   Done = 'done',
-  Debug = 'debug',
 }
+
+const levelToPriorityMappings = {
+  [LoggerLevel.Debug]: 0,
+  [LoggerLevel.Info]: 1,
+  [LoggerLevel.Done]: 2,
+  [LoggerLevel.Warn]: 3,
+  [LoggerLevel.Error]: 4,
+};
 
 const levelToColorMappings = {
   [LoggerLevel.Info]: 'blue' as AnsiColor,
@@ -32,6 +40,7 @@ export default class Logger {
   static LevelColorMapping = levelToColorMappings;
 
   private proxyHandler: ProxyHandler | undefined;
+  public minLoggingLevel: LoggerLevel = LoggerLevel.Info;
 
   constructor(private inspectorClient?: InspectorClient) {}
 
@@ -89,10 +98,15 @@ export default class Logger {
         this.inspectorClient.emitEvent(new LoggerEvent(level, args));
       }
 
-      if (this.proxyHandler) {
-        this.proxyHandler(level, ...args);
-      } else {
-        this.print(this.enhance(level, ...args));
+      if (
+        levelToPriorityMappings[level] >=
+        levelToPriorityMappings[this.minLoggingLevel]
+      ) {
+        if (this.proxyHandler) {
+          this.proxyHandler(level, ...args);
+        } else {
+          this.print(this.enhance(level, ...args));
+        }
       }
     };
   }

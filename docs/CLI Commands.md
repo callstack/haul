@@ -3,6 +3,10 @@ id: cli
 title: CLI Commands
 ---
 
+### Global options
+
+* `--verbose` - Print all messages including debug logs.
+
 ## `haul init`
 
 This creates `haul.config.js` file in your project directory which is required by `Haul` to function. The file contains the app's entry point used for creating the app bundle.
