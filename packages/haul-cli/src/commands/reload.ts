@@ -1,3 +1,5 @@
+import { Arguments } from 'yargs';
+import http from 'http';
 import { Runtime, DEFAULT_PORT } from '@haul-bundler/core';
 
 export default function reloadCommand(runtime: Runtime) {
@@ -11,10 +13,40 @@ export default function reloadCommand(runtime: Runtime) {
         type: 'number',
       },
     },
-    async handler() {
+    async handler(
+      argv: Arguments<{
+        port: number;
+      }>
+    ) {
       let exitCode = 0;
       try {
-        require('@haul-bundler/core-legacy/build/commands/reload').action();
+        const requestOptions = {
+          hostname: 'localhost',
+          port: argv.port,
+          path: '/reloadapp',
+          method: 'HEAD',
+        };
+
+        await new Promise(resolve => {
+          const req = http.request(requestOptions, () => {
+            runtime.logger.done('Sent reload request');
+            resolve();
+          });
+
+          req.on('error', e => {
+            const error = e.toString();
+            if (error.includes('connect ECONNREFUSED')) {
+              runtime.logger.error(
+                `Reload request failed. Make sure Haul is up.`
+              );
+            } else {
+              runtime.logger.error(e);
+            }
+            resolve();
+          });
+
+          req.end();
+        });
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         exitCode = 1;
