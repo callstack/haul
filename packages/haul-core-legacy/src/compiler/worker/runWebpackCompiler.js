@@ -24,23 +24,17 @@ module.exports = async function runWebpackCompiler({
   fs: Object,
 }) {
   const emitter = new EventEmitter();
-
   const { configPath, configOptions } = JSON.parse(options);
 
   const runtime = new Runtime();
-  const loggerProxy = new Proxy(
-    {},
-    {
-      get: function get(object, logger) {
-        return new Proxy(() => {}, {
-          apply: (target, that, [message]) => {
-            setImmediate(() => emitter.emit(Events.LOG, { message, logger }));
-          },
-        });
-      },
-    }
-  );
-  runtime.logger = loggerProxy;
+  runtime.logger.proxy((level, ...args) => {
+    setImmediate(() => {
+      emitter.emit(Events.LOG, {
+        message: runtime.logger.stringify(args).join(' '),
+        level,
+      });
+    });
+  });
 
   const projectConfig = getNormalizedProjectConfigBuilder(configPath)(runtime, {
     ...configOptions,
