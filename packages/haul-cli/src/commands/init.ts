@@ -9,7 +9,7 @@ import path from 'path';
 import inquirer from 'inquirer';
 import dedent from 'dedent';
 import which from 'which';
-import { execSync } from 'child_process';
+import exec from 'execa';
 
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -306,6 +306,23 @@ async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
   return scriptName;
 }
 
+async function installDependencies(
+  progress: Ora,
+  { babelPreset, haulPreset }: { babelPreset: string; haulPreset: string }
+) {
+  progress.info('Installing required devDependencies');
+  const useYarn = await new Promise<boolean>(resolve => {
+    which('yarn', (_, resolved: string | undefined) => {
+      resolve(Boolean(resolved));
+    });
+  });
+  const installArgs = (useYarn
+    ? ['add', '-D']
+    : ['install', '--save-dev']
+  ).concat(babelPreset, haulPreset);
+  await exec(useYarn ? 'yarn' : 'npm', installArgs, { stdio: 'inherit' });
+}
+
 export default function initCommand(runtime: Runtime) {
   return {
     command: 'init',
@@ -336,17 +353,7 @@ export default function initCommand(runtime: Runtime) {
         await modifyXcodeProject(progress, cwd);
         await modifyGradleBuild(progress, cwd);
         const scriptName = await addHaulScript(progress, cwd);
-
-        progress.info('Installing required devDependencies');
-        const useYarn = await new Promise<boolean>(resolve => {
-          which('yarn', (_, resolved: string | undefined) => {
-            resolve(Boolean(resolved));
-          });
-        });
-        const installCommand = `${useYarn ? 'yarn' : 'npm'} ${
-          useYarn ? 'add -D' : 'install --save-dev'
-        } ${babelPreset} ${haulPreset}`;
-        execSync(installCommand, { stdio: 'inherit' });
+        await installDependencies(progress, { babelPreset, haulPreset });
         progress.succeed(
           `You can now start Haul by running '${getRunScript(scriptName)}'`
         );

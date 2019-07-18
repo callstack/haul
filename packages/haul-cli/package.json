@@ -26,6 +26,7 @@
     "@haul-bundler/core-legacy": "^0.8.0",
     "@haul-bundler/inspector-events": "^0.8.0",
     "ansi-fragments": "^0.2.1",
+    "execa": "^2.0.3",
     "dedent": "^0.7.0",
     "inquirer": "^6.3.1",
     "ora": "^3.4.0",
