@@ -29,6 +29,7 @@ class DebuggerWorker {
     this.visibilityState = undefined;
     this.hasWarned = false;
     this.platform = undefined;
+    this.initialUrl = undefined;
 
     self.bundleRegistryLoad = (...args) => this.bundleRegistryLoad(...args);
   }
@@ -59,6 +60,10 @@ class DebuggerWorker {
   bundleRegistryLoad(bundleName, sync) {
     if (self[bundleName]) {
       return;
+    }
+
+    if (!this.platform) {
+      throw new Error(`Could not detect platform from URL: ${this.initialUrl}`);
     }
 
     const url = `${self.location.origin}/${bundleName}.bundle?platform=${this.platform}`;
@@ -98,10 +103,6 @@ class DebuggerWorker {
       }
     }
   
-    if (!platform) {
-      throw new Error(`Cannot detect platform from URL: ${url}`);
-    }
-  
     return platform;
   }
 
@@ -114,7 +115,7 @@ class DebuggerWorker {
     if (!this.platform) {
       this.platform = this.getPlatformFromURL(message.url);
     }
-
+    this.initialUrl = message.url;
     this.shouldQueueMessages = true;
 
     let error;
