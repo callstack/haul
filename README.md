@@ -36,11 +36,10 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 Start by adding Haul as a dependency to your React Native project (use `react-native init MyProject` to create one if you don't have a project):
 
 ```bash
-yarn add --dev @haul-bundler/cli @haul-bundler/preset-<x>.<y> # Use major version as x and minor as y for your version of React Native
-# Example: yarn add --dev @haul-bundler/cli @haul-bundler/preset-0.59
+yarn add --dev @haul-bundler/cli
 
 # Traditionalist? No problem:
-npm install --save-dev @haul-bundler/cli @haul-bundler/preset-<x>.<y>
+npm install --save-dev @haul-bundler/cli
 ```
 
 To configure your project to use haul, run the following:
