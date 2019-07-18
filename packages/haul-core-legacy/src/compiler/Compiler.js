@@ -142,8 +142,8 @@ module.exports = class Compiler extends EventEmitter {
       }
     });
 
-    fork.on(Events.LOG, ({ message, logger: type }) => {
-      this.logger[type] && this.logger[type](message);
+    fork.on(Events.LOG, ({ message, level }) => {
+      this.logger[level] && this.logger[level](message);
 
       this.emit(Events.BUILD_START, { platform, message });
     });

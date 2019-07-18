@@ -81,11 +81,11 @@ export default class Logger {
   };
 
   enhanceWithColor = (enhancer: AnsiColor, ...args: unknown[]) => {
-    return color(enhancer, stringify(args).join(' ')).build();
+    return color(enhancer, this.stringify(args).join(' ')).build();
   };
 
   enhanceWithModifier = (enhancer: AnsiModifier, ...args: unknown[]) => {
-    return modifier(enhancer, stringify(args).join(' ')).build();
+    return modifier(enhancer, this.stringify(args).join(' ')).build();
   };
 
   enhance = (level: LoggerLevel, ...args: unknown[]) => {
@@ -94,9 +94,13 @@ export default class Logger {
       pad(1),
       '▶︎',
       pad(1),
-      stringify(args).join(' ')
+      this.stringify(args).join(' ')
     ).build();
   };
+
+  stringify(args: any[]) {
+    return args.map(item => (typeof item === 'string' ? item : inspect(item)));
+  }
 
   private createLoggingFunction(level: LoggerLevel) {
     return (...args: unknown[]) => {
@@ -109,7 +113,7 @@ export default class Logger {
           this.logFile,
           (this.logAsJson
             ? JSON.stringify({ timestamp: new Date(), level, messages: args })
-            : `[${new Date().toISOString()}] ${level}: ${stringify(
+            : `[${new Date().toISOString()}] ${level}: ${this.stringify(
                 args
               ).join()}`) + '\n',
           'utf8'
@@ -128,8 +132,4 @@ export default class Logger {
       }
     };
   }
-}
-
-function stringify(args: any[]) {
-  return args.map(item => (typeof item === 'string' ? item : inspect(item)));
 }
