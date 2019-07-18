@@ -98,7 +98,7 @@ export default function setupDevtoolRoutes(
 
   server.route({
     method: 'GET',
-    path: '/haul_assets/{param*}',
+    path: '/debugger-ui/{param*}',
     handler: {
       directory: {
         path: path.join(__dirname, '../../assets'),

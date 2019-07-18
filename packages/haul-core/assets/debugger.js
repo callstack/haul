@@ -54,7 +54,7 @@ class DebuggerManager {
     // This worker will run the application javascript code,
     // making sure that it's run in an environment without a global
     // document, to make it consistent with the JSC executor environment.
-    this.worker = new Worker('/haul_assets/debuggerWorker.js');
+    this.worker = new Worker('/debugger-ui/debuggerWorker.js');
     this.worker.onmessage = (message) => {
       this.ws.send(JSON.stringify(message.data));
     };
