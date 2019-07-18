@@ -194,4 +194,8 @@ export default makeConfig({
 });
 ```
 
-Now use can start Haul packager server (`yarn haul start`) and use _Attach to packager_ configuration in debug panel in VS Code.
+Now use can start Haul packager server (`yarn haul start`) and use _Attach to packager_ configuration in Debug panel in VS Code.
+
+From within the app tap on _Enable remote debugging_. This will open a page in Chrome, which you can safely close.
+
+Finally press _Start debugging_ icon (green triangle) in Debug panel in VS Code.
