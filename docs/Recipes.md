@@ -163,3 +163,35 @@ Set the environment variable `APP_ENV` to `detox_tests` when running Haul:
 ```sh
 APP_ENV=detox_tests yarn haul
 ```
+
+## Debugging with React Native Tools (`vscode-react-native`)
+
+In order to use React Native Tools extension you must first install the extension:
+```bash
+code --install-extension msjsdiag.vscode-react-native
+```
+
+Next, you need to tweak your `haul.config.js` and add `source-map-loader`:
+```diff
+import { withPolyfills, makeConfig } from "@haul-bundler/preset-0.60";
+
+export default makeConfig({
+  bundles: {
+    index: {
+      entry: withPolyfills('./index.js'),
++      transform({ config }) {
++        config.module.rules = [
++          ...config.module.rules,
++          {
++            test: /\.js$/,
++            use: ["source-map-loader"],
++            enforce: "pre"
++          }
++        ];
++      },
+    },
+  },
+});
+```
+
+Now use can start Haul packager server (`yarn haul start`) and use _Attach to packager_ configuration in debug panel in VS Code.
