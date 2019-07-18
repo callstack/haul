@@ -7,8 +7,9 @@ import ora, { Ora } from 'ora';
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
-import semver from 'semver';
 import dedent from 'dedent';
+import which from 'which';
+import exec from 'execa';
 
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -47,8 +48,8 @@ async function checkProject(progress: Ora, cwd: string, runtime: Runtime) {
 async function createHaulProjectConfig(
   progress: Ora,
   cwd: string,
-  reactNativeVersion: string,
-  runtime: Runtime
+  runtime: Runtime,
+  preset: string
 ) {
   // Does `haul.config.js` already exist?
   if (fs.existsSync(path.join(cwd, DEFAULT_CONFIG_FILENAME))) {
@@ -69,15 +70,8 @@ async function createHaulProjectConfig(
 
   await delay(1000);
 
-  const version = semver.parse(reactNativeVersion);
-  if (!version) {
-    throw new Error(`Cannot parse React Native version: ${reactNativeVersion}`);
-  }
-
   const config = dedent`
-    import { withPolyfills, makeConfig } from "@haul-bundler/preset-${
-      version.major
-    }.${version.minor}";
+    import { withPolyfills, makeConfig } from "${preset}";
 
     export default makeConfig({
       bundles: {
@@ -98,7 +92,12 @@ async function createHaulProjectConfig(
   );
 }
 
-async function modifyBabelConfig(progress: Ora, cwd: string, runtime: Runtime) {
+async function modifyBabelConfig(
+  progress: Ora,
+  cwd: string,
+  runtime: Runtime,
+  babelPreset: string
+) {
   progress.start('Updating Babel config');
 
   const defaultBabelConfigPaths = [
@@ -128,10 +127,7 @@ async function modifyBabelConfig(progress: Ora, cwd: string, runtime: Runtime) {
   const babelConfig = fs.readFileSync(babelConfigPath).toString();
   fs.writeFileSync(
     babelConfigPath,
-    babelConfig.replace(
-      'metro-react-native-babel-preset',
-      '@haul-bundler/babel-preset-react-native'
-    )
+    babelConfig.replace('metro-react-native-babel-preset', babelPreset)
   );
 
   progress.succeed(
@@ -264,7 +260,7 @@ function getRunScript(scriptName: string) {
   return `yarn run ${scriptName}`;
 }
 
-async function addHaulScript(progress: Ora, cwd: string) {
+async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
   const packageJson = require(path.join(cwd, 'package.json'));
   const scripts = packageJson.scripts || {};
   const haulScript = Object.keys(scripts).find(
@@ -272,12 +268,8 @@ async function addHaulScript(progress: Ora, cwd: string) {
   );
 
   if (haulScript) {
-    ora().info(
-      `Haul already exists in your package.json. Start Haul by running ${getRunScript(
-        haulScript
-      )}'`
-    );
-    return;
+    progress.info('Haul already exists in your package.json.');
+    return haulScript;
   }
 
   let scriptName = 'start';
@@ -311,9 +303,24 @@ async function addHaulScript(progress: Ora, cwd: string) {
     JSON.stringify(packageJson, null, 2)
   );
 
-  progress.succeed(
-    `You can now start Haul by running '${getRunScript(scriptName)}'`
-  );
+  return scriptName;
+}
+
+async function installDependencies(
+  progress: Ora,
+  { babelPreset, haulPreset }: { babelPreset: string; haulPreset: string }
+) {
+  progress.info('Installing required devDependencies');
+  const useYarn = await new Promise<boolean>(resolve => {
+    which('yarn', (_, resolved: string | undefined) => {
+      resolve(Boolean(resolved));
+    });
+  });
+  const installArgs = (useYarn
+    ? ['add', '-D']
+    : ['install', '--save-dev']
+  ).concat(babelPreset, haulPreset);
+  await exec(useYarn ? 'yarn' : 'npm', installArgs, { stdio: 'inherit' });
 }
 
 export default function initCommand(runtime: Runtime) {
@@ -324,7 +331,6 @@ export default function initCommand(runtime: Runtime) {
       let exitCode = 0;
       try {
         const cwd = process.cwd();
-
         const rnVersion = getReactNativeVersion(cwd);
 
         if (!rnVersion) {
@@ -334,14 +340,23 @@ export default function initCommand(runtime: Runtime) {
           runtime.complete(1);
         }
 
+        const babelPreset = '@haul-bundler/babel-preset-react-native';
+        const haulPreset = `@haul-bundler/preset-${rnVersion!.major}.${
+          rnVersion!.minor
+        }`;
+
         const progress = ora().start();
 
         await checkProject(progress, cwd, runtime);
-        await createHaulProjectConfig(progress, cwd, rnVersion || '', runtime);
-        await modifyBabelConfig(progress, cwd, runtime);
+        await createHaulProjectConfig(progress, cwd, runtime, haulPreset);
+        await modifyBabelConfig(progress, cwd, runtime, babelPreset);
         await modifyXcodeProject(progress, cwd);
         await modifyGradleBuild(progress, cwd);
-        await addHaulScript(progress, cwd);
+        const scriptName = await addHaulScript(progress, cwd);
+        await installDependencies(progress, { babelPreset, haulPreset });
+        progress.succeed(
+          `You can now start Haul by running '${getRunScript(scriptName)}'`
+        );
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         exitCode = 1;
