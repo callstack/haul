@@ -6,6 +6,8 @@ title: CLI Commands
 ### Global options
 
 * `--verbose` - Print all messages including debug logs.
+* `--haul-inspector <true|false|"wait">` - Make Haul process attach to Haul inspector (use `wait` to make Haul process to wait for connection with inspector before proceeding). Check [Using Haul inspector recipe](./Recipes.md#using-haul-inspector) for more info.
+* `--node-inspector <true|false|"wait">` - Make Haul process attach to Node debugger, similar to passing `--inspect` options (use `wait` for make Haul process to wait for connection with Node debugger before proceeding, similar to passing `--inspect-brk`). Check [Debugging Haul process recipe](./Recipes.md#debugging-haul-process) for more info.
 
 ## `haul init`
 

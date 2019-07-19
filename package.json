@@ -10,7 +10,6 @@
     "build:def": "lerna exec --ignore '@haul-bundler/core-legacy' \"tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./build\"",
     "prepare": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
-    "add-contributor": "all-contributors add",
     "test": "jest",
     "publish": "yarn prepare && node ./scripts/publish.js"
   },
@@ -37,7 +36,6 @@
     "@types/node": "^11.13.4",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
-    "all-contributors-cli": "^4.5.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "eslint": "^5.16.0",
