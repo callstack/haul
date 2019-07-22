@@ -13,7 +13,9 @@ import setupLiveReload from './setupLiveReload';
 import setupSymbolication from './setupSymbolication';
 import createWebsocketProxy from './websocketProxy';
 import WebSocketDebuggerProxy from './WebSocketDebuggerProxy';
-import UserInterface from './UserInterface';
+import InteractiveUI from './InteractiveUI';
+import NonInteractiveUI from './NonInteractiveUI';
+import UserInterface from './UI';
 import Logger from '../runtime/Logger';
 import { container, color, modifier, pad, AnsiColor } from 'ansi-fragments';
 
@@ -33,13 +35,19 @@ export default class Server {
   httpServer: http.Server = http.createServer();
   resetConsole = () => {};
   disposeLoggerProxy = () => {};
-  ui = new UserInterface(terminal);
+  ui: UserInterface;
 
   constructor(
     private runtime: Runtime,
     private configPath: string,
     private options: ServerEnvOptions
-  ) {}
+  ) {
+    if (this.options.noInteractive) {
+      this.ui = new NonInteractiveUI(this.runtime);
+    } else {
+      this.ui = new InteractiveUI(terminal);
+    }
+  }
 
   createCompiler() {
     const compiler = new Compiler(
@@ -120,9 +128,7 @@ export default class Server {
   }
 
   exit(exitCode: number, error: any | undefined) {
-    if (!this.options.noInteractive) {
-      this.ui.dispose(exitCode, false);
-    }
+    this.ui.dispose(exitCode, false);
     this.resetConsole();
     this.disposeLoggerProxy();
     if (error) {
@@ -132,9 +138,14 @@ export default class Server {
   }
 
   async listen(host: string, port: number) {
-    this.disposeLoggerProxy = this.runtime.logger.proxy((level, ...args) => {
-      this.ui.addLogItem(this.runtime.logger.enhance(level, ...args));
-    });
+    // Proxy logs from runtime to interactive server UI only when server is running
+    // in interactive mode.
+    if (!this.options.noInteractive) {
+      this.disposeLoggerProxy = this.runtime.logger.proxy((level, ...args) => {
+        this.ui.addLogItem(this.runtime.logger.enhance(level, ...args));
+      });
+    }
+
     this.resetConsole = this.hijackConsole();
     this.compiler = this.createCompiler();
     this.attachProcessEventsListeners();
@@ -183,12 +194,10 @@ export default class Server {
     });
 
     await server.start();
-    if (!this.options.noInteractive) {
-      this.ui.start(this.options.platforms);
-      this.runtime.logger.done(
-        `Packager server running on http://${host}:${port}`
-      );
-    }
+    this.ui.start(this.options.platforms);
+    this.runtime.logger.done(
+      `Packager server running on http://${host}:${port}`
+    );
 
     this.options.eager.forEach(platform => {
       this.compiler.emit(Compiler.Events.REQUEST_BUNDLE, {

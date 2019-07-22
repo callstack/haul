@@ -1,5 +1,6 @@
 import { Terminal } from 'terminal-kit';
 import { container, color, modifier, pad } from 'ansi-fragments';
+import UserInterface from './UI';
 
 class Logs {
   autoFollow: boolean = true;
@@ -49,7 +50,7 @@ class Logs {
   }
 }
 
-export default class UserInterface {
+export default class InteractiveUserInterface implements UserInterface {
   private terminal: Terminal;
   private logs: Logs = new Logs();
   private compilations: {
