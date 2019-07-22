@@ -99,7 +99,7 @@ export default class UserInterface {
 
     platforms.forEach((platform, index) => {
       this.compilations[platform] = {
-        width: Math.min(110, this.terminal.width) - (platformNameLength + 22),
+        width: Math.min(110, this.terminal.width) - (platformNameLength + 20),
         value: 0,
         title: `${' '.repeat(
           platformNameLength - platform.length
