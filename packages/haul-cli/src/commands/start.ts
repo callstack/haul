@@ -93,6 +93,7 @@ export default function startCommand(runtime: Runtime) {
           platform: '',
           root: directory,
           dev: argv.dev,
+          port: argv.port,
           bundleMode: 'multi-bundle',
           bundleTarget: 'server',
           assetsDest: tempDir,
