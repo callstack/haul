@@ -43,7 +43,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
   ): NormalizedProjectConfigBuilder {
     return (runtime: Runtime, env: EnvOptions) => {
       const normalizedServerConfig = {
-        port: get(projectConfig, 'server.port', DEFAULT_PORT),
+        port: env.port || get(projectConfig, 'server.port', DEFAULT_PORT),
         host: get(projectConfig, 'server.host', 'localhost'),
       } as NormalizedServerConfig;
 
