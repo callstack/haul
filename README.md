@@ -83,7 +83,7 @@ react-native run-ios
 ```
 
 <p align="center">
-  <img width="635" src="https://cloud.githubusercontent.com/assets/2464966/24395888/8957aba8-13a1-11e7-96a3-70d34d4b5069.png" />
+  <img width="635" src="./docs/img/packager_server.gif" />
 </p>
 
 ## Documentation
