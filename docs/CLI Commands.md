@@ -59,6 +59,8 @@ Path to Haul config. Defaults to `haul.config.js`.
 
 If `false`, disables any user prompts and prevents the UI (which requires a TTY session) from being rendered - useful when running on CI. Defaults to `true`.
 
+Alternative usage: `--no-interactive` (the same as `--interactive false`).
+
 ## `haul bundle`
 
 This generates the app bundle and assets for packaging the app.
