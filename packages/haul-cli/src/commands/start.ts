@@ -30,10 +30,10 @@ export default function startCommand(runtime: Runtime) {
         default: true,
         type: 'boolean',
       },
-      'no-interactive': {
+      interactive: {
         description:
-          'Disables prompting the user if the port is already in use',
-        default: !INTERACTIVE_MODE_DEFAULT,
+          "If 'false', disables any user prompts and prevents the UI (which requires a TTY session) from being rendered",
+        default: INTERACTIVE_MODE_DEFAULT,
         type: 'boolean',
       },
       minify: {
@@ -60,7 +60,7 @@ export default function startCommand(runtime: Runtime) {
       argv: yargs.Arguments<{
         port: number;
         dev: boolean;
-        'no-interactive'?: boolean;
+        interactive?: boolean;
         minify?: boolean;
         tempDir?: string;
         config: string;
@@ -107,7 +107,7 @@ export default function startCommand(runtime: Runtime) {
           projectConfig.server.host
         );
         if (isTaken) {
-          if (!argv.noInteractive) {
+          if (argv.interactive) {
             const { userChoice } = await inquirer.prompt({
               type: 'list',
               name: 'userChoice',
@@ -145,7 +145,7 @@ export default function startCommand(runtime: Runtime) {
 
         new Server(runtime, configPath, {
           dev: argv.dev,
-          noInteractive: Boolean(argv.noInteractive),
+          noInteractive: !argv.interactive,
           minify: argv.minify === undefined ? !argv.dev : argv.minify,
           assetsDest: tempDir,
           root: directory,

@@ -55,9 +55,11 @@ Path to directory where to store temporary files. By default Haul will use a ran
 
 Path to Haul config. Defaults to `haul.config.js`.
 
-### `--no-interactive <true|false>`
+### `--interactive <true|false>`
 
-Disables any user prompts and prevent the UI (which requires a TTY session) from being rendered - useful when running on CI.
+If `false`, disables any user prompts and prevents the UI (which requires a TTY session) from being rendered - useful when running on CI. Defaults to `true`.
+
+Alternative usage: `--no-interactive` (the same as `--interactive false`).
 
 ## `haul bundle`
 
