@@ -40,7 +40,7 @@ export default function startCommand(runtime: Runtime) {
         description: `Whether to minify the bundle, 'true' by default when dev=false`,
         type: 'boolean',
       },
-      tempDir: {
+      'temp-dir': {
         description:
           'Path to directory where to store temporary files, eg. /tmp/dist',
         type: 'string',
