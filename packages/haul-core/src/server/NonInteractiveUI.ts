@@ -1,6 +1,7 @@
 import Runtime from '../runtime/Runtime';
+import UserInterface from './UI';
 
-export default class NonInteractiveUserInterface {
+export default class NonInteractiveUserInterface implements UserInterface {
   constructor(private runtime: Runtime) {}
 
   updateCompilationProgress(
