@@ -163,6 +163,23 @@ describe('importModule', () => {
     expect(require.cache[filename]).not.toBeDefined();
   });
 
+  it('should provide correct require.resolve', () => {
+    (babel.transformSync as jest.Mock).mockImplementation((...args: any[]) => {
+      return require.requireActual('@babel/core').transformSync(...args);
+    });
+
+    const {
+      exports: { default: resolved },
+      cache,
+    } = importModule('./__fixtures__/nested/moduleE.js', {
+      resolve: require.resolve,
+      runtime: new Runtime(),
+    });
+
+    expect(resolved).toEqual(require.resolve('./__fixtures__/moduleA.js'));
+    expect(Object.keys(cache).length).toBe(1);
+  });
+
   it('should not transpile if file is ignored', () => {
     (babel.transformSync as jest.Mock).mockImplementation((...args: any[]) => {
       return require.requireActual('@babel/core').transformSync(...args);

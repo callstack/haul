@@ -15,129 +15,6 @@ type Options = {
   runtime: Runtime;
 };
 
-const nativeRequire = require;
-
-function loadModule(
-  filename: string,
-  options: {
-    resolve: Options['resolve'];
-    parentModule: NonNullable<Options['parentModule']>;
-    ignore: NonNullable<Options['ignore']>;
-    cache: NonNullable<Options['cache']>;
-    runtime: Runtime;
-  }
-) {
-  const moduleFilename = options.resolve(filename);
-
-  if (Module.builtinModules.includes(moduleFilename)) {
-    return nativeRequire(moduleFilename);
-  }
-
-  if (options.cache[moduleFilename]) {
-    return options.cache[moduleFilename].exports;
-  }
-
-  const moduleBody = fs.readFileSync(moduleFilename, 'utf8');
-  const module = new Module(moduleFilename, options.parentModule);
-  module.filename = moduleFilename;
-  options.cache[module.id] = module;
-
-  const require = (moduleId: string) => {
-    return loadModule(moduleId, {
-      resolve: ((Module.createRequireFromPath(module.filename) as unknown) as {
-        resolve: RequireResolve;
-      }).resolve,
-      parentModule: module,
-      ignore: options.ignore,
-      cache: options.cache,
-      runtime: options.runtime,
-    });
-  };
-
-  require.resolve = options.resolve;
-
-  if (/\.json$/.test(module.filename)) {
-    module.exports = JSON.parse(moduleBody);
-    module.loaded = true;
-    return module.exports;
-  }
-
-  let moduleFactory: Function;
-  try {
-    moduleFactory = vm.runInThisContext(Module.wrap('\n' + moduleBody), {
-      filename: module.filename,
-    });
-  } catch (error) {
-    let ignoreModuleTranspilation = false;
-    if (typeof options.ignore === 'function') {
-      ignoreModuleTranspilation = options.ignore(module.filename);
-    } else {
-      ignoreModuleTranspilation = options.ignore.some(ignorePattern => {
-        if (typeof ignorePattern === 'string') {
-          return module.filename.startsWith(ignorePattern);
-        }
-
-        return ignorePattern.test(module.filename);
-      });
-    }
-
-    if (ignoreModuleTranspilation) {
-      throw error;
-    }
-
-    // If the parsing failed, transpile the code with babel and try again.
-    let transpilationResults: babel.BabelFileResult | null;
-    try {
-      // Use hardcored plugins and preset, since we cannot use Babel config from project, due
-      // to different targets - project babel config might have commonjs transform disabled etc.
-      transpilationResults = babel.transformSync(moduleBody, {
-        filename: module.filename,
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              targets: {
-                node: 10,
-              },
-            },
-          ],
-          '@babel/preset-typescript',
-        ],
-        plugins: [
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-transform-flow-strip-types',
-        ],
-      });
-    } catch (error) {
-      options.runtime.logger.error(
-        `Failed to transpile module ${module.filename}:`
-      );
-      throw error;
-    }
-
-    if (transpilationResults && transpilationResults.code) {
-      moduleFactory = vm.runInThisContext(
-        Module.wrap('\n' + transpilationResults.code),
-        {
-          filename: module.filename,
-        }
-      );
-    } else {
-      throw new Error(`Failed to transpile module ${module.filename}`);
-    }
-  }
-
-  moduleFactory(
-    module.exports,
-    require,
-    module,
-    module.filename,
-    path.dirname(module.filename)
-  );
-  module.loaded = true;
-  return module.exports;
-}
-
 export default function importModule(filename: string, options: Options) {
   const { resolve, parentModule, ignore = [], cache = {}, runtime } = options;
 
@@ -153,4 +30,151 @@ export default function importModule(filename: string, options: Options) {
     exports,
     cache,
   };
+}
+
+const nativeRequire = require;
+
+function loadModule(
+  filename: string,
+  provided: {
+    resolve: Options['resolve'];
+    parentModule: NonNullable<Options['parentModule']>;
+    ignore: NonNullable<Options['ignore']>;
+    cache: NonNullable<Options['cache']>;
+    runtime: Runtime;
+  }
+) {
+  // Resolve absolute module location using parent's resolver.
+  const moduleFilename = provided.resolve(filename);
+
+  // Use native require if requested module is a build-in one.
+  // Built-in modules are not kept in isolated cache, but in the native cache.
+  if (Module.builtinModules.includes(moduleFilename)) {
+    return nativeRequire(moduleFilename);
+  }
+
+  // Use exports from cache is available.
+  if (provided.cache[moduleFilename]) {
+    return provided.cache[moduleFilename].exports;
+  }
+
+  const moduleBody = fs.readFileSync(moduleFilename, 'utf8');
+  // Instantiating a new Module will setup some some properties, but won't
+  // load the module code by itself, so we can do it ourselves later.
+  const module = new Module(moduleFilename, provided.parentModule);
+  module.filename = moduleFilename;
+  provided.cache[module.id] = module;
+
+  // Create resolver for this module.
+  const currentResolve = ((Module.createRequireFromPath(
+    module.filename
+  ) as unknown) as { resolve: RequireResolve }).resolve;
+
+  // Create require function for this module.
+  const currentRequire = (moduleId: string) => {
+    return loadModule(moduleId, {
+      resolve: currentResolve,
+      parentModule: module,
+      ignore: provided.ignore,
+      cache: provided.cache,
+      runtime: provided.runtime,
+    });
+  };
+
+  // Set `resolve` and `cache` on `require` function.
+  currentRequire.resolve = currentResolve;
+  currentRequire.cache = provided.cache;
+
+  // Special case for JSON files.
+  if (/\.json$/.test(module.filename)) {
+    module.exports = JSON.parse(moduleBody);
+  } else {
+    let moduleFactory: Function;
+    try {
+      // Try to create a module factory function. If it fails, there's a good cache that the
+      // module needs to be transpiled.
+      moduleFactory = vm.runInThisContext(Module.wrap('\n' + moduleBody), {
+        filename: module.filename,
+      });
+    } catch (error) {
+      // Figure out if module should be transpiled.
+      let shouldTranspile = true;
+      if (typeof provided.ignore === 'function') {
+        shouldTranspile = !provided.ignore(module.filename);
+      } else {
+        shouldTranspile = !provided.ignore.some(ignorePattern => {
+          if (typeof ignorePattern === 'string') {
+            return module.filename.startsWith(ignorePattern);
+          }
+
+          return ignorePattern.test(module.filename);
+        });
+      }
+
+      // Throw original error if module ignored and thus should not be transpiled.
+      if (!shouldTranspile) {
+        throw error;
+      }
+
+      // If the parsing failed, transpile the code with babel and try again.
+      let transpilationResults: babel.BabelFileResult | null;
+      try {
+        // Use hardcoded plugins and preset, since we cannot use Babel config from project, due
+        // to different targets - project babel config might have commonjs transform disabled etc.
+        transpilationResults = babel.transformSync(moduleBody, {
+          filename: module.filename,
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  node: 10,
+                },
+              },
+            ],
+            '@babel/preset-typescript',
+          ],
+          plugins: [
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-transform-flow-strip-types',
+          ],
+        });
+      } catch (error) {
+        // Transpilation failed. Babel sometimes might not print which file it was transpiling
+        // so, log it here and then throw error from Babel.
+        provided.runtime.logger.error(
+          `Failed to transpile module ${module.filename}:`
+        );
+        throw error;
+      }
+
+      if (transpilationResults && transpilationResults.code) {
+        // Try to evaluate the module factory again using transpiled code. If it fails, the
+        // error will propagate to up the stack - there's nothing we need to do.
+        moduleFactory = vm.runInThisContext(
+          Module.wrap('\n' + transpilationResults.code),
+          {
+            filename: module.filename,
+          }
+        );
+      } else {
+        // Edge case if transpilation failed, but we don't know why.
+        throw new Error(
+          `Failed to transpile module ${module.filename} due to unknown reason`
+        );
+      }
+    }
+
+    // Evaluate the actual module's code.
+    moduleFactory(
+      module.exports,
+      currentRequire,
+      module,
+      module.filename,
+      path.dirname(module.filename)
+    );
+  }
+
+  module.loaded = true;
+  return module.exports;
 }
