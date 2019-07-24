@@ -20,7 +20,7 @@ describe('in multi-bundle mode', () => {
     let disposed = false;
 
     beforeAll(done => {
-      server = runHaul(TEST_PROJECT_DIR, ['start']);
+      server = runHaul(TEST_PROJECT_DIR, ['start', '--port', '8082']);
 
       server.stderr.on('data', data => {
         done.fail(data.toString());
@@ -121,19 +121,19 @@ describe('in multi-bundle mode', () => {
 
 async function fetchBundles(platform) {
   const host = await (await fetch(
-    `http://localhost:8081/index.${platform}.bundle`
+    `http://localhost:8082/index.${platform}.bundle`
   )).text();
   const baseDll = await (await fetch(
-    `http://localhost:8081/base_dll.${platform}.bundle`
+    `http://localhost:8082/base_dll.${platform}.bundle`
   )).text();
   const app0 = await (await fetch(
-    `http://localhost:8081/app0.${platform}.bundle`
+    `http://localhost:8082/app0.${platform}.bundle`
   )).text();
   const app1 = await (await fetch(
-    `http://localhost:8081/app1.${platform}.bundle`
+    `http://localhost:8082/app1.${platform}.bundle`
   )).text();
   const app1Chunk = await (await fetch(
-    `http://localhost:8081/0.app1.${platform}.bundle`
+    `http://localhost:8082/0.app1.${platform}.bundle`
   )).text();
 
   return {
