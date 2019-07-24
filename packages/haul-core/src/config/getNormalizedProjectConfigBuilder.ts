@@ -1,11 +1,11 @@
 import { NormalizedProjectConfigBuilder } from './types';
+import importModule from '../utils/importModule';
+import Runtime from '../runtime/Runtime';
 
 export default function getNormalizedProjectConfigBuilder(
+  runtime: Runtime,
   configPath?: string
 ): NormalizedProjectConfigBuilder {
-  // TODO: figure out a better way to read and transpile user files on-demand
-  require('@haul-bundler/core-legacy/build/babelRegister');
-
   let config;
 
   /**
@@ -15,7 +15,8 @@ export default function getNormalizedProjectConfigBuilder(
   if (!configPath) {
     throw new Error("Couldn't find `haul.config.js`");
   } else {
-    config = require(configPath);
+    config = importModule(configPath, { resolve: require.resolve, runtime })
+      .exports;
     config = config.__esModule ? config.default : config;
   }
 

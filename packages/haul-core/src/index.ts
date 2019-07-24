@@ -45,3 +45,4 @@ export { default as parseEntry } from './utils/parseEntry';
 export {
   default as sortBundlesByDependencies,
 } from './utils/sortBundlesByDependencies';
+export { default as importModule } from './utils/importModule';

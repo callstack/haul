@@ -87,19 +87,19 @@ export default function startCommand(runtime: Runtime) {
       }
 
       const configPath = getProjectConfigPath(directory, argv.config);
-      const projectConfig = getNormalizedProjectConfigBuilder(configPath)(
+      const projectConfig = getNormalizedProjectConfigBuilder(
         runtime,
-        {
-          platform: '',
-          root: directory,
-          dev: argv.dev,
-          port: argv.port,
-          bundleMode: 'multi-bundle',
-          bundleTarget: 'server',
-          assetsDest: tempDir,
-          minify: argv.minify === undefined ? !argv.dev : argv.minify,
-        }
-      );
+        configPath
+      )(runtime, {
+        platform: '',
+        root: directory,
+        dev: argv.dev,
+        port: argv.port,
+        bundleMode: 'multi-bundle',
+        bundleTarget: 'server',
+        assetsDest: tempDir,
+        minify: argv.minify === undefined ? !argv.dev : argv.minify,
+      });
 
       try {
         const isTaken = await isPortTaken(
