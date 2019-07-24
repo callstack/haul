@@ -65,10 +65,18 @@ function loadModule(
   module.filename = moduleFilename;
   provided.cache[module.id] = module;
 
-  // Create resolver for this module.
-  const currentResolve = ((Module.createRequireFromPath(
-    module.filename
-  ) as unknown) as { resolve: RequireResolve }).resolve;
+  // Create resolver for this module. For Node 8, we need to use `Module._resolveFilename`
+  // since `Module.createRequireFromPath` is not implemented there. Node 8 has End of Life
+  // schedule on December 2019, so soon-ish we will be able to drop
+  // usage of `Module._resolveFilename`.
+  const currentResolve = Module.createRequireFromPath
+    ? ((Module.createRequireFromPath(module.filename) as unknown) as {
+        resolve: RequireResolve;
+      }).resolve
+    : (moduleId: string) =>
+        ((Module as unknown) as {
+          _resolveFilename: (request: string, parent?: Module) => string;
+        })._resolveFilename(moduleId, module);
 
   // Create require function for this module.
   const currentRequire = (moduleId: string) => {
