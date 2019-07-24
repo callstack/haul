@@ -33,6 +33,7 @@ export default function importModule(filename: string, options: Options) {
 }
 
 const nativeRequire = require;
+const builtinModules = ['debug'].concat(Module.builtinModules);
 
 function loadModule(
   filename: string,
@@ -49,7 +50,7 @@ function loadModule(
 
   // Use native require if requested module is a build-in one.
   // Built-in modules are not kept in isolated cache, but in the native cache.
-  if (Module.builtinModules.includes(moduleFilename)) {
+  if (builtinModules.includes(moduleFilename)) {
     return nativeRequire(moduleFilename);
   }
 
@@ -63,6 +64,17 @@ function loadModule(
   // load the module code by itself, so we can do it ourselves later.
   const module = new Module(moduleFilename, provided.parentModule);
   module.filename = moduleFilename;
+  // Resolve lookup paths (for example paths to node_modules for each parent directory).
+  module.paths = ((Module as unknown) as {
+    _resolveLookupPaths: (request: string, parent?: Module) => string[][];
+  })
+    ._resolveLookupPaths(module.filename, provided.parentModule)
+    .reduce(
+      (acc, item) =>
+        Array.isArray(item) ? acc.concat(...item) : acc.concat(item),
+      []
+    )
+    .concat(path.dirname(module.filename));
   provided.cache[module.id] = module;
 
   // Create resolver for this module. For Node 8, we need to use `Module._resolveFilename`
@@ -73,10 +85,19 @@ function loadModule(
     ? ((Module.createRequireFromPath(module.filename) as unknown) as {
         resolve: RequireResolve;
       }).resolve
-    : (moduleId: string) =>
-        ((Module as unknown) as {
-          _resolveFilename: (request: string, parent?: Module) => string;
-        })._resolveFilename(moduleId, module);
+    : (moduleId: string) => {
+        if (builtinModules.includes(moduleId)) {
+          return moduleId;
+        }
+
+        return ((Module as unknown) as {
+          _resolveFilename: (
+            request: string,
+            parent: Module | undefined,
+            isMain: boolean
+          ) => string;
+        })._resolveFilename(moduleId, module, false);
+      };
 
   // Create require function for this module.
   const currentRequire = (moduleId: string) => {
