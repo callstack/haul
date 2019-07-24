@@ -58,6 +58,7 @@ function loadModule(
 
   if (/\.json$/.test(module.filename)) {
     module.exports = JSON.parse(moduleBody);
+    module.loaded = true;
     return module.exports;
   }
 
