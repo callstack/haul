@@ -128,7 +128,7 @@ function loadModule(
               '@babel/preset-env',
               {
                 targets: {
-                  node: 10,
+                  node: 'current',
                 },
               },
             ],
