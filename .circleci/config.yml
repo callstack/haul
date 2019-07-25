@@ -22,10 +22,6 @@ commands:
       - run: yarn test -i
 
 executors:
-  node_8:
-    working_directory: ~/haul
-    docker:
-      - image: circleci/node:8
   node_10:
     working_directory: ~/haul
     docker:
@@ -36,11 +32,6 @@ executors:
       - image: circleci/node:latest
 
 jobs:
-  test_node_8:
-    executor: node_8
-    steps:
-      - run_node_tests:
-          cache_prefix: "node_8"
   test_node_10:
     executor: node_10
     steps:
@@ -56,6 +47,5 @@ workflows:
   version: 2
   test:
     jobs:
-      - test_node_8
       - test_node_10
       - test_node_latest

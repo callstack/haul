@@ -8,7 +8,7 @@
   "main": "build/index.js",
   "types": "./index.d.ts",
   "engines": {
-    "node": ">=8.x"
+    "node": ">=10.x"
   },
   "author": "Mike Grabowski <mike@callstack.com>",
   "repository": "github:callstack/haul",

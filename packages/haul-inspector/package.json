@@ -10,7 +10,7 @@
     "bin/"
   ],
   "engines": {
-    "node": ">=8.x"
+    "node": ">=10.x"
   },
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
