@@ -69,6 +69,7 @@ function loadModule(
       }`
     );
   }
+
   // Instantiating a new Module will setup some some properties, but won't
   // load the module code by itself, so we can do it ourselves later.
   const module = new Module(moduleFilename, provided.parentModule);
