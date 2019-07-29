@@ -1,32 +1,18 @@
-import Module from 'module';
 import { withPolyfillsFactory, makeConfigFactory } from '@haul-bundler/core';
 import getDefaultConfig from './defaultConfig';
-import { resolve } from 'path';
 
 function resolvePolyfill(name: string) {
   const filename = `react-native/Libraries/polyfills/${name}.js`;
+  const searchPaths = [...module.paths, process.cwd()];
   try {
-    return require.resolve(filename);
+    return require.resolve(filename, { paths: searchPaths });
   } catch (e) {
-    // NOOP: try next resolution logic
+    throw new Error(
+      `Cannot resolve '${filename}' in [${searchPaths.join(
+        ', '
+      )}]'. Please make sure you have 'react-native' installed.`
+    );
   }
-
-  try {
-    // Try to resolve polyfill path as though it was required from 'haul.config.js' in CWD.
-    return ((Module.createRequireFromPath(
-      resolve('haul.config.js')
-    ) as unknown) as {
-      resolve: (filename: string) => string;
-    }).resolve(filename);
-  } catch (e) {
-    // NOOP: try next resolution logic
-  }
-
-  throw new Error(
-    `Cannot resolve neither '${filename}' nor '${resolve(
-      filename
-    )}'. Please make sure you have 'react-native' installed.`
-  );
 }
 
 const polyfills = [
