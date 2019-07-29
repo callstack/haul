@@ -52,18 +52,19 @@ async function createHaulProjectConfig(
   preset: string
 ) {
   // Does `haul.config.js` already exist?
+  let overwrite = true;
   if (fs.existsSync(path.join(cwd, DEFAULT_CONFIG_FILENAME))) {
-    const result = (await inquirer.prompt([
+    overwrite = ((await inquirer.prompt([
       {
         type: 'confirm',
         name: 'overwrite',
         message: `There is already a '${DEFAULT_CONFIG_FILENAME}'. Overwrite it?`,
       },
-    ])) as { overwrite: boolean };
+    ])) as { overwrite: boolean }).overwrite;
+  }
 
-    if (!result.overwrite) {
-      runtime.complete(0);
-    }
+  if (!overwrite) {
+    return;
   }
 
   progress.start('Generating config files');
@@ -76,7 +77,7 @@ async function createHaulProjectConfig(
     export default makeConfig({
       bundles: {
         index: {
-          entry: withPolyfills('./index.js'),
+          entry: withPolyfills('./index'),
         },
       },
     });
