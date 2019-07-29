@@ -6,7 +6,7 @@ exports[`init command on react-native project 1`] = `
 export default makeConfig({
   bundles: {
     index: {
-      entry: withPolyfills('./index.js'),
+      entry: withPolyfills('./index'),
     },
   },
 });"
