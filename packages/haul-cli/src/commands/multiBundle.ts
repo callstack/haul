@@ -85,6 +85,7 @@ export default function multiBundleCommand(runtime: Runtime) {
         const directory = process.cwd();
         const configPath = getProjectConfigPath(directory, config);
         const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
+          runtime,
           configPath
         );
         const projectConfig = normalizedProjectConfigBuilder(runtime, {

@@ -36,10 +36,13 @@ module.exports = async function runWebpackCompiler({
     });
   });
 
-  const projectConfig = getNormalizedProjectConfigBuilder(configPath)(runtime, {
-    ...configOptions,
-    platform,
-  });
+  const projectConfig = getNormalizedProjectConfigBuilder(runtime, configPath)(
+    runtime,
+    {
+      ...configOptions,
+      platform,
+    }
+  );
 
   const apps = [];
   const bundles = sortBundlesByDependencies(projectConfig);

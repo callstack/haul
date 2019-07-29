@@ -27,6 +27,7 @@ export default function prepareWebpackConfig(
   const directory = process.cwd();
   const configPath = getProjectConfigPath(directory, options.config);
   const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
+    runtime,
     configPath
   );
   const projectConfig = normalizedProjectConfigBuilder(runtime, {

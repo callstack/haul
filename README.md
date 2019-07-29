@@ -22,6 +22,8 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 
 `@haul-bundler/cli` and other packages under `@haul-bundler` scope are a overhaul of `haul` package __and support only React Native 0.59.0 and above__. If you need to support older versions, please check [`master` branch](https://github.com/callstack/haul/tree/master).
 
+`@haul-bundler/cli` and other packages __requires Node 10 to be installed__. If you're running older version, please upgrade to Node 10 LTS or newer.
+
 ## Features
 
 - Replaces React Native packager to bundle your app

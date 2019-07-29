@@ -5,8 +5,6 @@
  * @flow
  */
 
-require('../../babelRegister');
-
 /**
  * Get env vars
  */
