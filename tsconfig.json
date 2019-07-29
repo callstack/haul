@@ -14,4 +14,7 @@
     "declarationMap": true,
     "typeRoots": ["node_modules/@types", "typings"]
   },
+  "exclude": [
+    "./fixtures"
+  ]
 }
