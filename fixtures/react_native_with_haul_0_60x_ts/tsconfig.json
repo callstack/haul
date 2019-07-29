@@ -8,13 +8,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "jsx": "react",
-    "outDir": "build",
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "typeRoots": ["node_modules/@types", "typings"]
+    "resolveJsonModule": true
   },
-  "exclude": [
-    "./fixtures"
-  ]
 }

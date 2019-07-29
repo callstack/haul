@@ -37,15 +37,6 @@ export default makeConfig({
           },
           ...config.module.rules,
         ];
-         config.resolve.extensions = [
-          '.ts',
-          '.tsx',
-          `.${env.platform}.ts`,
-          '.native.ts',
-          `.${env.platform}.tsx`,
-          '.native.tsx',
-          ...config.resolve.extensions,
-        ]
       },
     },
   },
@@ -96,15 +87,6 @@ export default makeConfig({
           },
           ...config.module.rules,
         ];
-         config.resolve.extensions = [
-          '.ts',
-          '.tsx',
-          `.${env.platform}.ts`,
-          '.native.ts',
-          `.${env.platform}.tsx`,
-          '.native.tsx',
-          ...config.resolve.extensions,
-        ]
       },
     },
   },

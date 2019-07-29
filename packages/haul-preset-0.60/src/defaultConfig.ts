@@ -47,7 +47,7 @@ export default function getDefaultConfig(
       rules: [
         { parser: { requireEnsure: false } },
         {
-          test: /\.js$/,
+          test: /\.[jt]sx?$/,
           // eslint-disable-next-line no-useless-escape
           exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul-bundler|metro))/,
           use: [
@@ -142,7 +142,20 @@ export default function getDefaultConfig(
        * First entry takes precedence.
        */
       mainFields: ['react-native', 'browser', 'main'],
-      extensions: [`.${platform}.js`, '.native.js', '.js'],
+      extensions: [
+        `.${platform}.js`,
+        `.${platform}.jsx`,
+        '.native.js',
+        '.native.jsx',
+        '.js',
+        '.jsx',
+        `.${platform}.ts`,
+        `.${platform}.tsx`,
+        '.native.ts',
+        '.native.tsx',
+        '.ts',
+        '.tsx',
+      ],
     },
     optimization: {
       minimize: !!minify,
