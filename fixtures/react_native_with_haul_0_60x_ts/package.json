@@ -1,0 +1,22 @@
+{
+  "name": "react_native_with_haul_0_60x_ts",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "haul start",
+    "haul": "haul"
+  },
+  "dependencies": {
+    "react": "16.8.6",
+    "react-native": "0.60.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "@haul-bundler/babel-preset-react-native": "^0.9.0",
+    "@haul-bundler/preset-0.60": "^0.9.0",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.60.2",
+    "metro-react-native-babel-preset": "^0.55.0"
+  }
+}
