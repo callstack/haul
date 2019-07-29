@@ -60,7 +60,7 @@ function loadModule(
   }
 
   const moduleBody = fs.readFileSync(moduleFilename, 'utf8');
-  // Instantiating a new Module will setup some some properties, but won't
+  // Instantiating a new Module will setup some properties, but won't
   // load the module code by itself, so we can do it ourselves later.
   const module = new Module(moduleFilename, provided.parentModule);
   module.filename = moduleFilename;
