@@ -59,7 +59,16 @@ function loadModule(
     return provided.cache[moduleFilename].exports;
   }
 
-  const moduleBody = fs.readFileSync(moduleFilename, 'utf8');
+  let moduleBody: string;
+  try {
+    moduleBody = fs.readFileSync(moduleFilename, 'utf8');
+  } catch (error) {
+    throw new Error(
+      `Module '${filename}' resolved to '${moduleFilename}' not found: ${
+        error.code
+      }`
+    );
+  }
   // Instantiating a new Module will setup some some properties, but won't
   // load the module code by itself, so we can do it ourselves later.
   const module = new Module(moduleFilename, provided.parentModule);
