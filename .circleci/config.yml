@@ -1,26 +1,5 @@
 version: 2.1
 
-# commands:
-#   run_unit_test:
-#     parameters:
-#       cache_prefix:
-#         type: string
-#         default: ""
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#           - << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
-#           - << parameters.cache_prefix >>-dependencies
-#       - run: yarn
-#       - save_cache:
-#           paths:
-#             - node_modules
-#           key: << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
-#       - run: yarn lint
-#       - run: yarn typecheck
-#       - run: yarn test -i
-
 executors:
   node_10:
     working_directory: ~/haul_node_10
@@ -69,33 +48,33 @@ jobs:
           path: coverage
           destination: coverage_node_10
   
-  integration_tests_rn_0_59x:
+  rn_0_59x_integration_tests:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i integration_tests/react_native_0_59x
 
-  integration_tests_rn_0_60x:
+  rn_0_60x_integration_tests:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_50x
+      - run: yarn test -i integration_tests/react_native_0_60x
 
-  integration_tests_rn_0_60x_ts:
+  rn_0_60x_ts_integration_tests:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_59x_ts
+      - run: yarn test -i integration_tests/react_native_0_60x_ts
 
-  integration_tests_rn_0_60x_multibundle:
+  rn_0_60x_multibundle_integration_tests:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_59x_multibundle
+      - run: yarn test -i integration_tests/react_native_0_60x_multibundle
 
   setup_node_latest:
     executor: node_latest
@@ -146,16 +125,16 @@ workflows:
       - unit_test_node_10:
           requires:
             - setup_node_10
-      - integration_tests_rn_0_59x:
+      - rn_0_59x_integration_tests:
           requires:
             - setup_node_10
-      - integration_tests_rn_0_60x:
+      - rn_0_60x_integration_tests:
           requires:
             - setup_node_10
-      - integration_tests_rn_0_60x_ts:
+      - rn_0_60x_ts_integration_tests:
           requires:
             - setup_node_10
-      - integration_tests_rn_0_60x_multibundle:
+      - rn_0_60x_multibundle_integration_tests:
           requires:
             - setup_node_10
       - setup_node_latest
