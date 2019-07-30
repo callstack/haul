@@ -1,51 +1,167 @@
 version: 2.1
 
-commands:
-  run_node_tests:
-    parameters:
-      cache_prefix:
-        type: string
-        default: ""
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
-          - << parameters.cache_prefix >>-dependencies
-      - run: yarn
-      - save_cache:
-          paths:
-            - node_modules
-          key: << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
-      - run: yarn lint
-      - run: yarn typecheck
-      - run: yarn test -i
+# commands:
+#   run_unit_test:
+#     parameters:
+#       cache_prefix:
+#         type: string
+#         default: ""
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           keys:
+#           - << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
+#           - << parameters.cache_prefix >>-dependencies
+#       - run: yarn
+#       - save_cache:
+#           paths:
+#             - node_modules
+#           key: << parameters.cache_prefix >>-dependencies-{{ checksum "package.json" }}
+#       - run: yarn lint
+#       - run: yarn typecheck
+#       - run: yarn test -i
 
 executors:
   node_10:
-    working_directory: ~/haul
+    working_directory: ~/haul_node_10
     docker:
       - image: circleci/node:10
   node_latest:
-    working_directory: ~/haul
+    working_directory: ~/haul_node_latest
     docker:
       - image: circleci/node:latest
 
 jobs:
-  test_node_10:
+  setup_node_10:
     executor: node_10
     steps:
-      - run_node_tests:
-          cache_prefix: "node_10"
-  test_node_latest:
+      - checkout
+      - attach_workspace:
+          at: ~/haul_node_10
+      - restore_cache:
+          keys:
+          - node-10-dependencies-{{ checksum "package.json" }}
+          - node-10-dependencies
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          paths:
+            - node_modules
+          key: node-10-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths: .
+
+  lint_and_typecheck_node_10:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn lint
+      - run: yarn typecheck
+
+  unit_test_node_10:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i --coverage packages # run only tests in packages
+      - store_artifacts:
+          path: coverage
+          destination: coverage_node_10
+  
+  integration_tests_rn_0_59x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i integration_tests/react_native_0_59x
+
+  integration_tests_rn_0_60x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i integration_tests/react_native_0_50x
+
+  integration_tests_rn_0_60x_ts:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i integration_tests/react_native_0_59x_ts
+
+  integration_tests_rn_0_60x_multibundle:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i integration_tests/react_native_0_59x_multibundle
+
+  setup_node_latest:
     executor: node_latest
     steps:
-      - run_node_tests:
-          cache_prefix: "node_latest"
+      - checkout
+      - attach_workspace:
+          at: ~/haul_node_latest
+      - restore_cache:
+          keys:
+          - node-latest-dependencies-{{ checksum "package.json" }}
+          - node-latest-dependencies
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          paths:
+            - node_modules
+          key: node-latest-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths: .
+
+  lint_and_typecheck_node_latest:
+    executor: node_latest
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_latest
+      - run: yarn lint
+      - run: yarn typecheck
+
+  unit_test_node_latest:
+    executor: node_latest
+    steps:
+      - attach_workspace:
+          at: ~/haul_nnode_latest
+      - run: yarn test -i --coverage packages # run only tests in packages
+      - store_artifacts:
+          path: coverage
+          destination: coverage_node_latest
+
 
 workflows:
   version: 2
   test:
     jobs:
-      - test_node_10
-      - test_node_latest
+      - setup_node_10
+      - lint_and_typecheck_node_10:
+          requires:
+            - setup_node_10
+      - unit_test_node_10:
+          requires:
+            - setup_node_10
+      - integration_tests_rn_0_59x:
+          requires:
+            - setup_node_10
+      - integration_tests_rn_0_60x:
+          requires:
+            - setup_node_10
+      - integration_tests_rn_0_60x_ts:
+          requires:
+            - setup_node_10
+      - integration_tests_rn_0_60x_multibundle:
+          requires:
+            - setup_node_10
+      - setup_node_10
+      - lint_and_typecheck_node_latest:
+          requires:
+            - setup_node_latest
+      - unit_test_node_latest:
+          requires:
+            - setup_node_latest
