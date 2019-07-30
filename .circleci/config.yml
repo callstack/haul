@@ -158,7 +158,7 @@ workflows:
       - integration_tests_rn_0_60x_multibundle:
           requires:
             - setup_node_10
-      - setup_node_10
+      - setup_node_latest
       - lint_and_typecheck_node_latest:
           requires:
             - setup_node_latest
