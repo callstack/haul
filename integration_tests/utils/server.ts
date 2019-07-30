@@ -24,7 +24,7 @@ export function startServer(
   const server = runHaul(projectDir, [
     'start',
     '--port',
-    port,
+    port.toString(),
   ]) as Instance['server'];
   const instance: Instance = {
     server,
