@@ -107,7 +107,7 @@ jobs:
     executor: node_latest
     steps:
       - attach_workspace:
-          at: ~/haul_nnode_latest
+          at: ~/haul_node_latest
       - run: yarn test -i --coverage packages # run only tests in packages
       - store_artifacts:
           path: coverage
