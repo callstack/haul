@@ -34,6 +34,10 @@ export function run(cmd: string, cwd?: string): ExecOutput {
   };
 }
 
+export function installDeps(projectDir: string) {
+  run(`${yarnCommand} --mutex network`, projectDir);
+}
+
 export function fileExists(filePath: string) {
   try {
     fs.accessSync(filePath, ((fs as unknown) as { F_OK: number }).F_OK);

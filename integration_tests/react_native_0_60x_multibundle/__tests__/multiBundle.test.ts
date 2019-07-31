@@ -2,9 +2,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 import fs from 'fs';
 import { Instance, startServer, stopServer } from '../../utils/server';
-// @ts-ignore
-import { run, yarnCommand, cleanup } from '../../utils/common';
-// @ts-ignore
+import { installDeps, cleanup } from '../../utils/common';
 import { runHaulSync } from '../../utils/runHaul';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -13,9 +11,7 @@ const TEST_PROJECT_DIR = path.resolve(
 );
 
 describe('in multi-bundle mode', () => {
-  beforeAll(() => {
-    run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR);
-  });
+  beforeAll(() => installDeps(TEST_PROJECT_DIR));
 
   describe('packager server', () => {
     let instance: Instance;

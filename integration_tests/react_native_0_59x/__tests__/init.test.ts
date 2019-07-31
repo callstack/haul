@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
-import { run, yarnCommand } from '../../utils/common';
+import { run, installDeps } from '../../utils/common';
 import { runHaul } from '../../utils/runHaul';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -26,7 +26,7 @@ const cleanProject = () => {
   rimraf.sync(CONFIG_FILE_PATH);
 };
 
-beforeAll(() => run(`${yarnCommand} --mutex network`, TEST_PROJECT_DIR));
+beforeAll(() => installDeps(TEST_PROJECT_DIR));
 beforeEach(cleanProject);
 afterEach(cleanProject);
 
