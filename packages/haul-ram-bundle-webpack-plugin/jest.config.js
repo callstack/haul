@@ -1,5 +1,5 @@
 module.exports = {
   displayName: '@haul-bundler/ram-bundle-webpack-plugin',
-  testPathIgnorePatterns: ['fixtures/.*'],
-  testRegex: '/__tests__/.*\\.(test|spec)\\.ts?$',
+  testPathIgnorePatterns: ['fixtures/.*', '__fixtures__/.*'],
+  testRegex: '/__tests__/.*\\.(test|spec)\\.[jt]sx?$',
 };
