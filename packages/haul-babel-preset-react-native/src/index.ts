@@ -1,10 +1,13 @@
 const defaultPlugins = [
-  [require('@babel/plugin-proposal-class-properties')],
+  [require('@babel/plugin-proposal-class-properties'), {loose: true}],
   [require('@babel/plugin-proposal-optional-catch-binding')],
   [require('@babel/plugin-syntax-dynamic-import')],
   [require('@babel/plugin-syntax-export-default-from')],
+  [require('@babel/plugin-transform-classes')],
   [require('@babel/plugin-transform-react-jsx')],
+  [require('@babel/plugin-transform-shorthand-properties')],
   [require('@babel/plugin-transform-sticky-regex')],
+  [require('@babel/plugin-transform-template-literals'), {loose: true}],
   [require('@babel/plugin-transform-unicode-regex')],
   // For some reason native async/await don't behave correctly
   // on RN 0.59 on both platforms, so we need to transpile it
