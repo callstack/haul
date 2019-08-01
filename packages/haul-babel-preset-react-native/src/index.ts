@@ -1,5 +1,5 @@
 const defaultPlugins = [
-  [require('@babel/plugin-proposal-class-properties')],
+  [require('@babel/plugin-proposal-class-properties'), { loose: true }],
   [require('@babel/plugin-proposal-optional-catch-binding')],
   [require('@babel/plugin-syntax-dynamic-import')],
   [require('@babel/plugin-syntax-export-default-from')],
@@ -13,6 +13,13 @@ const defaultPlugins = [
   [require('@babel/plugin-transform-async-to-generator')],
 ];
 
+// Additional plugins for Hermes because it doesn't support ES6 yet
+const hermesPlugins = [
+  [require('@babel/plugin-transform-classes')],
+  [require('@babel/plugin-transform-shorthand-properties')],
+  [require('@babel/plugin-transform-template-literals'), { loose: true }],
+];
+
 function isTypeScriptSource(fileName: string) {
   return !!fileName && fileName.endsWith('.ts');
 }
@@ -21,7 +28,7 @@ function isTSXSource(fileName: string) {
   return !!fileName && fileName.endsWith('.tsx');
 }
 
-export default function getHaulBabelPreset() {
+export default function getHaulBabelPreset(options: { hermes: boolean }) {
   return {
     compact: false,
     overrides: [
@@ -30,16 +37,18 @@ export default function getHaulBabelPreset() {
         plugins: [require('@babel/plugin-transform-flow-strip-types')],
       },
       {
-        plugins: defaultPlugins.concat(
-          process.env.HAUL_PLATFORM
+        plugins: [
+          ...defaultPlugins,
+          ...(options.hermes ? hermesPlugins : []),
+          ...(process.env.HAUL_PLATFORM
             ? [
                 [
                   require('./transforms/stripDeadPlatformSelect'),
                   { platform: process.env.HAUL_PLATFORM },
                 ],
               ]
-            : []
-        ),
+            : []),
+        ],
       },
       {
         test: /node_modules\/react-native/,
