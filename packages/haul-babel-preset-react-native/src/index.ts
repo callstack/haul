@@ -28,7 +28,10 @@ function isTSXSource(fileName: string) {
   return !!fileName && fileName.endsWith('.tsx');
 }
 
-export default function getHaulBabelPreset(options: { hermes: boolean }) {
+export default function getHaulBabelPreset(
+  api: any,
+  options: { hermes: boolean }
+) {
   return {
     compact: false,
     overrides: [
