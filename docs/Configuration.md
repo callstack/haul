@@ -52,8 +52,9 @@ Project configuration object (the one accepted by `makeConfig` function) consist
 
 - `server?: ServerConfig` (_optional_) - Specify custom port and host for the packager server:
   - `host?: string` (_optional_) - Host to use for the packager server, defaults to `localhost`.
+    - Note: if you are having trouble connecting to the development server with `localhost` try `'0.0.0.0'`
   - `port?: number` (_optional_) - Port to use for the packager server, defaults to `8081`.
-- `platforms?: string[]` (_optional_) - List of supported platforms - useful for defining out-of-tree platforms.  
+- `platforms?: string[]` (_optional_) - List of supported platforms - useful for defining out-of-tree platforms.
   Defaults to `['ios', 'android']`.
 
   When providing the value, you need to specify all of the available platforms, for example to **add** `windows` your need to pass `['windows', 'ios', 'android']`.
