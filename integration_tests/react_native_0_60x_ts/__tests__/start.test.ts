@@ -11,7 +11,8 @@ describe('packager server', () => {
   let instance: Instance;
 
   beforeAll(done => {
-    instance = startServer(8081, TEST_PROJECT_DIR, done);
+    // server port is set in haul.config.js fort this project
+    instance = startServer(undefined, TEST_PROJECT_DIR, done);
   });
 
   afterAll(() => {
@@ -27,7 +28,7 @@ describe('packager server', () => {
 });
 
 async function testPlatform(platform: string) {
-  const res = await fetch(`http://localhost:8081/index.${platform}.bundle`);
+  const res = await fetch(`http://localhost:8000/index.${platform}.bundle`);
   const bundle = await res.text();
   expect(bundle).toMatch('__webpack_require__');
 }
