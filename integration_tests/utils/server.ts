@@ -15,7 +15,7 @@ export type Instance = {
 };
 
 export function startServer(
-  port: number,
+  port: number | undefined,
   projectDir: string,
   done: jest.DoneCallback
 ) {
@@ -23,8 +23,7 @@ export function startServer(
 
   const server = runHaul(projectDir, [
     'start',
-    '--port',
-    port.toString(),
+    ...(port ? ['--port', port.toString()] : []),
   ]) as Instance['server'];
   const instance: Instance = {
     server,

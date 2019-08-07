@@ -1,6 +1,5 @@
 import yargs from 'yargs';
 import {
-  DEFAULT_PORT,
   DEFAULT_CONFIG_FILENAME,
   INTERACTIVE_MODE_DEFAULT,
   getProjectConfigPath,
@@ -22,7 +21,6 @@ export default function startCommand(runtime: Runtime) {
     builder: {
       port: {
         description: 'Port to run your webpack server',
-        default: DEFAULT_PORT,
         type: 'number',
       },
       dev: {
@@ -58,7 +56,7 @@ export default function startCommand(runtime: Runtime) {
     },
     async handler(
       argv: yargs.Arguments<{
-        port: number;
+        port?: number;
         dev: boolean;
         interactive?: boolean;
         minify?: boolean;
