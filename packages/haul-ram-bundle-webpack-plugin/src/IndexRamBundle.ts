@@ -114,11 +114,10 @@ export default class IndexRamBundle {
         });
 
         lineOffset += countLines(sourceModule.source);
-
-        compilation.assets[sourceMapFilename] = new RawSource(
-          JSON.stringify(indexMap)
-        );
       });
+      compilation.assets[sourceMapFilename] = new RawSource(
+        JSON.stringify(indexMap)
+      );
     }
   }
 }
