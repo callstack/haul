@@ -7,5 +7,5 @@ module.exports = {
   moduleNameMapper: {
     '^jest/(.*)': path.join(__dirname, '../../jest/$1'),
   },
-  testEnvironment: 'node'
+  testEnvironment: 'node',
 };

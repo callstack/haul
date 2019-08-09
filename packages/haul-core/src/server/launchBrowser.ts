@@ -31,9 +31,7 @@ export default function launchBrowser(runtime: Runtime, url: string) {
     }
   ).catch((error: Error) => {
     runtime.logger.warn(
-      `Cannot start browser for debugging. Navigate manually to "${url}": ${
-        error.message
-      }`
+      `Cannot start browser for debugging. Navigate manually to "${url}": ${error.message}`
     );
   });
 }

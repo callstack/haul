@@ -64,9 +64,7 @@ function loadModule(
     moduleBody = fs.readFileSync(moduleFilename, 'utf8');
   } catch (error) {
     throw new Error(
-      `Module '${filename}' resolved to '${moduleFilename}' not found: ${
-        error.code
-      }`
+      `Module '${filename}' resolved to '${moduleFilename}' not found: ${error.code}`
     );
   }
 

@@ -24,7 +24,7 @@ const runWebpack = (
     }
     const assetPaths = stats
       .toJson()
-      .modules.map((module: any) => module.identifier);
+      .modules!.map((module: any) => module.identifier);
 
     try {
       assertion(assetPaths);

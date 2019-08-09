@@ -82,6 +82,7 @@ function bootstrap(globalScope, options) { // eslint-disable-line
       for (var i = 0; i < moduleIds.length; i++) {
         __webpack_require__(moduleIds[i]);
       }
+      return undefined;
     });
   };
 

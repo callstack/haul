@@ -56,9 +56,7 @@ export default function setupCompilerRoutes(
           type: bundleType,
         } = getBundleDataFromURL(request.url.href);
         if (!platform) {
-          const message = `Cannot detect platform parameter in URL: ${
-            request.path
-          }`;
+          const message = `Cannot detect platform parameter in URL: ${request.path}`;
           runtime.logger.error(message);
           return Boom.badImplementation(message);
         }
@@ -78,8 +76,8 @@ export default function setupCompilerRoutes(
         );
 
         if (!hasRunAdbReverse && platform === 'android') {
-          await runAdbReverse(runtime, port);
           hasRunAdbReverse = true;
+          await runAdbReverse(runtime, port);
         }
 
         if (bundleType === 'delta' && !hasWarnedDelta) {
