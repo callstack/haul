@@ -37,9 +37,7 @@ export default class HasteResolver {
         return resolver.doResolve(
           resolver.hooks.resolve,
           obj,
-          `Aliased ${innerRequest} with haste mapping: ${
-            hasteMap[innerRequest]
-          }`,
+          `Aliased ${innerRequest} with haste mapping: ${hasteMap[innerRequest]}`,
           context,
           callback
         );

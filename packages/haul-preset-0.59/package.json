@@ -16,20 +16,20 @@
   "peerDependencies": {
     "@haul-bundler/cli": "^0.10.0",
     "@haul-bundler/core": "^0.10.0",
-    "webpack": "^4.30.0"
+    "webpack": "4.x"
   },
   "dependencies": {
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "is-ci": "^2.0.0",
-    "terser-webpack-plugin": "^1.2.3"
+    "terser-webpack-plugin": "^1.4.1"
   },
   "devDependencies": {
     "@haul-bundler/cli": "^0.10.0",
     "@haul-bundler/core": "^0.10.0",
-    "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
-    "@types/is-ci": "^1.1.0",
+    "@types/case-sensitive-paths-webpack-plugin": "^2.1.3",
+    "@types/is-ci": "^2.0.0",
     "@types/terser-webpack-plugin": "^1.2.1",
-    "webpack": "^4.30.0"
+    "webpack": "^4.39.1"
   }
 }

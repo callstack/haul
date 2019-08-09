@@ -3,11 +3,7 @@
  */
 
 import path from 'path';
-import {
-  spawn,
-  spawnSync,
-  ChildProcessWithoutNullStreams,
-} from 'child_process';
+import { spawn, spawnSync, ChildProcess } from 'child_process';
 import { ExecOutput } from './common';
 
 const BIN_PATH = path.resolve(__dirname, '../../packages/haul-cli/bin/haul.js');
@@ -49,7 +45,7 @@ export function runHaul(
   dir: string,
   args?: Array<string>,
   options: RunHaulOptions = {}
-): ChildProcessWithoutNullStreams {
+): ChildProcess {
   let cwd = dir;
   const isRelative = cwd[0] !== '/';
 

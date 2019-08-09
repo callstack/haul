@@ -168,7 +168,7 @@ function assertBundles(
   } else {
     expect(bundles.app1).toMatch('function asyncEval');
     expect(bundles.app1).toMatch(
-      /return asyncEval\("" \+ chunkId \+ "\.app1\.(ios|android)\.bundle"\);/g
+      /return asyncEval\(__webpack_require__\.p \+ "" \+ chunkId \+ "\.app1\.(ios|android)\.bundle"\);/g
     );
 
     expect(bundles.app1Chunk).toMatch('this["webpackChunkapp1"]');

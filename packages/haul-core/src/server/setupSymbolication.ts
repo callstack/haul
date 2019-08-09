@@ -61,6 +61,7 @@ async function getSourceMapConsumers(
   baseUrl: string
 ): Promise<SourceMapConsumers> {
   if (!sourceMapConsumers[platform]) {
+    // eslint-disable-next-line require-atomic-updates
     sourceMapConsumers[platform] = (await Promise.all(
       bundleNames.map(bundleName =>
         createSourceMapConsumer(
@@ -136,9 +137,7 @@ export default function setupSymbolication(
       const { platform } = getBundleDataFromURL(unconvertedFrames[0].file);
       if (!platform) {
         runtime.logger.warn(
-          `Cannot detect platform from initial frame: ${
-            unconvertedFrames[0].file
-          }`
+          `Cannot detect platform from initial frame: ${unconvertedFrames[0].file}`
         );
         return h.response().code(400);
       }

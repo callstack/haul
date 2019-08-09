@@ -14,9 +14,7 @@ const makeConfig = makeConfigFactory(
     target: 'webworker',
     output: {
       path: env.assetsDest || env.root,
-      publicPath: `http://${projectConfig.server.host}:${
-        projectConfig.server.port
-      }/`,
+      publicPath: `http://${projectConfig.server.host}:${projectConfig.server.port}/`,
       globalObject: 'this',
     },
     plugins: [

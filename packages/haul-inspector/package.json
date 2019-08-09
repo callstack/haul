@@ -20,10 +20,10 @@
     "@haul-bundler/inspector-events": "^0.10.0",
     "ansi-fragments": "^0.2.1",
     "ws": "^6.2.1",
-    "yargs": "^13.2.2"
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
-    "@types/ws": "^6.0.1",
-    "@types/yargs": "^13.0.0"
+    "@types/ws": "^6.0.2",
+    "@types/yargs": "^13.0.2"
   }
 }

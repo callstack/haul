@@ -16,9 +16,9 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "escape-string-regexp": "^2.0.0",
-    "lerna": "^3.15.0",
+    "lerna": "^3.16.4",
     "mkdirp": "^0.5.1",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.0",
     "rimraf": "^2.6.3",
     "strip-ansi": "^5.2.0",
     "traverse": "^0.6.6"
@@ -31,18 +31,18 @@
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.3.3",
-    "@callstack/eslint-config": "^4.2.0",
-    "@types/jest": "^24.0.11",
-    "@types/webpack": "^4.4.29",
+    "@callstack/eslint-config": "^7.0.0",
+    "@types/jest": "^24.0.17",
     "@types/mkdirp": "^0.5.2",
-    "@types/node": "^11.13.4",
+    "@types/node": "^10.14.15",
     "@types/rimraf": "^2.0.2",
-    "@typescript-eslint/eslint-plugin": "^1.6.0",
-    "@typescript-eslint/parser": "^1.6.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.7.1",
-    "eslint": "^5.16.0",
-    "jest": "^24.7.1",
-    "typescript": "^3.4.3"
+    "@types/webpack": "^4.32.1",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "typescript": "^3.5.3"
   }
 }

@@ -93,7 +93,7 @@ export default function getDefaultConfig(
        * MacOS has a case insensitive filesystem
        * This is needed so we can error on incorrect case
        */
-      new CaseSensitivePathsPlugin(),
+      new CaseSensitivePathsPlugin() as webpack.Plugin,
       new webpack.DefinePlugin({
         /**
          * Various libraries like React rely on `process.env.NODE_ENV`

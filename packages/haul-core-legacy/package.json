@@ -26,11 +26,10 @@
   "dependencies": {
     "mime-types": "^2.1.24",
     "mkdirp": "^0.5.1",
-    "ws": "^2.2.2",
+    "ws": "^6.2.1",
     "xpipe": "^1.0.5"
   },
   "devDependencies": {
-    "jest": "^24.7.1",
-    "snapshot-diff": "^0.3.0"
+    "snapshot-diff": "^0.5.2"
   }
 }

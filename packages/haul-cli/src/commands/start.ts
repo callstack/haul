@@ -109,13 +109,9 @@ export default function startCommand(runtime: Runtime) {
             const { userChoice } = await inquirer.prompt({
               type: 'list',
               name: 'userChoice',
-              message: `Port ${
-                projectConfig.server.port
-              } is already in use. What should we do?`,
+              message: `Port ${projectConfig.server.port} is already in use. What should we do?`,
               choices: [
-                `Kill process using port ${
-                  projectConfig.server.port
-                } and start Haul`,
+                `Kill process using port ${projectConfig.server.port} and start Haul`,
                 'Quit',
               ],
             });
@@ -133,9 +129,7 @@ export default function startCommand(runtime: Runtime) {
             runtime.logger.info(`Successfully killed processes.`);
           } else {
             runtime.logger.error(
-              `Could not spawn process! Reason: Port ${
-                projectConfig.server.port
-              } already in use.`
+              `Could not spawn process! Reason: Port ${projectConfig.server.port} already in use.`
             );
             runtime.complete(1);
           }

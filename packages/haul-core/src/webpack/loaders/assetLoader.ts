@@ -33,9 +33,7 @@ async function assetLoader(this: any) {
   const url = path.relative(config.root, dirname);
   const type = path.extname(filePath).replace(/^\./, '');
   const assets = path.join('assets', config.bundle ? '' : config.platform);
-  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${
-    config.platform
-  }|native))?\\.${type}$`;
+  const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
   const filename = path.basename(filePath).replace(new RegExp(suffix), '');
   const normalizedUrl = url.replace(new RegExp(`^[\\.\\${path.sep}]+`), '');
   const normalizedName =
