@@ -46,7 +46,7 @@ function getBuildTime(stats: webpack.Stats) {
   const jsonStats = stats.toJson({ timings: true });
   return jsonStats.time
     ? jsonStats.time
-    : Math.max(...jsonStats.children.map(({ time }: any) => time));
+    : Math.max(...jsonStats.children!.map(({ time }: any) => time));
 }
 
 export function bundleBuilt(

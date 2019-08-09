@@ -142,7 +142,9 @@ function build(webpackConfig: webpack.Configuration) {
     compiler.run((err, info) => {
       if (err || info.hasErrors()) {
         reject(
-          new Error(err ? err : info.toJson({ errorDetails: true }).errors)
+          err
+            ? err
+            : new Error(info.toJson({ errorDetails: true }).errors.join('\n'))
         );
       } else {
         resolve(info);
