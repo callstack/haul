@@ -34,7 +34,7 @@
     "@callstack/eslint-config": "^7.0.0",
     "@types/jest": "^24.0.17",
     "@types/mkdirp": "^0.5.2",
-    "@types/node": "^10.16.2",
+    "@types/node": "^10.14.15",
     "@types/rimraf": "^2.0.2",
     "@types/webpack": "^4.32.1",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
