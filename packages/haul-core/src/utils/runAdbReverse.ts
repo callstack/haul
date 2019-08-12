@@ -5,7 +5,9 @@ export default function runAdbReverse(
   runtime: Runtime,
   port: number
 ): Promise<string | undefined> {
-  const command = `adb reverse tcp:${port} tcp:${port}`;
+  const androidHome = process.env.ANDROID_HOME;
+  const adb = androidHome ? `${androidHome}/platform-tools/adb` : 'adb';
+  const command = `${adb} reverse tcp:${port} tcp:${port}`;
 
   return new Promise(resolve => {
     exec(command, error => {
