@@ -28,7 +28,9 @@ class Logs {
   addItem(item: string) {
     const lines = item.split('\n').reduce(
       (acc, line) => {
-        const wrappedLine = wrapAnsi(line, this.maxLineWidth);
+        const wrappedLine = wrapAnsi(line, this.maxLineWidth, {
+          hard: true,
+        });
         return acc.concat(...wrappedLine.split('\n'));
       },
       [] as string[]
