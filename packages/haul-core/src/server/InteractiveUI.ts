@@ -1,5 +1,6 @@
 import { Terminal } from 'terminal-kit';
 import { container, color, modifier, pad } from 'ansi-fragments';
+import wrapAnsi from 'wrap-ansi';
 import UserInterface from './UI';
 
 class Logs {
@@ -27,17 +28,8 @@ class Logs {
   addItem(item: string) {
     const lines = item.split('\n').reduce(
       (acc, line) => {
-        if (line.length > this.maxLineWidth) {
-          const subLines =
-            line.match(new RegExp(`.{1,${this.maxLineWidth}}`, 'g')) || [];
-          if (subLines) {
-            return acc.concat(...subLines);
-          }
-
-          return acc;
-        }
-
-        return acc.concat(line);
+        const wrappedLine = wrapAnsi(line, this.maxLineWidth);
+        return acc.concat(...wrappedLine.split('\n'));
       },
       [] as string[]
     );
@@ -180,7 +172,7 @@ export default class InteractiveUserInterface implements UserInterface {
   start(platforms: string[]) {
     this.logs.sliceStart = 0;
     this.logs.sliceMaxLength = this.terminal.height - platforms.length - 6;
-    this.logs.maxLineWidth = this.terminal.width - 10;
+    this.logs.maxLineWidth = this.terminal.width - 2;
 
     this.terminal.fullscreen(true);
     this.terminal.grabInput({ mouse: 'motion' });
