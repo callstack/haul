@@ -93,7 +93,7 @@ export default class Server {
           value: 0,
         });
         this.ui.addLogItem(
-          this.runtime.logger.enhance(Logger.Level.Error, message)
+          this.runtime.logger.enhanceWithLevel(Logger.Level.Error, message)
         );
       }
     );
@@ -107,7 +107,7 @@ export default class Server {
         });
         errors.forEach(error => {
           this.ui.addLogItem(
-            this.runtime.logger.enhance(Logger.Level.Error, error)
+            this.runtime.logger.enhanceWithLevel(Logger.Level.Error, error)
           );
         });
       }
@@ -142,7 +142,9 @@ export default class Server {
     // in interactive mode.
     if (!this.options.noInteractive) {
       this.disposeLoggerProxy = this.runtime.logger.proxy((level, ...args) => {
-        this.ui.addLogItem(this.runtime.logger.enhance(level, ...args));
+        this.ui.addLogItem(
+          this.runtime.logger.enhanceWithLevel(level, ...args)
+        );
       });
     }
 
@@ -219,13 +221,13 @@ export default class Server {
 
     console.log = (...args) => {
       this.ui.addLogItem(
-        this.runtime.logger.enhance(Logger.Level.Info, ...args)
+        this.runtime.logger.enhanceWithLevel(Logger.Level.Info, ...args)
       );
     };
 
     console.error = (...args) => {
       this.ui.addLogItem(
-        this.runtime.logger.enhance(Logger.Level.Error, ...args)
+        this.runtime.logger.enhanceWithLevel(Logger.Level.Error, ...args)
       );
     };
 
@@ -239,12 +241,15 @@ export default class Server {
   logServerEvent(request: Hapi.Request, event?: Hapi.RequestEvent) {
     const { statusCode } = request.response as ResponseObject;
     let logColor: AnsiColor = 'green';
+    let level: 'info' | 'warn' | 'error' = 'info';
     if (statusCode >= 300 && statusCode < 400) {
       logColor = 'yellow';
+      level = 'warn';
     } else if (statusCode >= 400) {
       logColor = 'red';
+      level = 'error';
     }
-    this.ui.addLogItem(
+    this.runtime.logger[level](
       container(
         color(logColor, modifier('bold', request.method.toUpperCase())),
         pad(1),
