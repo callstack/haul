@@ -161,7 +161,7 @@ export default class Logger {
                   messages: rawArgs,
                 })
               )
-            : `[${new Date().toISOString()}] ${level}: ${rawArgs.join()}`) +
+            : `[${new Date().toISOString()}] ${level}: ${rawArgs.join(' ')}`) +
             '\n',
           'utf8'
         );
