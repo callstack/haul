@@ -9,9 +9,7 @@ export default function getSourceMapPlugin(
   serverConfig: NormalizedServerConfig
 ) {
   const baseOptions = {
-    test: /\.(js|css|(js)?bundle)($|\?)/i,
-    filename: '[file].map',
-    moduleFilenameTemplate: '[absolute-resource-path]',
+    test: /\.(js|jsx|css|ts|tsx|(js)?bundle)($|\?)/i,
     module: true,
   };
 
@@ -21,7 +19,11 @@ export default function getSourceMapPlugin(
       publicPath: `http://${serverConfig.host}:${serverConfig.port}/`,
     } as webpack.EvalSourceMapDevToolPluginOptions);
   } else if (bundleConfig.sourceMap) {
-    return new webpack.SourceMapDevToolPlugin(baseOptions);
+    return new webpack.SourceMapDevToolPlugin({
+      ...baseOptions,
+      filename: '[file].map',
+      moduleFilenameTemplate: '[absolute-resource-path]',
+    });
   }
 
   return undefined;
