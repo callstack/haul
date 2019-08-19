@@ -1,5 +1,5 @@
 {
-  "version": "0.11.0",
+  "version": "0.12.0",
   "name": "@haul-bundler/babel-preset-react-native",
   "description": "Babel preset for React Native >=0.59 with Haul",
   "main": "index.js",
@@ -47,5 +47,6 @@
     "@types/babel__template": "^7.0.2",
     "@types/dedent": "^0.7.0",
     "dedent": "^0.7.0"
-  }
+  },
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }
