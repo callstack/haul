@@ -21,21 +21,51 @@ If you want to use Typescript's official compiler and toolchain, you will need t
 
 ```yarn add --dev ts-loader```
 
-This is a `haul.config.js` that works with TypeScript:
+To use the Typescript compiler exclusively on Typescript files without Babel's intervention, you have to remove the Babel loader and then re-add it to the module rules. This is needed if you want to use Typescript features that are currently not supported by Babel, like `const enum` or `namespace`.
+
+The `haul.config.js` should then look something like this:
+
 ```js
-import { makeConfig, withPolyfills } from "@haul-bundler/preset-0.59";
+import { makeConfig, withPolyfills } from '@haul-bundler/preset-0.60';
+
+const removeRuleByTest = (moduleConfig, test) => {
+  const index = moduleConfig.findIndex(rule => {
+    if (rule.test) {
+      return rule.test.toString() === test.toString();
+    }
+    return false;
+  });
+  moduleConfig.splice(index, 1);
+};
 
 export default makeConfig({
   bundles: {
     index: {
       entry: withPolyfills('./index.ts'),
       transform({ config }) {
+
+        // Remove babel-loader, as it handles both .ts(x) and .js(x) files
+        removeRuleByTest(config.module.rules, /\.[jt]sx?$/);
+
         config.module.rules = [
           {
             test: /\.tsx?$/,
-            loader: 'ts-loader'
+            loader: 'ts-loader',
           },
           ...config.module.rules,
+
+          // Re-add the babel-loader, now only for .js(x)
+          {
+            test: /\.jsx?$/,
+            loader: require.resolve('babel-loader'),
+            options: {
+              plugins: [
+                require.resolve(
+                  '@haul-bundler/core/build/utils/fixRequireIssues',
+                ),
+              ],
+            },
+          },
         ];
       },
     },
