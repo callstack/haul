@@ -58,6 +58,9 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
       const normalizedBundleConfigs: {
         [bundleName: string]: NormalizedBundleConfig;
       } = {};
+      const transforms: {
+        [bundleName: string]: BundleConfig['transform'];
+      } = {};
       const webpackConfigs: {
         [bundleName: string]: webpack.Configuration;
       } = {};
@@ -73,7 +76,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         // TODO: use minifyOptions to configure terser for basic bundle
         const dev = bundleConfig.dev || env.dev;
         const root = bundleConfig.root || env.root;
-        const normalizedBundleConfig = {
+        const normalizedBundleConfig: NormalizedBundleConfig = {
           name: bundleConfig.name || bundleName,
           entry:
             typeof bundleConfig.entry === 'string'
@@ -97,11 +100,30 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           app: Boolean(bundleConfig.app),
           dll: Boolean(bundleConfig.dll),
           dependsOn: bundleConfig.dependsOn || [],
+          external: bundleConfig.bundlePath
+            ? {
+                copyBundle: Boolean(bundleConfig.copyBundle),
+                bundlePath: bundleConfig.bundlePath,
+                manifestPath: bundleConfig.manifestPath,
+              }
+            : false,
           providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
             'react-native',
           ],
           hasteOptions: bundleConfig.hasteOptions || {},
         };
+
+        // Make sure user supplied manifestPath if the bundle is DLL. Otherwise, we wouldn't
+        // have any info what the bundle contains.
+        if (
+          normalizedBundleConfig.dll &&
+          normalizedBundleConfig.external &&
+          !normalizedBundleConfig.external.manifestPath
+        ) {
+          throw new Error(
+            `Missing 'manifestPath' for external DLL '${normalizedBundleConfig.name}'`
+          );
+        }
 
         // Make sure the target platform is supported. Do not run this check when target is set
         // to server, since the initial configuration loading is done with `platform` set
@@ -118,6 +140,15 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
               .join(', ')} are available.`
           );
         }
+
+        normalizedBundleConfigs[
+          normalizedBundleConfig.name
+        ] = normalizedBundleConfig;
+        transforms[normalizedBundleConfig.name] = bundleConfig.transform;
+      });
+
+      Object.keys(normalizedBundleConfigs).forEach(bundleName => {
+        const normalizedBundleConfig = normalizedBundleConfigs[bundleName];
 
         let webpackConfig = getDefaultConfig(
           runtime,
@@ -175,11 +206,12 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             env,
             normalizedTemplatesConfig,
             normalizedBundleConfig,
-            webpackConfig
+            webpackConfig,
+            normalizedBundleConfigs
           );
         }
 
-        const { transform } = bundleConfig;
+        const transform = transforms[bundleName];
         if (transform) {
           webpackConfig =
             transform({
@@ -190,9 +222,6 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             }) || webpackConfig;
         }
 
-        normalizedBundleConfigs[
-          normalizedBundleConfig.name
-        ] = normalizedBundleConfig;
         webpackConfigs[normalizedBundleConfig.name] = webpackConfig;
       });
 

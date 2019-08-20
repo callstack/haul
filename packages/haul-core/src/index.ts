@@ -6,6 +6,7 @@ export { default as getProjectConfigPath } from './config/getProjectConfigPath';
 export { default as withPolyfillsFactory } from './preset/withPolyfillsFactory';
 export { default as getBabelConfigPath } from './preset/getBabelConfigPath';
 export { default as makeConfigFactory } from './preset/makeConfigFactory';
+export { getBundleFilename } from './preset/utils/applyMultiBundleTweaks';
 
 // Webpack utils
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';

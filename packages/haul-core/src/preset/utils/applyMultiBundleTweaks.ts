@@ -7,13 +7,12 @@ import {
 } from '../../config/types';
 import compileTemplate from './compileTemplate';
 
-export default function applyMultiBundleTweaks(
+export function getBundleFilename(
   env: EnvOptions,
   templatesConfig: NormalizedTemplatesConfig,
-  bundleConfig: NormalizedBundleConfig,
-  webpackConfig: webpack.Configuration
+  bundleConfig: NormalizedBundleConfig
 ) {
-  let bundleFilename = compileTemplate(
+  return compileTemplate(
     templatesConfig.filename[
       env.bundleTarget === 'server' ? '__server__' : bundleConfig.platform
     ],
@@ -24,6 +23,16 @@ export default function applyMultiBundleTweaks(
       mode: bundleConfig.dev ? 'dev' : 'prod',
     }
   );
+}
+
+export default function applyMultiBundleTweaks(
+  env: EnvOptions,
+  templatesConfig: NormalizedTemplatesConfig,
+  bundleConfig: NormalizedBundleConfig,
+  webpackConfig: webpack.Configuration,
+  normalizedBundleConfigs: { [bundleName: string]: NormalizedBundleConfig }
+) {
+  let bundleFilename = getBundleFilename(env, templatesConfig, bundleConfig);
 
   let bundleOutputDirectory = webpackConfig.output!.path!;
   if (env.bundleOutput) {
@@ -64,13 +73,19 @@ export default function applyMultiBundleTweaks(
   }
 
   bundleConfig.dependsOn.forEach((dllBundleName: string) => {
+    const dllNormalizedBundleConfig = normalizedBundleConfigs[dllBundleName];
+    if (!dllNormalizedBundleConfig) {
+      throw new Error(
+        `Cannot find bundle config for DLL '${dllBundleName}' - make sure it's listed in config before any other bundle depends on it.`
+      );
+    }
+
     webpackConfig.plugins!.push(
       new webpack.DllReferencePlugin({
         context: bundleConfig.root,
-        manifest: path.join(
-          bundleOutputDirectory,
-          `${dllBundleName}.manifest.json`
-        ),
+        manifest: dllNormalizedBundleConfig.external
+          ? dllNormalizedBundleConfig.external.manifestPath!
+          : path.join(bundleOutputDirectory, `${dllBundleName}.manifest.json`),
         sourceType: 'this',
       })
     );

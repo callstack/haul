@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import { MinifyOptions } from 'terser';
-import { DeepNonNullable, Overwrite } from 'utility-types';
+import { DeepNonNullable, Overwrite, Assign } from 'utility-types';
 import Runtime from '../runtime/Runtime';
 
 export type ServerConfig = {
@@ -40,6 +40,9 @@ export type BundleConfig = {
   >;
   sourceMap?: boolean | 'inline';
   dll?: boolean;
+  copyBundle?: boolean;
+  bundlePath?: string;
+  manifestPath?: string;
   app?: boolean;
   dependsOn?: string[];
   providesModuleNodeModules?: Array<
@@ -55,9 +58,24 @@ export type TemplatesConfig = {
 
 export type NormalizedTemplatesConfig = TemplatesConfig;
 
-export type NormalizedBundleConfig = Overwrite<
-  Pick<DeepNonNullable<BundleConfig>, Exclude<keyof BundleConfig, 'transform'>>,
-  { minifyOptions: BundleConfig['minifyOptions'] }
+export type NormalizedBundleConfig = Assign<
+  Overwrite<
+    Pick<
+      DeepNonNullable<BundleConfig>,
+      Exclude<
+        keyof BundleConfig,
+        'transform' | 'copyBundle' | 'bundlePath' | 'manifestPath'
+      >
+    >,
+    {
+      minifyOptions: BundleConfig['minifyOptions'];
+    }
+  >,
+  {
+    external:
+      | false
+      | { copyBundle: boolean; bundlePath: string; manifestPath?: string };
+  }
 >;
 
 export type WebpackConfigTransform = (params: {

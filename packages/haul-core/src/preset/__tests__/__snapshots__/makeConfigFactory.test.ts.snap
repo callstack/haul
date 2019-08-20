@@ -14,6 +14,7 @@ Object {
       "entry": Array [
         "./spp.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -35,6 +36,7 @@ Object {
       "entry": Array [
         "./dll.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -58,6 +60,7 @@ Object {
       "entry": Array [
         "./host.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -304,6 +307,7 @@ Object {
       "entry": Array [
         "./spp.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -325,6 +329,7 @@ Object {
       "entry": Array [
         "./dll.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -348,6 +353,7 @@ Object {
       "entry": Array [
         "./host.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,
@@ -580,6 +586,7 @@ Object {
       "entry": Array [
         "index.js",
       ],
+      "external": false,
       "hasteOptions": Object {},
       "minify": false,
       "minifyOptions": undefined,

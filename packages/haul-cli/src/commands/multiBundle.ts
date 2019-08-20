@@ -1,10 +1,14 @@
 import { Arguments } from 'yargs';
 import webpack from 'webpack';
+import fs from 'fs';
+import path from 'path';
 import {
   Runtime,
   getProjectConfigPath,
   getNormalizedProjectConfigBuilder,
   sortBundlesByDependencies,
+  getBundleFilename,
+  EnvOptions,
 } from '@haul-bundler/core';
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
@@ -88,7 +92,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           runtime,
           configPath
         );
-        const projectConfig = normalizedProjectConfigBuilder(runtime, {
+        const env: EnvOptions = {
           platform,
           root: directory,
           dev,
@@ -98,9 +102,64 @@ export default function multiBundleCommand(runtime: Runtime) {
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
-        });
+        };
+        const projectConfig = normalizedProjectConfigBuilder(runtime, env);
 
         for (const bundleName of sortBundlesByDependencies(projectConfig)) {
+          const bundleConfig = projectConfig.bundles[bundleName];
+          if (bundleConfig.external) {
+            runtime.logger.info(
+              `Using external${bundleConfig.dll ? ' DLL' : ''} bundle`,
+              runtime.logger.enhanceWithModifier('bold', bundleName)
+            );
+            runtime.logger.info(
+              'Bundle path',
+              runtime.logger.enhanceWithColor(
+                'gray',
+                bundleConfig.external.bundlePath
+              )
+            );
+            if (bundleConfig.dll) {
+              runtime.logger.info(
+                'Manifest path',
+                runtime.logger.enhanceWithColor(
+                  'gray',
+                  bundleConfig.external.manifestPath
+                )
+              );
+            }
+            if (bundleConfig.external.copyBundle) {
+              const filename = getBundleFilename(
+                env,
+                projectConfig.templates,
+                projectConfig.bundles[bundleName]
+              );
+              // `bundleOutput` should be a directory, but for backward-compatibility,
+              // we also handle the case with a filename.
+              let bundleOutputDirectory = bundleConfig.root;
+              if (env.bundleOutput) {
+                path.extname(env.bundleOutput) === ''
+                  ? env.bundleOutput
+                  : path.dirname(env.bundleOutput);
+                bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
+                  ? bundleOutputDirectory
+                  : path.join(bundleConfig.root, bundleOutputDirectory);
+              }
+              runtime.logger.info(
+                'Copying bundle to',
+                runtime.logger.enhanceWithColor(
+                  'gray',
+                  path.join(bundleOutputDirectory, filename)
+                )
+              );
+              fs.copyFileSync(
+                bundleConfig.external.bundlePath,
+                path.join(bundleOutputDirectory, filename)
+              );
+            }
+            continue;
+          }
+
           try {
             const webpackConfig = projectConfig.webpackConfigs[bundleName];
 
