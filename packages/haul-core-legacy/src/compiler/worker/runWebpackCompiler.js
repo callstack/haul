@@ -8,7 +8,10 @@ import {
   sortBundlesByDependencies,
   getNormalizedProjectConfigBuilder,
   Runtime,
+  getBundleFilename,
 } from '@haul-bundler/core';
+import fs from 'fs';
+import path from 'path';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
@@ -18,10 +21,8 @@ const Events = require('../events');
 module.exports = async function runWebpackCompiler({
   platform,
   options,
-  fs,
 }: {
-  [key: string]: string,
-  fs: Object,
+  [key: string]: any,
 }) {
   const emitter = new EventEmitter();
   const { configPath, configOptions } = JSON.parse(options);
@@ -36,6 +37,7 @@ module.exports = async function runWebpackCompiler({
     });
   });
 
+  const outputPath = configOptions.assetsDest;
   const projectConfig = getNormalizedProjectConfigBuilder(runtime, configPath)(
     runtime,
     {
@@ -50,7 +52,67 @@ module.exports = async function runWebpackCompiler({
   let bundlesBuilt = 0;
 
   for (const bundleName of bundles) {
+    const bundleConfig = projectConfig.bundles[bundleName];
+    if (bundleConfig.external) {
+      const bundleFilename = getBundleFilename(
+        {
+          ...configOptions,
+          platform,
+        },
+        projectConfig.templates,
+        bundleConfig
+      );
+
+      // TODO: source maps
+      // TODO: prod DLL vs dev (server) DLL
+      try {
+        fs.copyFileSync(
+          bundleConfig.external.bundlePath,
+          path.join(outputPath, bundleFilename)
+        );
+        runtime.logger.done(
+          `Copied external${
+            bundleConfig.dll ? ' DLL' : ''
+          } bundle "${bundleName}"`
+        );
+      } catch (error) {
+        // Log original message
+        runtime.logger.error(error.message);
+        let message = '';
+        try {
+          // If the error was caused due to insufficient permissions,
+          // try to get the permissions bits in octal.
+          let permissions = '';
+          if (error.code === 'EACCES' && error.path) {
+            const stats = fs.statSync(error.path);
+            permissions = '0' + (stats.mode & parseInt('777', 8)).toString(8);
+          }
+
+          message = `Failed to copy${
+            bundleConfig.dll ? ' DLL' : ''
+          } bundle "${bundleName}": ${error.code} ${error.path}${
+            permissions ? ` | permissions: ${permissions}` : ''
+          }`;
+        } catch (statError) {
+          // `fs.statSync` will fail only if the one of the parent directories is inaccessible due
+          // to insufficient permissions. If the file does not exists, `fs.statSync` won't be called on it.
+          message =
+            'Failed to stats file for permissions - parent directories can be inaccessible due to insufficient permissions';
+        }
+
+        setTimeout(() => {
+          // Emit event only after the emitter is returned from this function.
+          emitter.emit(Events.BUILD_FAILED, {
+            message,
+          });
+        }, 0);
+        break;
+      }
+      continue;
+    }
+
     let config = projectConfig.webpackConfigs[bundleName];
+
     /**
      * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
      */
@@ -88,10 +150,6 @@ module.exports = async function runWebpackCompiler({
   }
 
   const compiler = webpack(apps);
-
-  // As of Webpack 4.12.0, |outputFileSystem| must be set since there is no
-  // fallback despite the documentation stating otherwise.
-  compiler.outputFileSystem = fs;
 
   compiler.hooks.done.intercept({
     call(stats) {
