@@ -11,7 +11,7 @@
     "prepare": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "publish": "yarn prepare && node ./scripts/publish.js"
+    "publish": "yarn lerna publish --no-git-tag-version --no-push"
   },
   "dependencies": {
     "chalk": "^2.4.2",
