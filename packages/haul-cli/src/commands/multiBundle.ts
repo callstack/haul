@@ -2,6 +2,7 @@ import { Arguments } from 'yargs';
 import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';
+import mkdirp from 'mkdirp';
 import {
   Runtime,
   getProjectConfigPath,
@@ -154,6 +155,7 @@ export default function multiBundleCommand(runtime: Runtime) {
                   ? bundleOutputDirectory
                   : path.join(bundleConfig.root, bundleOutputDirectory);
               }
+              mkdirp.sync(bundleOutputDirectory);
               runtime.logger.info(
                 'Copying bundle to',
                 runtime.logger.enhanceWithColor(
