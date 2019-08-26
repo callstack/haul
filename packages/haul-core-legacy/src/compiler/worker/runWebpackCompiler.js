@@ -63,7 +63,6 @@ module.exports = async function runWebpackCompiler({
         bundleConfig
       );
 
-      // TODO: source maps
       // TODO: assets
       try {
         fs.copyFileSync(
@@ -108,6 +107,29 @@ module.exports = async function runWebpackCompiler({
         }, 0);
         break;
       }
+
+      try {
+        if (fs.existsSync(`${bundleConfig.external.bundlePath}.map`)) {
+          fs.copyFileSync(
+            `${bundleConfig.external.bundlePath}.map`,
+            path.join(
+              outputPath,
+              `${path.basename(bundleConfig.external.bundlePath)}.map`
+            )
+          );
+          runtime.logger.done(`Copied external source maps for ${bundleName}`);
+        }
+      } catch (error) {
+        const message = `Failed to copy source maps for ${bundleName}`;
+        runtime.logger.error(message, error.message);
+        setTimeout(() => {
+          // Emit event only after the emitter is returned from this function.
+          emitter.emit(Events.BUILD_FAILED, {
+            message,
+          });
+        }, 0);
+      }
+
       continue;
     }
 
