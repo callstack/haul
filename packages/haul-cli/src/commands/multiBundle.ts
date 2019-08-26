@@ -165,6 +165,19 @@ export default function multiBundleCommand(runtime: Runtime) {
                 bundleConfig.external.bundlePath,
                 path.join(bundleOutputDirectory, filename)
               );
+              if (fs.existsSync(`${bundleConfig.external.bundlePath}.map`)) {
+                fs.copyFileSync(
+                  `${bundleConfig.external.bundlePath}.map`,
+                  path.join(bundleOutputDirectory, `${filename}.map`)
+                );
+                runtime.logger.info(
+                  'Copying bundle source maps to',
+                  runtime.logger.enhanceWithColor(
+                    'gray',
+                    path.join(bundleOutputDirectory, `${filename}.map`)
+                  )
+                );
+              }
             }
             continue;
           }

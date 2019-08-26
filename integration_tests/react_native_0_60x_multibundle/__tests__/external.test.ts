@@ -39,12 +39,18 @@ describe('for external bundle', () => {
 
     compileBundles('ios');
     fs.existsSync(path.join(TEST_PROJECT_DIR, 'dist/ios/base_dll.jsbundle'));
+    fs.existsSync(
+      path.join(TEST_PROJECT_DIR, 'dist/ios/base_dll.jsbundle.map')
+    );
     fs.existsSync(path.join(TEST_PROJECT_DIR, 'dist/ios/main.jsbundle'));
     fs.existsSync(path.join(TEST_PROJECT_DIR, 'dist/ios/app0.jsbundle'));
     fs.existsSync(path.join(TEST_PROJECT_DIR, 'dist/ios/app1.jsbundle'));
     compileBundles('android');
     fs.existsSync(
       path.join(TEST_PROJECT_DIR, 'dist/android/base_dll.android.bundle')
+    );
+    fs.existsSync(
+      path.join(TEST_PROJECT_DIR, 'dist/android/base_dll.android.bundle.map')
     );
     fs.existsSync(
       path.join(TEST_PROJECT_DIR, 'dist/android/index.android.bundle')
@@ -72,6 +78,7 @@ describe('for external bundle', () => {
 
     assertBundles(await fetchBundles('ios'));
     assertBundles(await fetchBundles('android'));
+
     stopServer(server);
   });
 });
@@ -133,6 +140,12 @@ async function fetchBundles(platform: string) {
   const app1Chunk = await (await fetch(
     `http://localhost:9000/0.app1.${platform}.bundle`
   )).text();
+
+  await (await fetch(
+    `http://localhost:9000/base_dll_server.${
+      platform === 'ios' ? 'jsbundle' : 'android.bundle'
+    }.map`
+  )).json();
 
   return {
     baseDll,
