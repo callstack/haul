@@ -7,13 +7,15 @@ export default makeConfig({
       entry: withPolyfills('./src/host.js'),
       dependsOn: ['base_dll'],
     },
-    base_dll: ({ platform }) => ({
+    base_dll: ({ platform, bundleTarget }) => ({
       dll: true,
       copyBundle: true,
       bundlePath: join(
         __dirname,
-        `../node_modules/external-base-dll/${platform}/${
-          platform === 'ios' ? 'base_dll.jsbundle' : 'base_dll.android.bundle'
+        `../node_modules/external-base-dll/${platform}/base_dll${
+          bundleTarget === 'server' ? '_server' : ''
+        }${
+          platform === 'ios' ? '.jsbundle' : '.android.bundle'
         }`
       ),
       manifestPath: join(__dirname, `../node_modules/external-base-dll/${platform}/base_dll.manifest.json`),

@@ -21,6 +21,9 @@ export default makeConfig({
         './src/BundleRegistry.js'
       ]),
       dll: true,
+      transform: ({ config }) => {
+        config.output.library = 'base_dll';
+      }
     },
   },
 });
