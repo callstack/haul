@@ -17,6 +17,7 @@ export type Instance = {
 export function startServer(
   port: number | undefined,
   projectDir: string,
+  config: string | undefined,
   done: jest.DoneCallback
 ) {
   run(`${yarnCommand} --mutex network`, projectDir);
@@ -24,6 +25,7 @@ export function startServer(
   const server = runHaul(projectDir, [
     'start',
     ...(port ? ['--port', port.toString()] : []),
+    ...(config ? ['--config', config] : []),
   ]) as Instance['server'];
   const instance: Instance = {
     server,

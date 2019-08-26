@@ -12,7 +12,7 @@ describe('packager server', () => {
 
   beforeAll(done => {
     // server port is set in haul.config.js fort this project
-    instance = startServer(undefined, TEST_PROJECT_DIR, done);
+    instance = startServer(undefined, TEST_PROJECT_DIR, undefined, done);
   });
 
   afterAll(() => {

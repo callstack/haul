@@ -59,6 +59,10 @@ export default function multiBundleCommand(runtime: Runtime) {
         default: !process.stdin.isTTY ? 'verbose' : 'compact',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
+      'skip-host-check': {
+        description: 'Skips check for "index" or "host" bundle in Haul config',
+        type: 'boolean',
+      },
     },
     async handler(
       argv: Arguments<{
@@ -70,6 +74,7 @@ export default function multiBundleCommand(runtime: Runtime) {
         bundleOutput?: string;
         sourcemapOutput?: string;
         progress: string;
+        skipHostCheck?: boolean;
       }>
     ) {
       try {
@@ -82,6 +87,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          skipHostCheck,
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -105,7 +111,9 @@ export default function multiBundleCommand(runtime: Runtime) {
         };
         const projectConfig = normalizedProjectConfigBuilder(runtime, env);
 
-        for (const bundleName of sortBundlesByDependencies(projectConfig)) {
+        for (const bundleName of sortBundlesByDependencies(projectConfig, {
+          skipHostCheck,
+        })) {
           const bundleConfig = projectConfig.bundles[bundleName];
           if (bundleConfig.external) {
             runtime.logger.info(

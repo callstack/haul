@@ -1,7 +1,8 @@
 import { NormalizedProjectConfig } from '../config/types';
 
 export default function sortBundlesByDependencies(
-  projectConfig: NormalizedProjectConfig
+  projectConfig: NormalizedProjectConfig,
+  { skipHostCheck }: { skipHostCheck?: boolean } = {}
 ): string[] {
   const dlls: Set<string> = new Set();
   let host: string = '';
@@ -26,11 +27,11 @@ export default function sortBundlesByDependencies(
     }
   }
 
-  if (!host) {
+  if (!host && !skipHostCheck) {
     throw new Error(
       'Cannot find webpack config `index` nor `host`. Make sure you have bundle config for `index` or `host'
     );
   }
 
-  return [...dlls.values(), host, ...apps];
+  return [...dlls.values(), host, ...apps].filter(Boolean);
 }
