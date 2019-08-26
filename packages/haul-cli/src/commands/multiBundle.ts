@@ -146,9 +146,10 @@ export default function multiBundleCommand(runtime: Runtime) {
               // we also handle the case with a filename.
               let bundleOutputDirectory = bundleConfig.root;
               if (env.bundleOutput) {
-                path.extname(env.bundleOutput) === ''
-                  ? env.bundleOutput
-                  : path.dirname(env.bundleOutput);
+                bundleOutputDirectory =
+                  path.extname(env.bundleOutput) === ''
+                    ? env.bundleOutput
+                    : path.dirname(env.bundleOutput);
                 bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
                   ? bundleOutputDirectory
                   : path.join(bundleConfig.root, bundleOutputDirectory);

@@ -64,7 +64,7 @@ module.exports = async function runWebpackCompiler({
       );
 
       // TODO: source maps
-      // TODO: prod DLL vs dev (server) DLL
+      // TODO: assets
       try {
         fs.copyFileSync(
           bundleConfig.external.bundlePath,
