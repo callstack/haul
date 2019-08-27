@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "workspaces": [
+    "base-dll",
+    "host"
+  ],
+  "dependencies": {
+    "lerna": "^3.16.4"
+  }
+}

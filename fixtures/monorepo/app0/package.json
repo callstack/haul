@@ -1,0 +1,11 @@
+{
+  "name": "app0",
+  "version": "0.1.0",
+  "scripts": {
+    "haul": "node ../../../packages/haul-cli/bin/haul.js"
+  },
+  "dependencies": {
+    "base-dll": "*",
+    "host": "*"
+  }
+}
