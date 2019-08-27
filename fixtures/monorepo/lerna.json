@@ -3,7 +3,7 @@
   "npmClient": "yarn",
   "packages": [
     "base-dll",
-    "host"
-  ],
-  "useWorkspaces": true
+    "host",
+    "app0"
+  ]
 }

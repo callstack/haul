@@ -6,10 +6,7 @@ const entry = withPolyfills([
   require.resolve('react-native'),
   require.resolve('react-navigation'),
   './BundleRegistry.js'
-], {
-  root: '',
-  initializeCoreLocation: require.resolve('react-native/Libraries/Core/InitializeCore.js')
-});
+]);
 
 export default makeConfig({
   bundles: {

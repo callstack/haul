@@ -2,7 +2,9 @@ import React from 'react';
 import { AppRegistry, View, Text, Linking } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, NavigationActions } from 'react-navigation';
 import EmptyHost from './EmptyHost';
-import BundleRegistry from 'base-dll/BundleRegistry';
+// import BundleRegistry from './BundleRegistry';
+
+const BundleRegistry = {}
 
 function makeScreenForAppBundle(bundleName) {
   const screen = (props) => {

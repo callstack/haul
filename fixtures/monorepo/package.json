@@ -1,9 +1,8 @@
 {
   "private": true,
-  "workspaces": [
-    "base-dll",
-    "host"
-  ],
+  "scripts": {
+    "postinstall": "yarn lerna bootstrap"
+  },
   "dependencies": {
     "lerna": "^3.16.4"
   }

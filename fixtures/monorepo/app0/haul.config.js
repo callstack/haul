@@ -7,7 +7,7 @@ export default makeConfig({
     index:  ({ platform, dev }) => {
       const basePath = join(
         __dirname,
-        `../node_modules/host/dist/${platform}/${dev ? 'dev' : 'prod'}`
+        `node_modules/host/dist/${platform}/${dev ? 'dev' : 'prod'}`
       );
       const filename = `index${
         platform === 'ios' ? '.jsbundle' : '.android.bundle'

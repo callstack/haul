@@ -14,6 +14,10 @@
     "build:all": "yarn build:ios:dev && yarn build:ios:prod && yarn build:android:dev && yarn build:android:prod"
   },
   "dependencies": {
+    "react": "^16.8.6",
+    "react-native": "^0.60.5",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-navigation": "^3.11.0",
     "base-dll": "*"
   }
 }

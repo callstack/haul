@@ -4,10 +4,7 @@ import makeBaseDllConfig from 'base-dll/makeConfig';
 export default makeConfig({
   bundles: {
     index: {
-      entry: withPolyfills('./host.js', {
-        root: '',
-        initializeCoreLocation: require.resolve('react-native/Libraries/Core/InitializeCore.js')
-      }),
+      entry: withPolyfills('./host.js'),
       dependsOn: ['base_dll'],
     },
     base_dll: makeBaseDllConfig(),
