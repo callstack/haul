@@ -147,18 +147,18 @@ function loadModule(
           filename: module.filename,
           presets: [
             [
-              '@babel/preset-env',
+              require.resolve('@babel/preset-env'),
               {
                 targets: {
                   node: 'current',
                 },
               },
             ],
-            '@babel/preset-typescript',
+            require.resolve('@babel/preset-typescript'),
           ],
           plugins: [
-            '@babel/plugin-proposal-class-properties',
-            '@babel/plugin-transform-flow-strip-types',
+            require.resolve('@babel/plugin-proposal-class-properties'),
+            require.resolve('@babel/plugin-transform-flow-strip-types'),
           ],
         });
       } catch (error) {
