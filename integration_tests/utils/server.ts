@@ -18,9 +18,12 @@ export function startServer(
   port: number | undefined,
   projectDir: string,
   config: string | undefined,
-  done: jest.DoneCallback
+  done: jest.DoneCallback,
+  { skipInstall }: { skipInstall?: boolean } = {}
 ) {
-  run(`${yarnCommand} --mutex network`, projectDir);
+  if (!skipInstall) {
+    run(`${yarnCommand} --mutex network`, projectDir);
+  }
 
   const server = runHaul(projectDir, [
     'start',
