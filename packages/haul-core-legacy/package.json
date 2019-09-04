@@ -24,6 +24,7 @@
     "webpack": "4.x"
   },
   "dependencies": {
+    "cpx": "^1.5.0",
     "mime-types": "^2.1.24",
     "mkdirp": "^0.5.1",
     "ws": "^6.2.1",

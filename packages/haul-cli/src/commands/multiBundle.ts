@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
+import cpx from 'cpx';
 import {
   Runtime,
   getProjectConfigPath,
@@ -137,6 +138,7 @@ export default function multiBundleCommand(runtime: Runtime) {
                 )
               );
             }
+
             if (bundleConfig.external.copyBundle) {
               const filename = getBundleFilename(
                 env,
@@ -180,6 +182,27 @@ export default function multiBundleCommand(runtime: Runtime) {
                   )
                 );
               }
+
+              let assetsOutputDirectory = bundleConfig.root;
+              if (env.assetsDest) {
+                assetsOutputDirectory = env.assetsDest;
+              } else if (env.bundleOutput) {
+                assetsOutputDirectory = env.bundleOutput;
+              }
+              assetsOutputDirectory = path.isAbsolute(assetsOutputDirectory)
+                ? assetsOutputDirectory
+                : path.join(bundleConfig.root, assetsOutputDirectory);
+
+              cpx.copySync(
+                path.join(
+                  bundleConfig.external.assetsPath,
+                  '**/*.{aac,aiff,bmp,caf,gif,html,jpeg,jpg,m4a,m4v,mov,mp3,mp4,mpeg,mpg,obj,otf,pdf,png,psd,svg,ttf,wav,webm,webp}'
+                ),
+                assetsOutputDirectory,
+                {
+                  preserve: true,
+                }
+              );
             }
             continue;
           }

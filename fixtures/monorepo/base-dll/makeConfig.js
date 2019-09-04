@@ -12,10 +12,10 @@ export default function makeConfig(copyBundle = false) {
       platform === 'ios' ? '.jsbundle' : '.android.bundle'
     }`;
     return {
-    dll: true,
-    copyBundle,
-    bundlePath: join(basePath, filename),
-    manifestPath: join(basePath, 'base_dll.manifest.json'),
+      dll: true,
+      copyBundle,
+      bundlePath: join(basePath, filename),
+      manifestPath: join(basePath, 'base_dll.manifest.json'),
     }
   };
 }

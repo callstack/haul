@@ -26,6 +26,7 @@
     "@haul-bundler/core-legacy": "^0.12.0",
     "@haul-bundler/inspector-events": "^0.12.0",
     "ansi-fragments": "^0.2.1",
+    "cpx": "^1.5.0",
     "dedent": "^0.7.0",
     "execa": "^2.0.3",
     "inquirer": "^6.5.0",
@@ -38,6 +39,7 @@
     "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
+    "@types/cpx": "^1.5.0",
     "@types/dedent": "^0.7.0",
     "@types/inquirer": "^6.5.0",
     "@types/mkdirp": "^0.5.2",

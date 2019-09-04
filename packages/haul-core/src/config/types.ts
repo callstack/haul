@@ -40,9 +40,6 @@ export type BundleConfig = {
   >;
   sourceMap?: boolean | 'inline';
   dll?: boolean;
-  copyBundle?: boolean;
-  bundlePath?: string;
-  manifestPath?: string;
   app?: boolean;
   dependsOn?: string[];
   providesModuleNodeModules?: Array<
@@ -50,6 +47,11 @@ export type BundleConfig = {
   >;
   hasteOptions?: any;
   transform?: WebpackConfigTransform;
+  /* external bundles */
+  copyBundle?: boolean;
+  bundlePath?: string;
+  manifestPath?: string;
+  assetsPath?: string;
 };
 
 export type TemplatesConfig = {
@@ -64,7 +66,11 @@ export type NormalizedBundleConfig = Assign<
       DeepNonNullable<BundleConfig>,
       Exclude<
         keyof BundleConfig,
-        'transform' | 'copyBundle' | 'bundlePath' | 'manifestPath'
+        | 'transform'
+        | 'copyBundle'
+        | 'bundlePath'
+        | 'manifestPath'
+        | 'assetsPath'
       >
     >,
     {
@@ -74,7 +80,12 @@ export type NormalizedBundleConfig = Assign<
   {
     external:
       | false
-      | { copyBundle: boolean; bundlePath: string; manifestPath?: string };
+      | {
+          copyBundle: boolean;
+          bundlePath: string;
+          assetsPath: string;
+          manifestPath?: string;
+        };
   }
 >;
 

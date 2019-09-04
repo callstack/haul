@@ -104,6 +104,14 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             ? {
                 copyBundle: Boolean(bundleConfig.copyBundle),
                 bundlePath: bundleConfig.bundlePath,
+                assetsPath: bundleConfig.assetsPath
+                  ? path.isAbsolute(bundleConfig.assetsPath)
+                    ? bundleConfig.assetsPath
+                    : path.join(
+                        path.dirname(bundleConfig.bundlePath),
+                        bundleConfig.assetsPath
+                      )
+                  : path.dirname(bundleConfig.bundlePath),
                 manifestPath: bundleConfig.manifestPath,
               }
             : false,

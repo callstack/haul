@@ -68,6 +68,14 @@ describe('in multi-bundle monorepo', () => {
           )
           .toString(),
       });
+      expect(
+        fs.existsSync(
+          path.join(
+            TEST_PROJECT_DIR,
+            'host/dist/ios/dev/assets/node_modules/react-navigation-stack/lib/module/views/assets/back-icon.png'
+          )
+        )
+      ).toBe(true);
 
       assertBundles({
         host: fs
@@ -95,6 +103,15 @@ describe('in multi-bundle monorepo', () => {
           )
           .toString(),
       });
+
+      expect(
+        fs.existsSync(
+          path.join(
+            TEST_PROJECT_DIR,
+            'host/dist/android/dev/drawable-mdpi/node_modules_reactnavigationstack_lib_module_views_assets_backicon.png'
+          )
+        )
+      ).toBe(true);
     });
   });
 });

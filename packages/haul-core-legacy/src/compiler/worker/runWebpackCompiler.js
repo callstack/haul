@@ -12,6 +12,7 @@ import {
 } from '@haul-bundler/core';
 import fs from 'fs';
 import path from 'path';
+import cpx from 'cpx';
 
 const EventEmitter = require('events');
 const webpack = require('webpack');
@@ -122,12 +123,24 @@ module.exports = async function runWebpackCompiler({
       } catch (error) {
         const message = `Failed to copy source maps for ${bundleName}`;
         runtime.logger.error(message, error.message);
-        setTimeout(() => {
-          // Emit event only after the emitter is returned from this function.
-          emitter.emit(Events.BUILD_FAILED, {
-            message,
-          });
-        }, 0);
+      }
+
+      try {
+        cpx.copySync(
+          path.join(bundleConfig.external.assetsPath, '**'),
+          path.join(outputPath, 'assets'),
+          {
+            preserve: true,
+          }
+        );
+        runtime.logger.done(
+          `Copied assets for external${
+            bundleConfig.dll ? ' DLL' : ''
+          } bundle "${bundleName}"`
+        );
+      } catch (error) {
+        const message = `Failed to copy assets for ${bundleName}`;
+        runtime.logger.error(message, error.message);
       }
 
       continue;
