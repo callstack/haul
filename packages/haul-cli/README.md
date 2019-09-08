@@ -30,7 +30,7 @@ You can read more about available commands [here](../../docs/CLI%20Commands.md).
 <!-- badges (common) -->
 
 [license-badge]: https://img.shields.io/npm/l/@haul-bundler/core.svg?style=flat-square
-[license]: https://opensource.org/licenses/MIT
+[license]: https://github.com/callstack/haul/blob/master/LICENSE
 [prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs-welcome]: http://makeapullrequest.com
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
