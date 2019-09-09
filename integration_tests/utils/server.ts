@@ -17,13 +17,18 @@ export type Instance = {
 export function startServer(
   port: number | undefined,
   projectDir: string,
-  done: jest.DoneCallback
+  config: string | undefined,
+  done: jest.DoneCallback,
+  { skipInstall }: { skipInstall?: boolean } = {}
 ) {
-  run(`${yarnCommand} --mutex network`, projectDir);
+  if (!skipInstall) {
+    run(`${yarnCommand} --mutex network`, projectDir);
+  }
 
   const server = runHaul(projectDir, [
     'start',
     ...(port ? ['--port', port.toString()] : []),
+    ...(config ? ['--config', config] : []),
   ]) as Instance['server'];
   const instance: Instance = {
     server,

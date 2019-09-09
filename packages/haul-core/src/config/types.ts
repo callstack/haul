@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import { MinifyOptions } from 'terser';
-import { DeepNonNullable, Overwrite } from 'utility-types';
+import { DeepNonNullable, Overwrite, Assign } from 'utility-types';
 import Runtime from '../runtime/Runtime';
 
 export type ServerConfig = {
@@ -25,28 +25,38 @@ export type EnvOptions = {
   port?: number;
 };
 
-export type BundleConfig = {
-  name?: string;
-  entry: string | string[];
-  type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
-  platform?: string;
-  root?: string;
-  dev?: boolean;
-  assetsDest?: string;
-  minify?: boolean;
-  minifyOptions?: Pick<
-    MinifyOptions,
-    Exclude<keyof MinifyOptions, 'sourceMap'>
-  >;
-  sourceMap?: boolean | 'inline';
-  dll?: boolean;
-  app?: boolean;
-  dependsOn?: string[];
-  providesModuleNodeModules?: Array<
-    string | { name: string; directory: string }
-  >;
-  hasteOptions?: any;
-  transform?: WebpackConfigTransform;
+export type BundleConfig = Assign<
+  {
+    name?: string;
+    entry: string | string[];
+    type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
+    platform?: string;
+    root?: string;
+    dev?: boolean;
+    assetsDest?: string;
+    minify?: boolean;
+    minifyOptions?: Pick<
+      MinifyOptions,
+      Exclude<keyof MinifyOptions, 'sourceMap'>
+    >;
+    sourceMap?: boolean | 'inline';
+    dll?: boolean;
+    app?: boolean;
+    dependsOn?: string[];
+    providesModuleNodeModules?: Array<
+      string | { name: string; directory: string }
+    >;
+    hasteOptions?: any;
+    transform?: WebpackConfigTransform;
+  },
+  ExternalBundleConfig
+>;
+
+export type ExternalBundleConfig = {
+  copyBundle?: boolean;
+  bundlePath?: string;
+  manifestPath?: string;
+  assetsPath?: string;
 };
 
 export type TemplatesConfig = {
@@ -55,9 +65,24 @@ export type TemplatesConfig = {
 
 export type NormalizedTemplatesConfig = TemplatesConfig;
 
-export type NormalizedBundleConfig = Overwrite<
-  Pick<DeepNonNullable<BundleConfig>, Exclude<keyof BundleConfig, 'transform'>>,
-  { minifyOptions: BundleConfig['minifyOptions'] }
+export type NormalizedBundleConfig = Assign<
+  Overwrite<
+    Pick<
+      DeepNonNullable<BundleConfig>,
+      Exclude<keyof BundleConfig, 'transform' | keyof ExternalBundleConfig>
+    >,
+    {
+      minifyOptions: BundleConfig['minifyOptions'];
+    }
+  >,
+  {
+    external:
+      | false
+      | Overwrite<
+          DeepNonNullable<ExternalBundleConfig>,
+          { manifestPath: ExternalBundleConfig['manifestPath'] }
+        >;
+  }
 >;
 
 export type WebpackConfigTransform = (params: {

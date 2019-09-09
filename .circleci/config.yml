@@ -75,6 +75,13 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i integration_tests/react_native_0_60x_multibundle
+  
+  monorepo_multibundle_integration_tests:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i integration_tests/monorepo_multibundle
 
   setup_node_latest:
     executor: node_latest
@@ -135,6 +142,9 @@ workflows:
           requires:
             - setup_node_10
       - rn_0_60x_multibundle_integration_tests:
+          requires:
+            - setup_node_10
+      - monorepo_multibundle_integration_tests:
           requires:
             - setup_node_10
       - setup_node_latest

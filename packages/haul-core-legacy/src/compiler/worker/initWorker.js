@@ -6,7 +6,6 @@
  */
 
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 const path = require('path');
 const WebSocket = require('ws');
 const mime = require('mime-types');
@@ -43,11 +42,6 @@ module.exports = function initWorker({
       compiler = await runWebpackCompiler({
         platform,
         options,
-        fs: {
-          ...fs,
-          join: path.join,
-          mkdirp,
-        },
       });
     } catch (e) {
       send(Events.BUILD_FAILED, { message: e.message });

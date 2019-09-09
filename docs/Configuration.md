@@ -107,7 +107,7 @@ The bundle configuration consist of the following properties:
 - `providesModuleNodeModules?: Array<string | { name: string; directory: string }>` - Provide custom modules for Haste.
 - `hasteOptions?: any` - Provide Haste options.
 - `transform?: WebpackConfigTransform` - Customize the Webpack config after it's been created.
-
+  
   The `transform` function will receive an object with `bundleName`, `env`, `runtime` and Webpack's `config`:
 
   ```js
@@ -120,6 +120,11 @@ The bundle configuration consist of the following properties:
   ```
 
   More information can be found in [Customize Webpack config recipe](#customize-webpack-config).
+- `bundlePath?: string` - Absolute path to an external (pre-built) bundle.
+- `manifestPath?: string` - Absolute path to manifest for an external (pre-built) bundle, if `dll` is `true`.
+- `assetsPath?: string` - Absolute or relative path pointing to where assets for an external (pre-built) bundle are stored. If relative, it will be joined with `path.dirname(bundlePath)`.
+- `copyBundle?: boolean` - Whether to copy bundle, source map and assets of an external (pre-built) bundle to output directory.
+
 
 If you want to provide the bundle config based on received CLI arguments, you can do so, by using `BundleConfigBuilder`:
 
@@ -376,3 +381,83 @@ class RootComponent extends React.Component {
 
 AppRegistry.registerComponent('MyApp', () => RootComponent);
 ```
+
+### External (pre-built) bundles
+
+Check out [monorepo fixture](../fixtures/monorepo) for a complete an example.
+
+To use external bundles, first build the bundles that will be considered pre-built. You only need a single bundle config:
+```js
+import { withPolyfills, makeConfig } from '@haul-bundler/preset-0.60';
+import { join } from 'path';
+
+const entry = withPolyfills([
+  require.resolve('react'),
+  require.resolve('react-native'),
+  require.resolve('react-navigation'),
+]);
+
+export default makeConfig({
+  bundles: {
+    base_dll: ({ dev }) => ({
+      entry,
+      dll: true,
+      // Packager server will use development bundle, so it should be built as a plain JS bundle.
+      type: dev ? 'basic-bundle' : 'indexed-ram-bundle',
+    }),
+  },
+});
+```
+
+Use `--skip-host-check` option when building pre-built bundles:
+```sh
+yarn haul multi-bundle --skip-host-check <...>
+```
+
+Now in a project, where you want to use pre-built bundles, you need to specify, which bundle is external one:
+```js
+import {makeConfig, withPolyfills} from '@haul-bundler/preset-0.59';
+
+export default makeConfig({
+  bundles: {
+    index: {
+      entry: withPolyfills('./src/host.js'),
+      dependsOn: ['base_dll'],
+    },
+    // Let's assume base-dll bundle is a Node module.
+    base_dll: ({ platform, bundleTarget, dev }) => {
+      // For a pre-built bundle, both development and production bundle have to be present.
+      const basePath = join(
+        __dirname,
+        `node_modules/base-dll/dist/${platform}/${dev ? 'dev' : 'prod'}`
+      );
+      const filename = `base_dll${
+        platform === 'ios' ? '.jsbundle' : '.android.bundle'
+      }`;
+      return {
+        dll: true,
+        copyBundle,
+        bundlePath: join(basePath, filename),
+        manifestPath: join(basePath, 'base_dll.manifest.json'),
+      }
+    },
+    // Let's assume app bundle is a Node module.
+    app: ({ platform, dev }) => {
+      const basePath = join(
+        __dirname,
+        `node_modules/app/dist/${platform}/${dev ? 'dev' : 'prod'}`
+      );
+      const filename = `app0${
+        platform === 'ios' ? '.jsbundle' : '.android.bundle'
+      }`;
+
+      return {
+        bundlePath: join(basePath, filename),
+        copyBundle: true,
+      };
+    },
+  },
+});
+```
+
+Now when building a static bundle, the other external bundles alongside it's assets and source maps will be copied to next to `index` bundle.

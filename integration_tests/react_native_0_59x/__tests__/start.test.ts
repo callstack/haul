@@ -11,7 +11,7 @@ describe('packager server', () => {
   let instance: Instance;
 
   beforeAll(done => {
-    instance = startServer(8084, TEST_PROJECT_DIR, done);
+    instance = startServer(8084, TEST_PROJECT_DIR, undefined, done);
   });
 
   afterAll(() => {
