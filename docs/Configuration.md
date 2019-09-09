@@ -426,7 +426,7 @@ export default makeConfig({
     },
     // Let's assume base-dll bundle is a Node module.
     base_dll: ({ platform, bundleTarget, dev }) => {
-      // For a pre-built bundle, both development and production bundle have to be preset.
+      // For a pre-built bundle, both development and production bundle have to be present.
       const basePath = join(
         __dirname,
         `node_modules/base-dll/dist/${platform}/${dev ? 'dev' : 'prod'}`
