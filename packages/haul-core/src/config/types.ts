@@ -25,29 +25,34 @@ export type EnvOptions = {
   port?: number;
 };
 
-export type BundleConfig = {
-  name?: string;
-  entry: string | string[];
-  type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
-  platform?: string;
-  root?: string;
-  dev?: boolean;
-  assetsDest?: string;
-  minify?: boolean;
-  minifyOptions?: Pick<
-    MinifyOptions,
-    Exclude<keyof MinifyOptions, 'sourceMap'>
-  >;
-  sourceMap?: boolean | 'inline';
-  dll?: boolean;
-  app?: boolean;
-  dependsOn?: string[];
-  providesModuleNodeModules?: Array<
-    string | { name: string; directory: string }
-  >;
-  hasteOptions?: any;
-  transform?: WebpackConfigTransform;
-  /* external bundles */
+export type BundleConfig = Assign<
+  {
+    name?: string;
+    entry: string | string[];
+    type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
+    platform?: string;
+    root?: string;
+    dev?: boolean;
+    assetsDest?: string;
+    minify?: boolean;
+    minifyOptions?: Pick<
+      MinifyOptions,
+      Exclude<keyof MinifyOptions, 'sourceMap'>
+    >;
+    sourceMap?: boolean | 'inline';
+    dll?: boolean;
+    app?: boolean;
+    dependsOn?: string[];
+    providesModuleNodeModules?: Array<
+      string | { name: string; directory: string }
+    >;
+    hasteOptions?: any;
+    transform?: WebpackConfigTransform;
+  },
+  ExternalBundleConfig
+>;
+
+export type ExternalBundleConfig = {
   copyBundle?: boolean;
   bundlePath?: string;
   manifestPath?: string;
@@ -64,14 +69,7 @@ export type NormalizedBundleConfig = Assign<
   Overwrite<
     Pick<
       DeepNonNullable<BundleConfig>,
-      Exclude<
-        keyof BundleConfig,
-        | 'transform'
-        | 'copyBundle'
-        | 'bundlePath'
-        | 'manifestPath'
-        | 'assetsPath'
-      >
+      Exclude<keyof BundleConfig, 'transform' | keyof ExternalBundleConfig>
     >,
     {
       minifyOptions: BundleConfig['minifyOptions'];
@@ -80,12 +78,10 @@ export type NormalizedBundleConfig = Assign<
   {
     external:
       | false
-      | {
-          copyBundle: boolean;
-          bundlePath: string;
-          assetsPath: string;
-          manifestPath?: string;
-        };
+      | Overwrite<
+          DeepNonNullable<ExternalBundleConfig>,
+          { manifestPath: ExternalBundleConfig['manifestPath'] }
+        >;
   }
 >;
 
