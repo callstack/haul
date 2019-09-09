@@ -64,7 +64,6 @@ module.exports = async function runWebpackCompiler({
         bundleConfig
       );
 
-      // TODO: assets
       try {
         fs.copyFileSync(
           bundleConfig.external.bundlePath,
