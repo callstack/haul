@@ -386,7 +386,7 @@ AppRegistry.registerComponent('MyApp', () => RootComponent);
 
 Check out [monorepo fixture](../fixtures/monorepo) for a complete an example.
 
-To use external bundles, first built the bundles that will be considered pre-built. You only need a single bundle config:
+To use external bundles, first build the bundles that will be considered pre-built. You only need a single bundle config:
 ```js
 import { withPolyfills, makeConfig } from '@haul-bundler/preset-0.60';
 import { join } from 'path';
