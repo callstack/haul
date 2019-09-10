@@ -5,6 +5,7 @@
     "dist/"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "haul": "node ../../../packages/haul-cli/bin/haul.js",
     "build:base": "yarn haul multi-bundle",
     "build:ios:dev": "yarn build:base --platform ios --dev true --bundle-output dist/ios/dev --assets-dest dist/ios/dev",
@@ -15,10 +16,13 @@
   },
   "dependencies": {
     "react": "^16.8.6",
-    "react-native": "^0.60.5",
-    "react-native-gesture-handler": "^1.3.0",
+    "react-native": "callstack/react-native#feat/apennine-0.60",
+    "react-native-gesture-handler": "1.3.0",
     "react-navigation": "^3.11.0",
     "base-dll": "*",
     "app0": "*"
+  },
+  "devDependencies": {
+    "patch-package": "^6.1.2"
   }
 }
