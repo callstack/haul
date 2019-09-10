@@ -40,7 +40,6 @@ const AppContainer = createAppContainer(
   createBottomTabNavigator({
     Initial: EmptyHost,
     app0: makeScreenForAppBundle('app0'),
-    app1: makeScreenForAppBundle('app1'),
   }, {
     initialRouteName: 'Initial',
   })
@@ -97,4 +96,4 @@ class RootComponent extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('react_native_with_haul_0_60x_multibundle', () => RootComponent);
+AppRegistry.registerComponent('MonorepoHost', () => RootComponent);
