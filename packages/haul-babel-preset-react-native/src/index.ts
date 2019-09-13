@@ -100,8 +100,10 @@ export default function getHaulBabelPreset(
             },
           ],
           require('@babel/plugin-transform-react-display-name'),
-          require('@babel/plugin-transform-react-jsx-source'),
           require('metro-react-native-babel-preset/src/transforms/transform-symbol-member'),
+          ...(process.env.NODE_ENV === 'production'
+            ? []
+            : [require('@babel/plugin-transform-react-jsx-source')]),
         ],
       },
     ],
