@@ -2,6 +2,7 @@ comment: off
 
 coverage:
   status:
+    changes: true
     project:
       default:
         target: auto
