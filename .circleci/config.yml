@@ -44,6 +44,7 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i --coverage packages # run only tests in packages
+      - run: yarn codecov
       - store_artifacts:
           path: coverage
           destination: coverage_node_10
