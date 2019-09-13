@@ -23,3 +23,7 @@ const polyfills = [
 
 export const withPolyfills = withPolyfillsFactory(polyfills);
 export const makeConfig = makeConfigFactory(getDefaultConfig);
+
+export function doSomething(value: any) {
+  console.log(value);
+}
