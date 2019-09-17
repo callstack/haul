@@ -119,8 +119,10 @@ class DebuggerWorker {
     this.shouldQueueMessages = true;
 
     let error;
+    const scriptURL = new URL(message.url);
+    scriptURL.host = self.location.host;
     try {
-      importScripts(message.url)
+      importScripts(scriptURL.href);
     } catch (e) {
       error = e;
       if (self.ErrorUtils) {
