@@ -7,6 +7,16 @@ import Runtime from '../runtime/Runtime';
 import openInEditor from './openInEditor';
 import { promisify } from 'util';
 
+const defaultAndroidEmulatorHostnames: string[] = ['10.0.2.2', '10.0.3.2'];
+
+// If no debug_http_host is set, use localhost as the hostname.
+// The iOS Simulator will use localhost as a default.
+function getHostname(hostname: string): string {
+  return defaultAndroidEmulatorHostnames.includes(hostname)
+    ? 'localhost'
+    : hostname;
+}
+
 export default function setupDevtoolRoutes(
   runtime: Runtime,
   server: Hapi.Server,
@@ -17,10 +27,11 @@ export default function setupDevtoolRoutes(
     path: '/launch-js-devtools',
     handler: request => {
       // Open debugger page only if it's not already open.
+      const host = getHostname(request.url.hostname);
       if (!isDebuggerConnected()) {
         launchBrowser(
           runtime,
-          `http://localhost:${request.raw.req.socket.localPort}/debugger-ui`
+          `http://${host}:${request.url.port}/debugger-ui`
         );
       }
       return 'OK';
