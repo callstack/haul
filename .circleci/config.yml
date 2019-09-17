@@ -83,6 +83,20 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i integration_tests/monorepo_multibundle
+  
+  e2e_react_native_windows_current:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_windows_current
+
+  e2e_react_native_windows_vnext:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_windows_vnext
 
   setup_node_latest:
     executor: node_latest
@@ -146,6 +160,12 @@ workflows:
           requires:
             - setup_node_10
       - monorepo_multibundle_integration_tests:
+          requires:
+            - setup_node_10
+      - e2e_react_native_windows_current:
+          requires:
+            - setup_node_10
+      - e2e_react_native_windows_vnext:
           requires:
             - setup_node_10
       - setup_node_latest

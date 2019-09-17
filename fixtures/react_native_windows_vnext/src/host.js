@@ -1,11 +1,12 @@
 import React from 'react';
-import { AppRegistry, BundleRegistry, View, Text, Linking } from 'react-native';
+import { AppRegistry, View, Text, Linking } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, NavigationActions } from 'react-navigation';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import EmptyHost from './EmptyHost';
+import BundleRegistry from './BundleRegistry';
 
 function makeScreenForAppBundle(bundleName) {
   const screen = (props) => {

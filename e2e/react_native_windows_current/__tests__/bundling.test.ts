@@ -2,6 +2,11 @@ import path from 'path';
 import fs from 'fs';
 import { installDeps, cleanup } from '../../../integration_tests/utils/common';
 import { runHaulSync } from '../../../integration_tests/utils/runHaul';
+import {
+  validateBaseBundle,
+  validateHostBundle,
+  validateAppBundle,
+} from '../../utils/bundles';
 
 const PROJECT_FIXTURE = path.join(
   __dirname,
@@ -39,6 +44,10 @@ describe('react_native_windows_current', () => {
         path.join(PROJECT_FIXTURE, 'dist/single/index.windows.bundle')
       )
     ).toBe(true);
+    const bundle = fs.readFileSync(
+      path.join(PROJECT_FIXTURE, 'dist/single/index.windows.bundle')
+    );
+    validateBaseBundle(bundle);
   });
 
   it('should bundle for host, base_dll and apps bundles', () => {
@@ -79,5 +88,22 @@ describe('react_native_windows_current', () => {
         path.join(PROJECT_FIXTURE, 'dist/multi/app1.windows.bundle')
       )
     ).toBe(true);
+    const baseDllBundle = fs.readFileSync(
+      path.join(PROJECT_FIXTURE, 'dist/multi/base_dll.windows.bundle')
+    );
+    const hostBundle = fs.readFileSync(
+      path.join(PROJECT_FIXTURE, 'dist/multi/host.windows.bundle')
+    );
+    const app0Bundle = fs.readFileSync(
+      path.join(PROJECT_FIXTURE, 'dist/multi/app0.windows.bundle')
+    );
+    const app1Bundle = fs.readFileSync(
+      path.join(PROJECT_FIXTURE, 'dist/multi/app1.windows.bundle')
+    );
+
+    validateBaseBundle(baseDllBundle);
+    validateHostBundle(hostBundle);
+    validateAppBundle(app0Bundle);
+    validateAppBundle(app1Bundle);
   });
 });
