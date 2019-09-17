@@ -13,5 +13,7 @@ module.exports = {
     '<rootDir>/integration_tests/react_native_0_60x_ts',
     '<rootDir>/integration_tests/react_native_0_60x',
     '<rootDir>/integration_tests/react_native_0_59x',
+    '<rootDir>/e2e/react_native_windows_current',
+    '<rootDir>/e2e/react_native_windows_vnext',
   ],
 };
