@@ -1,0 +1,28 @@
+{
+  "name": "react_native_windows_current",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "haul start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-http": "^1.5.16",
+    "graphql": "^14.5.6",
+    "graphql-tag": "^2.10.1",
+    "react": "16.8.3",
+    "react-apollo": "^3.1.1",
+    "react-native": "0.59.8",
+    "react-native-gesture-handler": "^1.4.1",
+    "react-native-windows": "0.59.0-rc.3",
+    "react-navigation": "^4.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "rnpm-plugin-windows": "^0.2.11"
+  }
+}
