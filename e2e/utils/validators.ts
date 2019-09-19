@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 
 type ValidationOptions = {
   isIndexedRAMBundle?: boolean;
+  platform?: string;
 };
 
 export function validateBaseBundle(
@@ -20,8 +21,15 @@ export function validateBaseBundle(
       0
     );
   }
-  expect(bundleBuffer.toString().includes('react-native-windows')).toBe(true);
-  expect(bundleBuffer.toString().includes("OS: 'windows',")).toBe(true);
+  if (options.platform === 'windows') {
+    expect(bundleBuffer.toString().includes('react-native-windows')).toBe(true);
+    expect(bundleBuffer.toString().includes("OS: 'windows',")).toBe(true);
+  } else if (options.platform) {
+    expect(bundleBuffer.toString().includes('react-native')).toBe(true);
+    expect(bundleBuffer.toString().includes(`OS: '${options.platform}',`)).toBe(
+      true
+    );
+  }
 }
 
 export function validateHostBundle(bundleBuffer: Buffer) {

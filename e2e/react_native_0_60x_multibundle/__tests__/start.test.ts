@@ -25,7 +25,12 @@ describe('packager server', () => {
   let instance: Instance;
 
   beforeAll(done => {
-    instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done);
+    instance = startServer(
+      PORT,
+      TEST_PROJECT_DIR,
+      'haul.config.multi.js',
+      done
+    );
   });
 
   afterAll(() => {
@@ -34,26 +39,26 @@ describe('packager server', () => {
 
   it('compile bundles for iOS', async () => {
     const bundles = await fetchBundles('ios');
-    validateBaseBundle(bundles.baseDll, { isIndexedRAMBundle: false });
+    validateBaseBundle(bundles.baseDll, { platform: 'ios' });
     validateHostBundle(bundles.host);
-    validateAppBundle(bundles.app0, { isIndexedRAMBundle: false });
-    validateAppBundle(bundles.app1, { isIndexedRAMBundle: false });
+    validateAppBundle(bundles.app0, { platform: 'ios' });
+    validateAppBundle(bundles.app1, { platform: 'ios' });
     validateAppBundleWithChunk(bundles.app1, bundles.app1Chunk);
   });
 
   it('compile bundles for Android', async () => {
     const bundles = await fetchBundles('android');
-    validateBaseBundle(bundles.baseDll, { isIndexedRAMBundle: false });
+    validateBaseBundle(bundles.baseDll, { platform: 'android' });
     validateHostBundle(bundles.host);
-    validateAppBundle(bundles.app0, { isIndexedRAMBundle: false });
-    validateAppBundle(bundles.app1, { isIndexedRAMBundle: false });
+    validateAppBundle(bundles.app0, { platform: 'android' });
+    validateAppBundle(bundles.app1, { platform: 'android' });
     validateAppBundleWithChunk(bundles.app1, bundles.app1Chunk);
   });
 });
 
 async function fetchBundles(platform: string) {
   const host = await (await fetch(
-    `http://localhost:${PORT}/index.${platform}.bundle`
+    `http://localhost:${PORT}/host.${platform}.bundle`
   )).buffer();
   const baseDll = await (await fetch(
     `http://localhost:${PORT}/base_dll.${platform}.bundle`

@@ -21,7 +21,7 @@ export default function createBundlingTestSuite(
     });
 
     afterAll(() => {
-      cleanup(path.join(PROJECT_FIXTURE, 'dist/non-min'));
+      // cleanup(path.join(PROJECT_FIXTURE, 'dist/non-min'));
     });
 
     it('should bundle for single Indexed RAM bundle', () => {
@@ -42,7 +42,7 @@ export default function createBundlingTestSuite(
 
       expect(stderr.length).toBe(0);
       const bundle = fs.readFileSync(path.join(PROJECT_FIXTURE, BUNDLE_PATH));
-      validateBaseBundle(bundle);
+      validateBaseBundle(bundle, { platform, isIndexedRAMBundle: true });
     });
 
     it('should bundle for host, base_dll and apps bundles', () => {
@@ -76,10 +76,10 @@ export default function createBundlingTestSuite(
         path.join(PROJECT_FIXTURE, `dist/non-min/app1.${platform}.bundle`)
       );
 
-      validateBaseBundle(baseDllBundle);
+      validateBaseBundle(baseDllBundle, { platform, isIndexedRAMBundle: true });
       validateHostBundle(hostBundle);
-      validateAppBundle(app0Bundle);
-      validateAppBundle(app1Bundle);
+      validateAppBundle(app0Bundle, { platform, isIndexedRAMBundle: true });
+      validateAppBundle(app1Bundle, { platform, isIndexedRAMBundle: true });
     });
   });
 }

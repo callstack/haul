@@ -16,7 +16,7 @@ export default function createSizeTestSuite(
     });
 
     afterAll(() => {
-      cleanup(path.join(PROJECT_FIXTURE, 'dist/min'));
+      // cleanup(path.join(PROJECT_FIXTURE, 'dist/min'));
     });
 
     it('minified Indexed RAM bundle should be have size between 600kb and 920kb', () => {
