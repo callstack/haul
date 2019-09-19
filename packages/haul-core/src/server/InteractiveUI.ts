@@ -162,7 +162,6 @@ export default class InteractiveUserInterface implements UserInterface {
   }
 
   dispose(exitCode: number = 0, exit: boolean = true) {
-    this.terminal.clear();
     this.terminal.grabInput(false);
     this.terminal.hideCursor(false);
     this.terminal.fullscreen(false);
