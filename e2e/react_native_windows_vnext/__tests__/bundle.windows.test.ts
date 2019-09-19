@@ -1,3 +1,3 @@
-import createBundlingTestSuite from '../../utils/createWindowsBundleTestSuite';
+import createMultiBundleTestSuite from '../../utils/createMultiBundleTestSuite';
 
-createBundlingTestSuite('react_native_windows_vnext');
+createMultiBundleTestSuite('react_native_windows_vnext', 'windows');

@@ -8,7 +8,10 @@ import {
   validateAppBundle,
 } from './validators';
 
-export default function createBundlingTestSuite(projectName: string) {
+export default function createBundlingTestSuite(
+  projectName: string,
+  platform: string
+) {
   const PROJECT_FIXTURE = path.join(__dirname, '../../fixtures', projectName);
 
   // eslint-disable-next-line jest/valid-describe
@@ -22,11 +25,11 @@ export default function createBundlingTestSuite(projectName: string) {
     });
 
     it('should bundle for single Indexed RAM bundle', () => {
-      const BUNDLE_PATH = 'dist/non-min/index.windows.bundle';
+      const BUNDLE_PATH = `dist/non-min/index.${platform}.bundle`;
       const { stderr } = runHaulSync(PROJECT_FIXTURE, [
         'bundle',
         '--platform',
-        'windows',
+        platform,
         '--dev',
         'false',
         '--minify',
@@ -46,7 +49,7 @@ export default function createBundlingTestSuite(projectName: string) {
       const { stderr } = runHaulSync(PROJECT_FIXTURE, [
         'multi-bundle',
         '--platform',
-        'windows',
+        platform,
         '--dev',
         'false',
         '--minify',
@@ -61,16 +64,16 @@ export default function createBundlingTestSuite(projectName: string) {
 
       expect(stderr.length).toBe(0);
       const baseDllBundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, 'dist/non-min/base_dll.windows.bundle')
+        path.join(PROJECT_FIXTURE, `dist/non-min/base_dll.${platform}.bundle`)
       );
       const hostBundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, 'dist/non-min/host.windows.bundle')
+        path.join(PROJECT_FIXTURE, `dist/non-min/host.${platform}.bundle`)
       );
       const app0Bundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, 'dist/non-min/app0.windows.bundle')
+        path.join(PROJECT_FIXTURE, `dist/non-min/app0.${platform}.bundle`)
       );
       const app1Bundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, 'dist/non-min/app1.windows.bundle')
+        path.join(PROJECT_FIXTURE, `dist/non-min/app1.${platform}.bundle`)
       );
 
       validateBaseBundle(baseDllBundle);

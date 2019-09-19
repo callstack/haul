@@ -3,7 +3,10 @@ import { installDeps, cleanup } from '../../integration_tests/utils/common';
 import { runHaulSync } from '../../integration_tests/utils/runHaul';
 import { kilobytes, validateBundleSize } from './bundleSize';
 
-export default function createSizeTestSuite(projectName: string) {
+export default function createSizeTestSuite(
+  projectName: string,
+  platform: string
+) {
   const PROJECT_FIXTURE = path.join(__dirname, '../../fixtures', projectName);
 
   // eslint-disable-next-line jest/valid-describe
@@ -17,11 +20,11 @@ export default function createSizeTestSuite(projectName: string) {
     });
 
     it('minified Indexed RAM bundle should be have size between 600kb and 920kb', () => {
-      const BUNDLE_PATH = 'dist/min/index.windows.bundle';
+      const BUNDLE_PATH = `dist/min/index.${platform}.bundle`;
       runHaulSync(PROJECT_FIXTURE, [
         'bundle',
         '--platform',
-        'windows',
+        platform,
         '--dev',
         'false',
         '--bundle-output',
@@ -41,7 +44,7 @@ export default function createSizeTestSuite(projectName: string) {
       runHaulSync(PROJECT_FIXTURE, [
         'multi-bundle',
         '--platform',
-        'windows',
+        platform,
         '--dev',
         'false',
         '--bundle-output',
@@ -53,22 +56,22 @@ export default function createSizeTestSuite(projectName: string) {
       ]);
 
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, 'dist/min/host.windows.bundle'),
+        path.join(PROJECT_FIXTURE, `dist/min/host.${platform}.bundle`),
         kilobytes(1),
         kilobytes(8)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, 'dist/min/base_dll.windows.bundle'),
+        path.join(PROJECT_FIXTURE, `dist/min/base_dll.${platform}.bundle`),
         kilobytes(600),
         kilobytes(1100)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, 'dist/min/app0.windows.bundle'),
+        path.join(PROJECT_FIXTURE, `dist/min/app0.${platform}.bundle`),
         kilobytes(1),
         kilobytes(8)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, 'dist/min/app1.windows.bundle'),
+        path.join(PROJECT_FIXTURE, `dist/min/app1.${platform}.bundle`),
         kilobytes(1),
         kilobytes(8)
       );

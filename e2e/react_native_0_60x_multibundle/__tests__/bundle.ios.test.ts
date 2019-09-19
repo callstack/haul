@@ -1,3 +1,3 @@
 import createMultiBundleTestSuite from '../../utils/createMultiBundleTestSuite';
 
-createMultiBundleTestSuite('react_native_windows_current', 'windows');
+createMultiBundleTestSuite('react_native_0_60x_multibundle', 'ios');
