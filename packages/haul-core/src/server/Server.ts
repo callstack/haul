@@ -121,6 +121,13 @@ export default class Server {
       this.exit(exitCode, error);
     };
 
+    // Manually call disposal logic if pressed key is CTRL + C.
+    // 'SIGINT' signal won't be emitted on CTRL + C, because stdin is in raw mode.
+    terminal.on('key', (name: string) => {
+      if (name === 'CTRL_C') {
+        createListener(0)(null);
+      }
+    });
     process.on('uncaughtException', createListener(1));
     process.on('unhandledRejection', createListener(1));
     process.on('SIGINT', createListener(0));
@@ -131,6 +138,7 @@ export default class Server {
     this.ui.dispose(exitCode, false);
     this.resetConsole();
     this.disposeLoggerProxy();
+    this.compiler.terminate();
     if (error) {
       this.runtime.logger.error(error);
     }
