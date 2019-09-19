@@ -21,11 +21,11 @@ export default function createBundlingTestSuite(
     });
 
     afterAll(() => {
-      // cleanup(path.join(PROJECT_FIXTURE, 'dist/non-min'));
+      cleanup(path.join(PROJECT_FIXTURE, 'dist/non-min'));
     });
 
     it('should bundle for single Indexed RAM bundle', () => {
-      const BUNDLE_PATH = `dist/non-min/index.${platform}.bundle`;
+      const BUNDLE_PATH = `dist/non-min/${platform}/index.${platform}.bundle`;
       const { stderr } = runHaulSync(PROJECT_FIXTURE, [
         'bundle',
         '--platform',
@@ -37,7 +37,7 @@ export default function createBundlingTestSuite(
         '--bundle-output',
         BUNDLE_PATH,
         '--assets-dest',
-        'dist/non-min',
+        `dist/non-min/${platform}`,
       ]);
 
       expect(stderr.length).toBe(0);
@@ -55,25 +55,37 @@ export default function createBundlingTestSuite(
         '--minify',
         'false',
         '--bundle-output',
-        'dist/non-min',
+        `dist/non-min/${platform}`,
         '--assets-dest',
-        'dist/non-min',
+        `dist/non-min/${platform}`,
         '--config',
         'haul.config.multi.js',
       ]);
 
       expect(stderr.length).toBe(0);
       const baseDllBundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, `dist/non-min/base_dll.${platform}.bundle`)
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/non-min/${platform}/base_dll.${platform}.bundle`
+        )
       );
       const hostBundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, `dist/non-min/host.${platform}.bundle`)
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/non-min/${platform}/host.${platform}.bundle`
+        )
       );
       const app0Bundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, `dist/non-min/app0.${platform}.bundle`)
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/non-min/${platform}/app0.${platform}.bundle`
+        )
       );
       const app1Bundle = fs.readFileSync(
-        path.join(PROJECT_FIXTURE, `dist/non-min/app1.${platform}.bundle`)
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/non-min/${platform}/app1.${platform}.bundle`
+        )
       );
 
       validateBaseBundle(baseDllBundle, { platform, isIndexedRAMBundle: true });

@@ -1,4 +1,4 @@
-import { withPolyfills, makeConfig } from "@haul-bundler/preset-0.59";
+import { withPolyfills, makeConfig } from '../../packages/haul-preset-0.60';
 
 export default makeConfig({
   templates: {

@@ -1,5 +1,5 @@
-import { withPolyfills, makeConfig } from "@haul-bundler/preset-0.59";
-import { join } from "path";
+import { withPolyfills, makeConfig } from '../../packages/haul-preset-0.60';
+import { join } from 'path';
 
 export default makeConfig({
   bundles: {
@@ -8,7 +8,6 @@ export default makeConfig({
         'react',
         'react-native',
         'react-navigation',
-        './src/BundleRegistry.js'
       ]),
       dll: true,
       type: 'indexed-ram-bundle',
@@ -18,7 +17,6 @@ export default makeConfig({
         'react',
         'react-native',
         'react-navigation',
-        './src/BundleRegistry.js'
       ]),
       dll: true,
       transform: ({ config }) => {

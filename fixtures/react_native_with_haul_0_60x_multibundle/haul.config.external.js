@@ -1,5 +1,5 @@
-import { withPolyfills, makeConfig } from "@haul-bundler/preset-0.59";
-import { join } from "path";
+import { withPolyfills, makeConfig } from '../../packages/haul-preset-0.60';
+import { join } from 'path';
 
 export default makeConfig({
   bundles: {
@@ -12,13 +12,13 @@ export default makeConfig({
       copyBundle: true,
       bundlePath: join(
         __dirname,
-        `../node_modules/external-base-dll/${platform}/base_dll${
+        `node_modules/external-base-dll/${platform}/base_dll${
           bundleTarget === 'server' ? '_server' : ''
         }${
           platform === 'ios' ? '.jsbundle' : '.android.bundle'
         }`
       ),
-      manifestPath: join(__dirname, `../node_modules/external-base-dll/${platform}/base_dll.manifest.json`),
+      manifestPath: join(__dirname, `node_modules/external-base-dll/${platform}/base_dll.manifest.json`),
     }),
     app0: {
       entry: './src/app0',

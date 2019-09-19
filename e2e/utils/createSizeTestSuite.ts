@@ -16,11 +16,11 @@ export default function createSizeTestSuite(
     });
 
     afterAll(() => {
-      // cleanup(path.join(PROJECT_FIXTURE, 'dist/min'));
+      cleanup(path.join(PROJECT_FIXTURE, 'dist/min'));
     });
 
     it('minified Indexed RAM bundle should be have size between 600kb and 920kb', () => {
-      const BUNDLE_PATH = `dist/min/index.${platform}.bundle`;
+      const BUNDLE_PATH = `dist/min/${platform}/index.${platform}.bundle`;
       runHaulSync(PROJECT_FIXTURE, [
         'bundle',
         '--platform',
@@ -30,7 +30,7 @@ export default function createSizeTestSuite(
         '--bundle-output',
         BUNDLE_PATH,
         '--assets-dest',
-        'dist/min',
+        `dist/min/${platform}`,
       ]);
 
       validateBundleSize(
@@ -48,30 +48,42 @@ export default function createSizeTestSuite(
         '--dev',
         'false',
         '--bundle-output',
-        'dist/min',
+        `dist/min/${platform}`,
         '--assets-dest',
-        'dist/min',
+        `dist/min/${platform}`,
         '--config',
         'haul.config.multi.js',
       ]);
 
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, `dist/min/host.${platform}.bundle`),
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/min/${platform}/host.${platform}.bundle`
+        ),
         kilobytes(1),
         kilobytes(8)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, `dist/min/base_dll.${platform}.bundle`),
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/min/${platform}/base_dll.${platform}.bundle`
+        ),
         kilobytes(600),
         kilobytes(1100)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, `dist/min/app0.${platform}.bundle`),
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/min/${platform}/app0.${platform}.bundle`
+        ),
         kilobytes(1),
         kilobytes(8)
       );
       validateBundleSize(
-        path.join(PROJECT_FIXTURE, `dist/min/app1.${platform}.bundle`),
+        path.join(
+          PROJECT_FIXTURE,
+          `dist/min/${platform}/app1.${platform}.bundle`
+        ),
         kilobytes(1),
         kilobytes(8)
       );
