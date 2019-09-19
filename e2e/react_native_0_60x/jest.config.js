@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  displayName: 'integration-react-native-0.60x-ts',
+  displayName: 'e2e-react-native-0.60x',
   setupFilesAfterEnv: [
     path.join(__dirname, '../../jest/setupTestFramework.js'),
   ],

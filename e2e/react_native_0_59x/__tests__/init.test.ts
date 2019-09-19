@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
-import { run, installDeps } from '../../utils/common';
-import { runHaul } from '../../utils/runHaul';
+import { run, installDeps } from '../../../integration_tests/utils/common';
+import { runHaul } from '../../../integration_tests/utils/runHaul';
 
 const TEST_PROJECT_DIR = path.resolve(
   __dirname,

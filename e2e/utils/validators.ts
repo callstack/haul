@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
+import fetch from 'node-fetch';
 
 export function validateBaseBundle(bundleBuffer: Buffer) {
   const parser = new RamBundleParser(bundleBuffer);
@@ -37,4 +38,10 @@ export function validateAppBundle(bundleBuffer: Buffer) {
   expect(
     bundleBuffer.toString().includes("preloadBundleNames: [ 'base_dll' ]")
   ).toBe(true);
+}
+
+export async function fetchAndValidateBundle(url: string) {
+  const res = await fetch(url);
+  const bundle = await res.text();
+  expect(bundle).toMatch('__webpack_require__');
 }

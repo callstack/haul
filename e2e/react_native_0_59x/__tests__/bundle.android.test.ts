@@ -1,11 +1,14 @@
 import path from 'path';
 import fs from 'fs';
-import { installDeps } from '../../utils/common';
-import { bundleForPlatform, cleanup } from '../../utils/bundle';
+import { installDeps } from '../../../integration_tests/utils/common';
+import {
+  bundleForPlatform,
+  cleanup,
+} from '../../../integration_tests/utils/bundle';
 
 const TEST_PROJECT_DIR = path.join(
   __dirname,
-  '../../../fixtures/react_native_with_haul_0_60x'
+  '../../../fixtures/react_native_with_haul_0_59x'
 );
 
 beforeAll(() => installDeps(TEST_PROJECT_DIR));
