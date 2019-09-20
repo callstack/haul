@@ -1,11 +1,7 @@
 import path from 'path';
 import fetch from 'node-fetch';
-import {
-  Instance,
-  startServer,
-  stopServer,
-} from '../../../integration_tests/utils/server';
-import { installDeps } from '../../../integration_tests/utils/common';
+import { Instance, startServer, stopServer } from '../../utils/server';
+import { installDeps } from '../../utils/common';
 import {
   validateAppBundle,
   validateBaseBundle,

@@ -1,13 +1,9 @@
 import path from 'path';
 import fetch from 'node-fetch';
 import fs from 'fs';
-import {
-  Instance,
-  startServer,
-  stopServer,
-} from '../../../integration_tests/utils/server';
-import { installDeps, cleanup } from '../../../integration_tests/utils/common';
-import { runHaulSync } from '../../../integration_tests/utils/runHaul';
+import { Instance, startServer, stopServer } from '../../utils/server';
+import { installDeps, cleanup } from '../../utils/common';
+import { runHaulSync } from '../../utils/runHaul';
 import {
   validateBaseBundle,
   validateHostBundle,

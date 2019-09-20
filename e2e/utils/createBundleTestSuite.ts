@@ -1,10 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import { installDeps } from '../../integration_tests/utils/common';
-import {
-  bundleForPlatform,
-  cleanup,
-} from '../../integration_tests/utils/bundle';
+import { installDeps } from './common';
+import { bundleForPlatform, cleanup } from './bundle';
 
 export default function createBundleTestSuite(
   projectName: string,

@@ -1,6 +1,6 @@
 import path from 'path';
-import { installDeps, cleanup } from '../../integration_tests/utils/common';
-import { runHaulSync } from '../../integration_tests/utils/runHaul';
+import { installDeps, cleanup } from './common';
+import { runHaulSync } from './runHaul';
 import { kilobytes, validateBundleSize } from './bundleSize';
 
 export default function createSizeTestSuite(

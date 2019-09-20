@@ -1,9 +1,5 @@
 import path from 'path';
-import {
-  Instance,
-  startServer,
-  stopServer,
-} from '../../integration_tests/utils/server';
+import { Instance, startServer, stopServer } from './server';
 import { fetchAndValidateBundle } from './validators';
 
 export default function createStartTestSuite(

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  displayName: 'integration-monorepo-multibundle',
+  displayName: 'e2e-monorepo-multibundle',
   setupFilesAfterEnv: [
     path.join(__dirname, '../../jest/setupTestFramework.js'),
   ],
