@@ -49,40 +49,40 @@ jobs:
           path: coverage
           destination: coverage_node_10
   
-  rn_0_59x_integration_tests:
+  e2e_rn_0_59x:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_59x
+      - run: yarn test -i e2e/react_native_0_59x
 
-  rn_0_60x_integration_tests:
+  e2e_rn_0_60x:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_60x
+      - run: yarn test -i e2e/react_native_0_60x
 
-  rn_0_60x_ts_integration_tests:
+  e2e_rn_0_60x_ts:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_60x_ts
+      - run: yarn test -i e2e/react_native_0_60x_ts
 
-  rn_0_60x_multibundle_integration_tests:
+  e2e_rn_0_60x_multibundle:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/react_native_0_60x_multibundle
+      - run: yarn test -i e2e/react_native_0_60x_multibundle
   
-  monorepo_multibundle_integration_tests:
+  e2e_monorepo_multibundle:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i integration_tests/monorepo_multibundle
+      - run: yarn test -i e2e/monorepo_multibundle
   
   e2e_react_native_windows_current:
     executor: node_10
@@ -147,19 +147,19 @@ workflows:
       - unit_test_node_10:
           requires:
             - setup_node_10
-      - rn_0_59x_integration_tests:
+      - e2e_rn_0_59x:
           requires:
             - setup_node_10
-      - rn_0_60x_integration_tests:
+      - e2e_rn_0_60x:
           requires:
             - setup_node_10
-      - rn_0_60x_ts_integration_tests:
+      - e2e_rn_0_60x_ts:
           requires:
             - setup_node_10
-      - rn_0_60x_multibundle_integration_tests:
+      - e2e_rn_0_60x_multibundle:
           requires:
             - setup_node_10
-      - monorepo_multibundle_integration_tests:
+      - e2e_monorepo_multibundle:
           requires:
             - setup_node_10
       - e2e_react_native_windows_current:
