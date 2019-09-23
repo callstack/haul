@@ -34,9 +34,9 @@ module.exports = class Compiler extends EventEmitter {
     this.tasks = new TaskQueue();
     this.logger = logger;
 
-    this.on(Events.REQUEST_BUNDLE, ({ platform, filename, callback }) => {
+    this.on(Events.REQUEST_BUNDLE, async ({ platform, filename, callback }) => {
       if (!this.forks[platform]) {
-        this.forks[platform] = this.initFork({ platform, options });
+        this.forks[platform] = await this.initFork({ platform, options });
       }
 
       if (!this.forks[platform]) return;
@@ -95,10 +95,11 @@ module.exports = class Compiler extends EventEmitter {
   /**
    * Create fork process and attach necessary event listeners.
    */
-  initFork({ platform, options }: { platform: Platform, options: * }) {
+  async initFork({ platform, options }: { platform: Platform, options: * }) {
     let fork;
     try {
       fork = new Fork({ platform, options });
+      await fork.init();
     } catch (message) {
       this.emit(Events.BUILD_FAILED, { platform, message });
       return null;

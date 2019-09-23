@@ -21,7 +21,7 @@ module.exports = function initWorker({
   [key: string]: string,
 }) {
   const webSocket = new WebSocket(
-    `ws+unix://${socketAddress}:/?platform=${platform}`
+    `ws://${socketAddress}/?platform=${platform}`
   );
 
   function send(type, payload = {}) {

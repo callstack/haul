@@ -7,7 +7,6 @@
 
 import type { Platform } from '../types';
 
-const fs = require('fs');
 const EventEmitter = require('events');
 const Events = require('./events');
 const createForkProcess = require('./createForkProcess');
@@ -32,12 +31,20 @@ module.exports = class Fork extends EventEmitter {
   socket: WebSocket;
   enqueuedMessages: any[];
   isProcessing: boolean;
+  options: any;
 
   constructor({ platform, options }: ForkConstructorArgs) {
     super();
+    this.isProcessing = true;
+    this.enqueuedMessages = [];
+    this.platform = platform;
+    this.options = options;
+  }
 
+  async init() {
     if (!transportServer) {
-      transportServer = createWebSocketServer();
+      // eslint-disable-next-line require-atomic-updates
+      transportServer = await createWebSocketServer();
 
       // WebSocket connection is established after the Fork is created.
       transportServer.on('connection', (socket, req) => {
@@ -58,17 +65,15 @@ module.exports = class Fork extends EventEmitter {
       });
     }
 
-    this.isProcessing = true;
-    this.enqueuedMessages = [];
-    this.platform = platform;
+    const { port } = transportServer.address();
     this.process = createForkProcess(
-      platform,
+      this.platform,
       __dirname,
-      transportServer.options.server.address(),
-      options
+      `localhost:${port}`,
+      this.options
     );
 
-    forks[platform] = this;
+    forks[this.platform] = this;
   }
 
   setSocket(socket: WebSocket) {
@@ -116,10 +121,6 @@ module.exports = class Fork extends EventEmitter {
     }
 
     if (transportServer && !Object.keys(forks).length) {
-      const socketAddress = transportServer.options.server.address();
-      if (fs.existsSync(socketAddress)) {
-        fs.unlinkSync(socketAddress);
-      }
       transportServer.close();
     }
   }
