@@ -1,3 +1,5 @@
+import path from 'path';
+
 const defaultPlugins = [
   [require('@babel/plugin-proposal-class-properties'), { loose: true }],
   [require('@babel/plugin-proposal-optional-catch-binding')],
@@ -28,6 +30,10 @@ function isTSXSource(fileName: string) {
   return !!fileName && fileName.endsWith('.tsx');
 }
 
+function isReactNative(fileName: string) {
+  return !!fileName && fileName.includes(`node_modules${path.sep}react-native`);
+}
+
 export default function getHaulBabelPreset(
   api: any,
   options: { hermes: boolean }
@@ -54,7 +60,7 @@ export default function getHaulBabelPreset(
         ],
       },
       {
-        test: /node_modules\/react-native/,
+        test: isReactNative,
         plugins: [
           [
             require('@babel/plugin-transform-modules-commonjs'),
