@@ -142,6 +142,7 @@ export default function getDefaultConfig(
        * First entry takes precedence.
        */
       mainFields: ['react-native', 'browser', 'main'],
+      aliasFields: ['react-native'],
       extensions: [
         `.${platform}.js`,
         `.${platform}.jsx`,
