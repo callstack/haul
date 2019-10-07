@@ -157,7 +157,7 @@ export default makeConfig({
   platforms: ['windows', 'ios', 'android'], // or ['windows'] if you only use windows platform
   bundles: {
     index: {
-      entry: entry: withPolyfills('./index.js', {
+      entry: withPolyfills('./index.js', {
         initializeCoreLocation: 'node_modules/react-native-windows/Libraries/Core/InitializeCore.js'
       }),
       providesModuleNodeModules: ['react-native', 'react-native-windows'],
