@@ -125,13 +125,16 @@ export default makeConfig({
 
 ## Use Haul with `react-native-windows`
 
-If you want to use `react-native-windows`, you can register windows as a supported platform type for the commandline, and for windows platform builds add the react-native-windows package as an additional package to look for RN modules:
+### With React Native 0.59
+
+If you want to use `react-native-windows`, you have to register it as a provider of JS modules.
+
+Update your `haul.config.js` like so:
 ```js
-// haul.config.js
 import { makeConfig, withPolyfills } from "@haul-bundler/preset-0.59";
 
 export default makeConfig({
-  platforms: ['windows', 'ios', 'android'],
+  platforms: ['windows', 'ios', 'android'], // or ['windows'] if you only use windows platform
   bundles: {
     index: {
       entry: withPolyfills('./index.js'),
@@ -141,6 +144,35 @@ export default makeConfig({
   },
 });
 ```
+
+### With React Native 0.60 and newer
+
+With React Native 0.60 and newer, you need to register `react-native-windows` as a module provider and modify `InitializeCore` location and alias `react-native`.
+
+Update your `haul.config.js` like so:
+```js
+import { makeConfig, withPolyfills } from "@haul-bundler/preset-0.60";
+
+export default makeConfig({
+  platforms: ['windows', 'ios', 'android'], // or ['windows'] if you only use windows platform
+  bundles: {
+    index: {
+      entry: withPolyfills('./index.js', {
+        initializeCoreLocation: 'node_modules/react-native-windows/Libraries/Core/InitializeCore.js'
+      }),
+      providesModuleNodeModules: ['react-native', 'react-native-windows'],
+      hasteOptions: { platforms: ['native', 'windows'] },
+      transform({ config }) {
+        config.resolve.alias = {
+          ...config.resolve.alias,
+          'react-native': 'react-native-windows'
+        };
+      },
+    },
+  },
+});
+```
+
 
 ## Mock files when running detox tests
 
