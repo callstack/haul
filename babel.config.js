@@ -15,4 +15,9 @@ module.exports = {
     '@babel/plugin-transform-flow-strip-types',
     '@babel/plugin-transform-react-jsx',
   ],
+  env: {
+    development: {
+      ignore: [/__tests__/],
+    },
+  },
 };
