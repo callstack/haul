@@ -147,7 +147,7 @@ export default makeConfig({
 
 ### With React Native 0.60 and newer
 
-React Native 0.60 removed Haste imports, so now in order to use out-of-tree platforms, you need to modify `InitializeCore` location and alias `react-native` to your out-of-tree library.
+With React Native 0.60 and newer, you need to register `react-native-windows` as a module provider and modify `InitializeCore` location and alias `react-native`.
 
 Update your `haul.config.js` like so:
 ```js
