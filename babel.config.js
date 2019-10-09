@@ -14,6 +14,7 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-transform-flow-strip-types',
     '@babel/plugin-transform-react-jsx',
+    'babel-plugin-istanbul',
   ],
   env: {
     development: {

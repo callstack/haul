@@ -7,6 +7,15 @@ import { spawn, spawnSync, ChildProcess } from 'child_process';
 import { ExecOutput } from './common';
 
 const BIN_PATH = path.resolve(__dirname, '../../packages/haul-cli/bin/haul.js');
+const NYC_BIN = path.resolve(__dirname, '../../node_modules/.bin/nyc');
+const NYC_ARGS = [
+  '--silent',
+  '--no-clean',
+  '--exclude-after-remap',
+  'false',
+  '--cwd',
+  path.join(__dirname, '../../'),
+];
 
 type RunHaulOptions = {
   nodePath?: string;
@@ -29,7 +38,7 @@ export function runHaulSync(
     ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
     : process.env;
 
-  const result = spawnSync('node', [BIN_PATH, ...(args || [])], {
+  const result = spawnSync(NYC_BIN, [...NYC_ARGS, BIN_PATH, ...(args || [])], {
     cwd,
     env,
   });
@@ -57,5 +66,5 @@ export function runHaul(
     ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
     : process.env;
 
-  return spawn('node', [BIN_PATH, ...(args || [])], { cwd, env });
+  return spawn(NYC_BIN, [...NYC_ARGS, BIN_PATH, ...(args || [])], { cwd, env });
 }

@@ -1,0 +1,9 @@
+{
+  "sourceMap": false,
+  "instrument": false,
+  "all": true,
+  "extension": [".js", ".ts"],
+  "include": [
+    "packages/**"
+  ]
+}
