@@ -14,10 +14,15 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-transform-flow-strip-types',
     '@babel/plugin-transform-react-jsx',
-    'babel-plugin-istanbul',
   ],
   env: {
+    // Building for local development and E2E tests
     development: {
+      ignore: [/__tests__/],
+      plugins: ['babel-plugin-istanbul'],
+    },
+    // Building for publishing to NPM
+    production: {
       ignore: [/__tests__/],
     },
   },

@@ -92,3 +92,4 @@ dist/
 !**/fixtures/node_modules/
 .vscode/
 .DS_Store
+.coverage_output

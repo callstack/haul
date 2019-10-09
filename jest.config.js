@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   rootDir: __dirname,
   projects: [
@@ -16,4 +18,6 @@ module.exports = {
     '<rootDir>/e2e/react_native_windows_current',
     '<rootDir>/e2e/react_native_windows_vnext',
   ],
+  coverageReporters: ['json'],
+  coverageDirectory: path.join(__dirname, '.coverage_output'),
 };
