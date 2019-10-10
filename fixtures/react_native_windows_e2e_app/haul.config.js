@@ -17,11 +17,6 @@ export default makeConfig({
           'react-native': 'react-native-windows'
         };
 
-        // Apollo imports react-dom, so we need to stub it with empty module.
-        config.plugins.push(
-          new NormalModuleReplacementPlugin(/react-dom.*/, path.join(__dirname, 'emptyModule.js'))
-        );
-
         // react-navigation imports and initialises native modules only available on iOS/Android,
         // so we stub it with minimal working implementation.
         config.plugins.push(
