@@ -38,7 +38,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: ls -la ./.coverage_output
+      - run: yarn coverage:report
+      - run: yarn coverage:check
 
   lint_and_typecheck_node_10:
     executor: node_10
@@ -75,7 +76,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i e2e/react_native_0_60x
+      - run: yarn test -i e2e/react_native_0_60x/
       - persist_to_workspace:
           root: .
           paths:
