@@ -40,6 +40,9 @@ jobs:
           at: ~/haul_node_10
       - run: yarn coverage:report
       - run: yarn coverage:check
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
   lint_and_typecheck_node_10:
     executor: node_10
