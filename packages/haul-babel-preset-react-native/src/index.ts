@@ -23,8 +23,8 @@ const hermesPlugins = [
 ];
 
 const chakraPlugins = [
-  [require("@babel/plugin-transform-spread")],
-  [require("@babel/plugin-proposal-object-rest-spread")]
+  [require('@babel/plugin-transform-spread')],
+  [require('@babel/plugin-proposal-object-rest-spread')],
 ];
 
 function isTypeScriptSource(fileName: string) {
@@ -41,7 +41,7 @@ function isReactNative(fileName: string) {
 
 export default function getHaulBabelPreset(
   api: any,
-  options: { hermes?: boolean; chackra?: boolean }
+  options: { hermes?: boolean; chakra?: boolean }
 ) {
   return {
     compact: false,
@@ -54,7 +54,7 @@ export default function getHaulBabelPreset(
         plugins: [
           ...defaultPlugins,
           ...(options.hermes ? hermesPlugins : []),
-          ...(options.chackra ? chakraPlugins : []),
+          ...(options.chakra ? chakraPlugins : []),
           ...(process.env.HAUL_PLATFORM
             ? [
                 [

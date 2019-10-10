@@ -1,5 +1,5 @@
 module.exports = {
-  presets: [['module:../../packages/haul-babel-preset-react-native', { chackra: true }]],
+  presets: [['module:../../packages/haul-babel-preset-react-native', { chakra: true }]],
   overrides: [
     {
       test: /__tests__/,

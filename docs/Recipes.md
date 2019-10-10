@@ -125,6 +125,13 @@ export default makeConfig({
 
 ## Use Haul with `react-native-windows`
 
+Unless you're using different JavaScript VM than ChakraCore (default) to run your JavaScript, add `chakra: true` flag to your `babel.config.js`:
+```js
+module.exports = {
+  presets: [['module:@haul-bundler/babel-preset-react-native', { chakra: true }]],
+};
+```
+
 ### With React Native 0.59
 
 If you want to use `react-native-windows`, you have to register it as a provider of JS modules.
