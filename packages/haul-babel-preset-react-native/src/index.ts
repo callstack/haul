@@ -27,6 +27,11 @@ const chakraPlugins = [
   [require('@babel/plugin-proposal-object-rest-spread')],
 ];
 
+const commonJsPlugin = [
+  require('@babel/plugin-transform-modules-commonjs'),
+  { allowTopLevelThis: true },
+];
+
 function isTypeScriptSource(fileName: string) {
   return !!fileName && fileName.endsWith('.ts');
 }
@@ -45,6 +50,12 @@ export default function getHaulBabelPreset(
 ) {
   return {
     compact: false,
+    env: {
+      // Add CommonJS transform when running in NODE_ENV === test, for example when testing.
+      test: {
+        plugins: [commonJsPlugin],
+      },
+    },
     overrides: [
       // The flow strip types plugin must go BEFORE class properties!
       {
@@ -67,12 +78,7 @@ export default function getHaulBabelPreset(
       },
       {
         test: isReactNative,
-        plugins: [
-          [
-            require('@babel/plugin-transform-modules-commonjs'),
-            { allowTopLevelThis: true },
-          ],
-        ],
+        plugins: [commonJsPlugin],
       },
       {
         test: isTypeScriptSource,
