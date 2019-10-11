@@ -10,11 +10,6 @@ export default makeConfig({
       providesModuleNodeModules: ['react-native', 'react-native-windows'],
       hasteOptions: { platforms: ['native', 'windows'] },
       type: 'indexed-ram-bundle',
-      transform({ config }) {
-        config.plugins.push(
-          new NormalModuleReplacementPlugin(/react-dom*/, join(__dirname, 'empty.js'))
-        );
-      }
     },
   },
 });
