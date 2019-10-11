@@ -42,6 +42,7 @@ function build({
             options: {
               babelrc: false,
               configFile: false,
+              envName: 'development',
               presets: ['module:@haul-bundler/babel-preset-react-native'],
             },
           },

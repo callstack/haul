@@ -22,6 +22,14 @@ type RunHaulOptions = {
   skipPkgJsonCheck?: boolean; // don't complain if can't find package.json
 };
 
+function getEnv(options: RunHaulOptions) {
+  return {
+    ...process.env,
+    ...(options.nodePath ? { NODE_PATH: options.nodePath } : {}),
+    NODE_ENV: 'development',
+  };
+}
+
 export function runHaulSync(
   dir: string,
   args?: Array<string>,
@@ -34,13 +42,9 @@ export function runHaulSync(
     cwd = path.resolve(__dirname, cwd);
   }
 
-  const env = options.nodePath
-    ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
-    : process.env;
-
   const result = spawnSync(NYC_BIN, [...NYC_ARGS, BIN_PATH, ...(args || [])], {
     cwd,
-    env,
+    env: getEnv(options),
   });
 
   return {
@@ -62,9 +66,8 @@ export function runHaul(
     cwd = path.resolve(__dirname, cwd);
   }
 
-  const env = options.nodePath
-    ? Object.assign({}, process.env, { NODE_PATH: options.nodePath })
-    : process.env;
-
-  return spawn(NYC_BIN, [...NYC_ARGS, BIN_PATH, ...(args || [])], { cwd, env });
+  return spawn(NYC_BIN, [...NYC_ARGS, BIN_PATH, ...(args || [])], {
+    cwd,
+    env: getEnv(options),
+  });
 }
