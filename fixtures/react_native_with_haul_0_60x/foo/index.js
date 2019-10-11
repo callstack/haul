@@ -1,3 +1,5 @@
-import asset from './asset.png';
+import foo from './asset.png';
+import baz from 'baz';
+import bar from 'bar';
 
-export default asset;
+export default [foo, baz, bar];

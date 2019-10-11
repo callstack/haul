@@ -6,7 +6,7 @@
     "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
     "haul": "node ../../packages/haul-cli/bin/haul.js",
-    "postinstall": "rm -rf node_modules/foo && mkdir -p node_modules/foo && cp -R foo node_modules"
+    "postinstall": "rm -rf node_modules/{foo,baz,foo/node_modules/bar} && mkdir -p node_modules/{foo,baz,foo/node_modules/bar} && cp -R foo node_modules && cp -R bar/* node_modules/baz && cp -R bar node_modules/foo/node_modules"
   },
   "dependencies": {
     "react": "16.8.6",

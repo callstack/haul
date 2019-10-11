@@ -29,10 +29,34 @@ export default function createBundleTestSuite(
             path.join(dist, 'drawable-mdpi/node_modules_foo_asset.png')
           )
         ).toBe(true);
+        expect(
+          fs.existsSync(
+            path.join(dist, 'drawable-mdpi/node_modules_baz_asset.png')
+          )
+        ).toBe(true);
+        expect(
+          fs.existsSync(
+            path.join(
+              dist,
+              'drawable-mdpi/node_modules_foo_node_modules_bar_asset.png'
+            )
+          )
+        ).toBe(true);
       } else {
         expect(fs.existsSync(path.join(dist, 'assets/asset.png'))).toBe(true);
         expect(
           fs.existsSync(path.join(dist, 'assets/node_modules/foo/asset.png'))
+        ).toBe(true);
+        expect(
+          fs.existsSync(path.join(dist, 'assets/node_modules/baz/asset.png'))
+        ).toBe(true);
+        expect(
+          fs.existsSync(
+            path.join(
+              dist,
+              'assets/node_modules/foo/node_modules/bar/asset.png'
+            )
+          )
         ).toBe(true);
       }
     }
