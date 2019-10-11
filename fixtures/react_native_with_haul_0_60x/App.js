@@ -24,7 +24,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import asset from './asset.png';
+import transitiveAsset from 'foo';
+
 const App = () => {
+  console.log(asset, transitiveAsset);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
