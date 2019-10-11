@@ -4,7 +4,8 @@
   "description": "Haul preset for React Native 0.59",
   "main": "build/index.js",
   "files": [
-    "build/"
+    "build/",
+    "vendor/"
   ],
   "engines": {
     "node": ">=10.x"

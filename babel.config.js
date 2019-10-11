@@ -16,7 +16,13 @@ module.exports = {
     '@babel/plugin-transform-react-jsx',
   ],
   env: {
+    // Building for local development and E2E tests
     development: {
+      ignore: [/__tests__/],
+      plugins: ['babel-plugin-istanbul'],
+    },
+    // Building for publishing to NPM
+    production: {
       ignore: [/__tests__/],
     },
   },

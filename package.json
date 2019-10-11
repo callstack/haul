@@ -11,7 +11,9 @@
     "prepare": "yarn build:source && yarn build:def",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "release": "lerna publish --no-git-tag-version --no-push"
+    "coverage:report": "nyc report --reporter=lcov --reporter=json --reporter=text --exclude='**/haul-preset-0.59/*/vendor/**'",
+    "coverage:check": "nyc check-coverage --temp-dir coverage",
+    "release": "NODE_ENV=production yarn prepare && lerna publish --ignore-prepublish --sign-git-commit --sign-git-tag"
   },
   "dependencies": {
     "chalk": "^2.4.2",
@@ -19,6 +21,7 @@
     "lerna": "^3.16.4",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.6.0",
+    "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "strip-ansi": "^5.2.0",
     "traverse": "^0.6.6"
@@ -41,6 +44,7 @@
     "@typescript-eslint/parser": "^1.13.0",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
+    "babel-plugin-istanbul": "^5.2.0",
     "codecov": "^3.5.0",
     "eslint": "^6.1.0",
     "jest": "^24.8.0",

@@ -26,9 +26,23 @@ jobs:
           paths:
             - node_modules
           key: node-10-dependencies-{{ checksum "package.json" }}
+      # Clear old coverage output
+      - run: rm -rf ./.coverage_output
+      - run: rm -rf ./coverage
       - persist_to_workspace:
           root: .
           paths: .
+  
+  check_coverage:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn coverage:report
+      - run: yarn coverage:check
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
   lint_and_typecheck_node_10:
     executor: node_10
@@ -44,10 +58,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i --coverage packages # run only tests in packages
-      - run: yarn codecov
-      - store_artifacts:
-          path: coverage
-          destination: coverage_node_10
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
   
   e2e_rn_0_59x:
     executor: node_10
@@ -55,13 +69,21 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/react_native_0_59x
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
 
   e2e_rn_0_60x:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i e2e/react_native_0_60x
+      - run: yarn test -i e2e/react_native_0_60x/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
 
   e2e_rn_0_60x_ts:
     executor: node_10
@@ -69,6 +91,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/react_native_0_60x_ts
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
 
   e2e_rn_0_60x_multibundle:
     executor: node_10
@@ -76,6 +102,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/react_native_0_60x_multibundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
   
   e2e_monorepo_multibundle:
     executor: node_10
@@ -83,6 +113,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/monorepo_multibundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
   
   e2e_react_native_windows_current:
     executor: node_10
@@ -90,6 +124,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/react_native_windows_current
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
 
   e2e_react_native_windows_vnext:
     executor: node_10
@@ -97,6 +135,10 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn test -i e2e/react_native_windows_vnext
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
 
   setup_node_latest:
     executor: node_latest
@@ -131,15 +173,13 @@ jobs:
       - attach_workspace:
           at: ~/haul_node_latest
       - run: yarn test -i --coverage packages # run only tests in packages
-      - store_artifacts:
-          path: coverage
-          destination: coverage_node_latest
 
 
 workflows:
   version: 2
   test:
     jobs:
+      # Node 10 jobs
       - setup_node_10
       - lint_and_typecheck_node_10:
           requires:
@@ -168,6 +208,19 @@ workflows:
       - e2e_react_native_windows_vnext:
           requires:
             - setup_node_10
+      - check_coverage:
+          requires:
+            - lint_and_typecheck_node_10
+            - unit_test_node_10
+            - e2e_rn_0_59x
+            - e2e_rn_0_60x
+            - e2e_rn_0_60x_ts
+            - e2e_rn_0_60x_multibundle
+            - e2e_monorepo_multibundle
+            - e2e_react_native_windows_current
+            - e2e_react_native_windows_vnext
+      
+      # Node (latest) jobs
       - setup_node_latest
       - lint_and_typecheck_node_latest:
           requires:
