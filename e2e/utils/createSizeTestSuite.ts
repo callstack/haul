@@ -5,7 +5,12 @@ import { kilobytes, validateBundleSize } from './bundleSize';
 
 export default function createSizeTestSuite(
   projectName: string,
-  platform: string
+  platform: string,
+  {
+    min,
+    maxIndexBundle,
+    maxBaseBundle,
+  }: { min: number; maxIndexBundle: number; maxBaseBundle: number }
 ) {
   const PROJECT_FIXTURE = path.join(__dirname, '../../fixtures', projectName);
 
@@ -19,7 +24,7 @@ export default function createSizeTestSuite(
       cleanup(path.join(PROJECT_FIXTURE, 'dist/min'));
     });
 
-    it('minified Indexed RAM bundle should be have size between 600kb and 920kb', () => {
+    it(`minified Indexed RAM bundle should be have size between ${min}kb and ${maxIndexBundle}kb`, () => {
       const BUNDLE_PATH = `dist/min/${platform}/index.${platform}.bundle`;
       runHaulSync(PROJECT_FIXTURE, [
         'bundle',
@@ -35,8 +40,8 @@ export default function createSizeTestSuite(
 
       validateBundleSize(
         path.join(PROJECT_FIXTURE, BUNDLE_PATH),
-        kilobytes(600),
-        kilobytes(920)
+        kilobytes(min),
+        kilobytes(maxIndexBundle)
       );
     });
 
@@ -68,8 +73,8 @@ export default function createSizeTestSuite(
           PROJECT_FIXTURE,
           `dist/min/${platform}/base_dll.${platform}.bundle`
         ),
-        kilobytes(600),
-        kilobytes(1100)
+        kilobytes(min),
+        kilobytes(maxBaseBundle)
       );
       validateBundleSize(
         path.join(
