@@ -11,6 +11,32 @@ Babel preset for __React Native >=0.59.x__ with Haul - Webpack-based React Nativ
 
 You can read more about Haul here: https://github.com/callstack/haul.
 
+## API
+
+For easier extendability, `@haul-bundler/babel-preset-react-native` exports a list of functions for getting plugins and default options for them.
+
+Each of the functions below returns an array of `PluginSpec` which is an object with
+- `name: string` - name of the plugin
+- `options: object` - default options for plugin
+
+To get list of plugins use the following:
+
+- `getDefaultPrePlugins(): PluginSpec[]` - Get list of default plugins to include at the very beginning.
+- `getDefaultPostPlugins(): PluginSpec[]` - Get list of default plugins to include at the end, after all other plugins are included.
+- `getHermesPlugins(): PluginSpec[]` - Get list of plugins to include when targeting Hermes.
+- `getChakraPlugins(): PluginSpec[]` - Get list of plugins to include when targeting ChakraCore.
+- `getHaulPlugins(opts: { platform: string }): PluginSpec[]` - Get list of plugins used in Haul.
+- `getTsPlugins(opts: { isTSX: boolean }): PluginSpec[]` - Get list of plugins for transpiling TypeScript files (TS/TSX depending on `isTSX` option).
+- `getReactNativePlugins(): PluginSpec[]` - Get list of plugins for React Native.
+- `getDevelopmentEnvPlugins(): PluginSpec[]` - Get list of plugins for `development` mode - intended to be used in `env.development` in Babel preset.
+- `getTestEnvPlugins(): PluginSpec[]`- Get list of plugins for `test` mode - intended to be used in `env.test` in Babel preset.
+
+For convenience, the following util functions are exported as well:
+
+- `isTypeScriptSource(fileName: string): boolean` - returns `true` if the filename is regular TS file (without TSX).
+- `isTSXSource(fileName: string): boolean` - returns `true` if the filename is a TSX file.
+- `isReactNative(fileName: string): boolean` - returns `true` if the filename is pointing to `react-native` in `node_modules`.
+
 <!-- badges (common) -->
 
 [license-badge]: https://img.shields.io/npm/l/@haul-bundler/babel-preset-react-native.svg?style=flat-square
