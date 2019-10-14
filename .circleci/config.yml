@@ -210,7 +210,7 @@ workflows:
       - e2e_rn_0_60x_multibundle:
           requires:
             - setup_node_10
-       e2e_rn_0_61x:
+      - e2e_rn_0_61x:
           requires:
             - setup_node_10
       - e2e_monorepo_multibundle:
