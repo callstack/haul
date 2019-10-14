@@ -10,6 +10,7 @@ import inquirer from 'inquirer';
 import dedent from 'dedent';
 import which from 'which';
 import exec from 'execa';
+import npmFetch from 'npm-registry-fetch';
 
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -244,8 +245,9 @@ async function modifyGradleBuild(progress: Ora, cwd: string) {
     progress.info('Haul is already part of your build.gradle');
     return;
   }
+
   project = project.replace(
-    /project\.ext\.react = \[\n(.+)\n\]/,
+    /project\.ext\.react = \[\n([^\]]+)\n\]/,
     dedent`
     project.ext.react = [
     $1,
@@ -307,11 +309,36 @@ async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
   return scriptName;
 }
 
+async function getAvailableHaulPreset(
+  targetHaulPreset: string
+): Promise<string> {
+  // Stop searching on 0.59 - there's no preset below 0.59.
+  if (targetHaulPreset.includes('0.59')) {
+    return targetHaulPreset;
+  }
+
+  try {
+    await npmFetch(targetHaulPreset);
+    return targetHaulPreset;
+  } catch (error) {
+    if (error.statusCode === 404) {
+      const previousHaulPreset = targetHaulPreset.replace(/-0\.\d+$/, match => {
+        const [major, minor] = match.slice(1).split('.');
+        return `-${major}.${parseInt(minor, 10) - 1}`;
+      });
+      return await getAvailableHaulPreset(previousHaulPreset);
+    }
+
+    return targetHaulPreset;
+  }
+}
+
 async function installDependencies(
   progress: Ora,
   { babelPreset, haulPreset }: { babelPreset: string; haulPreset: string }
 ) {
   progress.info('Installing required devDependencies');
+
   const useYarn = await new Promise<boolean>(resolve => {
     which('yarn', (_, resolved: string | undefined) => {
       resolve(Boolean(resolved));
@@ -342,9 +369,9 @@ export default function initCommand(runtime: Runtime) {
         }
 
         const babelPreset = '@haul-bundler/babel-preset-react-native';
-        const haulPreset = `@haul-bundler/preset-${rnVersion!.major}.${
-          rnVersion!.minor
-        }`;
+        const haulPreset = await getAvailableHaulPreset(
+          `@haul-bundler/preset-${rnVersion!.major}.${rnVersion!.minor}`
+        );
 
         const progress = ora().start();
 

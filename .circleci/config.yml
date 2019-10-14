@@ -106,6 +106,17 @@ jobs:
           root: .
           paths:
             - ./.coverage_output/*.json
+
+  e2e_rn_0_61x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_61x/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
   
   e2e_monorepo_multibundle:
     executor: node_10
@@ -197,6 +208,9 @@ workflows:
           requires:
             - setup_node_10
       - e2e_rn_0_60x_multibundle:
+          requires:
+            - setup_node_10
+       e2e_rn_0_61x:
           requires:
             - setup_node_10
       - e2e_monorepo_multibundle:
