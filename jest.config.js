@@ -11,6 +11,7 @@ module.exports = {
     '<rootDir>/packages/haul-preset-0.59',
     '<rootDir>/packages/haul-babel-preset-react-native',
     '<rootDir>/e2e/monorepo_multibundle',
+    '<rootDir>/e2e/react_native_0_61x',
     '<rootDir>/e2e/react_native_0_60x_multibundle',
     '<rootDir>/e2e/react_native_0_60x_ts',
     '<rootDir>/e2e/react_native_0_60x',
