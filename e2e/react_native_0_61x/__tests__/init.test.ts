@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import { run, cleanup, yarnCommand } from '../../utils/common';
+import { run, cleanup } from '../../utils/common';
 import { runHaul } from '../../utils/runHaul';
 
 const TEST_PROJECT_DIR = path.resolve(__dirname, '__fixtures__/testapp');
@@ -25,10 +25,8 @@ beforeEach(() => {
 afterEach(() => cleanup(path.join(TEST_PROJECT_DIR, '..')));
 
 test('init command on a fresh react-native 0.61 project', done => {
-  run(`${yarnCommand} init -y`, path.join(TEST_PROJECT_DIR, '..'));
-  run(`${yarnCommand} add react-native-cli`, path.join(TEST_PROJECT_DIR, '..'));
   run(
-    `${yarnCommand} react-native init testapp --version 0.61.0`,
+    `npx react-native init testapp --version 0.61.0`,
     path.join(TEST_PROJECT_DIR, '..')
   );
 

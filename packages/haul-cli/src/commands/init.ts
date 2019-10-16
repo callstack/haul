@@ -310,6 +310,7 @@ async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
 }
 
 async function getAvailableHaulPreset(
+  progress: Ora,
   targetHaulPreset: string
 ): Promise<string> {
   // Stop searching on 0.59 - there's no preset below 0.59.
@@ -322,11 +323,14 @@ async function getAvailableHaulPreset(
     return targetHaulPreset;
   } catch (error) {
     if (error.statusCode === 404) {
+      progress.info(
+        `${targetHaulPreset} not available. Trying older version...`
+      );
       const previousHaulPreset = targetHaulPreset.replace(/-0\.\d+$/, match => {
         const [major, minor] = match.slice(1).split('.');
         return `-${major}.${parseInt(minor, 10) - 1}`;
       });
-      return await getAvailableHaulPreset(previousHaulPreset);
+      return await getAvailableHaulPreset(progress, previousHaulPreset);
     }
 
     return targetHaulPreset;
@@ -368,12 +372,15 @@ export default function initCommand(runtime: Runtime) {
           runtime.complete(1);
         }
 
+        const progress = ora().start('Detecting Haul preset version...');
+
         const babelPreset = '@haul-bundler/babel-preset-react-native';
         const haulPreset = await getAvailableHaulPreset(
+          progress,
           `@haul-bundler/preset-${rnVersion!.major}.${rnVersion!.minor}`
         );
 
-        const progress = ora().start();
+        progress.info(`Using Haul preset: ${haulPreset}`);
 
         await checkProject(progress, cwd, runtime);
         await createHaulProjectConfig(progress, cwd, runtime, haulPreset);
