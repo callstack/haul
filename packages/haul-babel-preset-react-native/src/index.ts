@@ -12,81 +12,57 @@ export function isReactNative(fileName: string) {
   return !!fileName && fileName.includes(`node_modules${path.sep}react-native`);
 }
 
-type PluginSpec = {
-  name: string;
-  options?: object;
-};
+type PluginSpec = [string] | [string, object];
 
-const commonJsPlugin: PluginSpec = {
-  name: '@babel/plugin-transform-modules-commonjs',
-  options: { allowTopLevelThis: true },
-};
+const commonJsPlugin: PluginSpec = [
+  '@babel/plugin-transform-modules-commonjs',
+  { allowTopLevelThis: true },
+];
 
 export function getDefaultPrePlugins(): PluginSpec[] {
   return [
-    {
-      // The flow strip types plugin must go BEFORE class properties!
-      name: '@babel/plugin-transform-flow-strip-types',
-    },
-    {
-      name: '@babel/plugin-proposal-class-properties',
-      options: { loose: true },
-    },
-    { name: '@babel/plugin-proposal-optional-catch-binding' },
-    { name: '@babel/plugin-syntax-dynamic-import' },
-    { name: '@babel/plugin-syntax-export-default-from' },
-    { name: '@babel/plugin-transform-react-jsx' },
-    { name: '@babel/plugin-transform-sticky-regex' },
-    { name: '@babel/plugin-transform-unicode-regex' },
-    {
+    // The flow strip types plugin must go BEFORE class properties!
+    ['@babel/plugin-transform-flow-strip-types'],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-proposal-optional-catch-binding'],
+    ['@babel/plugin-syntax-dynamic-import'],
+    ['@babel/plugin-syntax-export-default-from'],
+    ['@babel/plugin-transform-react-jsx'],
+    ['@babel/plugin-transform-sticky-regex'],
+    ['@babel/plugin-transform-unicode-regex'],
+    [
       // For some reason native async/await don't behave correctly
       // on RN 0.59 on both platforms, so we need to transpile it
       // to native Promises.
-      name: './transforms/superMemberArrowFunction',
-    },
-    { name: '@babel/plugin-transform-async-to-generator' },
+      './transforms/superMemberArrowFunction',
+    ],
+    ['@babel/plugin-transform-async-to-generator'],
   ];
 }
 
 export function getDefaultPostPlugins(): PluginSpec[] {
   return [
-    {
-      name: '@babel/plugin-transform-exponentiation-operator',
-    },
-    {
-      name: '@babel/plugin-proposal-nullish-coalescing-operator',
-      options: { loose: true },
-    },
-    {
-      name: '@babel/plugin-proposal-optional-chaining',
-      options: { loose: true },
-    },
-    {
-      name: '@babel/plugin-transform-react-display-name',
-    },
-    {
-      name:
-        'metro-react-native-babel-preset/src/transforms/transform-symbol-member',
-    },
+    ['@babel/plugin-transform-exponentiation-operator'],
+    ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: true }],
+    ['@babel/plugin-proposal-optional-chaining', { loose: true }],
+    ['@babel/plugin-transform-react-display-name'],
+    ['metro-react-native-babel-preset/src/transforms/transform-symbol-member'],
   ];
 }
 
 export function getHermesPlugins(): PluginSpec[] {
   // Additional plugins for Hermes because it doesn't support ES6 yet
   return [
-    { name: '@babel/plugin-transform-classes' },
-    { name: '@babel/plugin-transform-shorthand-properties' },
-    {
-      name: '@babel/plugin-transform-template-literals',
-      options: { loose: true },
-    },
+    ['@babel/plugin-transform-classes'],
+    ['@babel/plugin-transform-shorthand-properties'],
+    ['@babel/plugin-transform-template-literals', { loose: true }],
   ];
 }
 
 export function getChakraPlugins(): PluginSpec[] {
   return [
-    { name: '@babel/plugin-transform-spread' },
-    { name: '@babel/plugin-proposal-object-rest-spread' },
+    ['@babel/plugin-transform-spread'],
+    ['@babel/plugin-proposal-object-rest-spread'],
   ];
 }
 
@@ -96,40 +72,35 @@ export function getHaulPlugins({
   platform: string;
 }): PluginSpec[] {
   return [
-    {
-      name: require.resolve('./transforms/stripDeadPlatformSelect'),
-      options: { platform },
-    },
+    [require.resolve('./transforms/stripDeadPlatformSelect'), { platform }],
   ];
 }
 
 export function getTsPlugins({ isTSX }: { isTSX: boolean }): PluginSpec[] {
   return [
-    {
-      name: '@babel/plugin-transform-typescript',
-      options: {
+    [
+      '@babel/plugin-transform-typescript',
+      {
         isTSX,
       },
-    },
+    ],
   ];
 }
 
-export function getReactNativePlugins() {
+export function getReactNativePlugins(): PluginSpec[] {
   return [commonJsPlugin];
 }
 
-export function getDevelopmentEnvPlugins() {
-  return [{ name: '@babel/plugin-transform-react-jsx-source' }];
+export function getDevelopmentEnvPlugins(): PluginSpec[] {
+  return [['@babel/plugin-transform-react-jsx-source']];
 }
 
-export function getTestEnvPlugins() {
+export function getTestEnvPlugins(): PluginSpec[] {
   return [commonJsPlugin, ...getDevelopmentEnvPlugins()];
 }
 
 function requirePlugin(plugin: PluginSpec) {
-  return [require(plugin.name)].concat(
-    ...(plugin.options ? [plugin.options] : [])
-  );
+  return [require(plugin[0])].concat(...(plugin[1] ? [plugin[1]] : []));
 }
 
 export default function getHaulBabelPreset(

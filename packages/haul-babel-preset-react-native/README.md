@@ -15,9 +15,12 @@ You can read more about Haul here: https://github.com/callstack/haul.
 
 For easier extendability, `@haul-bundler/babel-preset-react-native` exports a list of functions for getting plugins and default options for them.
 
-Each of the functions below returns an array of `PluginSpec` which is an object with
-- `name: string` - name of the plugin
-- `options: object` - default options for plugin
+Each of the functions below returns an array of `PluginSpec` which is an tuple with plugin name and plugin default options or `undefined`:
+```ts
+type PluginSpec = [string] | [string, object];
+// plugin[0] => plugin name
+// plugin[1] => plugin default options
+```
 
 To get list of plugins use the following:
 
