@@ -1,3 +1,8 @@
-import asset from './asset.png';
+import React from 'react';
+import { Image } from 'react-native';
 
-export default asset;
+const Asset = () => (
+  <Image source={require('./asset.png')} />
+);
+
+export default Asset;

@@ -21,9 +21,6 @@ export default function createBundleTestSuite(
     if (checkAssets) {
       const dist = path.dirname(bundlePath);
       if (platform === 'android') {
-        expect(fs.existsSync(path.join(dist, 'drawable-mdpi/asset.png'))).toBe(
-          true
-        );
         expect(
           fs.existsSync(
             path.join(dist, 'drawable-mdpi/node_modules_foo_asset.png')
@@ -43,7 +40,6 @@ export default function createBundleTestSuite(
           )
         ).toBe(true);
       } else {
-        expect(fs.existsSync(path.join(dist, 'assets/asset.png'))).toBe(true);
         expect(
           fs.existsSync(path.join(dist, 'assets/node_modules/foo/asset.png'))
         ).toBe(true);

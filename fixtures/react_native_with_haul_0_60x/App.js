@@ -24,15 +24,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import asset from './asset.png';
-import transitiveAsset from 'foo';
+import Assets from 'foo';
 
 const App = () => {
-  console.log(asset, transitiveAsset);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
+        <Assets />
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
