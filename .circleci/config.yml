@@ -190,7 +190,7 @@ workflows:
     jobs:
       # Node 10 jobs
       - setup_node_10
-      - lint_and_typecheck_node_10:
+      - lint_node_10:
           requires:
             - setup_node_10
       - unit_test_node_10:
@@ -222,7 +222,7 @@ workflows:
             - setup_node_10
       - check_coverage:
           requires:
-            - lint_and_typecheck_node_10
+            - lint_node_10
             - unit_test_node_10
             - e2e_rn_0_59x
             - e2e_rn_0_60x
@@ -234,7 +234,7 @@ workflows:
       
       # Node (latest) jobs
       - setup_node_latest
-      - lint_and_typecheck_node_latest:
+      - lint_node_latest:
           requires:
             - setup_node_latest
       - unit_test_node_latest:
