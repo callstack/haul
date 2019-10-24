@@ -1,17 +1,25 @@
-// @ts-ignore
 import { runHaulSync } from './runHaul';
 import path from 'path';
 import rimraf from 'rimraf';
 
-export function bundleForPlatform(projectDir: string, platform: string) {
+export function bundleForPlatform(
+  projectDir: string,
+  platform: string,
+  { ramBundle }: { ramBundle?: boolean } = {}
+) {
   const bundlePath = path.resolve(
     projectDir,
+    'dist',
     platform === 'ios' ? 'index.jsbundle' : 'index.android.bundle'
   );
   const { stdout } = runHaulSync(projectDir, [
-    'bundle',
+    ramBundle ? 'ram-bundle' : 'bundle',
     '--platform',
     platform,
+    '--bundle-output',
+    bundlePath,
+    '--assets-dest',
+    path.resolve(projectDir, 'dist'),
   ]);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {
@@ -21,9 +29,6 @@ export function bundleForPlatform(projectDir: string, platform: string) {
   return bundlePath;
 }
 
-export function cleanup(projectDir: string, platform: string) {
-  const filename =
-    platform === 'ios' ? 'index.jsbundle' : 'index.android.bundle';
-  rimraf.sync(path.resolve(projectDir, filename));
-  rimraf.sync(path.resolve(projectDir, `${filename}.map`));
+export function cleanup(projectDir: string) {
+  rimraf.sync(path.resolve(projectDir, 'dist'));
 }

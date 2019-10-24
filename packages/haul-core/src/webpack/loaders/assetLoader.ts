@@ -30,16 +30,27 @@ async function assetLoader(this: any) {
   const pathSepPattern = new RegExp(`\\${path.sep}`, 'g');
   const filePath: string = this.resourcePath;
   const dirname = path.dirname(filePath);
-  const url = path.relative(config.root, dirname);
+  // Relative path to root without any ../ due to https://github.com/callstack/haul/issues/474
+  // Assets from from outside of root, should still be placed inside bundle output directory.
+  // Example:
+  //   filePath = monorepo/node_modules/my-module/image.png
+  //   dirname  = monorepo/node_modules/my-module
+  //   root     = monorepo/packages/my-app/
+  //   url      = ../../node_modules/my-module (original)
+  // So when we calculate destination for the asset for iOS ('assets' + url + filename),
+  // it will end up outside of `assets` directory, so we have to make sure it's:
+  //   url      = node_modules/my-module (tweaked)
+  const url = path
+    .relative(config.root, dirname)
+    .replace(new RegExp(`^[\\.\\${path.sep}]+`), '');
   const type = path.extname(filePath).replace(/^\./, '');
   const assets = path.join('assets', config.bundle ? '' : config.platform);
   const suffix = `(@\\d+(\\.\\d+)?x)?(\\.(${config.platform}|native))?\\.${type}$`;
   const filename = path.basename(filePath).replace(new RegExp(suffix), '');
-  const normalizedUrl = url.replace(new RegExp(`^[\\.\\${path.sep}]+`), '');
   const normalizedName =
-    normalizedUrl.length === 0
+    url.length === 0
       ? filename
-      : `${normalizedUrl.replace(pathSepPattern, '_')}_${filename}`;
+      : `${url.replace(pathSepPattern, '_')}_${filename}`;
   const longName = `${normalizedName
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')}.${type}`;
