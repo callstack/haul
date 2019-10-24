@@ -1,5 +1,5 @@
 {
-  "version": "0.13.0",
+  "version": "0.14.0",
   "name": "@haul-bundler/basic-bundle-webpack-plugin",
   "description": "Basic bundle plugin for Haul and Webpack",
   "main": "build/index.js",
