@@ -1,8 +1,13 @@
 {
-  "version": "0.13.0",
+  "version": "independent",
   "npmClient": "yarn",
   "packages": [
     "packages/*"
   ],
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "message": "chore: publish"
+    }
+  }
 }
