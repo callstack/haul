@@ -44,13 +44,12 @@ jobs:
           path: coverage
           destination: coverage
 
-  lint_and_typecheck_node_10:
+  lint_node_10:
     executor: node_10
     steps:
       - attach_workspace:
           at: ~/haul_node_10
       - run: yarn lint
-      - run: yarn typecheck
 
   unit_test_node_10:
     executor: node_10
@@ -170,13 +169,12 @@ jobs:
           root: .
           paths: .
 
-  lint_and_typecheck_node_latest:
+  lint_node_latest:
     executor: node_latest
     steps:
       - attach_workspace:
           at: ~/haul_node_latest
       - run: yarn lint
-      - run: yarn typecheck
 
   unit_test_node_latest:
     executor: node_latest
