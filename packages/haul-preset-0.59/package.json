@@ -15,8 +15,8 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "@haul-bundler/cli": "^0.13.0",
-    "@haul-bundler/core": "^0.13.0",
+    "@haul-bundler/cli": "0.x",
+    "@haul-bundler/core": "0.x",
     "webpack": "4.x"
   },
   "dependencies": {
