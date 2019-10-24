@@ -21,6 +21,7 @@ import {
 import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import getBundlePlugin from './utils/getBundlePlugin';
+import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -73,6 +74,32 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             ? bundleConfigBuilder(env, runtime)
             : bundleConfigBuilder;
 
+        let looseMode;
+        if (bundleConfig.looseMode === true) {
+          looseMode = () => true;
+        } else if (Array.isArray(bundleConfig.looseMode)) {
+          looseMode = (filename: string) => {
+            return (bundleConfig.looseMode as Array<string | RegExp>).some(
+              element => {
+                if (typeof element === 'string') {
+                  if (!path.isAbsolute(element)) {
+                    throw new Error(
+                      `${element} in 'looseMode' property must be an absolute path or regex`
+                    );
+                  }
+                  return element === filename;
+                }
+
+                return element.test(filename);
+              }
+            );
+          };
+        } else if (typeof bundleConfig.looseMode === 'function') {
+          looseMode = bundleConfig.looseMode;
+        } else {
+          looseMode = () => false;
+        }
+
         // TODO: use minifyOptions to configure terser for basic bundle
         const dev = bundleConfig.dev || env.dev;
         const root = bundleConfig.root || env.root;
@@ -97,6 +124,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             typeof bundleConfig.sourceMap !== 'undefined'
               ? bundleConfig.sourceMap
               : true,
+          looseMode,
           app: Boolean(bundleConfig.app),
           dll: Boolean(bundleConfig.dll),
           dependsOn: bundleConfig.dependsOn || [],
@@ -200,6 +228,10 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
           getBundlePlugin(env, normalizedBundleConfig)
+        );
+
+        webpackConfig.plugins.push(
+          new LooseModeWebpackPlugin(normalizedBundleConfig.looseMode)
         );
 
         if (env.bundleMode === 'single-bundle') {
