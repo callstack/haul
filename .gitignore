@@ -94,3 +94,4 @@ dist/
 .DS_Store
 .coverage_output
 fixtures/node_modules/
+**/tsconfig.tsbuildinfo

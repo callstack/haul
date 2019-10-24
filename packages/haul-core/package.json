@@ -55,25 +55,5 @@
     "wrap-ansi": "^6.0.0",
     "ws": "^6.2.1"
   },
-  "devDependencies": {
-    "@types/babel__core": "^7.1.2",
-    "@types/dedent": "^0.7.0",
-    "@types/hapi__boom": "^7.4.0",
-    "@types/hapi__hapi": "^18.2.5",
-    "@types/hapi__inert": "^5.2.0",
-    "@types/hapi__joi": "^15.0.3",
-    "@types/image-size": "^0.7.0",
-    "@types/loader-utils": "^1.1.3",
-    "@types/lodash.get": "^4.4.6",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/lodash.throttle": "^4.1.6",
-    "@types/node-fetch": "^2.5.0",
-    "@types/resolve": "^0.0.8",
-    "@types/semver": "^6.0.1",
-    "@types/strip-ansi": "^5.2.1",
-    "@types/terminal-kit": "^1.28.0",
-    "@types/wrap-ansi": "^3.0.0",
-    "@types/ws": "^6.0.2"
-  },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

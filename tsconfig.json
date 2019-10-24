@@ -12,9 +12,16 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "typeRoots": ["node_modules/@types", "typings"]
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "typings"
+    ]
   },
   "exclude": [
-    "./fixtures"
+    "./fixtures",
+    "**/__tests__/**",
+    "**/build/**",
   ]
 }
