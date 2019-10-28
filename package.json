@@ -7,6 +7,7 @@
     "lint": "eslint --ext '.js,.ts' './packages'",
     "test": "jest",
     "clean": "rm -rf ./packages/*/build ./packages/*/tsconfig.tsbuildinfo",
+    "watch": "yarn clean && concurrently \"yarn:watch:source\" \"yarn:watch:ts\"",
     "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js\"",
     "watch:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js --watch\"",
     "build:ts": "node ./scripts/build_ts.js",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
+    "concurrently": "^5.0.0",
     "escape-string-regexp": "^2.0.0",
     "execa": "^3.2.0",
     "glob": "^7.1.5",
