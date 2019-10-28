@@ -165,7 +165,7 @@ export default makeConfig({
   bundles: {
     index: {
       entry: withPolyfills('./index.js', {
-        initializeCoreLocation: 'node_modules/react-native-windows/Libraries/Core/InitializeCore.js'
+        initializeCoreLocation: 'react-native-windows/Libraries/Core/InitializeCore.js'
       }),
       providesModuleNodeModules: ['react-native', 'react-native-windows'],
       hasteOptions: { platforms: ['native', 'windows'] },

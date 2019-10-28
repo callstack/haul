@@ -40,11 +40,11 @@ Usually, the return value of `makeConfig` should be returned as default export w
 
 Decorate the entry file(s) with React Native polyfills. You can specify custom `root` directory and path to `InitializeCore.js` file.
 
-| Name      | Type                                                 | Description                                                                                                                                                                                                                                              |
-| --------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`   | `string` / `string[]`                                | Entry file(s) path(s)                                                                                                                                                                                                                                    |
-| `options` | `{ root?: string; initializeCoreLocation?: string }` | Specify custom path to `InitializeCore.js` file. `root` and `initializeCoreLocation` are joined together using `path.join`. Defaults: `root` - `process.cwd()`, `initializeCoreLocation` - `node_modules/react-native/Libraries/Core/InitializeCore.js`. |
-| _returns_ | `string[]`                                           | Entry file(s) with polyfill paths                                                                                                                                                                                                                        |
+| Name      | Type                                  | Description                                                                                                                            |
+| --------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `entry`   | `string` / `string[]`                 | Entry file(s) path(s)                                                                                                                  |
+| `options` | `{ initializeCoreLocation?: string }` | Specify custom path to `InitializeCore.js` file. Defaults: `initializeCoreLocation` - `react-native/Libraries/Core/InitializeCore.js`. |
+| _returns_ | `string[]`                            | Entry file(s) with polyfill paths                                                                                                      |
 
 ### Project configuration reference
 

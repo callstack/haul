@@ -1,7 +1,4 @@
-import path from 'path';
-
 type Options = {
-  root?: string;
   initializeCoreLocation?: string;
 };
 
@@ -9,11 +6,10 @@ export default function withPolyfillsFactory(polyfills: string[]) {
   return function withPolyfills(
     entry: string | string[],
     {
-      root = process.cwd(),
-      initializeCoreLocation = 'node_modules/react-native/Libraries/Core/InitializeCore.js',
+      initializeCoreLocation = 'react-native/Libraries/Core/InitializeCore.js',
     }: Options = {}
   ): string[] {
-    const entryPrefix = [...polyfills, path.join(root, initializeCoreLocation)];
+    const entryPrefix = [...polyfills, initializeCoreLocation];
 
     if (typeof entry === 'string') {
       return [...entryPrefix, entry];
