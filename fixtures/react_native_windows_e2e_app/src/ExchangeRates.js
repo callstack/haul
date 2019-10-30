@@ -8,9 +8,10 @@ export default function ExchangeRates() {
     <Query
       query={gql`
         {
-          rates(currency: "USD") {
-            currency
-            rate
+          allFilms {
+            films {
+              title
+            }
           }
         }
       `}
@@ -22,10 +23,10 @@ export default function ExchangeRates() {
         return (
           <FlatList
             testID="exchangeRates"
-            data={data.rates}
-            keyExtractor={(item) => item.currency}
+            data={data.allFilms.films}
+            keyExtractor={(item) => item.title}
             renderItem={({ item }) => (
-              <Text>{item.currency}: {item.rate}</Text>
+              <Text>{item.title}</Text>
             )}
           />
         );
