@@ -13,7 +13,7 @@
     "test": "jest",
     "coverage:report": "nyc report --reporter=lcov --reporter=json --reporter=text --exclude='**/haul-preset-0.59/*/vendor/**'",
     "coverage:check": "nyc check-coverage --temp-dir coverage",
-    "release": "NODE_ENV=production yarn prepare && lerna publish --ignore-prepublish --sign-git-commit"
+    "release": "NODE_ENV=production yarn prepare && lerna publish --ignore-prepublish --ignore-scripts --sign-git-commit"
   },
   "dependencies": {
     "chalk": "^2.4.2",
