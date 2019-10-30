@@ -9,14 +9,7 @@ export default function withPolyfillsFactory(polyfills: string[]) {
       initializeCoreLocation = 'react-native/Libraries/Core/InitializeCore.js',
     }: Options = {}
   ): string[] {
-    const entryPrefix = [...polyfills];
-    try {
-      // Try resolving the location using standard `require.resolve`, otherwise fallback to webpack resolution.
-      entryPrefix.push(require.resolve(initializeCoreLocation));
-    } catch (error) {
-      entryPrefix.push(initializeCoreLocation);
-    }
-
+    const entryPrefix = [...polyfills, initializeCoreLocation];
     if (typeof entry === 'string') {
       return [...entryPrefix, entry];
     } else if (Array.isArray(entry)) {
