@@ -57,7 +57,6 @@ test('RNWTestApp renders correctly', async () => {
 
   expect(await getByTestId('app1')).toBeDefined();
   expect(await (await getByTestId('app1LoadTime')).text()).toMatch(/Load time: ([1-9]|[0-9]{2}) ms/);
-  
-  await driver.sleep(2000);
-  expect(await getByTestId('exchangeRates')).toBeDefined();
+
+  expect(await getByTestId('films')).toBeDefined();
 });

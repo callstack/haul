@@ -116,7 +116,11 @@ export default function ramBundleCommand(runtime: Runtime) {
           compiler.run((err, info) => {
             if (err || info.hasErrors()) {
               messages.buildFailed(runtime);
-              reject(err ? err : info.toJson({ errorDetails: true }).errors);
+              reject(
+                err
+                  ? err
+                  : info.toJson({ errorDetails: true }).errors.join('\n')
+              );
             } else {
               resolve(info);
             }

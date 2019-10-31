@@ -3,29 +3,28 @@ import { Text, FlatList } from 'react-native';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-export default function ExchangeRates() {
+export default function Films() {
   return (
     <Query
       query={gql`
         {
-          rates(currency: "USD") {
-            currency
-            rate
+          allFilms {
+            title
           }
         }
       `}
     >
       {({ loading, error, data }) => {
         if (loading) return <Text>Loading...</Text>;
-        if (error) return <Text>Error :(</Text>;
+        if (error) return <Text>Error</Text>;
 
         return (
           <FlatList
-            testID="exchangeRates"
-            data={data.rates}
-            keyExtractor={(item) => item.currency}
+            testID="films"
+            data={data.allFilms}
+            keyExtractor={(item) => item.title}
             renderItem={({ item }) => (
-              <Text>{item.currency}: {item.rate}</Text>
+              <Text>{item.title}</Text>
             )}
           />
         );
