@@ -55,7 +55,7 @@ BundleRegistry.enableLogging();
 
 const cache = new InMemoryCache();
 const apolloClient = new ApolloClient({
-  link: createHttpLink({ uri: "https://graphql.org/swapi-graphql" }),
+  link: createHttpLink({ uri: "https://swapi.graph.cool/" }),
   cache
 });
 

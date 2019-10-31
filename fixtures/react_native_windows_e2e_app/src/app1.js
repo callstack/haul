@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const ExchangeRates = React.lazy(() => import('./ExchangeRates'));
+const Films = React.lazy(() => import('./Films'));
 
 export default class App extends Component {
   render() {
@@ -10,7 +10,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome} testID="app1">App 1</Text>
         <Text style={styles.body} testID="app1LoadTime">Load time: {loadTime} ms</Text>
-        <Suspense fallback={<Text>Loading</Text>}><ExchangeRates /></Suspense>
+        <Suspense fallback={<Text>Loading</Text>}><Films /></Suspense>
       </View>
     );
   }
