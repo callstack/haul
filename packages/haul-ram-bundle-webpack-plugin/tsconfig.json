@@ -1,12 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "typeRoots": ["node_modules/@types", "typings"]
+    "rootDir": "src",
+    "outDir": "build"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "**/__tests__/**",
+  "references": [
+    {
+      "path": "../haul-core"
+    }
   ]
 }

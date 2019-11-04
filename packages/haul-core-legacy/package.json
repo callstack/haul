@@ -30,8 +30,5 @@
     "mkdirp": "^0.5.1",
     "ws": "^6.2.1"
   },
-  "devDependencies": {
-    "snapshot-diff": "^0.5.2"
-  },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

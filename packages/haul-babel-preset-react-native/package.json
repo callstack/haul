@@ -44,11 +44,5 @@
     "@babel/template": "^7.4.4",
     "metro-react-native-babel-preset": "^0.54.0"
   },
-  "devDependencies": {
-    "@types/babel__core": "^7.1.2",
-    "@types/babel__template": "^7.0.2",
-    "@types/dedent": "^0.7.0",
-    "dedent": "^0.7.0"
-  },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

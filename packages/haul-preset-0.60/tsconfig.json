@@ -1,14 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": [
-      "../../node_modules/@haul-bundler/core-legacy"
-    ]
+    "rootDir": "src",
+    "outDir": "build"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "**/__tests__/**",
+  "references": [
+    {
+      "path": "../haul-core"
+    },
+    {
+      "path": "../haul-cli"
+    }
   ]
 }

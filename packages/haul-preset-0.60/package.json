@@ -24,14 +24,5 @@
     "is-ci": "^2.0.0",
     "terser-webpack-plugin": "^1.4.1"
   },
-  "devDependencies": {
-    "@haul-bundler/cli": "^0.14.2",
-    "@haul-bundler/core": "^0.14.2",
-    "@types/case-sensitive-paths-webpack-plugin": "^2.1.3",
-    "@types/is-ci": "^2.0.0",
-    "@types/terser-webpack-plugin": "^1.2.1",
-    "react-native": "0.60.0",
-    "webpack": "^4.39.1"
-  },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }
