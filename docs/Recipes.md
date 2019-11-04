@@ -215,11 +215,11 @@ Set the environment variable `APP_ENV` to `detox_tests` when running Haul:
 APP_ENV=detox_tests yarn haul
 ```
 
-## Using with Realm or loose-mode-only-compatible libraries
+## Using with Lottie or loose-mode-only-compatible libraries
 
 Some React Native libraries might not work with Haul out of the box. If the library if throw error, it is possible that it's not compatible with strict mode checks.
 
-By default all modules with Haul have `'use strict';` annotation, which makes the code evaluated in strict mode, whereas the default React Native bundler - Metro - generates the code without this annotation. For that reason, some libraries eg `Realm` need special steps to work.
+By default all modules with Haul have `'use strict';` annotation, which makes the code evaluated in strict mode, whereas the default React Native bundler - Metro - generates the code without this annotation. For that reason, some libraries eg `Lottie` need special steps to work.
 
 To enable loose mode, you need to add `looseMode` property to your config set to:
 
@@ -242,7 +242,7 @@ export default makeConfig({
       entry: withPolyfills('./index.ts'),
       looseMode: [
         require.resolve('./MyModule.js'),
-        /node_modules\/realm/,
+        /node_modules\/react-native-lottie/,
       ],
     },
   },
