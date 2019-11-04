@@ -106,6 +106,11 @@ The bundle configuration consist of the following properties:
 - `dependsOn?: string[]` (_optional_, **multi-bundle mode only**) - Specify on which DLLs the bundle depends on, which will be automatically linked when building the bundle.
 - `providesModuleNodeModules?: Array<string | { name: string; directory: string }>` - Provide custom modules for Haste.
 - `hasteOptions?: any` - Provide Haste options.
+- `looseMode?: true | Array<string | RegExp> | ((filename: string) => boolean)` - Removes `'use strict';` from:
+  - the whole bundle if `true`
+  - modules matched by absolute filename if array of string is passed (can be mixed with regexes)
+  - modules matched by the the regexes if array of regexes is passed (can be mixed with strings)
+  - modules for which function `(filename: string) => boolean` returns `true`
 - `transform?: WebpackConfigTransform` - Customize the Webpack config after it's been created.
   
   The `transform` function will receive an object with `bundleName`, `env`, `runtime` and Webpack's `config`:
