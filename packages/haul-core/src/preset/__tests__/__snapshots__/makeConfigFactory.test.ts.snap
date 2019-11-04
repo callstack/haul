@@ -16,6 +16,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "app",
@@ -38,6 +39,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "base_dll",
@@ -62,6 +64,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "index",
@@ -150,6 +153,9 @@ Object {
           "singleBundleMode": false,
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllReferencePlugin {
           "options": Object {
             "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
@@ -218,6 +224,9 @@ Object {
           "singleBundleMode": false,
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllPlugin {
           "options": Object {
             "name": "base_dll",
@@ -279,6 +288,9 @@ Object {
           ],
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllReferencePlugin {
           "options": Object {
             "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
@@ -309,6 +321,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "app",
@@ -331,6 +344,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "base_dll",
@@ -355,6 +369,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "index",
@@ -437,6 +452,9 @@ Object {
           ],
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllReferencePlugin {
           "options": Object {
             "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
@@ -499,6 +517,9 @@ Object {
           "preloadBundles": Array [],
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllPlugin {
           "options": Object {
             "name": "base_dll",
@@ -560,6 +581,9 @@ Object {
           ],
           "sourceMap": true,
         },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
+        },
         DllReferencePlugin {
           "options": Object {
             "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
@@ -588,6 +612,7 @@ Object {
       ],
       "external": false,
       "hasteOptions": Object {},
+      "looseMode": [Function],
       "minify": false,
       "minifyOptions": undefined,
       "name": "index",
@@ -665,6 +690,9 @@ Object {
           "bundle": false,
           "preloadBundles": Array [],
           "sourceMap": true,
+        },
+        LooseModeWebpackPlugin {
+          "checkLooseMode": [Function],
         },
       ],
       "target": "webworker",

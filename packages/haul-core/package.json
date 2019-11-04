@@ -52,6 +52,7 @@
     "terser": "^4.1.3",
     "utility-types": "^3.7.0",
     "webpack": "^4.39.1",
+    "webpack-sources": "^1.4.1",
     "wrap-ansi": "^6.0.0",
     "ws": "^6.2.1"
   },
