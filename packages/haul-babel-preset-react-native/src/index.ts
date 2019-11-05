@@ -53,11 +53,16 @@ export function getDefaultPostPlugins(): PluginSpec[] {
 export function getHermesPlugins(): PluginSpec[] {
   // Additional plugins for Hermes because it doesn't support ES6 yet
   return [
+    ['@babel/plugin-transform-computed-properties'],
+    ['@babel/plugin-transform-destructuring'],
+    ['@babel/plugin-transform-regenerator'],
     ['@babel/plugin-transform-shorthand-properties'],
     ['@babel/plugin-transform-classes'],
+    ['@babel/plugin-transform-arrow-functions'],
     ['@babel/plugin-transform-spread'],
     ['@babel/plugin-proposal-object-rest-spread'],
     ['@babel/plugin-transform-template-literals', { loose: true }],
+    ['@babel/plugin-transform-for-of', { loose: true }],
   ];
 }
 
