@@ -4,6 +4,7 @@ import makeConfigFactory from '../makeConfigFactory';
 import { Runtime, ProjectConfig, EnvOptions } from '../../';
 // @ts-ignore
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line
+import LooseModeWebpackPlugin from '../../webpack/plugins/LooseModeWebpackPlugin';
 
 const makeConfig = makeConfigFactory(
   (_runtime, env, bundleName, projectConfig) => ({
@@ -352,6 +353,65 @@ describe('makeConfig', () => {
         hasPlugin(config.webpackConfigs.app, 'WebpackBasicBundlePlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
+    });
+  });
+
+  describe('with looseMode', () => {
+    const baseEnv: EnvOptions = {
+      platform: 'ios',
+      root: __dirname,
+      dev: false,
+      bundleMode: 'single-bundle',
+      bundleTarget: 'file',
+    };
+
+    it('should build all modules in loose mode', () => {
+      const projectConfig: ProjectConfig = {
+        bundles: {
+          index: {
+            entry: './index.js',
+            looseMode: true,
+          },
+        },
+      };
+      const env: EnvOptions = {
+        ...baseEnv,
+        bundleTarget: 'server',
+      };
+      const config = makeConfig(projectConfig)(runtime, env);
+      const looseModePlugin = config.webpackConfigs.index.plugins.find(
+        plugin => {
+          return plugin.constructor.name === 'LooseModeWebpackPlugin';
+        }
+      ) as LooseModeWebpackPlugin;
+      expect(looseModePlugin.checkLooseMode('')).toBe(true);
+    });
+
+    it('should build some modules in loose mode', () => {
+      const moduleFilename = path.join(__dirname, 'someModule.js');
+
+      const projectConfig: ProjectConfig = {
+        bundles: {
+          index: {
+            entry: './index.js',
+            looseMode: [moduleFilename, /haul/],
+          },
+        },
+      };
+      const env: EnvOptions = {
+        ...baseEnv,
+        bundleTarget: 'server',
+      };
+      const config = makeConfig(projectConfig)(runtime, env);
+      const looseModePlugin = config.webpackConfigs.index.plugins.find(
+        plugin => {
+          return plugin.constructor.name === 'LooseModeWebpackPlugin';
+        }
+      ) as LooseModeWebpackPlugin;
+      expect(looseModePlugin.checkLooseMode('')).toBe(false);
+      expect(looseModePlugin.checkLooseMode(moduleFilename)).toBe(true);
+      expect(looseModePlugin.checkLooseMode(__filename)).toBe(true);
+      expect(looseModePlugin.checkLooseMode('path')).toBe(false);
     });
   });
 });

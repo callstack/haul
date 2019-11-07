@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import sources from 'webpack-sources';
 
 export default class LooseModeWebpackPlugin {
-  constructor(private checkLooseMode: (filename: string) => boolean) {}
+  constructor(public checkLooseMode: (filename: string) => boolean) {}
 
   apply(compiler: webpack.Compiler) {
     compiler.hooks.make.tap(
