@@ -104,6 +104,7 @@ Object {
         "libraryTarget": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -174,6 +175,7 @@ Object {
         "libraryTarget": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -239,6 +241,7 @@ Object {
         "globalObject": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -397,6 +400,7 @@ Object {
         "libraryTarget": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -461,6 +465,7 @@ Object {
         "libraryTarget": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -520,6 +525,7 @@ Object {
         "globalObject": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {
@@ -628,6 +634,7 @@ Object {
         "globalObject": "this",
         "path": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
         "publicPath": "http://localhost:8081/",
+        "sourceMapFilename": "[file].map",
       },
       "plugins": Array [
         DefinePlugin {

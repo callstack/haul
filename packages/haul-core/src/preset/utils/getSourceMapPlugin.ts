@@ -6,7 +6,8 @@ import {
 
 export default function getSourceMapPlugin(
   bundleConfig: NormalizedBundleConfig,
-  serverConfig: NormalizedServerConfig
+  serverConfig: NormalizedServerConfig,
+  sourceMapFilename: string
 ) {
   const baseOptions = {
     test: /\.(js|jsx|css|ts|tsx|(js)?bundle)($|\?)/i,
@@ -21,7 +22,7 @@ export default function getSourceMapPlugin(
   } else if (bundleConfig.sourceMap) {
     return new webpack.SourceMapDevToolPlugin({
       ...baseOptions,
-      filename: '[file].map',
+      filename: sourceMapFilename,
       moduleFilenameTemplate: '[absolute-resource-path]',
     });
   }
