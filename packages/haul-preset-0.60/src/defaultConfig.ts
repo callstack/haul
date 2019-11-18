@@ -62,10 +62,18 @@ export default function getDefaultConfig(
                 ],
                 /**
                  * to improve the rebuild speeds
-                 * This enables caching results in ./node_modules/.cache/babel-loader/
+                 * This enables caching results in ./node_modules/.cache/babel-loader/<platform>
                  * This is a feature of `babel-loader` and not babel
                  */
-                cacheDirectory: dev,
+                cacheDirectory: dev
+                  ? path.join(
+                      root,
+                      'node_modules',
+                      '.cache',
+                      'babel-loader',
+                      platform
+                    )
+                  : false,
               },
             },
           ],
