@@ -1,0 +1,11 @@
+{
+  "extends": "@callstack/eslint-config/node",
+  "overrides": [
+    {
+      "files": ["**/types.ts", "**/*.test.ts"],
+      "rules": {
+        "import/no-extraneous-dependencies": 0
+      }
+    }
+  ]
+}

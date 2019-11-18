@@ -1,0 +1,3 @@
+rootProject.name = 'react_native_clean'
+
+include ':app'

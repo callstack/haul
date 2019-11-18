@@ -1,157 +1,99 @@
 {
-  "version": "1.0.0-beta.13",
-  "name": "haul",
-  "description": "Haul is a new command line tools for React Native",
-  "bin": {
-    "haul": "./bin/cli.js"
-  },
-  "scripts": {
-    "precommit": "lint-staged",
-    "flow": "flow --include-warnings",
-    "lint": "eslint .",
-    "jest": "jest",
-    "test": "yarn flow && yarn lint && yarn jest",
-    "test:ci": "yarn flow && yarn lint && yarn jest -- -i",
-    "format": "eslint --fix .",
-    "add-contributor": "all-contributors add"
-  },
-  "author": "Mike Grabowski <mike@callstack.io>",
-  "repository": "github:callstack-io/haul",
-  "contributors": [
-    "Satyajit Sahoo <satyajit.sahoo@callstack.io>",
-    "Piotr Drapich <piotr.drapich@callstack.io>",
-    "Pawel Trysla <pawel.trysla@callstack.io>"
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "license": "MIT",
-  "bugs": "https://github.com/callstack-io/haul/issues",
-  "peerDependencies": {
-    "babel-preset-react-native": "^2.0.0",
-    "react": "*",
-    "react-native": "*"
+  "scripts": {
+    "lint": "eslint --ext '.js,.ts' './packages'",
+    "test": "jest",
+    "clean": "rm -rf ./packages/*/build ./packages/*/tsconfig.tsbuildinfo",
+    "watch": "yarn clean && concurrently \"yarn:watch:source\" \"yarn:watch:ts\"",
+    "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js\"",
+    "watch:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js --watch\"",
+    "build:ts": "node ./scripts/build_ts.js",
+    "watch:ts": "node ./scripts/build_ts.js --watch",
+    "prepare": "yarn clean && yarn build:source && yarn build:ts",
+    "coverage:report": "nyc report --reporter=lcov --reporter=json --reporter=text --exclude='**/haul-preset-0.59/*/vendor/**'",
+    "coverage:check": "nyc check-coverage --temp-dir coverage",
+    "release": "NODE_ENV=production yarn prepare && lerna publish --ignore-prepublish --ignore-scripts --sign-git-commit"
   },
   "dependencies": {
-    "@zamotany/react-proxy": "3.0.0-alpha.4",
-    "babel-core": "^6.24.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.2.2",
-    "babel-register": "^6.24.0",
-    "camelcase-keys": "^4.0.0",
-    "case-sensitive-paths-webpack-plugin": "^2.1.1",
-    "chalk": "1.1.3",
-    "clear": "^0.0.1",
-    "cliui": "^3.2.0",
-    "clone": "^2.1.1",
-    "core-js": "^2.5.3",
-    "decamelize": "^1.2.0",
-    "dedent": "^0.7.0",
-    "dlv": "^1.1.0",
-    "escape-string-regexp": "^1.0.5",
-    "express": "^4.15.2",
-    "hasha": "^2.2.0",
-    "hoist-non-react-statics": "^2.2.1",
-    "image-size": "^0.5.1",
-    "inquirer": "^3.0.6",
-    "loader-utils": "^1.1.0",
-    "minimist": "^1.2.0",
-    "morgan": "^1.8.1",
-    "multi-progress": "^2.0.0",
-    "open-in-editor": "^2.2.0",
-    "opn": "^4.0.2",
-    "ora": "^1.2.0",
-    "react-deep-force-update": "^2.0.1",
-    "react-hot-loader": "3.0.0-beta.7",
-    "resolve": "^1.3.3",
-    "resolve-from": "^4.0.0",
-    "rxjs": "^5.4.2",
-    "semver": "^5.5.0",
-    "source-map": "^0.5.6",
-    "strip-ansi": "^3.0.1",
-    "thread-loader": "^1.1.1",
-    "webpack": "^4.1.0",
-    "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.19.1",
-    "ws": "^2.2.2"
-  },
-  "devDependencies": {
-    "all-contributors-cli": "^4.5.1",
-    "babel-jest": "test",
-    "babel-preset-react-native": "^2.0.0",
-    "eslint": "^4.3.0",
-    "eslint-config-callstack-io": "^1.0.1",
-    "flow-bin": "^0.65.0",
-    "husky": "^0.13.3",
-    "jest": "^22.2.1",
-    "lint-staged": "^3.4.0",
+    "chalk": "^2.4.2",
+    "concurrently": "^5.0.0",
+    "escape-string-regexp": "^2.0.0",
+    "execa": "^3.2.0",
+    "glob": "^7.1.5",
+    "lerna": "^3.16.4",
     "mkdirp": "^0.5.1",
-    "react-native": "^0.51.0",
-    "rimraf": "^2.6.1",
+    "node-fetch": "^2.6.0",
+    "nyc": "^14.1.1",
+    "rimraf": "^2.6.3",
+    "strip-ansi": "^5.2.0",
     "traverse": "^0.6.6"
   },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          },
-          "useBuiltIns": true
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-flow-strip-types",
-      "transform-object-rest-spread"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "callstack-io",
-    "rules": {
-      "strict": 0,
-      "arrow-body-style": 0,
-      "arrow-parens": 0,
-      "class-methods-use-this": 0,
-      "flowtype/no-weak-types": 0,
-      "flowtype/require-parameter-type": 0,
-      "global-require": 0,
-      "no-alert": 0,
-      "no-confusing-arrow": 0,
-      "no-console": 0,
-      "no-constant-condition": 0,
-      "no-restricted-syntax": 0
-    },
-    "overrides": {
-      "files": "**/integration_tests/**/*.js",
-      "rules": {
-        "import/no-extraneous-dependencies": [
-          "error",
-          {
-            "devDependencies": [
-              "**/integration_tests/**"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/setupTestFramework.js",
-    "testPathIgnorePatterns": [
-      "/integration_tests/.*/__tests__"
-    ],
-    "moduleNameMapper": {
-      "^jest/(.*)": "<rootDir>/jest/$1"
-    },
-    "testMatch": [
-      "**/*.test.js"
-    ]
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@callstack/eslint-config": "^7.0.0",
+    "@haul-bundler/babel-preset-react-native": "^0.14.0",
+    "@haul-bundler/cli": "^0.14.0",
+    "@haul-bundler/core": "^0.14.0",
+    "@types/babel__core": "^7.1.2",
+    "@types/case-sensitive-paths-webpack-plugin": "^2.1.3",
+    "@types/cpx": "^1.5.0",
+    "@types/dedent": "^0.7.0",
+    "@types/del": "^4.0.0",
+    "@types/hapi__boom": "^7.4.0",
+    "@types/hapi__hapi": "^18.2.5",
+    "@types/hapi__inert": "^5.2.0",
+    "@types/hapi__joi": "^15.0.3",
+    "@types/image-size": "^0.7.0",
+    "@types/inquirer": "^6.5.0",
+    "@types/is-ci": "^2.0.0",
+    "@types/jest": "^24.0.17",
+    "@types/loader-utils": "^1.1.3",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/lodash.throttle": "^4.1.6",
+    "@types/mkdirp": "^0.5.2",
+    "@types/node": "^10.14.15",
+    "@types/node-fetch": "^2.5.0",
+    "@types/npm-registry-fetch": "^4.0.1",
+    "@types/resolve": "^0.0.8",
+    "@types/rimraf": "^2.0.2",
+    "@types/semver": "^6.0.1",
+    "@types/strip-ansi": "^5.2.1",
+    "@types/terminal-kit": "^1.28.0",
+    "@types/terser-webpack-plugin": "^1.2.1",
+    "@types/webpack": "^4.32.1",
+    "@types/webpack-sources": "^0.1.5",
+    "@types/which": "^1.3.1",
+    "@types/wrap-ansi": "^3.0.0",
+    "@types/ws": "^6.0.2",
+    "@types/yargs": "^13.0.2",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-istanbul": "^5.2.0",
+    "codecov": "^3.5.0",
+    "dedent": "^0.7.0",
+    "del": "^5.1.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "metro": "^0.56.0",
+    "react-native": "0.60.0",
+    "snapshot-diff": "^0.5.2",
+    "source-map": "^0.7.3",
+    "terser": "^4.1.3",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-sources": "^1.4.3"
   }
 }

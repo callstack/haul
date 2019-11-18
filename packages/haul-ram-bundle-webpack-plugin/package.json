@@ -1,0 +1,22 @@
+{
+  "version": "0.14.2",
+  "name": "@haul-bundler/ram-bundle-webpack-plugin",
+  "description": "RAM bundle plugin for Haul and Webpack",
+  "main": "build/index.js",
+  "files": [
+    "build/",
+    "runtime/"
+  ],
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "@haul-bundler/core": "0.x",
+    "metro": ">= 0.51.1 < 1",
+    "terser": "4.x",
+    "webpack": "4.x",
+    "webpack-sources": "1.x"
+  },
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+}

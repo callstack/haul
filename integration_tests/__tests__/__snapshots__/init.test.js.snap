@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`init command on react-native project 1`] = `
-"module.exports = ({ platform }) => ({
-  entry: \`./index.js\`,
-});"
-`;

@@ -1,4 +1,9 @@
-flow-typed/**
-coverage/**
-vendor/**
-fixtures/**
+**/flow-typed/**
+**/coverage/**
+**/src/vendor/**
+**/fixtures/**
+**/__fixtures__/**
+**/assets/**
+**/node_modules/**
+**/build/**
+**/vendor/**

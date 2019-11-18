@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "postinstall": "yarn lerna bootstrap",
+    "build": "lerna exec --concurrency 1 \"yarn build:all\""
+  },
+  "dependencies": {
+    "lerna": "^3.16.4"
+  }
+}

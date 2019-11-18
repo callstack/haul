@@ -1,0 +1,34 @@
+{
+  "version": "0.14.1",
+  "name": "@haul-bundler/core-legacy",
+  "description": "Haul core library (legacy)",
+  "bin": {
+    "haul-core-legacy": "./bin/cli.js"
+  },
+  "main": "build/index.js",
+  "types": "./index.d.ts",
+  "engines": {
+    "node": ">=10.x"
+  },
+  "author": "Mike Grabowski <mike@callstack.com>",
+  "repository": "github:callstack/haul",
+  "contributors": [
+    "Satyajit Sahoo <satyajit.sahoo@callstack.com>",
+    "Piotr Drapich <piotr.drapich@callstack.com>",
+    "Pawel Trysla <pawel.trysla@callstack.com>"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "@haul-bundler/core": "^0.x",
+    "webpack": "4.x"
+  },
+  "dependencies": {
+    "cpx": "^1.5.0",
+    "get-port": "^5.0.0",
+    "mime-types": "^2.1.24",
+    "mkdirp": "^0.5.1",
+    "ws": "^6.2.1"
+  },
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+}

@@ -1,0 +1,14 @@
+# root dotfiles
+/.*
+*.log
+
+# tests
+__tests__
+/integration_tests
+/fixtures
+
+# docs and tooling
+/docs
+/website
+/flow-typed
+/jest

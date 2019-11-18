@@ -1,0 +1,13 @@
+{
+  "docs": {
+    "Getting Started": [
+      "getting_started",
+      "configuration"
+    ],
+    "Guides": [
+      "cli",
+      "recipes",
+      "codepush"
+    ]
+  }
+}

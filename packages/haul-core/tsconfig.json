@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "jsx": "react"
+  },
+  "references": [
+    {
+      "path": "../haul-inspector-events"
+    },
+    {
+      "path": "../haul-basic-bundle-webpack-plugin"
+    },
+    {
+      "path": "../haul-ram-bundle-webpack-plugin"
+    }
+  ]
+}

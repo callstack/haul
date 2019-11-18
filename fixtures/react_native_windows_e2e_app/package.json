@@ -1,0 +1,39 @@
+{
+  "name": "RNWTestApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "postinstall": "patch-package",
+    "start": "../../packages/haul-cli/bin/haul start",
+    "test": "jest",
+    "build:bundle": "node ../../packages/haul-cli/bin/haul.js bundle --platform windows --dev true --bundle-output windows/RNWTestApp/Bundle/index.windows.bundle --assets-dest windows/RNWTestApp/Bundle",
+    "start:app": "node_modules/.bin/react-native run-windows --arch x86 --no-packager"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-http": "^1.5.16",
+    "graphql": "^14.5.7",
+    "graphql-tag": "^2.10.1",
+    "patch-package": "^6.2.0",
+    "postinstall-postinstall": "^2.0.0",
+    "react": "16.10.1",
+    "react-apollo": "^3.1.1",
+    "react-native": "^0.60.0",
+    "react-native-windows": "0.60.0-vnext.16",
+    "rnpm-plugin-windows": "^0.3.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
+    "appium": "^1.14.2",
+    "babel-jest": "^24.9.0",
+    "execa": "^2.0.4",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "wd": "^1.11.4"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

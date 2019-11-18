@@ -1,0 +1,29 @@
+{
+  "version": "0.14.2",
+  "name": "@haul-bundler/preset-0.59",
+  "description": "Haul preset for React Native 0.59",
+  "main": "build/index.js",
+  "files": [
+    "build/",
+    "vendor/"
+  ],
+  "engines": {
+    "node": ">=10.x"
+  },
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "@haul-bundler/cli": "0.x",
+    "@haul-bundler/core": "0.x",
+    "webpack": "4.x"
+  },
+  "dependencies": {
+    "babel-loader": "^8.0.6",
+    "case-sensitive-paths-webpack-plugin": "^2.2.0",
+    "is-ci": "^2.0.0",
+    "terser-webpack-plugin": "^1.4.1"
+  },
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+}

@@ -1,54 +1,242 @@
-version: 2
+version: 2.1
+
+executors:
+  node_10:
+    working_directory: ~/haul_node_10
+    docker:
+      - image: circleci/node:10
+  node_latest:
+    working_directory: ~/haul_node_latest
+    docker:
+      - image: circleci/node:latest
+
 jobs:
-  # Testing Node 8; running Yarn, ESLint, Flow and Jest
-  test-node-8:
-    working_directory: ~/haul
-    docker:
-      - image: circleci/node:8.6.0
+  setup_node_10:
+    executor: node_10
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/haul_node_10
       - restore_cache:
           keys:
-          - node8-dependencies-{{ checksum "package.json" }}
-          - node8-dependencies
-      - run: yarn install
+          - node-10-dependencies-{{ checksum "package.json" }}
+          - node-10-dependencies
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: node8-dependencies-{{ checksum "package.json" }}
-      - run: yarn test:ci
+          key: node-10-dependencies-{{ checksum "package.json" }}
+      # Clear old coverage output
+      - run: rm -rf ./.coverage_output
+      - run: rm -rf ./coverage
+      - persist_to_workspace:
+          root: .
+          paths: .
+  
+  check_coverage:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn coverage:report
+      - run: yarn coverage:check
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
-  # Testing Node 4; running just Jest, as we develop on Node >=6.
-  test-node-4:
-    working_directory: ~/haul
-    docker:
-      - image: circleci/node:4.8.4
+  lint_node_10:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn lint
+
+  unit_test_node_10:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i --coverage packages # run only tests in packages
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+  
+  e2e_rn_0_59x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_59x
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  e2e_rn_0_60x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_60x/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  e2e_rn_0_60x_ts:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_60x_ts
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  e2e_rn_0_60x_multibundle:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_60x_multibundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  e2e_rn_0_61x:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_0_61x/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+  
+  e2e_monorepo_multibundle:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/monorepo_multibundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+  
+  e2e_react_native_windows_current:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_windows_current
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  e2e_react_native_windows_vnext:
+    executor: node_10
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_10
+      - run: yarn test -i e2e/react_native_windows_vnext
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./.coverage_output/*.json
+
+  setup_node_latest:
+    executor: node_latest
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/haul_node_latest
       - restore_cache:
           keys:
-          - node4-dependencies-{{ checksum "package.json" }}
-          - node4-dependencies
-      - run: |
-          (export PKG=eslint-config-callstack-io; npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG")
-      - run: npm install
+          - node-latest-dependencies-{{ checksum "package.json" }}
+          - node-latest-dependencies
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: node4-dependencies-{{ checksum "package.json" }}
-      # We use yarn to install integration_tests fixtures
-      - run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
-          export PATH="$HOME/.yarn/bin:$PATH"
-      - run: npm run jest
+          key: node-latest-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths: .
 
-# Workflows enables us to run multiple jobs in parallel
+  lint_node_latest:
+    executor: node_latest
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_latest
+      - run: yarn lint
+
+  unit_test_node_latest:
+    executor: node_latest
+    steps:
+      - attach_workspace:
+          at: ~/haul_node_latest
+      - run: yarn test -i --coverage packages # run only tests in packages
+
+
 workflows:
   version: 2
-  node-8:
+  test:
     jobs:
-      - test-node-8
-  # Disable Node 4 because Haul is very buggy there :(
-  # node-4:
-  #   jobs:
-  #     - test-node-4
+      # Node 10 jobs
+      - setup_node_10
+      - lint_node_10:
+          requires:
+            - setup_node_10
+      - unit_test_node_10:
+          requires:
+            - setup_node_10
+      - e2e_rn_0_59x:
+          requires:
+            - setup_node_10
+      - e2e_rn_0_60x:
+          requires:
+            - setup_node_10
+      - e2e_rn_0_60x_ts:
+          requires:
+            - setup_node_10
+      - e2e_rn_0_60x_multibundle:
+          requires:
+            - setup_node_10
+      - e2e_rn_0_61x:
+          requires:
+            - setup_node_10
+      - e2e_monorepo_multibundle:
+          requires:
+            - setup_node_10
+      - e2e_react_native_windows_current:
+          requires:
+            - setup_node_10
+      - e2e_react_native_windows_vnext:
+          requires:
+            - setup_node_10
+      - check_coverage:
+          requires:
+            - lint_node_10
+            - unit_test_node_10
+            - e2e_rn_0_59x
+            - e2e_rn_0_60x
+            - e2e_rn_0_60x_ts
+            - e2e_rn_0_60x_multibundle
+            - e2e_monorepo_multibundle
+            - e2e_react_native_windows_current
+            - e2e_react_native_windows_vnext
+      
+      # Node (latest) jobs
+      - setup_node_latest
+      - lint_node_latest:
+          requires:
+            - setup_node_latest
+      - unit_test_node_latest:
+          requires:
+            - setup_node_latest
