@@ -74,7 +74,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             ? bundleConfigBuilder(env, runtime)
             : bundleConfigBuilder;
 
-        let looseMode;
+        let looseMode = () => false;
         if (bundleConfig.looseMode === true) {
           looseMode = () => true;
         } else if (Array.isArray(bundleConfig.looseMode)) {
