@@ -120,7 +120,10 @@ class DebuggerWorker {
 
     let error;
     const scriptURL = new URL(message.url);
-    scriptURL.host = self.location.host;
+    if (typeof self !== 'undefined' && self.location) {
+      scriptURL.host = self.location.host;
+    }
+   
     try {
       importScripts(scriptURL.href);
     } catch (e) {
