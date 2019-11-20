@@ -20,7 +20,7 @@ export default class LooseModeWebpackPlugin {
             }
 
             const source = moduleSource.source();
-            const match = source.match(/['"]use strict['"];/m);
+            const match = source.match(/['"]use strict['"]/);
             if (!match || match.index === undefined) {
               return moduleSource;
             }

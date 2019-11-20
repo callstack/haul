@@ -74,7 +74,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             ? bundleConfigBuilder(env, runtime)
             : bundleConfigBuilder;
 
-        let looseMode = () => false;
+        let looseMode: NormalizedBundleConfig['looseMode'] = () => false;
         if (bundleConfig.looseMode === true) {
           looseMode = () => true;
         } else if (Array.isArray(bundleConfig.looseMode)) {
@@ -96,8 +96,6 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           };
         } else if (typeof bundleConfig.looseMode === 'function') {
           looseMode = bundleConfig.looseMode;
-        } else {
-          looseMode = () => false;
         }
 
         // TODO: use minifyOptions to configure terser for basic bundle
