@@ -40,6 +40,7 @@ export type BundleConfig = Assign<
       Exclude<keyof MinifyOptions, 'sourceMap'>
     >;
     sourceMap?: boolean | 'inline';
+    looseMode?: true | Array<string | RegExp> | ((filename: string) => boolean);
     dll?: boolean;
     app?: boolean;
     dependsOn?: string[];
@@ -82,6 +83,7 @@ export type NormalizedBundleConfig = Assign<
           DeepNonNullable<ExternalBundleConfig>,
           { manifestPath: ExternalBundleConfig['manifestPath'] }
         >;
+    looseMode: (filename: string) => boolean;
   }
 >;
 

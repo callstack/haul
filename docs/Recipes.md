@@ -215,6 +215,40 @@ Set the environment variable `APP_ENV` to `detox_tests` when running Haul:
 APP_ENV=detox_tests yarn haul
 ```
 
+## Using with Lottie or loose-mode-only-compatible libraries
+
+Some React Native libraries might not work with Haul out of the box. If the library if throw error, it is possible that it's not compatible with strict mode checks.
+
+By default all modules with Haul have `'use strict';` annotation, which makes the code evaluated in strict mode, whereas the default React Native bundler - Metro - generates the code without this annotation. For that reason, some libraries eg `Lottie` need special steps to work.
+
+To enable loose mode, you need to add `looseMode` property to your config set to:
+
+- `true` - removes all `'use strict';` from the whole bundle
+- array for absolute filenames of modules - matched modules will have `'use strict';` removed
+- array of regexes - matched modules will have `'use strict';` removed
+- function that accepts absolute module filename and must return `true` to remove `'use strict';` or `false`
+
+You can mix string and regexes in array.
+
+For example:
+
+```js
+// haul.config.js
+import { makeConfig, withPolyfills } from "@haul-bundler/preset-0.59";
+
+export default makeConfig({
+  bundles: {
+    index: {
+      entry: withPolyfills('./index.ts'),
+      looseMode: [
+        require.resolve('./MyModule.js'),
+        /node_modules\/react-native-lottie/,
+      ],
+    },
+  },
+});
+```
+
 ## Debugging with React Native Tools (`vscode-react-native`)
 
 In order to use React Native Tools extension you must first install the extension:
