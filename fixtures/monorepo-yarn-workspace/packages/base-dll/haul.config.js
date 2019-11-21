@@ -1,4 +1,4 @@
-import { withPolyfills, makeConfig } from '../../../packages/haul-preset-0.60';
+import { withPolyfills, makeConfig } from '../../../../packages/haul-preset-0.59';
 import { join } from 'path';
 
 const entry = withPolyfills([

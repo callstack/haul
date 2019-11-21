@@ -6,7 +6,7 @@
     "dist/"
   ],
   "scripts": {
-    "haul": "node ../../../packages/haul-cli/bin/haul.js",
+    "haul": "node ../../../../packages/haul-cli/bin/haul.js",
     "build:base": "yarn haul multi-bundle --skip-host-check",
     "build:ios:dev": "yarn build:base --platform ios --dev true --bundle-output dist/ios/dev --assets-dest dist/ios/dev",
     "build:ios:prod": "yarn build:base --platform ios --dev false --bundle-output dist/ios/prod --assets-dest dist/ios/prod",
