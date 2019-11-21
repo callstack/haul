@@ -11,4 +11,6 @@ module.exports = {
     '.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|dds|ogg|json.resource)$':
       require.resolve('react-native/jest/assetFileTransformer.js'),
   },
+  // FIXME: fix jest so this manual line isn't necessary
+  rootDir: '../..'
 };

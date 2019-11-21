@@ -5776,7 +5776,17 @@ react-devtools-core@^3.6.0:
     shell-quote "^1.6.1"
     ws "^3.3.1"
 
-react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.3, react-is@^16.8.4, react-is@^16.8.6:
+react-dom@16.8.3:
+  version "16.8.3"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.3.tgz#ae236029e66210783ac81999d3015dfc475b9c32"
+  integrity sha512-ttMem9yJL4/lpItZAQ2NTFAbV7frotHk5DZEHXUOws2rMmrsvh1Na7ThGT0dTzUIl6pqTOi5tYREfL8AEna3lA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.3"
+
+react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
@@ -5820,62 +5830,6 @@ react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   integrity sha512-Bke8KkDcDhvB/z0AS7MnQKMD2p6Kwfc1rSKlMOvg9CC5CnClQ2QEnhPSbwegKDYhUkBI92iH/BYy7hNSm5kbUQ==
   dependencies:
     prop-types "^15.6.1"
-
-react-native@0.59.10:
-  version "0.59.10"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.59.10.tgz#352f381e382f93a0403be499c9e384bf51c2591c"
-  integrity sha512-guB9YW+pBqS1dnfZ4ntzjINopiCUAbdmshU2wMWD1W32fRczLAopi/7Q2iHKP8LTCdxuYZV3fa9Mew5PSuANAw==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@react-native-community/cli" "^1.2.1"
-    absolute-path "^0.0.0"
-    art "^0.10.0"
-    base64-js "^1.1.2"
-    chalk "^2.4.1"
-    commander "^2.9.0"
-    compression "^1.7.1"
-    connect "^3.6.5"
-    create-react-class "^15.6.3"
-    debug "^2.2.0"
-    denodeify "^1.2.1"
-    errorhandler "^1.5.0"
-    escape-string-regexp "^1.0.5"
-    event-target-shim "^1.0.5"
-    fbjs "^1.0.0"
-    fbjs-scripts "^1.0.0"
-    fs-extra "^1.0.0"
-    glob "^7.1.1"
-    graceful-fs "^4.1.3"
-    inquirer "^3.0.6"
-    invariant "^2.2.4"
-    lodash "^4.17.5"
-    metro-babel-register "0.51.0"
-    metro-react-native-babel-transformer "0.51.0"
-    mime "^1.3.4"
-    minimist "^1.2.0"
-    mkdirp "^0.5.1"
-    morgan "^1.9.0"
-    node-fetch "^2.2.0"
-    node-notifier "^5.2.1"
-    npmlog "^2.0.4"
-    nullthrows "^1.1.0"
-    opn "^3.0.2"
-    optimist "^0.6.1"
-    plist "^3.0.0"
-    pretty-format "24.0.0-alpha.6"
-    promise "^7.1.1"
-    prop-types "^15.5.8"
-    react-clone-referenced-element "^1.0.1"
-    react-devtools-core "^3.6.0"
-    regenerator-runtime "^0.11.0"
-    rimraf "^2.5.4"
-    semver "^5.0.3"
-    serve-static "^1.13.1"
-    shell-quote "1.6.1"
-    stacktrace-parser "^0.1.3"
-    ws "^1.1.5"
-    xmldoc "^0.4.0"
-    yargs "^9.0.0"
 
 react-native@callstack/react-native#feat/apennine-0.59:
   version "0.59.8"
@@ -5974,15 +5928,15 @@ react-proxy@^1.1.7:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
 
-react-test-renderer@16.8.3:
-  version "16.8.3"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.3.tgz#230006af264cc46aeef94392e04747c21839e05e"
-  integrity sha512-rjJGYebduKNZH0k1bUivVrRLX04JfIQ0FKJLPK10TAb06XWhfi4gTobooF9K/DEFNW98iGac3OSxkfIJUN9Mdg==
+react-test-renderer@16.8.6:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.6.tgz#188d8029b8c39c786f998aa3efd3ffe7642d5ba1"
+  integrity sha512-H2srzU5IWYT6cZXof6AhUcx/wEyJddQ8l7cLM/F7gDXYyPr4oq+vCIxJYXVGhId1J706sqziAjuOEjyNkfgoEw==
   dependencies:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    react-is "^16.8.3"
-    scheduler "^0.13.3"
+    react-is "^16.8.6"
+    scheduler "^0.13.6"
 
 react-transform-hmr@^1.0.4:
   version "1.0.4"
@@ -6375,7 +6329,7 @@ sax@~1.1.1:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.1.6.tgz#5d616be8a5e607d54e114afae55b7eaf2fcc3240"
   integrity sha1-XWFr6KXmB9VOEUr65Vt+ry/MMkA=
 
-scheduler@^0.13.3:
+scheduler@^0.13.3, scheduler@^0.13.6:
   version "0.13.6"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
   integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==

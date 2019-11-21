@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "react": "16.8.3",
-    "react-native": "0.59.10",
+    "react-native": "callstack/react-native#feat/apennine-0.59",
     "react-native-gesture-handler": "^1.3.0",
     "react-navigation": "^3.11.0",
     "base-dll": "*"
@@ -31,7 +31,8 @@
     "jest-cli": "^24.8.0",
     "jest-enzyme": "^7.0.2",
     "metro-react-native-babel-preset": "^0.54.0",
-    "react-test-renderer": "16.8.3"
+    "react-dom": "16.8.3",
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"

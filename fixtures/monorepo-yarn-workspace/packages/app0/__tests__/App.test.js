@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import App from '..';
+import App from '../App';
 
 let subject;
 afterEach(() => {
