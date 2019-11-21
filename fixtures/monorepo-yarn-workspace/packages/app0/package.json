@@ -1,0 +1,39 @@
+{
+  "name": "app0",
+  "version": "0.1.0",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "haul": "node ../../../packages/haul-cli/bin/haul.js",
+    "build:base": "yarn haul multi-bundle --skip-host-check",
+    "build:ios:dev": "yarn build:base --platform ios --dev true --bundle-output dist/ios/dev --assets-dest dist/ios/dev",
+    "build:ios:prod": "yarn build:base --platform ios --dev false --bundle-output dist/ios/prod --assets-dest dist/ios/prod",
+    "build:android:dev": "yarn build:base --platform android --dev true --bundle-output dist/android/dev --assets-dest dist/android/dev",
+    "build:android:prod": "yarn build:base --platform android --dev false --bundle-output dist/android/prod --assets-dest dist/android/prod",
+    "build:all": "yarn build:ios:dev && yarn build:ios:prod && yarn build:android:dev && yarn build:android:prod",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.8.3",
+    "react-native": "0.59.10",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-navigation": "^3.11.0",
+    "base-dll": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "babel-jest": "^24.8.0",
+    "enzyme": "^3.9.0",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.0",
+    "jest-enzyme": "^7.0.2",
+    "metro-react-native-babel-preset": "^0.54.0",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
