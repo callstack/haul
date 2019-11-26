@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'react-native',
-  setupFiles: [require.resolve('react-native/jest/setup')],
+  setupFiles: [require.resolve('react-native/jest/setup'), './jest.setup.js'],
   setupFilesAfterEnv: [require.resolve('jest-enzyme/lib')],
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|@react-navigation|@react-native-community)',
