@@ -31,7 +31,7 @@ export default function setupCompilerRoutes(
           platform: Joi.string(),
           minify: Joi.boolean(),
           dev: Joi.boolean(),
-        }).unknown(true),
+        }).unknown(true) as any,
       },
     },
     handler: async (request, h) => {

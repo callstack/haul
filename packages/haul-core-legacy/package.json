@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "cpx": "^1.5.0",
-    "get-port": "^5.0.0",
-    "mime-types": "^2.1.24",
+    "get-port": "^5.1.0",
+    "mime-types": "^2.1.26",
     "mkdirp": "^0.5.1",
-    "ws": "^6.2.1"
+    "ws": "^7.2.1"
   },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

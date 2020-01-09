@@ -170,7 +170,7 @@ function loadModule(
         throw error;
       }
 
-      if (transpilationResults && transpilationResults.code) {
+      if (transpilationResults?.code) {
         // Try to evaluate the module factory again using transpiled code. If it fails, the
         // error will propagate to up the stack - there's nothing we need to do.
         moduleFactory = vm.runInThisContext(

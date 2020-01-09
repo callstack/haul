@@ -45,29 +45,23 @@ export default class AssetResolver {
       ['native', platform].indexOf(queryPlatform);
 
     // Build a map of files according to the scale
-    return list.reduce(
-      (acc, curr) => {
-        const match = regex.exec(curr);
+    return list.reduce((acc, curr) => {
+      const match = regex.exec(curr);
 
-        if (match) {
-          let [, scale, , , platform] = match;
-          scale = scale || '@1x';
+      if (match) {
+        let [, scale, , , platform] = match;
+        scale = scale || '@1x';
 
-          if (
-            acc[scale] &&
-            priority(platform) < priority(acc[scale].platform)
-          ) {
-            // do nothing
-            return acc;
-          }
-
-          return { ...acc, [scale]: { platform, name: curr } };
+        if (acc[scale] && priority(platform) < priority(acc[scale].platform)) {
+          // do nothing
+          return acc;
         }
 
-        return acc;
-      },
-      {} as CollectOutput
-    );
+        return { ...acc, [scale]: { platform, name: curr } };
+      }
+
+      return acc;
+    }, {} as CollectOutput);
   }
 
   constructor(private options: Options) {}

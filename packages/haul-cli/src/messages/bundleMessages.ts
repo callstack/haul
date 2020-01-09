@@ -21,7 +21,7 @@ export function initialInformation(
   runtime.logger.info(
     `Bundle output (resolved): ${runtime.logger.enhanceWithColor(
       'gray',
-      path.resolve(config.output!.filename!)
+      path.resolve(config.output!.filename! as string)
     )}`
   );
 }

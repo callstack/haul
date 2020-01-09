@@ -10,19 +10,16 @@ function parseMultipleEntries(entry: webpack.Entry | string[]) {
   }
 
   if (typeof entry === 'object' && entry !== null) {
-    return Object.keys(entry).reduce(
-      (fileArray, key) => {
-        const filesForEntry = entry[key];
-        if (typeof filesForEntry === 'string') {
-          fileArray.push(filesForEntry);
-          return fileArray;
-        }
-
-        fileArray.push(`(chunk: ${key})`, ...resolvePath(filesForEntry));
+    return Object.keys(entry).reduce((fileArray, key) => {
+      const filesForEntry = entry[key];
+      if (typeof filesForEntry === 'string') {
+        fileArray.push(filesForEntry);
         return fileArray;
-      },
-      [] as string[]
-    );
+      }
+
+      fileArray.push(`(chunk: ${key})`, ...resolvePath(filesForEntry));
+      return fileArray;
+    }, [] as string[]);
   }
 
   return entry;

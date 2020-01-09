@@ -121,7 +121,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           stats,
           platform,
           assetsPath: webpackConfig.output!.path,
-          bundlePath: webpackConfig.output!.filename,
+          bundlePath: webpackConfig.output!.filename as string,
         });
         runtime.complete();
       } catch (error) {

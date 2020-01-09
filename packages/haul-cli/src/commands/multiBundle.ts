@@ -212,9 +212,11 @@ export default function multiBundleCommand(runtime: Runtime) {
 
             // Attach progress plugin
             if (progress !== 'none') {
-              webpackConfig.plugins!.push(new SimpleProgressWebpackPlugin({
-                format: progress,
-              }) as webpack.Plugin);
+              webpackConfig.plugins!.push(
+                new SimpleProgressWebpackPlugin({
+                  format: progress,
+                }) as webpack.Plugin
+              );
             }
 
             messages.initialBundleInformation(runtime, {

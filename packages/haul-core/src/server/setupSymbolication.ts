@@ -62,14 +62,16 @@ async function getSourceMapConsumers(
 ): Promise<SourceMapConsumers> {
   if (!sourceMapConsumers[platform]) {
     // eslint-disable-next-line require-atomic-updates
-    sourceMapConsumers[platform] = (await Promise.all(
-      bundleNames.map(bundleName =>
-        createSourceMapConsumer(
-          runtime,
-          `${baseUrl}${bundleName}.${platform}.bundle.map`
+    sourceMapConsumers[platform] = (
+      await Promise.all(
+        bundleNames.map(bundleName =>
+          createSourceMapConsumer(
+            runtime,
+            `${baseUrl}${bundleName}.${platform}.bundle.map`
+          )
         )
       )
-    )).reduce(
+    ).reduce(
       (acc, sourceMapConsumer, index) => ({
         ...acc,
         [bundleNames[index]]: sourceMapConsumer,

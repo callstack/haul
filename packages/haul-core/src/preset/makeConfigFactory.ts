@@ -220,11 +220,13 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         }
 
         webpackConfig.plugins = (webpackConfig.plugins || [])
-          .concat(getSourceMapPlugin(
-            normalizedBundleConfig,
-            normalizedServerConfig,
-            webpackConfig.output!.sourceMapFilename
-          ) as webpack.Plugin)
+          .concat(
+            getSourceMapPlugin(
+              normalizedBundleConfig,
+              normalizedServerConfig,
+              webpackConfig.output!.sourceMapFilename
+            ) as webpack.Plugin
+          )
           .filter(Boolean);
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
