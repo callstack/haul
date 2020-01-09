@@ -88,36 +88,29 @@ export default class IndexRamBundle {
     // but also on Buffers.
     compilation.assets[outputFilename] = new RawSource(bundle as any);
 
-    // if (this.sourceMap) {
-    //   const indexMap = {
-    //     version: 3,
-    //     file: outputDest,
-    //     sections: [] as Array<{
-    //       offset: { line: number; column: number };
-    //       map: Object;
-    //     }>,
-    //   };
+    if (this.sourceMap) {
+      const indexMap = {
+        version: 3,
+        file: outputDest,
+        sections: [] as Array<{
+          offset: { line: number; column: number };
+          map: Object;
+        }>,
+      };
 
-    //   const bundleParts = bundle.toString().split('\n');
-    //   let lineOffset =
-    //     bundleParts.findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1;
-    //   this.rawModules.forEach(sourceModule => {
-    //     indexMap.sections.push({
-    //       offset: {
-    //         line: lineOffset,
-    //         column:
-    //           bundleParts[lineOffset - 1]
-    //             .split('')
-    //             .findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1,
-    //       },
-    //       map: sourceModule.map,
-    //     });
+      this.rawModules.forEach((sourceModule, index) => {
+        indexMap.sections.push({
+          offset: {
+            line: index,
+            column: 0,
+          },
+          map: sourceModule.map,
+        });
+      });
 
-    //     lineOffset += countLines(sourceModule.source);
-    //   });
-    //   compilation.assets[sourceMapFilename] = new RawSource(
-    //     JSON.stringify(indexMap)
-    //   );
-    // }
+      compilation.assets[sourceMapFilename] = new RawSource(
+        JSON.stringify(indexMap)
+      );
+    }
   }
 }
