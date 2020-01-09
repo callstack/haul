@@ -237,9 +237,7 @@ describe('importModule', () => {
         resolve: require.resolve,
         runtime,
       });
-    }).toThrow(
-      "Support for the experimental syntax 'optionalChaining' isn't currently enabled"
-    );
+    }).toThrow(/Identifier directly after number/);
     expect(logged).toBeTruthy();
   });
 });

@@ -1,1 +1,1 @@
-export default global?.A;
+export default 10_000;

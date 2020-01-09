@@ -18,11 +18,11 @@
     "react-native": ">=0.59.0"
   },
   "dependencies": {
-    "@babel/core": "7.7.7",
-    "@babel/plugin-proposal-class-properties": "7.7.4",
-    "@babel/plugin-transform-flow-strip-types": "7.7.4",
-    "@babel/preset-env": "7.7.7",
-    "@babel/preset-typescript": "7.7.7",
+    "@babel/core": "7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-typescript": "^7.7.7",
     "@hapi/boom": "^9.0.0",
     "@hapi/hapi": "^18.4.0",
     "@hapi/inert": "^6.0.0",
