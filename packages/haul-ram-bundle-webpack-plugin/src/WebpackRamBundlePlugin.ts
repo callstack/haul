@@ -4,6 +4,8 @@ import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
 import terser, { MinifyOptions } from 'terser';
+import Worker from 'jest-worker';
+
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
 
@@ -142,7 +144,12 @@ export default class WebpackRamBundlePlugin {
 
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
-        this.modules = compilation.modules.map(webpackModule => {
+
+        const minifyWorker = new Worker(require.resolve('./worker'), {
+          numWorkers: 4,
+        });
+
+        this.modules = await Promise.all(compilation.modules.map(async webpackModule => {
           const renderedModule = compilation.moduleTemplates.javascript
             .render(
               webpackModule,
@@ -160,12 +167,14 @@ export default class WebpackRamBundlePlugin {
           )}, ${renderedModule.source});`;
           let map = renderedModule.map;
           if (this.minify) {
-            const minifiedSource = terser.minify(code, {
+            const minifyOptionsWithMap = {
               ...this.minifyOptions,
               sourceMap: {
                 content: renderedModule.map,
               },
-            });
+            };
+            // @ts-ignore property minify does not exist on type 'JestWorker'
+            const minifiedSource = await minifyWorker.minify(code, minifyOptionsWithMap);
             // Check if there is no error in minifed source
             assert(!minifiedSource.error, minifiedSource.error);
 
@@ -189,8 +198,10 @@ export default class WebpackRamBundlePlugin {
               }.js`,
             },
           };
-        });
+        }));
 
+        minifyWorker.end();
+        
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
