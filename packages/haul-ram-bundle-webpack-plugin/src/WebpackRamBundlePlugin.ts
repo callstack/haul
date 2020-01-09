@@ -1,13 +1,17 @@
 import assert from 'assert';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import path from 'path';
-import { inspect } from 'util';
+import { inspect, promisify } from 'util';
 import webpack from 'webpack';
+import mkdir from 'mkdirp';
 import terser, { MinifyOptions } from 'terser';
 import Worker from 'jest-worker';
 
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
+
+const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
 
 export type Module = {
   id: string | number;
@@ -148,60 +152,80 @@ export default class WebpackRamBundlePlugin {
         const minifyWorker = new Worker(require.resolve('./worker'), {
           numWorkers: 4,
         });
+        const TMP_MODULES_DIR = path.join(__dirname, 'tmp');
+        mkdir.sync(TMP_MODULES_DIR);
 
-        this.modules = await Promise.all(compilation.modules.map(async webpackModule => {
-          const renderedModule = compilation.moduleTemplates.javascript
-            .render(
-              webpackModule,
-              compilation.dependencyTemplates,
-              compilation.options
-            )
-            .sourceAndMap();
+        this.modules = await Promise.all(
+          compilation.modules.map(async webpackModule => {
+            const renderedModule = compilation.moduleTemplates.javascript
+              .render(
+                webpackModule,
+                compilation.dependencyTemplates,
+                compilation.options
+              )
+              .sourceAndMap();
 
-          if (typeof webpackModule.id === 'string') {
-            moduleMappings.modules[webpackModule.id] = webpackModule.index;
-          }
+            if (typeof webpackModule.id === 'string') {
+              moduleMappings.modules[webpackModule.id] = webpackModule.index;
+            }
 
-          let code = `__haul_${this.bundleName}.l(${variableToString(
-            webpackModule.id
-          )}, ${renderedModule.source});`;
-          let map = renderedModule.map;
-          if (this.minify) {
-            const minifyOptionsWithMap = {
-              ...this.minifyOptions,
-              sourceMap: {
-                content: renderedModule.map,
+            let code = `__haul_${this.bundleName}.l(${variableToString(
+              webpackModule.id
+            )}, ${renderedModule.source});`;
+            let map = renderedModule.map;
+            if (this.minify) {
+              const minifyOptionsWithMap = {
+                ...this.minifyOptions,
+                // sourceMap: {
+                //   content: renderedModule.map,
+                // },
+              };
+              console.log('Writing file', webpackModule.index);
+              await writeFile(
+                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
+                code,
+                'utf8'
+              );
+              // @ts-ignore property minify does not exist on type 'JestWorker'
+              await minifyWorker.minify(
+                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
+                minifyOptionsWithMap
+              );
+              code = await readFile(
+                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
+                'utf8'
+              );
+              console.log('Read file', webpackModule.index);
+              // Check if there is no error in minifed source
+              // assert(!minifiedSource.error, minifiedSource.error);
+
+              // code = minifiedSource.code || '';
+              // if (typeof minifiedSource.map === 'string') {
+              //   map = JSON.parse(minifiedSource.map);
+              // }
+            }
+
+            return {
+              id: webpackModule.id,
+              idx: webpackModule.index,
+              filename: webpackModule.resource,
+              source: code,
+              map: {
+                ...map,
+                file: `${
+                  typeof webpackModule.id === 'string'
+                    ? webpackModule.index
+                    : webpackModule.id
+                }.js`,
               },
             };
-            // @ts-ignore property minify does not exist on type 'JestWorker'
-            const minifiedSource = await minifyWorker.minify(code, minifyOptionsWithMap);
-            // Check if there is no error in minifed source
-            assert(!minifiedSource.error, minifiedSource.error);
-
-            code = minifiedSource.code || '';
-            if (typeof minifiedSource.map === 'string') {
-              map = JSON.parse(minifiedSource.map);
-            }
-          }
-
-          return {
-            id: webpackModule.id,
-            idx: webpackModule.index,
-            filename: webpackModule.resource,
-            source: code,
-            map: {
-              ...map,
-              file: `${
-                typeof webpackModule.id === 'string'
-                  ? webpackModule.index
-                  : webpackModule.id
-              }.js`,
-            },
-          };
-        }));
+          })
+        );
 
         minifyWorker.end();
-        
+
+        console.log('Done module processing');
+
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(
           path.join(__dirname, '../runtime/bootstrap.js'),
@@ -293,6 +317,8 @@ export default class WebpackRamBundlePlugin {
             delete compilation.assets[assetName];
           }
         });
+
+        console.log('building');
 
         bundle.build({
           outputDest,

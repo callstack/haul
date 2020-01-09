@@ -1,11 +1,23 @@
 import terser from 'terser';
+import fs, { readFileSync } from 'fs';
+import path from 'path';
+import { promisify } from 'util';
 
-type Code = string | string[] | {
-  [file: string]: string;
-} | terser.AST_Node
+const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
 
-type Options = terser.MinifyOptions | undefined
+type Code =
+  | string
+  | string[]
+  | {
+      [file: string]: string;
+    }
+  | terser.AST_Node;
 
-export const minify = (code:Code, minifyOptions:Options) => 
-  terser.minify(code, minifyOptions);
+type Options = terser.MinifyOptions | undefined;
 
+export const minify = async (filename: string, minifyOptions: Options) => {
+  const code = await readFile(filename, 'utf8');
+  const m = terser.minify(code, minifyOptions);
+  await writeFile(filename, m.code);
+};
