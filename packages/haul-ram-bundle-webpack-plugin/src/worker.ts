@@ -16,8 +16,5 @@ type Code =
 
 type Options = terser.MinifyOptions | undefined;
 
-export const minify = async (filename: string, minifyOptions: Options) => {
-  const code = await readFile(filename, 'utf8');
-  const m = terser.minify(code, minifyOptions);
-  await writeFile(filename, m.code);
-};
+export const minify = async (code: Code, minifyOptions: Options) => 
+  terser.minify(code, minifyOptions);

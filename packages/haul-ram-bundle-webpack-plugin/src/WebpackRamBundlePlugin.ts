@@ -173,36 +173,23 @@ export default class WebpackRamBundlePlugin {
               webpackModule.id
             )}, ${renderedModule.source});`;
             let map = renderedModule.map;
+
             if (this.minify) {
               const minifyOptionsWithMap = {
                 ...this.minifyOptions,
-                // sourceMap: {
-                //   content: renderedModule.map,
-                // },
+                sourceMap: {
+                  content: map,
+                },
               };
-              console.log('Writing file', webpackModule.index);
-              await writeFile(
-                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
-                code,
-                'utf8'
-              );
               // @ts-ignore property minify does not exist on type 'JestWorker'
-              await minifyWorker.minify(
-                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
-                minifyOptionsWithMap
-              );
-              code = await readFile(
-                path.join(TMP_MODULES_DIR, webpackModule.index + '.js'),
-                'utf8'
-              );
-              console.log('Read file', webpackModule.index);
-              // Check if there is no error in minifed source
-              // assert(!minifiedSource.error, minifiedSource.error);
+              const minifiedSource = await minifyWorker.minify(code, minifyOptionsWithMap);
+              //Check if there is no error in minifed source
+              assert(!minifiedSource.error, minifiedSource.error);
 
-              // code = minifiedSource.code || '';
-              // if (typeof minifiedSource.map === 'string') {
-              //   map = JSON.parse(minifiedSource.map);
-              // }
+              code = minifiedSource.code || '';
+              if (typeof minifiedSource.map === 'string') {
+                map = JSON.parse(minifiedSource.map);
+              }
             }
 
             return {
@@ -223,8 +210,6 @@ export default class WebpackRamBundlePlugin {
         );
 
         minifyWorker.end();
-
-        console.log('Done module processing');
 
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(
@@ -317,8 +302,6 @@ export default class WebpackRamBundlePlugin {
             delete compilation.assets[assetName];
           }
         });
-
-        console.log('building');
 
         bundle.build({
           outputDest,
