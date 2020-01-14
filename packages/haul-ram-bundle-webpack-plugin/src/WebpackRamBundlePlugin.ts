@@ -1,7 +1,7 @@
 import assert from 'assert';
-import fs, { readFileSync } from 'fs';
+import fs from 'fs';
 import path from 'path';
-import { inspect, promisify } from 'util';
+import { inspect } from 'util';
 import webpack from 'webpack';
 import mkdir from 'mkdirp';
 import terser, { MinifyOptions } from 'terser';
@@ -9,9 +9,6 @@ import Worker from 'jest-worker';
 
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
-
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
 
 export type Module = {
   id: string | number;

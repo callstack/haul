@@ -1,10 +1,5 @@
 import terser from 'terser';
-import fs, { readFileSync } from 'fs';
-import path from 'path';
 import { promisify } from 'util';
-
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
 
 type Code =
   | string
