@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
-import mkdir from 'mkdirp';
 import terser, { MinifyOptions } from 'terser';
 import Worker from 'jest-worker';
 
@@ -149,8 +148,6 @@ export default class WebpackRamBundlePlugin {
         const minifyWorker = new Worker(require.resolve('./worker'), {
           numWorkers: 4,
         });
-        const TMP_MODULES_DIR = path.join(__dirname, 'tmp');
-        mkdir.sync(TMP_MODULES_DIR);
 
         this.modules = await Promise.all(
           compilation.modules.map(async webpackModule => {
@@ -179,7 +176,10 @@ export default class WebpackRamBundlePlugin {
                 },
               };
               // @ts-ignore property minify does not exist on type 'JestWorker'
-              const minifiedSource = await minifyWorker.minify(code, minifyOptionsWithMap);
+              const minifiedSource = await minifyWorker.minify(
+                code,
+                minifyOptionsWithMap
+              );
               //Check if there is no error in minifed source
               assert(!minifiedSource.error, minifiedSource.error);
 

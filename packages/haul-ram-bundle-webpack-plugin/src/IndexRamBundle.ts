@@ -2,7 +2,6 @@ import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
 import { Module } from './WebpackRamBundlePlugin';
-import { countLines } from './utils';
 
 /***
  * Reference: https://github.com/facebook/metro/blob/master/packages/metro/src/shared/output/RamBundle/as-indexed-file.js

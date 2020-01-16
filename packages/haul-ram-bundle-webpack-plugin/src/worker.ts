@@ -1,5 +1,4 @@
 import terser from 'terser';
-import { promisify } from 'util';
 
 type Code =
   | string
@@ -11,5 +10,5 @@ type Code =
 
 type Options = terser.MinifyOptions | undefined;
 
-export const minify = async (code: Code, minifyOptions: Options) => 
+export const minify = async (code: Code, minifyOptions: Options) =>
   terser.minify(code, minifyOptions);
