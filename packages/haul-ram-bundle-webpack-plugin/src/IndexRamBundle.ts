@@ -101,7 +101,7 @@ export default class IndexRamBundle {
       this.rawModules.forEach((sourceModule, index) => {
         indexMap.sections.push({
           offset: {
-            line: index,
+            line: index + 1,
             column: 0,
           },
           map: sourceModule.map,
