@@ -48,7 +48,7 @@ type WebpackRamBundlePluginOptions = {
     MinifyOptions,
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
-  numWorkers?: number;
+  maxWorkers?: number;
 };
 
 const variableToString = (value?: string | number) => {
@@ -72,7 +72,7 @@ export default class WebpackRamBundlePlugin {
   singleBundleMode: boolean = true;
   minify: boolean = false;
   minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
-  numWorkers?: number = 3;
+  maxWorkers: number;
 
   constructor({
     sourceMap,
@@ -81,7 +81,7 @@ export default class WebpackRamBundlePlugin {
     singleBundleMode,
     minify,
     minifyOptions,
-    numWorkers,
+    maxWorkers,
   }: WebpackRamBundlePluginOptions) {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
@@ -91,7 +91,7 @@ export default class WebpackRamBundlePlugin {
       : this.singleBundleMode;
     this.minify = hasValue(minify) ? Boolean(minify) : this.minify;
     this.minifyOptions = minifyOptions;
-    this.numWorkers = numWorkers;
+    this.maxWorkers = maxWorkers || 2;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -105,7 +105,6 @@ export default class WebpackRamBundlePlugin {
     compiler.hooks.emit.tapPromise(
       'WebpackRamBundlePlugin',
       async _compilation => {
-        console.log(this.numWorkers);
         // Cast compilation from @types/webpack to custom Compilation type
         // which contains additional properties.
         const compilation: Compilation = _compilation as any;
@@ -146,12 +145,10 @@ export default class WebpackRamBundlePlugin {
         if (!mainChunk) {
           throw new Error("WebpackRamBundlePlugin: couldn't find main chunk");
         }
-
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
-
         const minifyWorker = new Worker(require.resolve('./worker'), {
-          numWorkers: this.numWorkers || 2,
+          numWorkers: this.maxWorkers,
           enableWorkerThreads: true,
         });
 
