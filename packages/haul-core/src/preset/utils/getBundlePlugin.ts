@@ -21,6 +21,7 @@ export default function getBundlePlugin(
       indexRamBundle: bundleConfig.type === 'indexed-ram-bundle',
       singleBundleMode: env.bundleMode === 'single-bundle',
       preloadBundles: bundleConfig.dependsOn,
+      numWorkers: bundleConfig.numWorkers,
     });
   }
 }

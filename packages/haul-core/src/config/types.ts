@@ -49,6 +49,7 @@ export type BundleConfig = Assign<
     >;
     hasteOptions?: any;
     transform?: WebpackConfigTransform;
+    numWorkers?: number;
   },
   ExternalBundleConfig
 >;
@@ -74,6 +75,7 @@ export type NormalizedBundleConfig = Assign<
     >,
     {
       minifyOptions: BundleConfig['minifyOptions'];
+      numWorkers?: number;
     }
   >,
   {
