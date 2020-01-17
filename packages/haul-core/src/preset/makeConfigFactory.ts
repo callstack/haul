@@ -145,6 +145,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             'react-native',
           ],
           hasteOptions: bundleConfig.hasteOptions || {},
+          numWorkers: bundleConfig.numWorkers || env.numWorkers,
         };
 
         // Make sure user supplied manifestPath if the bundle is DLL. Otherwise, we wouldn't
