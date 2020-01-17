@@ -23,6 +23,7 @@ export type EnvOptions = {
   sourcemapOutput?: string;
   minify?: boolean;
   port?: number;
+  numWorkers?: number;
 };
 
 export type BundleConfig = Assign<
