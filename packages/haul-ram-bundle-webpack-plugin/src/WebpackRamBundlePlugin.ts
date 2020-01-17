@@ -146,7 +146,8 @@ export default class WebpackRamBundlePlugin {
         // and wrapped with ModuleTemplate.
 
         const minifyWorker = new Worker(require.resolve('./worker'), {
-          numWorkers: 4,
+          numWorkers: 8,
+          enableWorkerThreads: true
         });
 
         this.modules = await Promise.all(
