@@ -1,0 +1,43 @@
+{
+  "version": "0.15.0",
+  "name": "@haul-bundler/explore",
+  "description": "Source map explorer",
+  "files": [
+    "build/",
+    "bin/"
+  ],
+  "bin": {
+    "haul-explore": "bin/haul-explore.js"
+  },
+  "engines": {
+    "node": ">=10.x"
+  },
+  "dependencies": {
+    "@babel/core": "7.4.3",
+    "@babel/plugin-proposal-class-properties": "7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "7.4.0",
+    "@babel/preset-env": "7.4.3",
+    "@babel/preset-typescript": "7.3.3",
+    "hasha": "^5.0.0",
+    "metro": "^0.56.4",
+    "source-map": "^0.7.3",
+    "source-map-explorer": "^3.2.2",
+    "yargs": "^15.1.0"
+  },
+  "devDependencies": {
+    "@types/btoa": "^1.2.3",
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/concat-stream": "^1.6.0",
+    "@types/convert-source-map": "^1.5.1",
+    "@types/cross-spawn": "^6.0.1",
+    "@types/ejs": "^3.0.0",
+    "@types/escape-html": "0.0.20",
+    "@types/glob": "^7.1.1",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.x",
+    "@types/rimraf": "^2.0.3",
+    "@types/temp": "^0.8.34",
+    "@types/yargs": "^15.0.0"
+  }
+}

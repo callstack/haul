@@ -2,7 +2,6 @@ import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
 import { Module } from './WebpackRamBundlePlugin';
-import { countLines } from './utils';
 
 /***
  * Reference: https://github.com/facebook/metro/blob/master/packages/metro/src/shared/output/RamBundle/as-indexed-file.js
@@ -97,23 +96,14 @@ export default class IndexRamBundle {
           map: Object;
         }>,
       };
-
-      const bundleParts = bundle.toString().split('\n');
-      let lineOffset =
-        bundleParts.findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1;
-      this.rawModules.forEach(sourceModule => {
+      this.rawModules.forEach((sourceModule, index) => {
         indexMap.sections.push({
           offset: {
-            line: lineOffset,
-            column:
-              bundleParts[lineOffset - 1]
-                .split('')
-                .findIndex(line => /__haul_.+\.l\(/gm.test(line)) + 1,
+            line: index + 1, // line is 1-based
+            column: 0,
           },
           map: sourceModule.map,
         });
-
-        lineOffset += countLines(sourceModule.source);
       });
       compilation.assets[sourceMapFilename] = new RawSource(
         JSON.stringify(indexMap)
