@@ -22,7 +22,7 @@
     "babel-loader": "^8.0.6",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "is-ci": "^2.0.0",
-    "terser-webpack-plugin": "^1.4.1"
+    "terser-webpack-plugin": "^2.3.2"
   },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

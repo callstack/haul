@@ -67,7 +67,7 @@ export default async function main() {
             const results = commandModule.handler(...args) as
               | undefined
               | Promise<unknown>;
-            if (results && results.catch) {
+            if (results?.catch) {
               results.catch(error => {
                 runtime.unhandledError(error);
                 runtime.complete(1);
