@@ -21,7 +21,7 @@
     "hasha": "^5.0.0",
     "metro": "^0.56.4",
     "source-map": "^0.7.3",
-    "source-map-explorer": "^3.2.2",
+    "source-map-explorer": "git://github.com/pan-pawel/source-map-explorer.git#source-map-explorer-v3.2.2-gitpkg",
     "yargs": "^15.1.0"
   }
 }
