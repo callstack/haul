@@ -37,7 +37,7 @@ export function computeFileSizes(
       : NO_SOURCE_KEY;
     const moduleCode = splitted
       ? fs.readFileSync(path.join(bundleDirnamePath, `${line}.js`))
-      : parser && parser.getModule(line);
+      : parser?.getModule(line);
     const rangeByteLength = moduleCode ? Buffer.byteLength(moduleCode) : 0;
     if (!files[source]) {
       files[source] = { size: 0 };

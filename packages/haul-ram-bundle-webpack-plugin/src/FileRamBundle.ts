@@ -3,7 +3,6 @@ import path from 'path';
 import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import { Module } from './WebpackRamBundlePlugin';
-import { countLines } from './utils';
 
 export default class FileRamBundle {
   constructor(
