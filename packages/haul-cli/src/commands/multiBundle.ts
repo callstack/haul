@@ -111,7 +111,17 @@ export default function multiBundleCommand(runtime: Runtime) {
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
         };
-        const projectConfig = normalizedProjectConfigBuilder(runtime, env);
+        const optionsWithProgress = {
+          ...env,
+          progress: progress !== undefined 
+          ? progress 
+          : !dev 
+            ? 'none' 
+            : !process.stdin.isTTY 
+              ? 'verbose' 
+              : 'compact'
+        }
+        const projectConfig = normalizedProjectConfigBuilder(runtime, optionsWithProgress);
 
         for (const bundleName of sortBundlesByDependencies(projectConfig, {
           skipHostCheck,

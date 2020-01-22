@@ -90,7 +90,13 @@ export default function ramBundleCommand(runtime: Runtime) {
           assetsDest,
           bundleOutput,
           sourcemapOutput,
-          progress,
+          progress: progress !== undefined 
+            ? progress 
+            : !dev 
+              ? 'none' 
+              : !process.stdin.isTTY 
+                ? 'verbose' 
+                : 'compact',
           bundleType: 'basic-bundle',
           bundleMode: 'single-bundle',
         });
