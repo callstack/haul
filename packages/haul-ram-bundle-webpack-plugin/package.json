@@ -12,7 +12,6 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "@haul-bundler/core": "0.x",
     "metro": ">= 0.51.1 < 1",
     "terser": "4.x",
     "webpack": "4.x",

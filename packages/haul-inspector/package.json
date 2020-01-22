@@ -19,8 +19,8 @@
   "dependencies": {
     "@haul-bundler/inspector-events": "^0.15.0",
     "ansi-fragments": "^0.2.1",
-    "ws": "^6.2.1",
-    "yargs": "^13.3.0"
+    "ws": "^7.2.1",
+    "yargs": "^15.1.0"
   },
   "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }

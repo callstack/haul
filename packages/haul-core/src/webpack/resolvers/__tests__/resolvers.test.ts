@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-test-callback */
 import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';

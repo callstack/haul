@@ -51,17 +51,18 @@ export default function superMemberArrowFunction() {
               ) as babel.NodePath<babel.types.Class>;
 
               if (
-                parentClass &&
-                parentClass.node.superClass &&
+                parentClass?.node.superClass &&
                 babel.types.isIdentifier(parentClass.node.superClass)
               ) {
-                path.parentPath.parentPath.replaceWith(template({
-                  SUPER: parentClass.node.superClass,
-                  METHOD: (path.parent as babel.types.MemberExpression)
-                    .property,
-                  ARGS: (path.parentPath.parent as babel.types.CallExpression)
-                    .arguments,
-                }) as any);
+                path.parentPath.parentPath.replaceWith(
+                  template({
+                    SUPER: parentClass.node.superClass,
+                    METHOD: (path.parent as babel.types.MemberExpression)
+                      .property,
+                    ARGS: (path.parentPath.parent as babel.types.CallExpression)
+                      .arguments,
+                  }) as any
+                );
               }
             }
           },

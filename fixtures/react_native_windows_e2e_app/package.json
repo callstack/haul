@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "patch-package",
     "start": "../../packages/haul-cli/bin/haul start",
     "test": "jest",
     "build:bundle": "node ../../packages/haul-cli/bin/haul.js bundle --platform windows --dev true --bundle-output windows/RNWTestApp/Bundle/index.windows.bundle --assets-dest windows/RNWTestApp/Bundle",
@@ -20,7 +19,7 @@
     "react": "16.10.1",
     "react-apollo": "^3.1.1",
     "react-native": "^0.60.0",
-    "react-native-windows": "0.60.0-vnext.16",
+    "react-native-windows": "0.60.0-vnext.115",
     "rnpm-plugin-windows": "^0.3.5"
   },
   "devDependencies": {

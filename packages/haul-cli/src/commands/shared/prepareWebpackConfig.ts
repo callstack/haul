@@ -56,9 +56,11 @@ export default function prepareWebpackConfig(
 
   // Attach progress plugin
   if (options.progress !== 'none') {
-    webpackConfig.plugins!.push(new SimpleProgressWebpackPlugin({
-      format: options.progress,
-    }) as webpack.Plugin);
+    webpackConfig.plugins!.push(
+      new SimpleProgressWebpackPlugin({
+        format: options.progress,
+      }) as webpack.Plugin
+    );
   }
 
   return webpackConfig;

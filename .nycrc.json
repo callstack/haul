@@ -2,9 +2,8 @@
   "sourceMap": false,
   "instrument": false,
   "all": true,
-  "extension": [".js", ".ts"],
   "include": [
-    "packages/**"
+    "**/*"
   ],
   "tempDir": ".coverage_output",
   "branches": 60,

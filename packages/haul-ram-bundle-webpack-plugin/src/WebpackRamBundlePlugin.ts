@@ -118,18 +118,18 @@ export default class WebpackRamBundlePlugin {
         let mainChunk: webpack.compilation.Chunk | undefined;
 
         (compilation.chunks as webpack.compilation.Chunk[]).forEach(chunk => {
-          if (chunk.id === 'main' || chunk.name === 'main') {
+          if ((chunk.id as any) === 'main' || chunk.name === 'main') {
             mainChunk = chunk;
-            mainId = chunk.entryModule.id;
+            mainId = chunk.entryModule?.id ?? undefined;
           }
 
-          chunk
-            .getModules()
-            .forEach((moduleInChunk: { id: string | number }) => {
+          chunk.getModules().forEach(moduleInChunk => {
+            if (chunk.id !== null) {
               moduleMappings.chunks[chunk.id] = ([] as Array<string | number>)
                 .concat(...(moduleMappings.chunks[chunk.id] || []))
-                .concat(moduleInChunk.id);
-            });
+                .concat(moduleInChunk.id ?? []);
+            }
+          });
         });
 
         // Omit chunks mapping if there's only a single main chunk

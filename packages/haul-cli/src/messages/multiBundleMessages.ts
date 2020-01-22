@@ -28,7 +28,10 @@ export function initialBundleInformation(
   runtime.logger.info(
     `Bundle output (resolved): ${runtime.logger.enhanceWithColor(
       'gray',
-      path.join(webpackConfig.output!.path!, webpackConfig.output!.filename!)
+      path.join(
+        webpackConfig.output!.path!,
+        webpackConfig.output!.filename! as string
+      )
     )}`
   );
   runtime.logger.info(
