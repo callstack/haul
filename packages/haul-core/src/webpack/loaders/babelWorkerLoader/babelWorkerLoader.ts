@@ -33,11 +33,17 @@ function makeLoader() {
   // throw new Error('success, but actually no');
   debugger
   const overrides = undefined;
-  const worker = new Worker(require.resolve("./worker"), {
-    numWorkers: 7,
-    enableWorkerThreads: true,
-  });
+  let worker: undefined | typeof Worker = undefined; 
+  
   return async function (this:This, source:string, inputSourceMap:string) {
+    const options = loaderUtils.getOptions(this) || {}
+    if(worker === undefined) {
+      worker = new Worker(require.resolve("./worker"), {
+        numWorkers: options.maxWorkers || 4,
+        enableWorkerThreads: true,
+      });
+    }
+    debugger
     // Make the loader async
     const callback = this.async();
     const sourceMap = this.sourceMap
@@ -47,7 +53,7 @@ function makeLoader() {
         inputSourceMap,
         overrides,
         this.resourcePath,
-        loaderUtils.getOptions(this) || {},
+        options,
         sourceMap
       )
       .then((args: []) => callback(null, ...args), (err:Error) => callback(err));
