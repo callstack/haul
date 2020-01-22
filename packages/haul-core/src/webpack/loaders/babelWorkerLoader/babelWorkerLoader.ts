@@ -30,8 +30,6 @@ type This = {
 }
 
 function makeLoader() {
-  // throw new Error('success, but actually no');
-  debugger
   const overrides = undefined;
   let worker: undefined | typeof Worker = undefined; 
   
@@ -43,7 +41,6 @@ function makeLoader() {
         enableWorkerThreads: true,
       });
     }
-    debugger
     // Make the loader async
     const callback = this.async();
     const sourceMap = this.sourceMap
