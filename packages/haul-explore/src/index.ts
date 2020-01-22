@@ -40,32 +40,57 @@ const argv = yargs
 
 const bundle = path.resolve(argv._[0]);
 const sourceMap = path.resolve(argv._[1]);
+const outputFormat =
+  typeof argv.json === 'string'
+    ? 'json'
+    : typeof argv.tsv === 'string'
+    ? 'tsv'
+    : 'html';
 const options: ExploreOptions = {
   output: {
-    format:
-      typeof argv.json === 'string'
-        ? 'json'
-        : typeof argv.tsv === 'string'
-        ? 'tsv'
-        : 'html',
+    format: outputFormat,
   },
 };
+const outputFile = argv[outputFormat] || '';
 
 try {
   const bundleFile = fs.readFileSync(bundle);
   new RamBundleParser(bundleFile);
-  sourceMapForRamBundle(bundle, sourceMap, options, false);
+  sourceMapForRamBundle(bundle, sourceMap, options, false)
+    .then(result => {
+      returnResults(result);
+    })
+    .catch(err => {
+      console.log(err);
+      process.exit(1);
+    });
 } catch (err) {
   if (path.basename(bundle) === 'UNBUNDLE') {
-    sourceMapForRamBundle(bundle, sourceMap, options, true);
-  } else {
-    explore([bundle, sourceMap], options)
+    sourceMapForRamBundle(bundle, sourceMap, options, true)
       .then(result => {
-        return writeHtmlToTempFile(result.output);
+        console.log('ASDASDASDADASD');
+        returnResults(result);
       })
       .catch(err => {
         console.log(err);
         process.exit(1);
       });
+  } else {
+    explore([bundle, sourceMap], options)
+      .then(result => {
+        returnResults(result);
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
+  }
+}
+
+function returnResults(result: any) {
+  if (outputFile.length > 0) {
+    fs.writeFileSync(outputFile, result.output);
+  } else {
+    writeHtmlToTempFile(result.output);
   }
 }

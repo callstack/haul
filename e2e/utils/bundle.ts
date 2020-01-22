@@ -5,7 +5,7 @@ import rimraf from 'rimraf';
 export function bundleForPlatform(
   projectDir: string,
   platform: string,
-  { ramBundle }: { ramBundle?: boolean } = {}
+  { ramBundle, dev = true }: { ramBundle?: boolean; dev?: boolean } = {}
 ) {
   const bundlePath = path.resolve(
     projectDir,
@@ -20,12 +20,13 @@ export function bundleForPlatform(
     bundlePath,
     '--assets-dest',
     path.resolve(projectDir, 'dist'),
+    '--dev',
+    dev ? 'true' : 'false',
   ]);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {
     throw new Error(stdout);
   }
-
   return bundlePath;
 }
 

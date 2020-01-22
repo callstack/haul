@@ -15,7 +15,7 @@ export default function sourceMapForRamBundle(
   options: ExploreOptions,
   splitted: boolean
 ) {
-  loadSourceMap(bundle, sourceMap)
+  return loadSourceMap(bundle, sourceMap)
     .then(sourceMapData => {
       const sizes = computeFileSizes(sourceMapData, bundle, splitted);
       const files = adjustSourcePaths(sizes.files, options);
@@ -30,8 +30,7 @@ export default function sourceMapForRamBundle(
         },
       ];
       const result = getExploreResult(bundles, options);
-      saveOutputToFile(result, options);
-      return writeHtmlToTempFile(result.output);
+      return result;
     })
     .catch(err => {
       console.log(err);

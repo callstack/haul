@@ -31,12 +31,13 @@ export function computeFileSizes(
   let mappedBytes = 0;
   const bundleDirnamePath = path.dirname(bundlePath);
   consumer._sections.map((section: any) => {
-    const line = section.generatedOffset.generatedLine - 1;
+    const file = section.consumer.file;
+    const line = parseInt(file.match(/(\d)+\.js/)[1], 10);
     const source = section.consumer._sources.size()
       ? section.consumer._sources.at(0)
       : NO_SOURCE_KEY;
     const moduleCode = splitted
-      ? fs.readFileSync(path.join(bundleDirnamePath, `${line}.js`))
+      ? fs.readFileSync(path.join(bundleDirnamePath, file))
       : parser?.getModule(line);
     const rangeByteLength = moduleCode ? Buffer.byteLength(moduleCode) : 0;
     if (!files[source]) {
