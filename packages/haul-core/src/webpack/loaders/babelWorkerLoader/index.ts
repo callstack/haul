@@ -1,1 +1,2 @@
-export * from './babelWorkerLoader';
+//@ts-ignore
+export * from './babelWorkerLoader'
