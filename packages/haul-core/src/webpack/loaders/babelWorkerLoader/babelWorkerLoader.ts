@@ -1,6 +1,6 @@
-let babel;
+let babelCore;
 try {
-  babel = require("@babel/core");
+  babelCore = require("@babel/core");
 } catch (err) {
   if (err.code === "MODULE_NOT_FOUND") {
     err.message +=
@@ -13,7 +13,7 @@ try {
 
 // Since we've got the reverse bridge package at @babel/core@6.x, give
 // people useful feedback if they try to use it alongside babel-loader.
-if (/^6\./.test(babel.version)) {
+if (/^6\./.test(babelCore.version)) {
   throw new Error(
     "\n babel-loader@8 will not work with the '@babel/core@6' bridge package. " +
     "If you want to use Babel 6.x, install 'babel-loader@7'.",
@@ -23,6 +23,12 @@ if (/^6\./.test(babel.version)) {
 const loaderUtils = require("loader-utils");
 const Worker = require('jest-worker').default;
 
+type This = {
+  async: () => (error: Error | null, args?: Object) => void,
+  sourceMap: string,
+  resourcePath: string,
+}
+
 function makeLoader() {
   // throw new Error('success, but actually no');
   debugger
@@ -31,7 +37,7 @@ function makeLoader() {
     numWorkers: 7,
     enableWorkerThreads: true,
   });
-  return async function (source, inputSourceMap) {
+  return async function (this:This, source:string, inputSourceMap:string) {
     // Make the loader async
     const callback = this.async();
     const sourceMap = this.sourceMap
@@ -44,11 +50,10 @@ function makeLoader() {
         loaderUtils.getOptions(this) || {},
         sourceMap
       )
-      .then(args => callback(null, ...args), err => callback(err));
+      .then((args: []) => callback(null, ...args), (err:Error) => callback(err));
     return result
   };
 }
-
 module.exports = makeLoader();
 module.exports.custom = makeLoader;
 module.exports.pitch = makeLoader();
