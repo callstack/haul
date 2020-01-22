@@ -98,7 +98,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         const webpackConfig = prepareWebpackConfig(runtime, {
           config,
           dev,
-          minify,
+          minify: minify === undefined ? !dev : minify,
           platform,
           assetsDest,
           bundleOutput,
