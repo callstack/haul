@@ -63,6 +63,9 @@ try {
       .then(result => {
         return writeHtmlToTempFile(result.output);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        process.exit(1);
+      });
   }
 }

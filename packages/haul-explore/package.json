@@ -1,7 +1,11 @@
 {
   "version": "0.15.0",
   "name": "@haul-bundler/explore",
-  "description": "Source map explorer",
+  "description": "Explore and analyse your React Native bundle",
+  "author": "Pawel Szymanski <pawel.szymanski@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
   "files": [
     "build/",
     "bin/"

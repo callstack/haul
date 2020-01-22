@@ -6,6 +6,7 @@ import {
   writeHtmlToTempFile,
   ExploreOptions,
 } from 'source-map-explorer';
+import path from 'path';
 import { computeFileSizes } from './computeFileSizes';
 
 export default function sourceMapForRamBundle(
@@ -21,7 +22,10 @@ export default function sourceMapForRamBundle(
       const bundles = [
         {
           ...sizes,
-          bundleName: 'index.android.bundle',
+          bundleName:
+            path.basename(bundle) === 'UNBUNDLE'
+              ? 'index.android.bundle'
+              : path.basename(bundle),
           files,
         },
       ];
@@ -29,5 +33,8 @@ export default function sourceMapForRamBundle(
       saveOutputToFile(result, options);
       return writeHtmlToTempFile(result.output);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      process.exit(1);
+    });
 }
