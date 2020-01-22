@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
  <Identity
-    Name="efa9d272-9e91-47f4-a44f-d113355582d3"
-    Publisher="CN=user"
+    Name="4dc0ae12-1268-4d51-82b3-61a47a0558ae"
+    Publisher="CN=pawel"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="efa9d272-9e91-47f4-a44f-d113355582d3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="4dc0ae12-1268-4d51-82b3-61a47a0558ae" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>RNWTestApp</DisplayName>
-    <PublisherDisplayName>React Native for UWP</PublisherDisplayName>
+    <PublisherDisplayName>pawel</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
