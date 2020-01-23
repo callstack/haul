@@ -93,6 +93,8 @@ export default function ramBundleCommand(runtime: Runtime) {
           indexedRamBundle,
           maxWorkers,
         } = argv;
+        debugger
+        console.log({maxWorkers, argv});
 
         process.env.HAUL_PLATFORM = platform;
 
@@ -116,7 +118,7 @@ export default function ramBundleCommand(runtime: Runtime) {
               ? 'file-ram-bundle'
               : 'indexed-ram-bundle',
           bundleMode: 'single-bundle',
-          maxWorkers,
+          maxWorkers
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 

@@ -50,6 +50,7 @@ export type BundleConfig = Assign<
     >;
     hasteOptions?: any;
     transform?: WebpackConfigTransform;
+    maxWorkers?: number;
   },
   ExternalBundleConfig
 >;

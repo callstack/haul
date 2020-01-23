@@ -30,6 +30,7 @@ export default function getDefaultConfig(
     minify,
     providesModuleNodeModules,
     hasteOptions,
+    maxWorkers
   } = projectConfig.bundles[bundleName];
   const { host, port } = projectConfig.server;
 
@@ -54,6 +55,7 @@ export default function getDefaultConfig(
             {
               loader: require.resolve('@haul-bundler/core/build/webpack/loaders/babelWorkerLoader'),
               options: {
+                maxWorkers: maxWorkers || env.maxWorkers || 8,
                 extends: getBabelConfigPath(root),
                 plugins: [
                   require.resolve(

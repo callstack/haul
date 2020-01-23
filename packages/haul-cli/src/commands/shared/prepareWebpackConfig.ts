@@ -31,6 +31,7 @@ export default function prepareWebpackConfig(
     runtime,
     configPath
   );
+  debugger
   const projectConfig = normalizedProjectConfigBuilder(runtime, {
     platform: options.platform,
     root: directory,

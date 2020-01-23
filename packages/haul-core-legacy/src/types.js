@@ -31,15 +31,16 @@ export type Command = {
 
 export type ConfigOptions = {|
   root: string,
-  assetsDest: string,
-  dev: boolean,
-  minify?: boolean,
-  bundle?: boolean,
-  port?: number,
-  providesModuleNodeModules?: (string | { name: string, directory: string })[],
-  hasteOptions?: *,
-  initializeCoreLocation?: string,
-  disableHotReloading?: boolean,
+    assetsDest: string,
+      dev: boolean,
+        minify ?: boolean,
+        bundle ?: boolean,
+        port ?: number,
+        providesModuleNodeModules ?: (string | { name: string, directory: string })[],
+        hasteOptions ?: *,
+        initializeCoreLocation ?: string,
+        disableHotReloading ?: boolean,
+        maxWorkers ?: number,
 |};
 
 export type EnvOptions = {|
