@@ -55,15 +55,12 @@ export default function ramBundleCommand(runtime: Runtime) {
       progress: {
         description:
           'Display bundle compilation progress with different verbosity levels',
-        // Ensure that we don't trip Xcode's error detection. 'verbose' is the
-        // only level that doesn't make Xcode think that the bundle failed.
-        default: !process.stdin.isTTY ? 'verbose' : 'compact',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
       'max-workers': {
-        description: 'Number of workers used to minify RAM bundle and load modules',
+        description:
+          'Number of workers used to minify RAM bundle and load modules',
         type: 'number',
-        default: 4
       },
     },
     async handler(
@@ -93,8 +90,8 @@ export default function ramBundleCommand(runtime: Runtime) {
           indexedRamBundle,
           maxWorkers,
         } = argv;
-        debugger
-        console.log({maxWorkers, argv});
+        debugger;
+        console.log({ maxWorkers, argv });
 
         process.env.HAUL_PLATFORM = platform;
 
@@ -106,19 +103,22 @@ export default function ramBundleCommand(runtime: Runtime) {
           assetsDest,
           bundleOutput,
           sourcemapOutput,
-          progress: progress !== undefined 
-            ? progress 
-            : !dev 
-              ? 'none' 
-              : !process.stdin.isTTY 
-                ? 'verbose' 
-                : 'compact',
+          progress:
+            progress !== undefined
+              ? progress
+              : !dev
+              ? 'none'
+              : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
+              // only level that doesn't make Xcode think that the bundle failed.
+              !process.stdin.isTTY
+              ? 'verbose'
+              : 'compact',
           bundleType:
             !indexedRamBundle && platform == 'android'
               ? 'file-ram-bundle'
               : 'indexed-ram-bundle',
           bundleMode: 'single-bundle',
-          maxWorkers
+          maxWorkers,
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 

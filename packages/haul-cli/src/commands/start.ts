@@ -11,7 +11,7 @@ import inquirer from 'inquirer';
 import net from 'net';
 import { exec } from 'child_process';
 import path from 'path';
-import os from 'os';
+import os, { cpus } from 'os';
 import fs from 'fs';
 
 export default function startCommand(runtime: Runtime) {
@@ -54,7 +54,8 @@ export default function startCommand(runtime: Runtime) {
         type: 'string',
       },
       'max-workers': {
-        description: 'Number of workers used to minify RAM bundle and load modules',
+        description:
+          'Number of workers used to minify RAM bundle and load modules',
         type: 'number',
       },
     },
@@ -67,7 +68,7 @@ export default function startCommand(runtime: Runtime) {
         tempDir?: string;
         config: string;
         eager: string;
-        maxWorkers?: number,
+        maxWorkers?: number;
       }>
     ) {
       let parsedEager;
@@ -102,7 +103,7 @@ export default function startCommand(runtime: Runtime) {
         bundleTarget: 'server',
         assetsDest: tempDir,
         minify: argv.minify === undefined ? !argv.dev : argv.minify,
-        maxWorkers: argv.maxWorkers
+        maxWorkers: Math.max(argv.maxWorkers || cpus().length - 1, 1),
       });
 
       try {

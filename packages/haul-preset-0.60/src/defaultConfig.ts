@@ -30,7 +30,7 @@ export default function getDefaultConfig(
     minify,
     providesModuleNodeModules,
     hasteOptions,
-    maxWorkers
+    maxWorkers,
   } = projectConfig.bundles[bundleName];
   const { host, port } = projectConfig.server;
 
@@ -53,9 +53,11 @@ export default function getDefaultConfig(
           exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul-bundler|metro))/,
           use: [
             {
-              loader: require.resolve('@haul-bundler/core/build/webpack/loaders/babelWorkerLoader'),
+              loader: require.resolve(
+                '@haul-bundler/core/build/webpack/loaders/babelWorkerLoader'
+              ),
               options: {
-                maxWorkers: maxWorkers || env.maxWorkers || 8,
+                maxWorkers,
                 extends: getBabelConfigPath(root),
                 plugins: [
                   require.resolve(

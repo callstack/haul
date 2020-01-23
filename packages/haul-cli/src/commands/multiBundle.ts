@@ -14,6 +14,7 @@ import {
 } from '@haul-bundler/core';
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
+import { cpus } from 'os';
 
 export default function multiBundleCommand(runtime: Runtime) {
   return {
@@ -56,9 +57,6 @@ export default function multiBundleCommand(runtime: Runtime) {
       progress: {
         description:
           'Display bundle compilation progress with different verbosity levels',
-        // Ensure that we don't trip Xcode's error detection. 'verbose' is the
-        // only level that doesn't make Xcode think that the bundle failed.
-        default: !process.stdin.isTTY ? 'verbose' : 'compact',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
       'skip-host-check': {
@@ -68,7 +66,6 @@ export default function multiBundleCommand(runtime: Runtime) {
       'max-workers': {
         description: 'Number of workers used to minify bundle and load modules',
         type: 'number',
-        default: 4
       },
     },
     async handler(
@@ -96,7 +93,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           sourcemapOutput,
           progress,
           skipHostCheck,
-          maxWorkers
+          maxWorkers,
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -117,19 +114,25 @@ export default function multiBundleCommand(runtime: Runtime) {
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
-          maxWorkers,
+          maxWorkers: Math.max(maxWorkers || cpus().length - 1, 1),
         };
         const optionsWithProgress = {
           ...env,
-          progress: progress !== undefined 
-          ? progress 
-          : !dev 
-            ? 'none' 
-            : !process.stdin.isTTY 
-              ? 'verbose' 
-              : 'compact'
-        }
-        const projectConfig = normalizedProjectConfigBuilder(runtime, optionsWithProgress);
+          progress:
+            progress !== undefined
+              ? progress
+              : !dev
+              ? 'none'
+              : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
+              // only level that doesn't make Xcode think that the bundle failed.
+              !process.stdin.isTTY
+              ? 'verbose'
+              : 'compact',
+        };
+        const projectConfig = normalizedProjectConfigBuilder(
+          runtime,
+          optionsWithProgress
+        );
 
         for (const bundleName of sortBundlesByDependencies(projectConfig, {
           skipHostCheck,
