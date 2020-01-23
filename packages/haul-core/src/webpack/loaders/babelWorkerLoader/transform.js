@@ -1,6 +1,6 @@
-const babel = require("@babel/core");
-const promisify = require("pify");
-const LoaderError = require("./Error");
+const babel = require('@babel/core');
+const promisify = require('pify');
+const LoaderError = require('./Error');
 
 const transform = promisify(babel.transform);
 

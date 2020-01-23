@@ -1,4 +1,4 @@
-const babel = require("@babel/core");
+const babel = require('@babel/core');
 
 module.exports = function injectCaller(opts) {
   if (!supportsCallerOption()) return opts;
@@ -6,13 +6,13 @@ module.exports = function injectCaller(opts) {
   return Object.assign({}, opts, {
     caller: Object.assign(
       {
-        name: "babel-loader",
+        name: 'babel-loader',
 
         // Webpack >= 2 supports ESM and dynamic import.
         supportsStaticESM: true,
         supportsDynamicImport: true,
       },
-      opts.caller,
+      opts.caller
     ),
   });
 };

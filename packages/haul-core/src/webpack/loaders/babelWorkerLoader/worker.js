@@ -1,15 +1,15 @@
 // Forked Babel version
-const version = "8.0.6";
-const cache = require("./cache");
-const transform = require("./transform");
-const injectCaller = require("./injectCaller");
+const version = '8.0.6';
+const cache = require('./cache');
+const transform = require('./transform');
+const injectCaller = require('./injectCaller');
 const fs = require('fs');
 
 let babel;
 try {
-  babel = require("@babel/core");
+  babel = require('@babel/core');
 } catch (err) {
-  if (err.code === "MODULE_NOT_FOUND") {
+  if (err.code === 'MODULE_NOT_FOUND') {
     err.message +=
       "\n babel-loader@8 requires Babel 7.x (the package '@babel/core'). " +
       "If you'd like to use Babel 6.x ('babel-core'), you should install 'babel-loader@7'.";
@@ -22,7 +22,7 @@ try {
 if (/^6\./.test(babel.version)) {
   throw new Error(
     "\n babel-loader@8 will not work with the '@babel/core@6' bridge package. " +
-    "If you want to use Babel 6.x, install 'babel-loader@7'.",
+      "If you want to use Babel 6.x, install 'babel-loader@7'."
   );
 }
 
@@ -46,8 +46,8 @@ async function loader(
   // users may safely use either one alongside our default use of
   // 'this.sourceMap' below without getting error about conflicting aliases.
   if (
-    Object.prototype.hasOwnProperty.call(loaderOptions, "sourceMap") &&
-    !Object.prototype.hasOwnProperty.call(loaderOptions, "sourceMaps")
+    Object.prototype.hasOwnProperty.call(loaderOptions, 'sourceMap') &&
+    !Object.prototype.hasOwnProperty.call(loaderOptions, 'sourceMaps')
   ) {
     loaderOptions = Object.assign({}, loaderOptions, {
       sourceMaps: loaderOptions.sourceMap,
@@ -81,8 +81,8 @@ async function loader(
   if (!babel.loadPartialConfig) {
     throw new Error(
       `babel-loader ^8.0.0-beta.3 requires @babel/core@7.0.0-beta.41, but ` +
-      `you appear to be using "${babel.version}". Either update your ` +
-      `@babel/core version, or pin you babel-loader version to 8.0.0-beta.2`,
+        `you appear to be using "${babel.version}". Either update your ` +
+        `@babel/core version, or pin you babel-loader version to 8.0.0-beta.2`
     );
   }
 
@@ -96,7 +96,7 @@ async function loader(
       });
     }
 
-    if (options.sourceMaps === "inline") {
+    if (options.sourceMaps === 'inline') {
       // Babel has this weird behavior where if you set "inline", we
       // inline the sourcemap, and set 'result.map = null'. This results
       // in bad behavior from Babel since the maps get put into the code,
@@ -110,8 +110,8 @@ async function loader(
       cacheDirectory = null,
       cacheIdentifier = JSON.stringify({
         options,
-        "@babel/core": transform.version,
-        "@babel/loader": version,
+        '@babel/core': transform.version,
+        '@babel/loader': version,
       }),
       cacheCompression = true,
       metadataSubscribers = [],
@@ -162,5 +162,5 @@ export const useLoader = async (
   fileName,
   customOptions,
   sourceMap
-) => loader(source, inputSourceMap, overrides, fileName, customOptions, sourceMap)
-
+) =>
+  loader(source, inputSourceMap, overrides, fileName, customOptions, sourceMap);

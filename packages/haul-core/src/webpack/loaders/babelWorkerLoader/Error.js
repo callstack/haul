@@ -2,13 +2,13 @@ const STRIP_FILENAME_RE = /^[^:]+: /;
 
 const format = err => {
   if (err instanceof SyntaxError) {
-    err.name = "SyntaxError";
-    err.message = err.message.replace(STRIP_FILENAME_RE, "");
+    err.name = 'SyntaxError';
+    err.message = err.message.replace(STRIP_FILENAME_RE, '');
 
     err.hideStack = true;
   } else if (err instanceof TypeError) {
     err.name = null;
-    err.message = err.message.replace(STRIP_FILENAME_RE, "");
+    err.message = err.message.replace(STRIP_FILENAME_RE, '');
 
     err.hideStack = true;
   }
@@ -22,9 +22,9 @@ class LoaderError extends Error {
 
     const { name, message, codeFrame, hideStack } = format(err);
 
-    this.name = "BabelLoaderError";
+    this.name = 'BabelLoaderError';
 
-    this.message = `${name ? `${name}: ` : ""}${message}\n\n${codeFrame}\n`;
+    this.message = `${name ? `${name}: ` : ''}${message}\n\n${codeFrame}\n`;
 
     this.hideStack = hideStack;
 
