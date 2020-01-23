@@ -1,5 +1,5 @@
 {
-  "version": "0.15.0",
+  "version": "0.16.0-alpha.0",
   "name": "@haul-bundler/explore",
   "description": "Explore and analyse your React Native bundle",
   "author": "Pawel Szymanski <pawel.szymanski@callstack.com>",
