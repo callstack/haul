@@ -90,8 +90,6 @@ export default function ramBundleCommand(runtime: Runtime) {
           indexedRamBundle,
           maxWorkers,
         } = argv;
-        debugger;
-        console.log({ maxWorkers, argv });
 
         process.env.HAUL_PLATFORM = platform;
 

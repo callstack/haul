@@ -33,8 +33,6 @@ export default function getDefaultConfig(
     maxWorkers,
   } = projectConfig.bundles[bundleName];
   const { host, port } = projectConfig.server;
-  // console.log({projectConfig, env, EnvOptions})
-  // debugger;
   return {
     mode: dev ? 'development' : 'production',
     context: root,

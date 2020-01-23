@@ -36,8 +36,6 @@ function makeLoader() {
   return async function(this: This, source: string, inputSourceMap: string) {
     const options = loaderUtils.getOptions(this) || {};
     if (worker === undefined) {
-      debugger;
-      console.log({ maxWorkers: options.maxWorkers });
       worker = new Worker(require.resolve('./worker'), {
         numWorkers: options.maxWorkers,
         enableWorkerThreads: true,

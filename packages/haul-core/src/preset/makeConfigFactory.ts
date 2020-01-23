@@ -150,7 +150,6 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
               ? env.maxWorkers
               : bundleConfig.maxWorkers,
         };
-        debugger;
         // Make sure user supplied manifestPath if the bundle is DLL. Otherwise, we wouldn't
         // have any info what the bundle contains.
         if (

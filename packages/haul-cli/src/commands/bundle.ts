@@ -115,7 +115,6 @@ export default function ramBundleCommand(runtime: Runtime) {
         });
 
         const compiler = webpack(webpackConfig);
-        debugger;
         const stats = await new Promise<webpack.Stats>((resolve, reject) =>
           compiler.run((err, info) => {
             if (err || info.hasErrors()) {
