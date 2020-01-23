@@ -1,5 +1,5 @@
 {
-  "version": "0.16.0-alpha.0",
+  "version": "0.16.0-alpha.1",
   "name": "@haul-bundler/explore",
   "description": "Explore and analyse your React Native bundle",
   "author": "Pawel Szymanski <pawel.szymanski@callstack.com>",
@@ -15,6 +15,9 @@
   },
   "engines": {
     "node": ">=10.x"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@babel/core": "7.4.3",
