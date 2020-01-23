@@ -65,7 +65,11 @@ const outputFile = argv[outputFormat] || '';
     );
     writeResults(results);
   } catch (err) {
-    if (path.basename(bundle) === 'UNBUNDLE') {
+    const unbundleFilePath = path.join(
+      path.dirname(bundle),
+      'js-modules/UNBUNDLE'
+    );
+    if (fs.existsSync(unbundleFilePath)) {
       const results = await sourceMapForRamBundle(
         bundle,
         sourceMap,
