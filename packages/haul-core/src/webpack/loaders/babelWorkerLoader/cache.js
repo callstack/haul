@@ -92,6 +92,7 @@ const handleCache = async function(directory, params) {
     // No errors mean that the file was previously cached
     // we just need to return it
     return await read(file, cacheCompression);
+    // eslint-disable-next-line no-empty
   } catch (err) {}
 
   const fallback =
