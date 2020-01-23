@@ -1,0 +1,31 @@
+{
+  "version": "0.15.0",
+  "name": "@haul-bundler/explore",
+  "description": "Explore and analyse your React Native bundle",
+  "author": "Pawel Szymanski <pawel.szymanski@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "files": [
+    "build/",
+    "bin/"
+  ],
+  "bin": {
+    "haul-explore": "bin/haul-explore.js"
+  },
+  "engines": {
+    "node": ">=10.x"
+  },
+  "dependencies": {
+    "@babel/core": "7.4.3",
+    "@babel/plugin-proposal-class-properties": "7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "7.4.0",
+    "@babel/preset-env": "7.4.3",
+    "@babel/preset-typescript": "7.3.3",
+    "hasha": "^5.0.0",
+    "metro": "^0.56.4",
+    "source-map": "^0.7.3",
+    "source-map-explorer": "git://github.com/pan-pawel/source-map-explorer.git#source-map-explorer-v3.2.2-gitpkg",
+    "yargs": "^15.1.0"
+  }
+}

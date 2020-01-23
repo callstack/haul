@@ -3,7 +3,6 @@ import path from 'path';
 import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import { Module } from './WebpackRamBundlePlugin';
-import { countLines } from './utils';
 
 export default class FileRamBundle {
   constructor(
@@ -64,16 +63,14 @@ export default class FileRamBundle {
           map: Object;
         }>,
       };
-      let lineOffset = countLines(this.bootstrap);
-      this.modules.forEach(sourceModule => {
+      this.modules.forEach((sourceModule, index) => {
         indexMap.sections.push({
           offset: {
-            line: lineOffset,
+            line: index,
             column: 0,
           },
           map: sourceModule.map,
         });
-        lineOffset += countLines(sourceModule.source);
       });
 
       compilation.assets[sourceMapFilename] = new RawSource(
