@@ -3,9 +3,9 @@ import {
   explore,
   writeHtmlToTempFile,
   ExploreOptions,
+  ExploreResult,
 } from 'source-map-explorer';
 import sourceMapForRamBundle from './ram-bundle';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
 import path from 'path';
 
@@ -53,41 +53,37 @@ const options: ExploreOptions = {
 };
 const outputFile = argv[outputFormat] || '';
 
-try {
-  const bundleFile = fs.readFileSync(bundle);
-  new RamBundleParser(bundleFile);
-  sourceMapForRamBundle(bundle, sourceMap, options, false)
-    .then(result => {
-      returnResults(result);
-    })
-    .catch(err => {
-      console.log(err);
-      process.exit(1);
-    });
-} catch (err) {
-  if (path.basename(bundle) === 'UNBUNDLE') {
-    sourceMapForRamBundle(bundle, sourceMap, options, true)
-      .then(result => {
-        console.log('ASDASDASDADASD');
-        returnResults(result);
-      })
-      .catch(err => {
-        console.log(err);
-        process.exit(1);
-      });
-  } else {
-    explore([bundle, sourceMap], options)
-      .then(result => {
-        returnResults(result);
-      })
-      .catch(err => {
-        console.log(err);
-        process.exit(1);
-      });
+(async () => {
+  try {
+    const bundleFile = fs.readFileSync(bundle);
+    new RamBundleParser(bundleFile);
+    const results = await sourceMapForRamBundle(
+      bundle,
+      sourceMap,
+      options,
+      false
+    );
+    writeResults(results);
+  } catch (err) {
+    if (path.basename(bundle) === 'UNBUNDLE') {
+      const results = await sourceMapForRamBundle(
+        bundle,
+        sourceMap,
+        options,
+        true
+      );
+      writeResults(results);
+    } else {
+      const results = await explore([bundle, sourceMap], options);
+      writeResults(results);
+    }
   }
-}
+})().catch(error => {
+  console.log(error);
+  process.exit(1);
+});
 
-function returnResults(result: any) {
+function writeResults(result: ExploreResult) {
   if (outputFile.length > 0) {
     fs.writeFileSync(outputFile, result.output);
   } else {

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
 import { FileSizes } from 'source-map-explorer';
 import fs from 'fs';

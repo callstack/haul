@@ -2,38 +2,30 @@ import {
   loadSourceMap,
   adjustSourcePaths,
   getExploreResult,
-  saveOutputToFile,
-  writeHtmlToTempFile,
   ExploreOptions,
 } from 'source-map-explorer';
 import path from 'path';
 import { computeFileSizes } from './computeFileSizes';
 
-export default function sourceMapForRamBundle(
+export default async function sourceMapForRamBundle(
   bundle: string,
   sourceMap: string,
   options: ExploreOptions,
   splitted: boolean
 ) {
-  return loadSourceMap(bundle, sourceMap)
-    .then(sourceMapData => {
-      const sizes = computeFileSizes(sourceMapData, bundle, splitted);
-      const files = adjustSourcePaths(sizes.files, options);
-      const bundles = [
-        {
-          ...sizes,
-          bundleName:
-            path.basename(bundle) === 'UNBUNDLE'
-              ? 'index.android.bundle'
-              : path.basename(bundle),
-          files,
-        },
-      ];
-      const result = getExploreResult(bundles, options);
-      return result;
-    })
-    .catch(err => {
-      console.log(err);
-      process.exit(1);
-    });
+  const sourceMapData = await loadSourceMap(bundle, sourceMap);
+  const sizes = computeFileSizes(sourceMapData, bundle, splitted);
+  const files = adjustSourcePaths(sizes.files, options);
+  const bundles = [
+    {
+      ...sizes,
+      bundleName:
+        path.basename(bundle) === 'UNBUNDLE'
+          ? 'index.android.bundle'
+          : path.basename(bundle),
+      files,
+    },
+  ];
+  const result = getExploreResult(bundles, options);
+  return result;
 }
