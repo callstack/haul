@@ -41,6 +41,10 @@ function makeLoader() {
         enableWorkerThreads: true,
       });
     }
+    debugger
+    // when passed to the loader ReferenceError: Unknown option: .maxWorkers
+    delete options.maxWorkers;
+    debugger
     // Make the loader async
     const callback = this.async();
     const sourceMap = this.sourceMap

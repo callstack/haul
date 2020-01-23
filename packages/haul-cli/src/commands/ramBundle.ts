@@ -61,8 +61,9 @@ export default function ramBundleCommand(runtime: Runtime) {
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
       'max-workers': {
-        description: 'Number of workers used to minify RAM bundle',
+        description: 'Number of workers used to minify RAM bundle and load modules',
         type: 'number',
+        default: 4
       },
     },
     async handler(

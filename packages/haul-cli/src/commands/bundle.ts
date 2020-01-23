@@ -55,6 +55,11 @@ export default function ramBundleCommand(runtime: Runtime) {
         default: !process.stdin.isTTY ? 'verbose' : 'compact',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
+      'max-workers': {
+        description: 'Number of workers used to minify bundle and load modules',
+        type: 'number',
+        default: 4
+      },
     },
     async handler(
       argv: Arguments<{
@@ -66,6 +71,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         bundleOutput?: string;
         sourcemapOutput?: string;
         progress: string;
+        maxWorkers: number;
       }>
     ) {
       try {
@@ -78,6 +84,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          maxWorkers
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -99,6 +106,7 @@ export default function ramBundleCommand(runtime: Runtime) {
                 : 'compact',
           bundleType: 'basic-bundle',
           bundleMode: 'single-bundle',
+          maxWorkers
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 

@@ -65,6 +65,11 @@ export default function multiBundleCommand(runtime: Runtime) {
         description: 'Skips check for "index" or "host" bundle in Haul config',
         type: 'boolean',
       },
+      'max-workers': {
+        description: 'Number of workers used to minify bundle and load modules',
+        type: 'number',
+        default: 4
+      },
     },
     async handler(
       argv: Arguments<{
@@ -77,6 +82,7 @@ export default function multiBundleCommand(runtime: Runtime) {
         sourcemapOutput?: string;
         progress: string;
         skipHostCheck?: boolean;
+        maxWorkers?: number;
       }>
     ) {
       try {
@@ -90,6 +96,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           sourcemapOutput,
           progress,
           skipHostCheck,
+          maxWorkers
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -110,6 +117,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
+          maxWorkers,
         };
         const optionsWithProgress = {
           ...env,

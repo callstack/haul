@@ -31,6 +31,7 @@
     "@haul-bundler/core-legacy": "^0.15.0",
     "@haul-bundler/inspector-events": "^0.15.0",
     "@haul-bundler/ram-bundle-webpack-plugin": "^0.15.0",
+    "@types/image-size": "^0.8.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "escape-string-regexp": "^2.0.0",
