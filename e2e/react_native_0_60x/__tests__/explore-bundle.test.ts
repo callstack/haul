@@ -39,8 +39,8 @@ describe('test exploring bundle', () => {
     const resultJSON = JSON.parse(output.toString());
     const bundleInformation = resultJSON.results[0];
 
-    expect(bundleInformation.totalBytes).toBeGreaterThan(0);
-    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(0);
+    expect(bundleInformation.totalBytes).toBeGreaterThan(500 * 1024);
+    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(320);
     expect(bundleInformation.bundleName).toEqual(bundlePath);
   });
 
@@ -64,8 +64,8 @@ describe('test exploring bundle', () => {
     const resultJSON = JSON.parse(output.toString());
     const bundleInformation = resultJSON.results[0];
 
-    expect(bundleInformation.totalBytes).toBeGreaterThan(0);
-    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(0);
+    expect(bundleInformation.totalBytes).toBeGreaterThan(500 * 1024);
+    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(320);
     expect(bundleInformation.bundleName).toEqual(bundlePath);
   });
 });
