@@ -22,6 +22,10 @@ export function bundleForPlatform(
     path.resolve(projectDir, 'dist'),
     '--dev',
     dev ? 'true' : 'false',
+    '--max-workers',
+    '1',
+    '--progress',
+    'none',
   ]);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {

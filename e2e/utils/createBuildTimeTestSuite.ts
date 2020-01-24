@@ -35,6 +35,10 @@ export default function createBuildTimeTestSuite(
         BUNDLE_PATH,
         '--assets-dest',
         `dist/min/${platform}`,
+        '--max-workers',
+        '1',
+        '--progress',
+        'none',
       ]);
 
       const processTime = Date.now() - startTime;
@@ -53,7 +57,7 @@ export default function createBuildTimeTestSuite(
         ).toBeTruthy();
       }
 
-      expect(processTime).toBeLessThan(33000);
+      expect(processTime).toBeLessThan(35000);
     });
   });
 }

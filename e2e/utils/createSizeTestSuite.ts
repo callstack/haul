@@ -36,6 +36,10 @@ export default function createSizeTestSuite(
         BUNDLE_PATH,
         '--assets-dest',
         `dist/min/${platform}`,
+        '--max-workers',
+        '1',
+        '--progress',
+        'none',
       ]);
 
       validateBundleSize(
@@ -58,6 +62,10 @@ export default function createSizeTestSuite(
         `dist/min/${platform}`,
         '--config',
         'haul.config.multi.js',
+        '--max-workers',
+        '1',
+        '--progress',
+        'none',
       ]);
 
       validateBundleSize(

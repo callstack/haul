@@ -38,6 +38,10 @@ export default function createBundlingTestSuite(
         BUNDLE_PATH,
         '--assets-dest',
         `dist/non-min/${platform}`,
+        '--max-workers',
+        '1',
+        '--progress',
+        'none',
       ]);
 
       expect(stderr.length).toBe(0);
@@ -60,6 +64,10 @@ export default function createBundlingTestSuite(
         `dist/non-min/${platform}`,
         '--config',
         'haul.config.multi.js',
+        '--max-workers',
+        '1',
+        '--progress',
+        'none',
       ]);
 
       expect(stderr.length).toBe(0);

@@ -6,6 +6,19 @@
       "rules": {
         "import/no-extraneous-dependencies": 0
       }
+    },
+    {
+      "files": ["e2e/**"],
+      "env": {
+        "jest": true,
+        "jest/globals": true
+      },
+      "extends": ["plugin:jest/recommended"],
+      "plugins": ["jest"],
+      "rules": {
+        "jest/no-export": 0,
+        "jest/expect-expect": 0
+      }
     }
   ]
 }
