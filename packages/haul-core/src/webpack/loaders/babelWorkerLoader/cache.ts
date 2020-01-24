@@ -18,7 +18,7 @@ const promisify = require('pify');
 
 const transform = require('./transform');
 // Lazily instantiated when needed
-let defaultCacheDirectory = null;
+let defaultCacheDirectory: null = null;
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -32,7 +32,7 @@ const mkdirp = promisify(mkdirpOrig);
  * @async
  * @params {String} filename
  */
-const read = async function(filename, compress) {
+const read = async function(filename: string | number, compress: any) {
   const data = await readFile(filename + (compress ? '.gz' : ''));
   const content = compress ? await gunzip(data) : data;
 
@@ -46,7 +46,11 @@ const read = async function(filename, compress) {
  * @params {String} filename
  * @params {String} result
  */
-const write = async function(filename, compress, result) {
+const write = async function(
+  filename: string | number,
+  compress: any,
+  result: any
+) {
   const content = JSON.stringify(result);
 
   const data = compress ? await gzip(content) : content;
@@ -61,7 +65,7 @@ const write = async function(filename, compress, result) {
  *
  * @return {String}
  */
-const filename = function(source, identifier, options) {
+const filename = function(source: any, identifier: any, options: any) {
   const hash = crypto.createHash('md4');
 
   const contents = JSON.stringify({ source, options, identifier });
@@ -77,7 +81,19 @@ const filename = function(source, identifier, options) {
  * @params {String} directory
  * @params {Object} params
  */
-const handleCache = async function(directory, params) {
+
+type handleCacheParams = {
+  source: any;
+  options?: {} | undefined;
+  cacheIdentifier: any;
+  cacheDirectory: any;
+  cacheCompression: any;
+};
+
+const handleCache = async function(
+  directory: any,
+  params: handleCacheParams
+): Promise<any> {
   const {
     source,
     options = {},
@@ -160,7 +176,7 @@ const handleCache = async function(directory, params) {
  *   });
  */
 
-module.exports = async function(params) {
+module.exports = async function(params: handleCacheParams) {
   let directory;
 
   if (typeof params.cacheDirectory === 'string') {

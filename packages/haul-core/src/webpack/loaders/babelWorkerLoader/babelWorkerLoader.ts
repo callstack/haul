@@ -1,4 +1,11 @@
-let babelCore;
+let babelCore: {
+  version: string;
+  loadPartialConfig: (arg0: {
+    caller: undefined;
+    babelrc: boolean;
+    configFile: boolean;
+  }) => void;
+};
 try {
   babelCore = require('@babel/core');
 } catch (err) {

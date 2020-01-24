@@ -1,10 +1,15 @@
-const babel = require('@babel/core');
+import { TransformOptions } from '@babel/core';
+
+const babelPlugin = require('@babel/core');
 const promisify = require('pify');
 const LoaderError = require('./Error');
 
-const transform = promisify(babel.transform);
+const transform = promisify(babelPlugin.transform);
 
-module.exports = async function(source, options) {
+module.exports = async function(
+  source: string,
+  options: TransformOptions | undefined
+) {
   let result;
   try {
     result = await transform(source, options);
@@ -28,4 +33,4 @@ module.exports = async function(source, options) {
   return { ast, code, map, metadata, sourceType };
 };
 
-module.exports.version = babel.version;
+module.exports.version = babelPlugin.version;

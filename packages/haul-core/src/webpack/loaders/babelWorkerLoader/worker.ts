@@ -5,7 +5,9 @@ const transform = require('./transform');
 const injectCaller = require('./injectCaller');
 const fs = require('fs');
 
-let babel;
+let babel:
+  | { version: string; loadPartialConfig: (arg0: any) => any }
+  | undefined = undefined;
 try {
   babel = require('@babel/core');
 } catch (err) {
@@ -19,26 +21,42 @@ try {
 
 // Since we've got the reverse bridge package at @babel/core@6.x, give
 // people useful feedback if they try to use it alongside babel-loader.
-if (/^6\./.test(babel.version)) {
+if (/^6\./.test(babel!.version)) {
   throw new Error(
     "\n babel-loader@8 will not work with the '@babel/core@6' bridge package. " +
       "If you want to use Babel 6.x, install 'babel-loader@7'."
   );
 }
 
-function subscribe(subscriber, metadata, context) {
+function subscribe(
+  subscriber: string | number,
+  metadata: any,
+  context: { [x: string]: (arg0: any) => void }
+) {
   if (context[subscriber]) {
     context[subscriber](metadata);
   }
 }
 
 async function loader(
-  sourceFilename,
-  inputSourceMap,
-  overrides,
-  filename,
-  loaderOptions,
-  sourceMap
+  this: any,
+  sourceFilename: string,
+  inputSourceMap: string,
+  overrides: {
+    config: any;
+    result: any;
+  },
+  filename: string,
+  loaderOptions: {
+    sourceMap?: any;
+    sourceMaps?: any;
+    cacheDirectory?: any;
+    cacheIdentifier?: any;
+    cacheCompression?: any;
+    metadataSubscribers?: any;
+    customize?: any;
+  },
+  sourceMap: string
 ) {
   const source = fs.readFileSync(sourceFilename, 'utf8');
 
@@ -78,18 +96,18 @@ async function loader(
   delete programmaticOptions.cacheCompression;
   delete programmaticOptions.metadataSubscribers;
 
-  if (!babel.loadPartialConfig) {
+  if (!babel!.loadPartialConfig) {
     throw new Error(
       `babel-loader ^8.0.0-beta.3 requires @babel/core@7.0.0-beta.41, but ` +
-        `you appear to be using "${babel.version}". Either update your ` +
+        `you appear to be using "${babel!.version}". Either update your ` +
         `@babel/core version, or pin you babel-loader version to 8.0.0-beta.2`
     );
   }
 
-  const config = babel.loadPartialConfig(injectCaller(programmaticOptions));
+  const config = babel!.loadPartialConfig(injectCaller(programmaticOptions));
   if (config) {
     let options = config.options;
-    if (overrides && overrides.config) {
+    if (overrides?.config) {
       options = await overrides.config.call(this, config, {
         source,
         map: inputSourceMap,
@@ -132,7 +150,7 @@ async function loader(
     }
 
     if (result) {
-      if (overrides && overrides.result) {
+      if (overrides?.result) {
         result = await overrides.result.call(this, result, {
           source,
           map: inputSourceMap,
@@ -143,7 +161,7 @@ async function loader(
 
       const { code, map, metadata } = result;
 
-      metadataSubscribers.forEach(subscriber => {
+      metadataSubscribers.forEach((subscriber: any) => {
         subscribe(subscriber, metadata, this);
       });
 
@@ -156,11 +174,11 @@ async function loader(
 }
 
 export const useLoader = async (
-  source,
-  inputSourceMap,
-  overrides,
-  fileName,
-  customOptions,
-  sourceMap
+  source: string,
+  inputSourceMap: string,
+  overrides: { config: any; result: any },
+  fileName: string,
+  customOptions: any,
+  sourceMap: string
 ) =>
   loader(source, inputSourceMap, overrides, fileName, customOptions, sourceMap);

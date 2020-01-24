@@ -1,6 +1,6 @@
-const babel = require('@babel/core');
+const babelPlugin = require('@babel/core');
 
-module.exports = function injectCaller(opts) {
+module.exports = function injectCaller(opts: { caller: any }) {
   if (!supportsCallerOption()) return opts;
 
   return Object.assign({}, opts, {
@@ -20,13 +20,13 @@ module.exports = function injectCaller(opts) {
 // TODO: We can remove this eventually, I'm just adding it so that people have
 // a little time to migrate to the newer RCs of @babel/core without getting
 // hard-to-diagnose errors about unknown 'caller' options.
-let supportsCallerOptionFlag = undefined;
+let supportsCallerOptionFlag: boolean | undefined = undefined;
 function supportsCallerOption() {
   if (supportsCallerOptionFlag === undefined) {
     try {
       // Rather than try to match the Babel version, we just see if it throws
       // when passed a 'caller' flag, and use that to decide if it is supported.
-      babel.loadPartialConfig({
+      babelPlugin.loadPartialConfig({
         caller: undefined,
         babelrc: false,
         configFile: false,
