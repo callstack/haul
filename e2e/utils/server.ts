@@ -29,6 +29,8 @@ export function startServer(
     'start',
     ...(port ? ['--port', port.toString()] : []),
     ...(config ? ['--config', config] : []),
+    '--max-workers',
+    '1',
   ]) as Instance['server'];
   const instance: Instance = {
     server,

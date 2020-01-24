@@ -124,15 +124,15 @@ describe('in multi-bundle monorepo', () => {
 });
 
 async function fetchBundles(platform: string) {
-  const host = await (await fetch(
-    `http://localhost:${PORT}/index.${platform}.bundle`
-  )).buffer();
-  const baseDll = await (await fetch(
-    `http://localhost:${PORT}/base_dll.${platform}.bundle`
-  )).buffer();
-  const app0 = await (await fetch(
-    `http://localhost:${PORT}/app0.${platform}.bundle`
-  )).buffer();
+  const host = await (
+    await fetch(`http://localhost:${PORT}/index.${platform}.bundle`)
+  ).buffer();
+  const baseDll = await (
+    await fetch(`http://localhost:${PORT}/base_dll.${platform}.bundle`)
+  ).buffer();
+  const app0 = await (
+    await fetch(`http://localhost:${PORT}/app0.${platform}.bundle`)
+  ).buffer();
 
   return {
     baseDll,
