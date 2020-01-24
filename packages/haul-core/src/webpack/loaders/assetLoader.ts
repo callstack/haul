@@ -6,7 +6,6 @@ import hasha from 'hasha';
 import escapeStringRegexp from 'escape-string-regexp';
 import Runtime from '../../runtime/Runtime';
 import AssetResolver from '../resolvers/AssetResolver';
-import { ISizeCalculationResult } from 'image-size/dist/types/interface';
 
 type Config = {
   platform: string;
@@ -206,7 +205,7 @@ async function assetLoader(this: any) {
     })
   );
 
-  let info: ISizeCalculationResult | undefined;
+  let info: ReturnType<typeof imageSize> | undefined;
 
   try {
     runtime.logger.debug(`Asset: path ${this.resourcePath}`);
