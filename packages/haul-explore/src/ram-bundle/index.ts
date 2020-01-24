@@ -19,10 +19,7 @@ export default async function sourceMapForRamBundle(
   const bundles = [
     {
       ...sizes,
-      bundleName:
-        path.basename(bundle) === 'UNBUNDLE'
-          ? 'index.android.bundle'
-          : path.basename(bundle),
+      bundleName: path.basename(bundle),
       files,
     },
   ];

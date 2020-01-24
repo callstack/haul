@@ -44,7 +44,7 @@ yarn haul-explore dist/main.jsbundle dist/main.jsbundle.map
 ### File RAM bundle (default RAM bundle for Arndroid)
 
 ```bash
-yarn haul-explore dist/js-modules/UNBUNDLE dist/index.android.bundle.map
+yarn haul-explore dist/index.android.bundle dist/index.android.bundle.map
 ```
 
 <!-- badges (common) -->

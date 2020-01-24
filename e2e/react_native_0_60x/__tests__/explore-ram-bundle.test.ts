@@ -25,13 +25,9 @@ describe('test exploring ram bundle', () => {
       ramBundle: true,
       dev: false,
     });
-    const unbundleFilePath = path.join(
-      path.dirname(bundlePath),
-      'js-modules/UNBUNDLE'
-    );
     const result = runProcessSync(PROJECT_FIXTURE, [
       BIN_PATH,
-      unbundleFilePath,
+      bundlePath,
       bundlePath + '.map',
       `--json`,
       RESULT_PATH,
@@ -44,8 +40,8 @@ describe('test exploring ram bundle', () => {
     const resultJSON = JSON.parse(output.toString());
     const bundleInformation = resultJSON.results[0];
 
-    expect(bundleInformation.totalBytes).toBeGreaterThan(0);
-    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(0);
+    expect(bundleInformation.totalBytes).toBeGreaterThan(500 * 1024);
+    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(320);
     expect(bundleInformation.bundleName).toEqual(path.basename(bundlePath));
   });
 
@@ -70,8 +66,8 @@ describe('test exploring ram bundle', () => {
     const resultJSON = JSON.parse(output.toString());
     const bundleInformation = resultJSON.results[0];
 
-    expect(bundleInformation.totalBytes).toBeGreaterThan(0);
-    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(0);
+    expect(bundleInformation.totalBytes).toBeGreaterThan(500 * 1024);
+    expect(Object.keys(bundleInformation.files).length).toBeGreaterThan(320);
     expect(bundleInformation.bundleName).toEqual(path.basename(bundlePath));
   });
 });
