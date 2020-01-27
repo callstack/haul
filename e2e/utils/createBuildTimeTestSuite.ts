@@ -36,7 +36,7 @@ export default function createBuildTimeTestSuite(
         '--assets-dest',
         `dist/min/${platform}`,
         '--max-workers',
-        '1',
+        '2',
         '--progress',
         'none',
       ]);

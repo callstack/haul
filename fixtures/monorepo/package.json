@@ -5,6 +5,8 @@
     "build": "lerna exec --concurrency 1 \"yarn build:all\""
   },
   "dependencies": {
-    "lerna": "^3.16.4"
+    "lerna": "^3.16.4",
+    "react": "^16.8.6",
+    "react-native": "callstack/react-native#feat/apennine-0.60"
   }
 }
