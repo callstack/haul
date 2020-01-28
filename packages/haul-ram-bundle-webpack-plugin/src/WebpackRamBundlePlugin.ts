@@ -147,7 +147,7 @@ export default class WebpackRamBundlePlugin {
         }
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
-        const minifyWorker = new Worker(require.resolve('./worker'), {
+        const minifyWorker = new Worker(require.resolve('../build/worker'), {
           numWorkers: this.maxWorkers,
           enableWorkerThreads: true,
         });
