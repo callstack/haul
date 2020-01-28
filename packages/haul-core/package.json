@@ -50,6 +50,7 @@
     "platform-select": "^1.1.2",
     "resolve": "^1.14.2",
     "semver": "^7.1.1",
+    "signal-exit": "^3.0.2",
     "source-map": "^0.7.3",
     "strip-ansi": "6.0.0",
     "terminal-kit": "^1.32.3",

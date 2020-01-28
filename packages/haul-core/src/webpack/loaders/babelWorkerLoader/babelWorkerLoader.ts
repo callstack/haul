@@ -29,6 +29,7 @@ if (/^6\./.test(babelCore.version)) {
 
 const loaderUtils = require('loader-utils');
 const Worker = require('jest-worker').default;
+const onExit = require('signal-exit');
 
 type This = {
   async: () => (error: Error | null, args?: Object) => void;
@@ -39,6 +40,12 @@ type This = {
 function makeLoader() {
   const overrides = undefined;
   let worker: undefined | typeof Worker = undefined;
+
+  onExit(async () => {
+    if (worker !== undefined) {
+      await worker.end();
+    }
+  });
 
   return async function(this: This, source: string, inputSourceMap: string) {
     const options = loaderUtils.getOptions(this) || {};
