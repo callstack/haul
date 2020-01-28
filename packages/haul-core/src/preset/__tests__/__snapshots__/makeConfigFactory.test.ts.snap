@@ -130,20 +130,6 @@ Object {
             },
           },
         },
-        SourceMapDevToolPlugin {
-          "fallbackModuleFilenameTemplate": "webpack://[namespace]/[resourcePath]?[hash]",
-          "moduleFilenameTemplate": "[absolute-resource-path]",
-          "namespace": "",
-          "options": Object {
-            "filename": "[file].map",
-            "module": true,
-            "moduleFilenameTemplate": "[absolute-resource-path]",
-            "test": /\\\\\\.\\(js\\|jsx\\|css\\|ts\\|tsx\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-          },
-          "sourceMapFilename": "[file].map",
-          "sourceMappingURLComment": "
-//# sourceMappingURL=[url]",
-        },
         WebpackRamBundlePlugin {
           "bundleName": "index",
           "indexRamBundle": true,
@@ -204,20 +190,6 @@ Object {
               "test": [Function],
             },
           },
-        },
-        SourceMapDevToolPlugin {
-          "fallbackModuleFilenameTemplate": "webpack://[namespace]/[resourcePath]?[hash]",
-          "moduleFilenameTemplate": "[absolute-resource-path]",
-          "namespace": "",
-          "options": Object {
-            "filename": "[file].map",
-            "module": true,
-            "moduleFilenameTemplate": "[absolute-resource-path]",
-            "test": /\\\\\\.\\(js\\|jsx\\|css\\|ts\\|tsx\\|\\(js\\)\\?bundle\\)\\(\\$\\|\\\\\\?\\)/i,
-          },
-          "sourceMapFilename": "[file].map",
-          "sourceMappingURLComment": "
-//# sourceMappingURL=[url]",
         },
         WebpackRamBundlePlugin {
           "bundleName": "index",
