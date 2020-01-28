@@ -23,7 +23,7 @@ export type EnvOptions = {
   sourcemapOutput?: string;
   minify?: boolean;
   port?: number;
-  maxWorkers: number;
+  maxWorkers?: number;
 };
 
 export type BundleConfig = Assign<

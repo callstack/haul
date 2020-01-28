@@ -48,7 +48,7 @@ type WebpackRamBundlePluginOptions = {
     MinifyOptions,
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
-  maxWorkers?: number;
+  maxWorkers: number;
 };
 
 const variableToString = (value?: string | number) => {
@@ -91,7 +91,7 @@ export default class WebpackRamBundlePlugin {
       : this.singleBundleMode;
     this.minify = hasValue(minify) ? Boolean(minify) : this.minify;
     this.minifyOptions = minifyOptions;
-    this.maxWorkers = maxWorkers || 2;
+    this.maxWorkers = maxWorkers;
   }
 
   apply(compiler: webpack.Compiler) {

@@ -14,7 +14,6 @@ import {
 } from '@haul-bundler/core';
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
-import { cpus } from 'os';
 
 export default function multiBundleCommand(runtime: Runtime) {
   return {
@@ -114,7 +113,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
-          maxWorkers: Math.max(maxWorkers || cpus().length - 1, 1),
+          maxWorkers,
         };
         const optionsWithProgress = {
           ...env,

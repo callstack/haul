@@ -6,7 +6,6 @@ import {
   EnvOptions,
 } from '@haul-bundler/core';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
-import { cpus } from 'os';
 
 export type Options = {
   config?: string;
@@ -43,7 +42,7 @@ export default function prepareWebpackConfig(
     bundleOutput: options.bundleOutput,
     sourcemapOutput: options.sourcemapOutput,
     minify: options.minify === undefined ? !options.dev : options.minify,
-    maxWorkers: Math.max(options.maxWorkers || cpus().length - 1, 1),
+    maxWorkers: options.maxWorkers,
   });
 
   const webpackConfig =

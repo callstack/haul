@@ -11,7 +11,7 @@ import inquirer from 'inquirer';
 import net from 'net';
 import { exec } from 'child_process';
 import path from 'path';
-import os, { cpus } from 'os';
+import os from 'os';
 import fs from 'fs';
 
 export default function startCommand(runtime: Runtime) {
@@ -103,7 +103,7 @@ export default function startCommand(runtime: Runtime) {
         bundleTarget: 'server',
         assetsDest: tempDir,
         minify: argv.minify === undefined ? !argv.dev : argv.minify,
-        maxWorkers: Math.max(argv.maxWorkers || cpus().length - 1, 1),
+        maxWorkers: argv.maxWorkers,
       });
 
       try {

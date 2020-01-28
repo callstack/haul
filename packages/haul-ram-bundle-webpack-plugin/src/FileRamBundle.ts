@@ -66,7 +66,7 @@ export default class FileRamBundle {
       this.modules.forEach((sourceModule, index) => {
         indexMap.sections.push({
           offset: {
-            line: index + 1,
+            line: index,
             column: 0,
           },
           map: sourceModule.map,

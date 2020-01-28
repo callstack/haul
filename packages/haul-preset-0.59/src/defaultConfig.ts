@@ -53,7 +53,6 @@ export default function getDefaultConfig(
           exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul-bundler|metro))/,
           use: [
             {
-              // loader: require.resolve('babel-loader'),
               loader: require.resolve(
                 '@haul-bundler/core/build/webpack/loaders/babelWorkerLoader'
               ),
@@ -121,7 +120,6 @@ export default function getDefaultConfig(
         minimize: !!minify,
         debug: dev,
       }),
-      // new webpack.debug.ProfilingPlugin({outputPath: path.resolve('./events_no_progress.json')})
     ],
     resolve: {
       alias:
