@@ -14,6 +14,10 @@ export default function getSourceMapPlugin(
     module: true,
   };
 
+  if (bundleConfig.type !== 'basic-bundle') {
+    return undefined;
+  }
+
   if (bundleConfig.sourceMap === 'inline') {
     return new webpack.EvalSourceMapDevToolPlugin({
       ...baseOptions,
