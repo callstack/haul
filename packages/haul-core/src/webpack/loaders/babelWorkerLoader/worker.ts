@@ -130,7 +130,6 @@ export async function process(
       result = await cache({
         source,
         options,
-        transform,
         cacheDirectory,
         cacheIdentifier,
         cacheCompression,
