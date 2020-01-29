@@ -1,6 +1,6 @@
-const babelPlugin = require('@babel/core');
+import babelPlugin from '@babel/core';
 
-module.exports = function injectCaller(opts: { caller: any }) {
+export default function injectCaller(opts: { caller: any }) {
   if (!supportsCallerOption()) return opts;
 
   return Object.assign({}, opts, {

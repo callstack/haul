@@ -22,7 +22,7 @@ const format = (err: {
   return err;
 };
 
-class LoaderError extends Error {
+export default class LoaderError extends Error {
   constructor(err: any) {
     super();
 
@@ -39,4 +39,3 @@ class LoaderError extends Error {
   }
 }
 
-module.exports = LoaderError;

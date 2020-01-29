@@ -62,5 +62,10 @@
     "wrap-ansi": "^6.2.0",
     "ws": "^7.2.1"
   },
-  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f",
+  "devDependencies": {
+    "@types/find-cache-dir": "^2.0.0",
+    "@types/pify": "^3.0.2",
+    "@types/signal-exit": "^3.0.0"
+  }
 }

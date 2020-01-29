@@ -1,9 +1,9 @@
 // Forked Babel version
 const version = '8.0.6';
-const cache = require('./cache');
-const transform = require('./transform');
-const injectCaller = require('./injectCaller');
-const fs = require('fs');
+import cache from './vendor/cache';
+import transform, { version as transformVersion } from './vendor/transform';
+import injectCaller from './vendor/injectCaller';
+import fs from 'fs';
 
 let babel:
   | { version: string; loadPartialConfig: (arg0: any) => any }
@@ -38,14 +38,10 @@ function subscribe(
   }
 }
 
-async function loader(
+export async function process(
   this: any,
   sourceFilename: string,
   inputSourceMap: string,
-  overrides: {
-    config: any;
-    result: any;
-  },
   filename: string,
   loaderOptions: {
     sourceMap?: any;
@@ -107,12 +103,6 @@ async function loader(
   const config = babel!.loadPartialConfig(injectCaller(programmaticOptions));
   if (config) {
     let options = config.options;
-    if (overrides?.config) {
-      options = await overrides.config.call(this, config, {
-        source,
-        map: inputSourceMap,
-      });
-    }
 
     if (options.sourceMaps === 'inline') {
       // Babel has this weird behavior where if you set "inline", we
@@ -128,7 +118,7 @@ async function loader(
       cacheDirectory = null,
       cacheIdentifier = JSON.stringify({
         options,
-        '@babel/core': transform.version,
+        '@babel/core': transformVersion,
         '@babel/loader': version,
       }),
       cacheCompression = true,
@@ -150,15 +140,6 @@ async function loader(
     }
 
     if (result) {
-      if (overrides?.result) {
-        result = await overrides.result.call(this, result, {
-          source,
-          map: inputSourceMap,
-          config,
-          options,
-        });
-      }
-
       const { code, map, metadata } = result;
 
       metadataSubscribers.forEach((subscriber: any) => {
@@ -172,13 +153,3 @@ async function loader(
   // If the file was ignored, pass through the original content.
   return [source, inputSourceMap];
 }
-
-export const useLoader = async (
-  source: string,
-  inputSourceMap: string,
-  overrides: { config: any; result: any },
-  fileName: string,
-  customOptions: any,
-  sourceMap: string
-) =>
-  loader(source, inputSourceMap, overrides, fileName, customOptions, sourceMap);
