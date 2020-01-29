@@ -22,9 +22,9 @@ export async function process(
   loaderOptions: {
     sourceMap?: any;
     sourceMaps?: any;
-    cacheDirectory?: any;
-    cacheIdentifier?: any;
-    cacheCompression?: any;
+    cacheDirectory?: string;
+    cacheIdentifier?: string;
+    cacheCompression?: boolean;
   },
   sourceMap: string
 ) {
@@ -74,9 +74,8 @@ export async function process(
             loaderOptions.cacheIdentifier ||
             JSON.stringify({
               options,
-              '@babel/core': babel.version,
-              // forked babel loader version
-              '@babel/loader': '8.06',
+              // to do: get value from package.json
+              '@haul-bundle/core': '0.16.0-alpha.1',
             }),
           cacheCompression,
         })
