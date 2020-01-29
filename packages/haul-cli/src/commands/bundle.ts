@@ -49,11 +49,11 @@ export default function ramBundleCommand(runtime: Runtime) {
       },
       progress: {
         description:
-          'Display bundle compilation progress with different verbosity levels',
+          'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode.',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
       'max-workers': {
-        description: 'Number of workers used to minify bundle and load modules',
+        description: 'Number of workers used to load modules',
         type: 'number',
       },
     },

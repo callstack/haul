@@ -101,6 +101,14 @@ Path to use for a source map file, e.g. - `build/index.android.bundle.map`.
 
 Path to the webpack haul config. Defaults to `haul.config.js`.
 
+#### `--progress <string>`
+
+Display bundle compilation progress with different verbosity levels. Accepts `none`, `minimal`, `compact`, `expanded` and `verbose`. Note that logging the compilation progress will increase build time. Defaults to `none` when `--dev` is set to `false`.
+
+#### `--max-workers <number>`
+
+Number of workers used to transpile modules. Defaults to `1`.
+
 ## `haul ram-bundle`
 
 Generate the app bundle as a Random Access Memory bundle. For iOS platform (`--platform ios`) the bundle is a Indexed RAM bundle, where all JavaScript modules are contained in a single file. For Android (`--platform android`) the bundle is a File RAM bundle - the JS modules are stored separately in `js-modules` directory. You can overwrite this behavior by passing `--indexed-ram-bundle`, which will force Haul to create Indexed RAM bundle for Android.
@@ -154,3 +162,11 @@ Sends reload request to all devices that enabled live reload.
 #### `--port <number>`
 
 Port on which the packager server is running. Defaults to `8081`.
+
+#### `--progress <string>`
+
+Display bundle compilation progress with different verbosity levels. Accepts `none`, `minimal`, `compact`, `expanded` and `verbose`. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode.
+
+#### `--max-workers <number>`
+
+Number of workers used to minify RAM bundle and transpile modules. Defaults to `1`.
