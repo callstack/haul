@@ -107,7 +107,7 @@ Display bundle compilation progress with different verbosity levels. Accepts `no
 
 #### `--max-workers <number>`
 
-Number of workers used to transpile modules. Defaults to the number of the CPUs - 1. Default is limited to `7` on CI, as the number of CPUs happen to be not correct.
+Number of workers used to transpile modules. Defaults to the number of the CPUs - 1 on local machine, but is limited to `7` on CI, as the number of CPUs can happen to be incorrect.
 
 ## `haul ram-bundle`
 
@@ -169,4 +169,4 @@ Display bundle compilation progress with different verbosity levels. Accepts `no
 
 #### `--max-workers <number>`
 
-Number of workers used to minify RAM bundle and transpile modules. Defaults to the number of the CPUs - 1. Default is limited to `7` on CI, as the number of CPUs happen to be not correct.
+Number of workers used to transpile modules and minify them. Defaults to the number of the CPUs - 1 on local machine, but is limited to `7` on CI, as the number of CPUs can happen to be incorrect.

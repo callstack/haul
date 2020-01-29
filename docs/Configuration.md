@@ -129,7 +129,7 @@ The bundle configuration consist of the following properties:
 - `manifestPath?: string` - Absolute path to manifest for an external (pre-built) bundle, if `dll` is `true`.
 - `assetsPath?: string` - Absolute or relative path pointing to where assets for an external (pre-built) bundle are stored. If relative, it will be joined with `path.dirname(bundlePath)`.
 - `copyBundle?: boolean` - Whether to copy bundle, source map and assets of an external (pre-built) bundle to output directory.
-- `maxWorkers?: number` - Number of workers used to transpile modules by Babel loader. For `ram-bundle` workers are used also for the minification. Defaults to the number of the CPUs - 1. Default is limited to 7 on CI, as the number of CPUs happen to be not correct.
+- `maxWorkers?: number` - Number of workers used to transpile modules by our Babel loader. For `ram-bundle` workers are used also for the minification. Defaults to the number of the CPUs - 1 on local machine, but is limited to `7` on CI, as the number of CPUs can happen to be incorrect.
 
 
 If you want to provide the bundle config based on received CLI arguments, you can do so, by using `BundleConfigBuilder`:
