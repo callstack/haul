@@ -1,31 +1,20 @@
-// Forked Babel version
-const version = '8.0.6';
-import cache from './vendor/cache';
-import transform, { version as transformVersion } from './vendor/transform';
-import injectCaller from './vendor/injectCaller';
 import fs from 'fs';
+import * as babel from '@babel/core';
 
-let babel:
-  | { version: string; loadPartialConfig: (arg0: any) => any }
-  | undefined = undefined;
-try {
-  babel = require('@babel/core');
-} catch (err) {
-  if (err.code === 'MODULE_NOT_FOUND') {
-    err.message +=
-      "\n babel-loader@8 requires Babel 7.x (the package '@babel/core'). " +
-      "If you'd like to use Babel 6.x ('babel-core'), you should install 'babel-loader@7'.";
-  }
-  throw err;
-}
+import cache from './vendor/cache';
+import transform from './vendor/transform';
 
-// Since we've got the reverse bridge package at @babel/core@6.x, give
-// people useful feedback if they try to use it alongside babel-loader.
-if (/^6\./.test(babel!.version)) {
-  throw new Error(
-    "\n babel-loader@8 will not work with the '@babel/core@6' bridge package. " +
-      "If you want to use Babel 6.x, install 'babel-loader@7'."
-  );
+function injectCaller(opts: { [prop: string]: unknown; caller?: any }) {
+  return Object.assign({}, opts, {
+    caller: Object.assign(
+      {
+        name: 'babel-loader',
+        supportsStaticESM: true,
+        supportsDynamicImport: true,
+      },
+      opts.caller
+    ),
+  });
 }
 
 function subscribe(
@@ -92,14 +81,6 @@ export async function process(
   delete programmaticOptions.cacheCompression;
   delete programmaticOptions.metadataSubscribers;
 
-  if (!babel!.loadPartialConfig) {
-    throw new Error(
-      `babel-loader ^8.0.0-beta.3 requires @babel/core@7.0.0-beta.41, but ` +
-        `you appear to be using "${babel!.version}". Either update your ` +
-        `@babel/core version, or pin you babel-loader version to 8.0.0-beta.2`
-    );
-  }
-
   const config = babel!.loadPartialConfig(injectCaller(programmaticOptions));
   if (config) {
     let options = config.options;
@@ -118,8 +99,9 @@ export async function process(
       cacheDirectory = null,
       cacheIdentifier = JSON.stringify({
         options,
-        '@babel/core': transformVersion,
-        '@babel/loader': version,
+        '@babel/core': babel.version,
+        // forked babel loader version
+        '@babel/loader': '8.06',
       }),
       cacheCompression = true,
       metadataSubscribers = [],
