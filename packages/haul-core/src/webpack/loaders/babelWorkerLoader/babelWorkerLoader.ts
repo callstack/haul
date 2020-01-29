@@ -1,7 +1,6 @@
 import loaderUtils from 'loader-utils';
 import Worker from 'jest-worker';
 import onExit from 'signal-exit';
-import webpack from 'webpack';
 
 function makeLoader() {
   let worker: undefined | Worker;
@@ -10,11 +9,7 @@ function makeLoader() {
     await worker?.end();
   });
 
-  return async function(
-    this: webpack.loader.LoaderContext,
-    source: string,
-    inputSourceMap: string
-  ) {
+  return async function(this: any, source: string, inputSourceMap: string) {
     const { maxWorkers = 1, ...options }: { maxWorkers?: number } =
       loaderUtils.getOptions(this) || {};
     if (worker === undefined) {
