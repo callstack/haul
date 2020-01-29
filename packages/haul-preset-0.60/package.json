@@ -1,5 +1,5 @@
 {
-  "version": "0.16.0-alpha.1",
+  "version": "0.16.0-alpha.2",
   "name": "@haul-bundler/preset-0.60",
   "description": "Haul preset for React Native 0.60",
   "main": "build/index.js",

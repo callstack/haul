@@ -1,5 +1,5 @@
 {
-  "version": "0.16.0-alpha.1",
+  "version": "0.16.0-alpha.2",
   "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
@@ -28,9 +28,9 @@
     "@hapi/inert": "^5.2.2",
     "@hapi/joi": "^15.1.1",
     "@haul-bundler/basic-bundle-webpack-plugin": "^0.16.0-alpha.1",
-    "@haul-bundler/core-legacy": "^0.16.0-alpha.1",
+    "@haul-bundler/core-legacy": "^0.16.0-alpha.2",
     "@haul-bundler/inspector-events": "^0.16.0-alpha.1",
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.16.0-alpha.1",
+    "@haul-bundler/ram-bundle-webpack-plugin": "^0.16.0-alpha.2",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "escape-string-regexp": "^2.0.0",
@@ -62,6 +62,5 @@
     "wrap-ansi": "^6.2.0",
     "ws": "^7.2.1"
   },
-  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f",
-  "devDependencies": {}
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
 }
