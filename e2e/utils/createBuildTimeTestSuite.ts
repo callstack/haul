@@ -42,6 +42,7 @@ export default function createBuildTimeTestSuite(
       ]);
 
       const processTime = Date.now() - startTime;
+      console.log({ processTime });
 
       expect(
         fs.existsSync(path.join(PROJECT_FIXTURE, BUNDLE_PATH))
@@ -57,7 +58,7 @@ export default function createBuildTimeTestSuite(
         ).toBeTruthy();
       }
 
-      expect(processTime).toBeLessThan(35000);
+      expect(processTime).toBeLessThan(24000);
     });
   });
 }
