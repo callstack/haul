@@ -1,6 +1,6 @@
 import babelPlugin from '@babel/core';
 
-export default function injectCaller(opts: { caller: any }) {
+export default function injectCaller(opts: { [prop: string]: unknown; caller?: any }) {
   if (!supportsCallerOption()) return opts;
 
   return Object.assign({}, opts, {
