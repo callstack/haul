@@ -2,7 +2,7 @@ import { TransformOptions } from '@babel/core';
 
 import * as babelPlugin from '@babel/core';
 import promisify from 'pify';
-import LoaderError from './Error';
+import LoaderError from './error';
 
 const transform = promisify(babelPlugin.transform);
 
