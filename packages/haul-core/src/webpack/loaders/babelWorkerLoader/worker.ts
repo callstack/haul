@@ -1,10 +1,14 @@
 import fs from 'fs';
 import * as babel from '@babel/core';
-
 import cache from './vendor/cache';
 import transform from './vendor/transform';
 
-const injectCaller = (opts: { [prop: string]: unknown; caller?: any }) => ({
+const pkg = require('../../../../package.json');
+
+const injectCaller = (opts: {
+  [key: string]: any;
+  caller?: { [key: string]: any };
+}) => ({
   ...opts,
   caller: {
     name: 'babelWorkerLoader',
@@ -74,8 +78,7 @@ export async function process(
             loaderOptions.cacheIdentifier ||
             JSON.stringify({
               options,
-              // to do: get value from package.json
-              '@haul-bundle/core': '0.16.0-alpha.1',
+              '@haul-bundle/core': pkg.version,
             }),
           cacheCompression,
         })

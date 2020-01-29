@@ -56,7 +56,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/haul_node_10
-      - run: yarn test -i --coverage packages --forceExit # run only tests in packages
+      - run: yarn test -i --coverage packages # run only tests in packages
       - persist_to_workspace:
           root: .
           paths:
@@ -181,7 +181,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/haul_node_latest
-      - run: yarn test -i --coverage packages --forceExit # run only tests in packages
+      - run: yarn test -i --coverage packages # run only tests in packages
 
 
 workflows:
