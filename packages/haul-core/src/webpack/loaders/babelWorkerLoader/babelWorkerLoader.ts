@@ -33,5 +33,5 @@ function makeLoader() {
   };
 }
 
-export default makeLoader();
 export const custom = makeLoader;
+export const pitch = makeLoader();
