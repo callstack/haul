@@ -7,7 +7,7 @@ import transform from './vendor/transform';
 const injectCaller = (opts: { [prop: string]: unknown; caller?: any }) => ({
   ...opts,
   caller: {
-    name: 'babel-loader',
+    name: 'babelWorkerLoader',
     supportsStaticESM: true,
     supportsDynamicImport: true,
     ...opts.caller,
@@ -25,8 +25,6 @@ export async function process(
     cacheDirectory?: any;
     cacheIdentifier?: any;
     cacheCompression?: any;
-    metadataSubscribers?: any;
-    customize?: any;
   },
   sourceMap: string
 ) {
@@ -52,11 +50,9 @@ export async function process(
   };
 
   // Remove loader related options
-  delete programmaticOptions.customize;
   delete programmaticOptions.cacheDirectory;
   delete programmaticOptions.cacheIdentifier;
   delete programmaticOptions.cacheCompression;
-  delete programmaticOptions.metadataSubscribers;
 
   const config = babel!.loadPartialConfig(injectCaller(programmaticOptions));
   if (config) {
@@ -67,11 +63,7 @@ export async function process(
       options.sourceMaps = true;
     }
 
-    const {
-      cacheDirectory = null,
-      cacheCompression = true,
-      metadataSubscribers = [],
-    } = loaderOptions;
+    const { cacheDirectory = null, cacheCompression = true } = loaderOptions;
 
     const result = cacheDirectory
       ? await cache({
@@ -91,13 +83,7 @@ export async function process(
       : await transform(source, options);
 
     if (result) {
-      const { code, map, metadata } = result;
-
-      metadataSubscribers.forEach((subscriber: any) => {
-        this[subscriber] && this[subscriber](metadata);
-      });
-
-      return [code, map];
+      return [result.code, result.map];
     }
   }
   return [source, inputSourceMap];
