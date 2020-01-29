@@ -1,6 +1,6 @@
 import { TransformOptions } from '@babel/core';
 
-import babelPlugin from '@babel/core';
+import * as babelPlugin from '@babel/core';
 import promisify from 'pify';
 import LoaderError from './Error';
 

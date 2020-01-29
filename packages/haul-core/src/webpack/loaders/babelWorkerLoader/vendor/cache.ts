@@ -18,6 +18,7 @@ import findCacheDir from 'find-cache-dir';
 import promisify from 'pify';
 
 import transform from './transform';
+
 // Lazily instantiated when needed
 let defaultCacheDirectory: string | null = null;
 
