@@ -40,6 +40,7 @@ export type ConfigOptions = {|
   hasteOptions?: *,
   initializeCoreLocation?: string,
   disableHotReloading?: boolean,
+  maxWorkers?: number,
 |};
 
 export type EnvOptions = {|

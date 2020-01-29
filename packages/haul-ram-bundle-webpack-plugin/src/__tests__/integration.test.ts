@@ -55,6 +55,7 @@ function build({
         sourceMap,
         indexRamBundle,
         minify: false,
+        maxWorkers: 1,
       }),
     ],
     optimization: {

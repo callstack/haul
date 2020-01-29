@@ -53,6 +53,11 @@ export default function startCommand(runtime: Runtime) {
         default: 'false',
         type: 'string',
       },
+      'max-workers': {
+        description:
+          'Number of workers used to minify RAM bundle and load modules',
+        type: 'number',
+      },
     },
     async handler(
       argv: yargs.Arguments<{
@@ -63,6 +68,7 @@ export default function startCommand(runtime: Runtime) {
         tempDir?: string;
         config: string;
         eager: string;
+        maxWorkers?: number;
       }>
     ) {
       let parsedEager;
@@ -97,6 +103,7 @@ export default function startCommand(runtime: Runtime) {
         bundleTarget: 'server',
         assetsDest: tempDir,
         minify: argv.minify === undefined ? !argv.dev : argv.minify,
+        maxWorkers: argv.maxWorkers,
       });
 
       try {

@@ -96,6 +96,7 @@ export default class IndexRamBundle {
           map: Object;
         }>,
       };
+
       this.rawModules.forEach((sourceModule, index) => {
         indexMap.sections.push({
           offset: {
@@ -105,6 +106,7 @@ export default class IndexRamBundle {
           map: sourceModule.map,
         });
       });
+
       compilation.assets[sourceMapFilename] = new RawSource(
         JSON.stringify(indexMap)
       );

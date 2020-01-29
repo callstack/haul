@@ -34,18 +34,24 @@
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "escape-string-regexp": "^2.0.0",
+    "find-cache-dir": "^3.2.0",
     "hasha": "^5.1.0",
     "image-size": "^0.8.3",
+    "is-ci": "^2.0.0",
+    "jest-worker": "^25.1.0",
     "loader-utils": "^1.2.3",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.throttle": "^4.1.1",
+    "mkdirp": "^0.5.1",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
     "open-in-editor": "^2.2.0",
+    "pify": "^4.0.1",
     "platform-select": "^1.1.2",
     "resolve": "^1.14.2",
     "semver": "^7.1.1",
+    "signal-exit": "^3.0.2",
     "source-map": "^0.7.3",
     "strip-ansi": "6.0.0",
     "terminal-kit": "^1.32.3",
@@ -56,5 +62,6 @@
     "wrap-ansi": "^6.2.0",
     "ws": "^7.2.1"
   },
-  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f",
+  "devDependencies": {}
 }

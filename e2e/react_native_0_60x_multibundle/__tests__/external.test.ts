@@ -127,6 +127,10 @@ function compileExternalBundles(platform: string) {
     '--config',
     'haul.config.dll.js',
     '--skip-host-check',
+    '--max-workers',
+    '1',
+    '--progress',
+    'none',
   ]);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {
@@ -147,6 +151,10 @@ function compileBundles(platform: string) {
     `dist/external/${platform}`,
     '--config',
     'haul.config.external.js',
+    '--max-workers',
+    '1',
+    '--progress',
+    'none',
   ]);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {
@@ -155,27 +163,29 @@ function compileBundles(platform: string) {
 }
 
 async function fetchBundles(platform: string) {
-  const host = await (await fetch(
-    `http://localhost:9000/index.${platform}.bundle`
-  )).buffer();
-  const baseDll = await (await fetch(
-    `http://localhost:9000/base_dll.${platform}.bundle`
-  )).buffer();
-  const app0 = await (await fetch(
-    `http://localhost:9000/app0.${platform}.bundle`
-  )).buffer();
-  const app1 = await (await fetch(
-    `http://localhost:9000/app1.${platform}.bundle`
-  )).buffer();
-  const app1Chunk = await (await fetch(
-    `http://localhost:9000/0.app1.${platform}.bundle`
-  )).buffer();
+  const host = await (
+    await fetch(`http://localhost:9000/index.${platform}.bundle`)
+  ).buffer();
+  const baseDll = await (
+    await fetch(`http://localhost:9000/base_dll.${platform}.bundle`)
+  ).buffer();
+  const app0 = await (
+    await fetch(`http://localhost:9000/app0.${platform}.bundle`)
+  ).buffer();
+  const app1 = await (
+    await fetch(`http://localhost:9000/app1.${platform}.bundle`)
+  ).buffer();
+  const app1Chunk = await (
+    await fetch(`http://localhost:9000/0.app1.${platform}.bundle`)
+  ).buffer();
 
-  await (await fetch(
-    `http://localhost:9000/base_dll_server.${
-      platform === 'ios' ? 'jsbundle' : 'android.bundle'
-    }.map`
-  )).json();
+  await (
+    await fetch(
+      `http://localhost:9000/base_dll_server.${
+        platform === 'ios' ? 'jsbundle' : 'android.bundle'
+      }.map`
+    )
+  ).json();
 
   return {
     baseDll,

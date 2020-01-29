@@ -2,6 +2,8 @@ import get from 'lodash.get';
 import merge from 'lodash.merge';
 import webpack from 'webpack';
 import path from 'path';
+import { cpus } from 'os';
+import isCi from 'is-ci';
 import {
   Runtime,
   EnvOptions,
@@ -145,8 +147,16 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             'react-native',
           ],
           hasteOptions: bundleConfig.hasteOptions || {},
+          maxWorkers:
+            bundleConfig.maxWorkers !== undefined
+              ? Math.max(1, bundleConfig.maxWorkers)
+              : env.maxWorkers !== undefined
+              ? Math.max(1, env.maxWorkers)
+              : Math.max(
+                  isCi ? Math.min(cpus().length - 1, 7) : cpus().length - 1,
+                  1
+                ),
         };
-
         // Make sure user supplied manifestPath if the bundle is DLL. Otherwise, we wouldn't
         // have any info what the bundle contains.
         if (

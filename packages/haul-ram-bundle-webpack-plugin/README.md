@@ -24,7 +24,8 @@ new WebpackRamBundlePlugin({
   preloadBundles: [], // name of bundles to preload when running in multi-bundle mode
   singleBundleMode: true, // whether to run in single-bundle mode or multi-bundle
   minify: true, // enables minifcation
-  minifyOptions: { /* ... */ } // Terser minify options (excluding `sourceMap`)
+  minifyOptions: { /* ... */ }, // Terser minify options (excluding `sourceMap`)
+  maxWorkers: 1, // number of workers to use, should not be higher than number of available threads - 1
 });
 ```
 

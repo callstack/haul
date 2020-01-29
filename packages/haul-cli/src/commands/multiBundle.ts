@@ -55,15 +55,16 @@ export default function multiBundleCommand(runtime: Runtime) {
       },
       progress: {
         description:
-          'Display bundle compilation progress with different verbosity levels',
-        // Ensure that we don't trip Xcode's error detection. 'verbose' is the
-        // only level that doesn't make Xcode think that the bundle failed.
-        default: !process.stdin.isTTY ? 'verbose' : 'compact',
+          'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode.',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
       },
       'skip-host-check': {
         description: 'Skips check for "index" or "host" bundle in Haul config',
         type: 'boolean',
+      },
+      'max-workers': {
+        description: 'Number of workers used to load modules',
+        type: 'number',
       },
     },
     async handler(
@@ -77,6 +78,7 @@ export default function multiBundleCommand(runtime: Runtime) {
         sourcemapOutput?: string;
         progress: string;
         skipHostCheck?: boolean;
+        maxWorkers?: number;
       }>
     ) {
       try {
@@ -90,6 +92,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           sourcemapOutput,
           progress,
           skipHostCheck,
+          maxWorkers,
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -110,8 +113,25 @@ export default function multiBundleCommand(runtime: Runtime) {
           assetsDest,
           sourcemapOutput,
           minify: minify === undefined ? !dev : minify,
+          maxWorkers,
         };
-        const projectConfig = normalizedProjectConfigBuilder(runtime, env);
+        const optionsWithProgress = {
+          ...env,
+          progress:
+            progress !== undefined
+              ? progress
+              : !dev
+              ? 'none'
+              : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
+              // only level that doesn't make Xcode think that the bundle failed.
+              !process.stdin.isTTY
+              ? 'verbose'
+              : 'compact',
+        };
+        const projectConfig = normalizedProjectConfigBuilder(
+          runtime,
+          optionsWithProgress
+        );
 
         for (const bundleName of sortBundlesByDependencies(projectConfig, {
           skipHostCheck,

@@ -30,9 +30,10 @@ export default function getDefaultConfig(
     minify,
     providesModuleNodeModules,
     hasteOptions,
+    maxWorkers,
+    type,
   } = projectConfig.bundles[bundleName];
   const { host, port } = projectConfig.server;
-
   return {
     mode: dev ? 'development' : 'production',
     context: root,
@@ -52,8 +53,11 @@ export default function getDefaultConfig(
           exclude: /node_modules(?!.*[\/\\](react|@react-navigation|@react-native-community|@expo|pretty-format|@haul-bundler|metro))/,
           use: [
             {
-              loader: require.resolve('babel-loader'),
+              loader: require.resolve(
+                '@haul-bundler/core/build/webpack/loaders/babelWorkerLoader'
+              ),
               options: {
+                maxWorkers,
                 extends: getBabelConfigPath(root),
                 plugins: [
                   require.resolve(
@@ -177,16 +181,19 @@ export default function getDefaultConfig(
       ],
     },
     optimization: {
-      minimize: !!minify,
-      minimizer: [
-        new TerserWebpackPlugin({
-          test: /\.(js|(js)?bundle)($|\?)/i,
-          cache: true,
-          // Set upper limit on CPU cores, to prevent Out of Memory exception on CIs.
-          parallel: isCi ? Math.min(os.cpus().length, 8) - 1 : true,
-          sourceMap: true,
-        }),
-      ],
+      minimize: type === 'basic-bundle' ? !!minify : false,
+      minimizer:
+        type === 'basic-bundle'
+          ? [
+              new TerserWebpackPlugin({
+                test: /\.(js|(js)?bundle)($|\?)/i,
+                cache: true,
+                // Set upper limit on CPU cores, to prevent Out of Memory exception on CIs.
+                parallel: isCi ? Math.min(os.cpus().length, 8) - 1 : true,
+                sourceMap: true,
+              }),
+            ]
+          : [],
       namedModules: dev,
       concatenateModules: true,
     },

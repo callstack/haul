@@ -23,6 +23,7 @@ export type EnvOptions = {
   sourcemapOutput?: string;
   minify?: boolean;
   port?: number;
+  maxWorkers?: number;
 };
 
 export type BundleConfig = Assign<
@@ -49,6 +50,7 @@ export type BundleConfig = Assign<
     >;
     hasteOptions?: any;
     transform?: WebpackConfigTransform;
+    maxWorkers?: number;
   },
   ExternalBundleConfig
 >;

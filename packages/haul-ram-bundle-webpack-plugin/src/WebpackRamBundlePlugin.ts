@@ -4,6 +4,8 @@ import path from 'path';
 import { inspect } from 'util';
 import webpack from 'webpack';
 import terser, { MinifyOptions } from 'terser';
+import Worker from 'jest-worker';
+
 import IndexRamBundle from './IndexRamBundle';
 import FileRamBundle from './FileRamBundle';
 
@@ -46,6 +48,7 @@ type WebpackRamBundlePluginOptions = {
     MinifyOptions,
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
+  maxWorkers: number;
 };
 
 const variableToString = (value?: string | number) => {
@@ -69,6 +72,7 @@ export default class WebpackRamBundlePlugin {
   singleBundleMode: boolean = true;
   minify: boolean = false;
   minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
+  maxWorkers: number;
 
   constructor({
     sourceMap,
@@ -77,6 +81,7 @@ export default class WebpackRamBundlePlugin {
     singleBundleMode,
     minify,
     minifyOptions,
+    maxWorkers,
   }: WebpackRamBundlePluginOptions) {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
@@ -86,6 +91,7 @@ export default class WebpackRamBundlePlugin {
       : this.singleBundleMode;
     this.minify = hasValue(minify) ? Boolean(minify) : this.minify;
     this.minifyOptions = minifyOptions;
+    this.maxWorkers = maxWorkers;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -139,57 +145,71 @@ export default class WebpackRamBundlePlugin {
         if (!mainChunk) {
           throw new Error("WebpackRamBundlePlugin: couldn't find main chunk");
         }
-
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
-        this.modules = compilation.modules.map(webpackModule => {
-          const renderedModule = compilation.moduleTemplates.javascript
-            .render(
-              webpackModule,
-              compilation.dependencyTemplates,
-              compilation.options
-            )
-            .sourceAndMap();
-
-          if (typeof webpackModule.id === 'string') {
-            moduleMappings.modules[webpackModule.id] = webpackModule.index;
-          }
-
-          let code = `__haul_${this.bundleName}.l(${variableToString(
-            webpackModule.id
-          )}, ${renderedModule.source});`;
-          let map = renderedModule.map;
-          if (this.minify) {
-            const minifiedSource = terser.minify(code, {
-              ...this.minifyOptions,
-              sourceMap: {
-                content: renderedModule.map,
-              },
-            });
-            // Check if there is no error in minifed source
-            assert(!minifiedSource.error, minifiedSource.error);
-
-            code = minifiedSource.code || '';
-            if (typeof minifiedSource.map === 'string') {
-              map = JSON.parse(minifiedSource.map);
-            }
-          }
-
-          return {
-            id: webpackModule.id,
-            idx: webpackModule.index,
-            filename: webpackModule.resource,
-            source: code,
-            map: {
-              ...map,
-              file: `${
-                typeof webpackModule.id === 'string'
-                  ? webpackModule.index
-                  : webpackModule.id
-              }.js`,
-            },
-          };
+        const minifyWorker = new Worker(require.resolve('../build/worker'), {
+          numWorkers: this.maxWorkers,
+          enableWorkerThreads: true,
         });
+
+        this.modules = await Promise.all(
+          compilation.modules.map(async webpackModule => {
+            const renderedModule = compilation.moduleTemplates.javascript
+              .render(
+                webpackModule,
+                compilation.dependencyTemplates,
+                compilation.options
+              )
+              .sourceAndMap();
+
+            if (typeof webpackModule.id === 'string') {
+              moduleMappings.modules[webpackModule.id] = webpackModule.index;
+            }
+
+            let code = `__haul_${this.bundleName}.l(${variableToString(
+              webpackModule.id
+            )}, ${renderedModule.source});`;
+            let map = renderedModule.map;
+
+            if (this.minify) {
+              const minifyOptionsWithMap = {
+                ...this.minifyOptions,
+                sourceMap: {
+                  content: map,
+                },
+              };
+              // @ts-ignore property minify does not exist on type 'JestWorker'
+              const minifiedSource = await minifyWorker.minify(
+                code,
+                minifyOptionsWithMap
+              );
+              //Check if there is no error in minifed source
+              assert(!minifiedSource.error, minifiedSource.error);
+
+              code = minifiedSource.code || '';
+              if (typeof minifiedSource.map === 'string') {
+                map = JSON.parse(minifiedSource.map);
+              }
+            }
+
+            return {
+              id: webpackModule.id,
+              idx: webpackModule.index,
+              filename: webpackModule.resource,
+              source: code,
+              map: {
+                ...map,
+                file: `${
+                  typeof webpackModule.id === 'string'
+                    ? webpackModule.index
+                    : webpackModule.id
+                }.js`,
+              },
+            };
+          })
+        );
+
+        minifyWorker.end();
 
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(

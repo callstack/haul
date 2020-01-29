@@ -17,5 +17,8 @@
     "webpack": "4.x",
     "webpack-sources": "1.x"
   },
-  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f",
+  "dependencies": {
+    "jest-worker": "^25.1.0"
+  }
 }

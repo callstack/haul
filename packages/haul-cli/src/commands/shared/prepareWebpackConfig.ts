@@ -18,6 +18,7 @@ export type Options = {
   progress: string;
   bundleType?: EnvOptions['bundleType'];
   bundleMode: EnvOptions['bundleMode'];
+  maxWorkers?: number;
 };
 
 export default function prepareWebpackConfig(
@@ -41,6 +42,7 @@ export default function prepareWebpackConfig(
     bundleOutput: options.bundleOutput,
     sourcemapOutput: options.sourcemapOutput,
     minify: options.minify === undefined ? !options.dev : options.minify,
+    maxWorkers: options.maxWorkers,
   });
 
   const webpackConfig =

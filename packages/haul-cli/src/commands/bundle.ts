@@ -49,11 +49,12 @@ export default function ramBundleCommand(runtime: Runtime) {
       },
       progress: {
         description:
-          'Display bundle compilation progress with different verbosity levels',
-        // Ensure that we don't trip Xcode's error detection. 'verbose' is the
-        // only level that doesn't make Xcode think that the bundle failed.
-        default: !process.stdin.isTTY ? 'verbose' : 'compact',
+          'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode.',
         choices: ['none', 'minimal', 'compact', 'expanded', 'verbose'],
+      },
+      'max-workers': {
+        description: 'Number of workers used to load modules',
+        type: 'number',
       },
     },
     async handler(
@@ -66,6 +67,7 @@ export default function ramBundleCommand(runtime: Runtime) {
         bundleOutput?: string;
         sourcemapOutput?: string;
         progress: string;
+        maxWorkers?: number;
       }>
     ) {
       try {
@@ -78,6 +80,7 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleOutput,
           sourcemapOutput,
           progress,
+          maxWorkers,
         } = argv;
 
         process.env.HAUL_PLATFORM = platform;
@@ -85,14 +88,24 @@ export default function ramBundleCommand(runtime: Runtime) {
         const webpackConfig = prepareWebpackConfig(runtime, {
           config,
           dev,
-          minify,
+          minify: minify === undefined ? !dev : minify,
           platform,
           assetsDest,
           bundleOutput,
           sourcemapOutput,
-          progress,
+          progress:
+            progress !== undefined
+              ? progress
+              : !dev
+              ? 'none'
+              : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
+              // only level that doesn't make Xcode think that the bundle failed.
+              !process.stdin.isTTY
+              ? 'verbose'
+              : 'compact',
           bundleType: 'basic-bundle',
           bundleMode: 'single-bundle',
+          maxWorkers,
         });
         messages.initialInformation(runtime, { config: webpackConfig });
 
