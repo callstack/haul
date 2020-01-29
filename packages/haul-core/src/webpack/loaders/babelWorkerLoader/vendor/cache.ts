@@ -35,9 +35,8 @@ const write = async function(
   return await writeFile(filename + (compress ? '.gz' : ''), data);
 };
 
-const filename = function(source: any, identifier: any, options: any) {
+const filename = (source: any, identifier: any, options: any) => {
   const hash = crypto.createHash('md4');
-
   const contents = JSON.stringify({ source, options, identifier });
 
   hash.update(contents);
@@ -54,7 +53,7 @@ type handleCacheParams = {
 };
 
 const handleCache = async function(
-  directory: any,
+  directory: string,
   params: handleCacheParams
 ): Promise<any> {
   const {
@@ -106,18 +105,11 @@ const handleCache = async function(
 };
 
 export default async function(params: handleCacheParams) {
-  let directory;
-
-  if (typeof params.cacheDirectory === 'string') {
-    directory = params.cacheDirectory;
-  } else {
-    if (defaultCacheDirectory === null) {
-      defaultCacheDirectory =
+  if(typeof params.cacheDirectory !== 'string' && defaultCacheDirectory === null) {
+    defaultCacheDirectory =
         findCacheDir({ name: 'babel-loader' }) || os.tmpdir();
-    }
-
-    directory = defaultCacheDirectory;
   }
+  const directory = params.cacheDirectory || defaultCacheDirectory
 
   return await handleCache(directory, params);
 };

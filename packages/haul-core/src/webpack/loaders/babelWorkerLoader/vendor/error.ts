@@ -1,26 +1,14 @@
-const STRIP_FILENAME_RE = /^[^:]+: /;
-
 const format = (err: {
   name: null | string;
   message: string;
   hideStack: boolean;
   codeFrame: any;
-}) => {
-  if (err instanceof SyntaxError) {
-    err.name = 'SyntaxError';
-    err.message = err.message.replace(STRIP_FILENAME_RE, '');
-
-    err.hideStack = true;
-  } else if (err instanceof TypeError) {
-    // @ts-ignore null is not assignable to string
-    err.name = null;
-    err.message = err.message.replace(STRIP_FILENAME_RE, '');
-
-    err.hideStack = true;
-  }
-
-  return err;
-};
+}) => ({
+    ...err, 
+    name: err instanceof SyntaxError ? 'SyntaxError' : '',
+    message: err.message.replace(/^[^:]+: /, ''),
+    hideStack: true
+  })
 
 export default class LoaderError extends Error {
   constructor(err: any) {

@@ -4,28 +4,21 @@ import * as babel from '@babel/core';
 import cache from './vendor/cache';
 import transform from './vendor/transform';
 
-function injectCaller(opts: { [prop: string]: unknown; caller?: any }) {
-  return Object.assign({}, opts, {
-    caller: Object.assign(
-      {
-        name: 'babel-loader',
-        supportsStaticESM: true,
-        supportsDynamicImport: true,
-      },
-      opts.caller
-    ),
-  });
-}
+const injectCaller = (opts: { [prop: string]: unknown; caller?: any }) => ({
+  ...opts,
+  caller: {
+    name: 'babel-loader',
+    supportsStaticESM: true,
+    supportsDynamicImport: true,
+    ...opts.caller,
+  },
+});
 
-function subscribe(
+const subscribe = (
   subscriber: string | number,
   metadata: any,
   context: { [x: string]: (arg0: any) => void }
-) {
-  if (context[subscriber]) {
-    context[subscriber](metadata);
-  }
-}
+) => context[subscriber] && context[subscriber](metadata);
 
 export async function process(
   this: any,
@@ -45,35 +38,25 @@ export async function process(
 ) {
   const source = fs.readFileSync(sourceFilename, 'utf8');
 
-  // Standardize on 'sourceMaps' as the key passed through to Webpack, so that
-  // users may safely use either one alongside our default use of
-  // 'this.sourceMap' below without getting error about conflicting aliases.
-  if (
-    Object.prototype.hasOwnProperty.call(loaderOptions, 'sourceMap') &&
-    !Object.prototype.hasOwnProperty.call(loaderOptions, 'sourceMaps')
-  ) {
-    loaderOptions = Object.assign({}, loaderOptions, {
+  if ('sourceMap' in loaderOptions && !('sourceMaps' in loaderOptions)) {
+    loaderOptions = {
+      ...loaderOptions,
       sourceMaps: loaderOptions.sourceMap,
-    });
+    };
     delete loaderOptions.sourceMap;
   }
 
-  const programmaticOptions = Object.assign({}, loaderOptions, {
+  const programmaticOptions = {
+    ...loaderOptions,
     filename,
     inputSourceMap: inputSourceMap || undefined,
-
-    // Set the default sourcemap behavior based on Webpack's mapping flag,
-    // but allow users to override if they want.
     sourceMaps:
       loaderOptions.sourceMaps === undefined
         ? sourceMap
         : loaderOptions.sourceMaps,
-
-    // Ensure that Webpack will get a full absolute path in the sourcemap
-    // so that it can properly map the module back to its internal cached
-    // modules.
     sourceFileName: filename,
-  });
+  };
+
   // Remove loader related options
   delete programmaticOptions.customize;
   delete programmaticOptions.cacheDirectory;
@@ -86,12 +69,7 @@ export async function process(
     let options = config.options;
 
     if (options.sourceMaps === 'inline') {
-      // Babel has this weird behavior where if you set "inline", we
-      // inline the sourcemap, and set 'result.map = null'. This results
-      // in bad behavior from Babel since the maps get put into the code,
-      // which Webpack does not expect, and because the map we return to
-      // Webpack is null, which is also bad. To avoid that, we override the
-      // behavior here so "inline" just behaves like 'true'.
+      // Babel glitch
       options.sourceMaps = true;
     }
 

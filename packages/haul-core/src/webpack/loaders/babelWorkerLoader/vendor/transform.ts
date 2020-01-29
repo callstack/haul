@@ -20,7 +20,7 @@ export default async function(
 
   const { ast, code, map, metadata, sourceType } = result;
 
-  if (map && (!map.sourcesContent || !map.sourcesContent.length)) {
+  if (map?.sourcesContent?.length) {
     map.sourcesContent = [source];
   }
 
