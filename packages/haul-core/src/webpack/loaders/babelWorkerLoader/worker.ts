@@ -14,12 +14,6 @@ const injectCaller = (opts: { [prop: string]: unknown; caller?: any }) => ({
   },
 });
 
-const subscribe = (
-  subscriber: string | number,
-  metadata: any,
-  context: { [x: string]: (arg0: any) => void }
-) => context[subscriber] && context[subscriber](metadata);
-
 export async function process(
   this: any,
   sourceFilename: string,
@@ -75,40 +69,36 @@ export async function process(
 
     const {
       cacheDirectory = null,
-      cacheIdentifier = JSON.stringify({
-        options,
-        '@babel/core': babel.version,
-        // forked babel loader version
-        '@babel/loader': '8.06',
-      }),
       cacheCompression = true,
       metadataSubscribers = [],
     } = loaderOptions;
 
-    let result;
-    if (cacheDirectory) {
-      result = await cache({
-        source,
-        options,
-        cacheDirectory,
-        cacheIdentifier,
-        cacheCompression,
-      });
-    } else {
-      result = await transform(source, options);
-    }
+    const result = cacheDirectory
+      ? await cache({
+          source,
+          options,
+          cacheDirectory,
+          cacheIdentifier:
+            loaderOptions.cacheIdentifier ||
+            JSON.stringify({
+              options,
+              '@babel/core': babel.version,
+              // forked babel loader version
+              '@babel/loader': '8.06',
+            }),
+          cacheCompression,
+        })
+      : await transform(source, options);
 
     if (result) {
       const { code, map, metadata } = result;
 
       metadataSubscribers.forEach((subscriber: any) => {
-        subscribe(subscriber, metadata, this);
+        this[subscriber] && this[subscriber](metadata);
       });
 
       return [code, map];
     }
   }
-
-  // If the file was ignored, pass through the original content.
   return [source, inputSourceMap];
 }
