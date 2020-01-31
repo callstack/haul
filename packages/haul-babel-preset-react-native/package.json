@@ -1,5 +1,5 @@
 {
-  "version": "0.16.0-alpha.1",
+  "version": "0.16.0",
   "name": "@haul-bundler/babel-preset-react-native",
   "description": "Babel preset for React Native >=0.59 with Haul",
   "main": "index.js",
