@@ -79,8 +79,8 @@ function bootstrap(globalScope, options) { // eslint-disable-line
   __webpack_require__.e = function(chunkId) {
     return Promise.resolve().then(function() {
       const moduleIds = moduleMappings.chunks[chunkId];
-      for (var i = 0; i < moduleIds.length; i++) {
-        __webpack_require__(moduleIds[i]);
+      if (moduleIds === undefined) {
+        throw new Error('No modules found for chunk with id ' + chunkId);
       }
       return undefined;
     });
