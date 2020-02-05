@@ -1,6 +1,7 @@
 function bootstrap(globalScope, options) { // eslint-disable-line
   const {
     bundleName,
+    bundleId,
     mainModuleId,
     moduleMappings,
     preloadBundleNames,
@@ -50,7 +51,7 @@ function bootstrap(globalScope, options) { // eslint-disable-line
       // Use 0 as a segementId to be compatible with RN 0.59.
       globalScope.nativeRequire(moduleIntId, 0);
     } else {
-      globalScope.nativeRequire(moduleIntId, bundleName);
+      globalScope.nativeRequire(moduleIntId, bundleId);
     }
 
     // Return the exports of the module

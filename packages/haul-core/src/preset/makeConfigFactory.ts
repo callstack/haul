@@ -191,7 +191,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         transforms[normalizedBundleConfig.name] = bundleConfig.transform;
       });
 
-      Object.keys(normalizedBundleConfigs).forEach(bundleName => {
+      Object.keys(normalizedBundleConfigs).forEach((bundleName, index) => {
         const normalizedBundleConfig = normalizedBundleConfigs[bundleName];
 
         let webpackConfig = getDefaultConfig(
@@ -240,7 +240,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           .filter(Boolean);
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
-          getBundlePlugin(env, normalizedBundleConfig)
+          getBundlePlugin(env, normalizedBundleConfig, index)
         );
 
         webpackConfig.plugins.push(

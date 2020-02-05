@@ -131,6 +131,7 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
+          "bundleId": 2,
           "bundleName": "index",
           "indexRamBundle": true,
           "maxWorkers": 7,
@@ -192,6 +193,7 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
+          "bundleId": 1,
           "bundleName": "index",
           "indexRamBundle": true,
           "maxWorkers": 7,

@@ -49,6 +49,7 @@ type WebpackRamBundlePluginOptions = {
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
   maxWorkers: number;
+  bundleId: number;
 };
 
 const variableToString = (value?: string | number) => {
@@ -73,6 +74,7 @@ export default class WebpackRamBundlePlugin {
   minify: boolean = false;
   minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
   maxWorkers: number;
+  bundleId: number;
 
   constructor({
     sourceMap,
@@ -82,6 +84,7 @@ export default class WebpackRamBundlePlugin {
     minify,
     minifyOptions,
     maxWorkers,
+    bundleId,
   }: WebpackRamBundlePluginOptions) {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
@@ -92,6 +95,7 @@ export default class WebpackRamBundlePlugin {
     this.minify = hasValue(minify) ? Boolean(minify) : this.minify;
     this.minifyOptions = minifyOptions;
     this.maxWorkers = maxWorkers;
+    this.bundleId = bundleId;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -226,6 +230,7 @@ export default class WebpackRamBundlePlugin {
           `(${bootstrap.trim()})(this, ${inspect(
             {
               bundleName: this.bundleName,
+              bundleId: this.bundleId,
               mainModuleId: mainId,
               preloadBundleNames: this.preloadBundles,
               singleBundleMode: this.singleBundleMode,
