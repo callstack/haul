@@ -191,7 +191,16 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         transforms[normalizedBundleConfig.name] = bundleConfig.transform;
       });
 
-      Object.keys(normalizedBundleConfigs).forEach((bundleName, index) => {
+      const bundleIdsMap: { [bundleName: string]: number } = Object.keys(
+        normalizedBundleConfigs
+      ).reduce((acc, bundleName, index) => {
+        return {
+          ...acc,
+          [bundleName]: index,
+        };
+      }, {});
+
+      Object.keys(normalizedBundleConfigs).forEach(bundleName => {
         const normalizedBundleConfig = normalizedBundleConfigs[bundleName];
 
         let webpackConfig = getDefaultConfig(
@@ -240,7 +249,14 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           .filter(Boolean);
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
-          getBundlePlugin(env, normalizedBundleConfig, index)
+          getBundlePlugin(
+            env,
+            normalizedBundleConfig,
+            bundleIdsMap[bundleName]
+          ),
+          new webpack.DefinePlugin({
+            'process.env.HAUL_BUNDLES': JSON.stringify(bundleIdsMap),
+          })
         );
 
         webpackConfig.plugins.push(
