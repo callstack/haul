@@ -11,9 +11,12 @@ Object {
       ],
       "dev": false,
       "dll": false,
-      "entry": Array [
-        "./spp.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./spp.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -35,9 +38,12 @@ Object {
       "dependsOn": Array [],
       "dev": false,
       "dll": true,
-      "entry": Array [
-        "./dll.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./dll.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -61,9 +67,12 @@ Object {
       ],
       "dev": false,
       "dll": false,
-      "entry": Array [
-        "./host.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./host.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -99,9 +108,12 @@ Object {
     "app": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./spp.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./spp.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "app.jsbundle",
@@ -166,9 +178,12 @@ Object {
     "base_dll": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./dll.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./dll.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "base_dll.jsbundle",
@@ -230,9 +245,12 @@ Object {
     "index": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./host.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./host.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "index.jsbundle",
@@ -313,9 +331,12 @@ Object {
       ],
       "dev": false,
       "dll": false,
-      "entry": Array [
-        "./spp.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./spp.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -337,9 +358,12 @@ Object {
       "dependsOn": Array [],
       "dev": false,
       "dll": true,
-      "entry": Array [
-        "./dll.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./dll.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -363,9 +387,12 @@ Object {
       ],
       "dev": false,
       "dll": false,
-      "entry": Array [
-        "./host.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./host.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -401,9 +428,12 @@ Object {
     "app": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./spp.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./spp.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "app.ios.bundle",
@@ -474,9 +504,12 @@ Object {
     "base_dll": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./dll.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./dll.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "base_dll.ios.bundle",
@@ -544,9 +577,12 @@ Object {
     "index": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "./host.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "./host.js",
+        ],
+        "initializeCoreLocation": "",
+      },
       "mode": "production",
       "output": Object {
         "filename": "index.ios.bundle",
@@ -625,9 +661,13 @@ Object {
       "dependsOn": Array [],
       "dev": false,
       "dll": false,
-      "entry": Array [
-        "index.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "react-native/Libraries/Core/InitializeCore.js",
+          "index.js",
+        ],
+        "initializeCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
+      },
       "external": false,
       "hasteOptions": Object {},
       "looseMode": [Function],
@@ -663,9 +703,13 @@ Object {
     "index": Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
-      "entry": Array [
-        "index.js",
-      ],
+      "entry": Object {
+        "files": Array [
+          "react-native/Libraries/Core/InitializeCore.js",
+          "index.js",
+        ],
+        "initializeCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
+      },
       "mode": "production",
       "output": Object {
         "filename": "index.jsbundle",
@@ -718,6 +762,9 @@ Object {
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
+        },
+        InitCoreDllPlugin {
+          "initCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
         },
       ],
       "target": "webworker",

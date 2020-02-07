@@ -17,7 +17,7 @@ import {
 } from '../';
 import getSourceMapPlugin from './utils/getSourceMapPlugin';
 import {
-  FeaturesConfig,
+  NormalizedFeaturesConfig,
   NormalizedServerConfig,
   NormalizedTemplatesConfig,
 } from '../config/types';
@@ -25,6 +25,7 @@ import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import getBundlePlugin from './utils/getBundlePlugin';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
+import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -41,8 +42,8 @@ const defaultTemplateConfig: NormalizedTemplatesConfig = {
   },
 };
 
-const defaultFeaturesConfig: FeaturesConfig = {
-  multibundle: 1,
+const defaultFeaturesConfig: NormalizedFeaturesConfig = {
+  multiBundle: 1,
 };
 
 export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
@@ -65,7 +66,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         {},
         defaultFeaturesConfig,
         projectConfig.features
-      ) as FeaturesConfig;
+      ) as NormalizedFeaturesConfig;
 
       const platforms = projectConfig.platforms || ['ios', 'android'];
 
@@ -118,8 +119,13 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           name: bundleConfig.name || bundleName,
           entry:
             typeof bundleConfig.entry === 'string'
-              ? [bundleConfig.entry]
-              : bundleConfig.entry,
+              ? { files: [bundleConfig.entry], initializeCoreLocation: '' }
+              : Array.isArray(bundleConfig.entry)
+              ? {
+                  files: bundleConfig.entry,
+                  initializeCoreLocation: '',
+                }
+              : bundleConfig.entry || { files: [], initializeCoreLocation: '' },
           type:
             // Force basic-bundle type when serving from packager server.
             env.bundleTarget === 'server'
@@ -263,7 +269,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           getBundlePlugin(
             env,
             normalizedBundleConfig,
-            featuresConfig.multibundle === 1
+            featuresConfig.multiBundle === 1
               ? bundleName
               : bundleIdsMap[bundleName],
             bundleName
@@ -276,6 +282,18 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         webpackConfig.plugins.push(
           new LooseModeWebpackPlugin(normalizedBundleConfig.looseMode)
         );
+
+        if (
+          normalizedBundleConfig.entry.initializeCoreLocation &&
+          featuresConfig.multiBundle >= 2
+        ) {
+          webpackConfig.plugins.push(
+            new InitCoreDllPlugin({
+              initCoreLocation:
+                normalizedBundleConfig.entry.initializeCoreLocation,
+            })
+          );
+        }
 
         if (env.bundleMode === 'single-bundle') {
           applySingleBundleTweaks(
