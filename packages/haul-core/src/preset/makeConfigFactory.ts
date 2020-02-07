@@ -17,6 +17,7 @@ import {
 } from '../';
 import getSourceMapPlugin from './utils/getSourceMapPlugin';
 import {
+  FeaturesConfig,
   NormalizedServerConfig,
   NormalizedTemplatesConfig,
 } from '../config/types';
@@ -40,6 +41,10 @@ const defaultTemplateConfig: NormalizedTemplatesConfig = {
   },
 };
 
+const defaultFeaturesConfig: FeaturesConfig = {
+  multibundle: 1,
+};
+
 export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
   return function makeConfig(
     projectConfig: ProjectConfig
@@ -55,6 +60,12 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         defaultTemplateConfig,
         projectConfig.templates
       ) as NormalizedTemplatesConfig;
+
+      const featuresConfig = merge(
+        {},
+        defaultFeaturesConfig,
+        projectConfig.features
+      ) as FeaturesConfig;
 
       const platforms = projectConfig.platforms || ['ios', 'android'];
 
@@ -191,6 +202,15 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         transforms[normalizedBundleConfig.name] = bundleConfig.transform;
       });
 
+      const bundleIdsMap: { [bundleName: string]: number } = Object.keys(
+        normalizedBundleConfigs
+      ).reduce((acc, bundleName, index) => {
+        return {
+          ...acc,
+          [bundleName]: index,
+        };
+      }, {});
+
       Object.keys(normalizedBundleConfigs).forEach(bundleName => {
         const normalizedBundleConfig = normalizedBundleConfigs[bundleName];
 
@@ -240,7 +260,17 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           .filter(Boolean);
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
-          getBundlePlugin(env, normalizedBundleConfig)
+          getBundlePlugin(
+            env,
+            normalizedBundleConfig,
+            featuresConfig.multibundle === 1
+              ? bundleName
+              : bundleIdsMap[bundleName],
+            bundleName
+          ),
+          new webpack.DefinePlugin({
+            'process.env.HAUL_BUNDLES': JSON.stringify(bundleIdsMap),
+          })
         );
 
         webpackConfig.plugins.push(

@@ -101,10 +101,15 @@ export type BundleConfigBuilder = (
   runtime: Runtime
 ) => BundleConfig;
 
+export type FeaturesConfig = {
+  multibundle?: 1 | 2;
+};
+
 export type ProjectConfig = {
   server?: ServerConfig;
   platforms?: string[];
   templates?: TemplatesConfig;
+  features?: FeaturesConfig;
   bundles: { [bundleName: string]: BundleConfigBuilder | BundleConfig };
 };
 

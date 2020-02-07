@@ -131,7 +131,8 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
-          "bundleName": "index",
+          "bundleId": "app",
+          "bundleName": "app",
           "indexRamBundle": true,
           "maxWorkers": 7,
           "minify": false,
@@ -143,6 +144,11 @@ Object {
           ],
           "singleBundleMode": false,
           "sourceMap": true,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
@@ -192,7 +198,8 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
-          "bundleName": "index",
+          "bundleId": "base_dll",
+          "bundleName": "base_dll",
           "indexRamBundle": true,
           "maxWorkers": 7,
           "minify": false,
@@ -202,6 +209,11 @@ Object {
           "preloadBundles": Array [],
           "singleBundleMode": false,
           "sourceMap": true,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
@@ -267,6 +279,11 @@ Object {
             "base_dll",
           ],
           "sourceMap": true,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
@@ -436,6 +453,11 @@ Object {
           ],
           "sourceMap": true,
         },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
+        },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
         },
@@ -502,6 +524,11 @@ Object {
           "preloadBundles": Array [],
           "sourceMap": true,
         },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
+        },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
         },
@@ -566,6 +593,11 @@ Object {
             "base_dll",
           ],
           "sourceMap": true,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
+          },
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
@@ -678,6 +710,11 @@ Object {
           "bundle": false,
           "preloadBundles": Array [],
           "sourceMap": true,
+        },
+        DefinePlugin {
+          "definitions": Object {
+            "process.env.HAUL_BUNDLES": "{\\"index\\":0}",
+          },
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
