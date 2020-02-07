@@ -25,6 +25,7 @@ import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import getBundlePlugin from './utils/getBundlePlugin';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
+import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -118,7 +119,12 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           name: bundleConfig.name || bundleName,
           entry:
             typeof bundleConfig.entry === 'string'
-              ? [bundleConfig.entry]
+              ? { files: [bundleConfig.entry], initializeCoreLocation: '' }
+              : Array.isArray(bundleConfig.entry)
+              ? {
+                  files: bundleConfig.entry,
+                  initializeCoreLocation: '',
+                }
               : bundleConfig.entry,
           type:
             // Force basic-bundle type when serving from packager server.
@@ -276,6 +282,15 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         webpackConfig.plugins.push(
           new LooseModeWebpackPlugin(normalizedBundleConfig.looseMode)
         );
+
+        if (normalizedBundleConfig.entry.initializeCoreLocation) {
+          webpackConfig.plugins.push(
+            new InitCoreDllPlugin({
+              initCoreLocation:
+                normalizedBundleConfig.entry.initializeCoreLocation,
+            })
+          );
+        }
 
         if (env.bundleMode === 'single-bundle') {
           applySingleBundleTweaks(

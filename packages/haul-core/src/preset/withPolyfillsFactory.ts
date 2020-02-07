@@ -8,12 +8,18 @@ export default function withPolyfillsFactory(polyfills: string[]) {
     {
       initializeCoreLocation = 'react-native/Libraries/Core/InitializeCore.js',
     }: Options = {}
-  ): string[] {
+  ): { files: string[]; initializeCoreLocation: string } {
     const entryPrefix = [...polyfills, initializeCoreLocation];
     if (typeof entry === 'string') {
-      return [...entryPrefix, entry];
+      return {
+        initializeCoreLocation,
+        files: [...entryPrefix, entry],
+      };
     } else if (Array.isArray(entry)) {
-      return [...entryPrefix, ...entry];
+      return {
+        initializeCoreLocation,
+        files: [...entryPrefix, ...entry],
+      };
     } else {
       throw new Error(`${typeof entry} is not supported as a entry`);
     }

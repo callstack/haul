@@ -5,6 +5,7 @@ import { Runtime, ProjectConfig, EnvOptions } from '../../';
 // @ts-ignore
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line
 import LooseModeWebpackPlugin from '../../webpack/plugins/LooseModeWebpackPlugin';
+import withPolyfillsFactory from '../withPolyfillsFactory';
 
 const makeConfig = makeConfigFactory(
   (_runtime, env, bundleName, projectConfig) => ({
@@ -54,7 +55,7 @@ describe('makeConfig', () => {
       const projectConfig: ProjectConfig = {
         bundles: {
           index: {
-            entry: 'index.js',
+            entry: withPolyfillsFactory([])('index.js'),
           },
         },
       };
@@ -73,7 +74,9 @@ describe('makeConfig', () => {
       const projectConfig: ProjectConfig = {
         bundles: {
           index: {
-            entry: ['./a.js', './b.js'],
+            entry: withPolyfillsFactory([])(['./a.js', './b.js'], {
+              initializeCoreLocation: 'initCore.js',
+            }),
           },
         },
       };
@@ -82,7 +85,10 @@ describe('makeConfig', () => {
         bundleType: 'basic-bundle',
       };
       const config = makeConfig(projectConfig)(runtime, env);
-      expect(config.webpackConfigs.index.entry).toEqual(['./a.js', './b.js']);
+      expect(config.webpackConfigs.index.entry).toEqual({
+        files: ['initCore.js', './a.js', './b.js'],
+        initializeCoreLocation: 'initCore.js',
+      });
     });
 
     it('should create config with builder function and custom transform', () => {
