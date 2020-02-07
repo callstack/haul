@@ -53,6 +53,9 @@ describe('makeConfig', () => {
 
     it('should create config for basic-bundle', () => {
       const projectConfig: ProjectConfig = {
+        features: {
+          multiBundle: 2,
+        },
         bundles: {
           index: {
             entry: withPolyfillsFactory([])('index.js'),

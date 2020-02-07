@@ -17,7 +17,7 @@ import {
 } from '../';
 import getSourceMapPlugin from './utils/getSourceMapPlugin';
 import {
-  FeaturesConfig,
+  NormalizedFeaturesConfig,
   NormalizedServerConfig,
   NormalizedTemplatesConfig,
 } from '../config/types';
@@ -42,8 +42,8 @@ const defaultTemplateConfig: NormalizedTemplatesConfig = {
   },
 };
 
-const defaultFeaturesConfig: FeaturesConfig = {
-  multibundle: 1,
+const defaultFeaturesConfig: NormalizedFeaturesConfig = {
+  multiBundle: 1,
 };
 
 export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
@@ -66,7 +66,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         {},
         defaultFeaturesConfig,
         projectConfig.features
-      ) as FeaturesConfig;
+      ) as NormalizedFeaturesConfig;
 
       const platforms = projectConfig.platforms || ['ios', 'android'];
 
@@ -269,7 +269,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           getBundlePlugin(
             env,
             normalizedBundleConfig,
-            featuresConfig.multibundle === 1
+            featuresConfig.multiBundle === 1
               ? bundleName
               : bundleIdsMap[bundleName],
             bundleName
@@ -283,7 +283,10 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           new LooseModeWebpackPlugin(normalizedBundleConfig.looseMode)
         );
 
-        if (normalizedBundleConfig.entry.initializeCoreLocation) {
+        if (
+          normalizedBundleConfig.entry.initializeCoreLocation &&
+          featuresConfig.multiBundle >= 2
+        ) {
           webpackConfig.plugins.push(
             new InitCoreDllPlugin({
               initCoreLocation:
