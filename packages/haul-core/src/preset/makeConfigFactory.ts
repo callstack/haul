@@ -125,7 +125,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
                   files: bundleConfig.entry,
                   initializeCoreLocation: '',
                 }
-              : bundleConfig.entry,
+              : bundleConfig.entry || { files: [], initializeCoreLocation: '' },
           type:
             // Force basic-bundle type when serving from packager server.
             env.bundleTarget === 'server'
