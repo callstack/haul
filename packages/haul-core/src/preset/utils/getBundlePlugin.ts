@@ -6,7 +6,8 @@ import { EnvOptions, NormalizedBundleConfig } from '../../config/types';
 export default function getBundlePlugin(
   env: EnvOptions,
   bundleConfig: NormalizedBundleConfig,
-  bundleId: number
+  bundleId: number | string,
+  bundleName: string
 ): webpack.Plugin {
   if (bundleConfig.type === 'basic-bundle') {
     return new BasicBundleWebpackPlugin({
@@ -24,6 +25,7 @@ export default function getBundlePlugin(
       preloadBundles: bundleConfig.dependsOn,
       maxWorkers: env.maxWorkers || bundleConfig.maxWorkers,
       bundleId,
+      bundleName,
     });
   }
 }

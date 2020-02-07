@@ -56,6 +56,8 @@ function build({
         indexRamBundle,
         minify: false,
         maxWorkers: 1,
+        bundleName: 'index',
+        bundleId: 'index',
       }),
     ],
     optimization: {

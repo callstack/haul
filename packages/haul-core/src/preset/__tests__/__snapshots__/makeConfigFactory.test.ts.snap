@@ -131,8 +131,8 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
-          "bundleId": 2,
-          "bundleName": "index",
+          "bundleId": "app",
+          "bundleName": "app",
           "indexRamBundle": true,
           "maxWorkers": 7,
           "minify": false,
@@ -198,8 +198,8 @@ Object {
           },
         },
         WebpackRamBundlePlugin {
-          "bundleId": 1,
-          "bundleName": "index",
+          "bundleId": "base_dll",
+          "bundleName": "base_dll",
           "indexRamBundle": true,
           "maxWorkers": 7,
           "minify": false,

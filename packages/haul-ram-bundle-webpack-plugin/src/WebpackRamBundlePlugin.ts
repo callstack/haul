@@ -49,7 +49,8 @@ type WebpackRamBundlePluginOptions = {
     Exclude<keyof MinifyOptions, 'sourceMap'>
   >;
   maxWorkers: number;
-  bundleId: number;
+  bundleId: number | string;
+  bundleName: string;
 };
 
 const variableToString = (value?: string | number) => {
@@ -69,12 +70,12 @@ export default class WebpackRamBundlePlugin {
   sourceMap: boolean = false;
   indexRamBundle: boolean = true;
   preloadBundles: string[];
+  bundleId: number | string = 'index';
   bundleName: string = 'index';
   singleBundleMode: boolean = true;
   minify: boolean = false;
   minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
   maxWorkers: number;
-  bundleId: number;
 
   constructor({
     sourceMap,
@@ -85,6 +86,7 @@ export default class WebpackRamBundlePlugin {
     minifyOptions,
     maxWorkers,
     bundleId,
+    bundleName,
   }: WebpackRamBundlePluginOptions) {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
@@ -96,16 +98,10 @@ export default class WebpackRamBundlePlugin {
     this.minifyOptions = minifyOptions;
     this.maxWorkers = maxWorkers;
     this.bundleId = bundleId;
+    this.bundleName = bundleName;
   }
 
   apply(compiler: webpack.Compiler) {
-    compiler.hooks.thisCompilation.tap(
-      'WebpackRamBundlePlugin',
-      compilation => {
-        this.bundleName = compilation.outputOptions.library || this.bundleName;
-      }
-    );
-
     compiler.hooks.emit.tapPromise(
       'WebpackRamBundlePlugin',
       async _compilation => {
