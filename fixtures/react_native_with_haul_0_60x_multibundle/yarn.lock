@@ -5427,7 +5427,7 @@ react-native-gesture-handler@1.5.3:
 
 react-native-multibundle@callstack-internal/react-native-multibundle#feat/js-api:
   version "1.0.0"
-  resolved "git+ssh://git@github.com/callstack-internal/react-native-multibundle.git#fbf720719d43f42c15d102b6641f8218ccdc20f9"
+  resolved "git+ssh://git@github.com/callstack-internal/react-native-multibundle.git#e7d047e7881c1d66fc3829b543d9b4446759af8b"
 
 react-native-safe-area-view@^0.14.1:
   version "0.14.6"

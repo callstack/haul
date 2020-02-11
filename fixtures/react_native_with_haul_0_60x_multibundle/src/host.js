@@ -109,7 +109,4 @@ class RootComponent extends React.Component {
   }
 }
 
-AppRegistry.registerComponent(
-  'react_native_with_haul_0_60x_multibundle',
-  () => RootComponent
-);
+export default RootComponent;

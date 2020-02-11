@@ -10,30 +10,32 @@ export default makeConfig({
     multiBundle: 2,
   },
   bundles: {
-    // index: {
-    //   entry: withPolyfills('./index'),
-    //   // type: 'indexed-ram-bundle',
-    // },
-    // host: {
-    //   entry: withPolyfills('./src/host.js'),
-    //   dependsOn: ['index'],
-    // },
     index: {
-      entry: withPolyfills(['react', 'react-native', 'react-navigation']),
+      entry: withPolyfills(
+        ['./src/dll.js', 'react', 'react-native', 'react-navigation'],
+        {
+          additionalSetupFiles: ['src/dll.js'],
+        }
+      ),
       dll: true,
       type: 'indexed-ram-bundle',
     },
-    // app0: {
-    //   entry: './src/app0',
-    //   type: 'basic-bundle',
-    //   dependsOn: ['index'],
-    //   app: true,
-    // },
-    // app1: {
-    //   entry: './src/app1',
-    //   type: 'basic-bundle',
-    //   dependsOn: ['index'],
-    //   app: true,
-    // },
+    host: {
+      entry: './src/host.js',
+      dependsOn: ['index'],
+      app: true,
+    },
+    app0: {
+      entry: './src/app0',
+      type: 'basic-bundle',
+      dependsOn: ['index'],
+      app: true,
+    },
+    app1: {
+      entry: './src/app1',
+      type: 'basic-bundle',
+      dependsOn: ['index'],
+      app: true,
+    },
   },
 });

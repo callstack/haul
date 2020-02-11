@@ -79,6 +79,11 @@ export default class InitCoreDllPlugin {
                       );
                     }
                   );
+                  console.log(
+                    this.setupFiles,
+                    setupFilesModules.map(module => module.id),
+                    compilation.modules.find(m => /dll/.test(m.id))
+                  );
 
                   const setupCode = setupFilesModules
                     .map(

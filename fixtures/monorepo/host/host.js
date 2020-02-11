@@ -1,17 +1,21 @@
 import React from 'react';
 import { AppRegistry, View, Text, Linking } from 'react-native';
-import { createAppContainer, createBottomTabNavigator, NavigationActions } from 'react-navigation';
+import {
+  createAppContainer,
+  createBottomTabNavigator,
+  NavigationActions,
+} from 'react-navigation';
 import EmptyHost from './EmptyHost';
 import BundleRegistry from './BundleRegistry';
 
 function makeScreenForAppBundle(bundleName) {
-  const screen = (props) => {
+  const screen = props => {
     if (!BundleRegistry.isBundleLoaded(bundleName)) {
       throw new Error(`App bundle ${bundleName} was not loaded`);
     }
-    
+
     const Component = BundleRegistry.getBundleExport(bundleName);
-    return <Component {...props} />
+    return <Component {...props} />;
   };
 
   return {
@@ -21,7 +25,10 @@ function makeScreenForAppBundle(bundleName) {
         if (BundleRegistry.isBundleLoaded(bundleName)) {
           defaultHandler();
         } else {
-          const listener = ({ bundleName: currentlyLoadedBundle, loadStartTimestamp }) => {
+          const listener = ({
+            bundleName: currentlyLoadedBundle,
+            loadStartTimestamp,
+          }) => {
             if (currentlyLoadedBundle === bundleName) {
               BundleRegistry.removeListener('bundleLoaded', listener);
               navigation.setParams({ loadStartTimestamp });
@@ -31,42 +38,47 @@ function makeScreenForAppBundle(bundleName) {
           BundleRegistry.addListener('bundleLoaded', listener);
           BundleRegistry.loadBundle(bundleName);
         }
-      }
-    }
-  }
+      },
+    },
+  };
 }
 
 const AppContainer = createAppContainer(
-  createBottomTabNavigator({
-    Initial: EmptyHost,
-    app0: makeScreenForAppBundle('app0'),
-  }, {
-    initialRouteName: 'Initial',
-  })
+  createBottomTabNavigator(
+    {
+      Initial: EmptyHost,
+      app0: makeScreenForAppBundle('app0'),
+    },
+    {
+      initialRouteName: 'Initial',
+    }
+  )
 );
 
 BundleRegistry.enableLogging();
 
 class RootComponent extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   navigatorRef = React.createRef();
 
-  handleURL = (event) => {
+  handleURL = event => {
     const [, bundleName] = event.url.match(/.+\/\/(.+)/);
     BundleRegistry.loadBundle(bundleName);
-  }
+  };
 
   onBundleLoaded = ({ bundleName, loadStartTimestamp }) => {
     if (this.navigatorRef.current) {
-      this.navigatorRef.current.dispatch(NavigationActions.navigate({
-        routeName: bundleName,
-        params: { loadStartTimestamp }
-      }));
+      this.navigatorRef.current.dispatch(
+        NavigationActions.navigate({
+          routeName: bundleName,
+          params: { loadStartTimestamp },
+        })
+      );
     }
-  }
+  };
 
   async componentDidMount() {
     BundleRegistry.addListener('bundleLoaded', this.onBundleLoaded);
@@ -86,13 +98,13 @@ class RootComponent extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, width: '100%' }}>
-          <AppContainer
-            ref={this.navigatorRef}
-            // we handle deep linking manually
-            enableURLHandling={false}
-          />
+        <AppContainer
+          ref={this.navigatorRef}
+          // we handle deep linking manually
+          enableURLHandling={false}
+        />
       </View>
-    )
+    );
   }
 }
 
