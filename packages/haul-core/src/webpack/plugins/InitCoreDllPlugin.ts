@@ -49,10 +49,10 @@ class InitCoreDllModuleFactory extends DllModuleFactory {
 }
 
 export default class InitCoreDllPlugin {
-  private initCoreLocation: string = '';
+  private setupFiles: string[] = [];
 
-  constructor({ initCoreLocation }: { initCoreLocation: string }) {
-    this.initCoreLocation = initCoreLocation;
+  constructor({ setupFiles }: { setupFiles: string[] }) {
+    this.setupFiles = setupFiles;
   }
 
   apply(compiler: webpack.Compiler) {
@@ -72,18 +72,24 @@ export default class InitCoreDllPlugin {
               tap.fn(compilation, ...args);
               const initCoreDllModuleFactory = new InitCoreDllModuleFactory(
                 () => {
-                  const initCoreModule = compilation.modules.find(
+                  const setupFilesModules = compilation.modules.filter(
                     webpackModule => {
-                      return webpackModule.resource?.endsWith(
-                        this.initCoreLocation
+                      return this.setupFiles.some(setupFile =>
+                        webpackModule.resource?.endsWith(setupFile)
                       );
                     }
                   );
-                  return initCoreModule
-                    ? `__webpack_require__(${JSON.stringify(
-                        initCoreModule.id
-                      )});`
-                    : '';
+
+                  const setupCode = setupFilesModules
+                    .map(
+                      webpackModule =>
+                        `__webpack_require__(${JSON.stringify(
+                          webpackModule.id
+                        )});`
+                    )
+                    .join('\n');
+
+                  return setupCode;
                 }
               );
               compilation.dependencyFactories.set(
