@@ -1,4 +1,5 @@
-function bootstrap(globalScope, options) { // eslint-disable-line
+function bootstrap(globalScope, options) {
+  // eslint-disable-line
   const {
     bundleName,
     bundleId,

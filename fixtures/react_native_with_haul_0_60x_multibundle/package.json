@@ -5,12 +5,14 @@
   "scripts": {
     "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
-    "haul": "node ../../packages/haul-cli/bin/haul.js"
+    "haul": "node ../../packages/haul-cli/bin/haul.js",
+    "build": "yarn haul multi-bundle --platform android --dev false --bundle-output android/app/src/main/assets/ --assets-dest android/app/src/main/res/ --config haul.config.multi.js"
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.0",
-    "react-native-gesture-handler": "^1.3.0",
+    "react-native": "callstack/react-native#feat/bundle-id-for-multibundle",
+    "react-native-gesture-handler": "1.5.3",
+    "react-native-multibundle": "callstack-internal/react-native-multibundle#feat/js-api",
     "react-navigation": "3.11.0"
   },
   "devDependencies": {

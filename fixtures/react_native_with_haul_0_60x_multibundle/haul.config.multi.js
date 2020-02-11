@@ -3,34 +3,37 @@ import { withPolyfills, makeConfig } from '../../packages/haul-preset-0.60';
 export default makeConfig({
   templates: {
     filename: {
-      ios: '[bundleName].ios.bundle'
+      ios: '[bundleName].ios.bundle',
     },
   },
+  features: {
+    multiBundle: 2,
+  },
   bundles: {
-    host: {
-      entry: withPolyfills('./src/host.js'),
-      dependsOn: ['base_dll'],
-    },
-    base_dll: {
-      entry: withPolyfills([
-        'react',
-        'react-native',
-        'react-navigation',
-      ]),
+    // index: {
+    //   entry: withPolyfills('./index'),
+    //   // type: 'indexed-ram-bundle',
+    // },
+    // host: {
+    //   entry: withPolyfills('./src/host.js'),
+    //   dependsOn: ['index'],
+    // },
+    index: {
+      entry: withPolyfills(['react', 'react-native', 'react-navigation']),
       dll: true,
       type: 'indexed-ram-bundle',
     },
-    app0: {
-      entry: './src/app0',
-      type: 'indexed-ram-bundle',
-      dependsOn: ['base_dll'],
-      app: true,
-    },
-    app1: {
-      entry: './src/app1',
-      type: 'indexed-ram-bundle',
-      dependsOn: ['base_dll'],
-      app: true,
-    }
+    // app0: {
+    //   entry: './src/app0',
+    //   type: 'basic-bundle',
+    //   dependsOn: ['index'],
+    //   app: true,
+    // },
+    // app1: {
+    //   entry: './src/app1',
+    //   type: 'basic-bundle',
+    //   dependsOn: ['index'],
+    //   app: true,
+    // },
   },
 });

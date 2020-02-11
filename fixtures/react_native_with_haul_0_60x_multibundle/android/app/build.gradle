@@ -76,8 +76,11 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js",
-    cliPath: "node_modules/@haul-bundler/cli/bin/haul.js"
+//    entryFile: "index.js",
+    bundleCommand: "multi-bundle",
+    cliPath: "../../packages/haul-cli/bin/haul.js",
+    bundleInDebug: true,
+    extraPackagerArgs: ["--skipHostCheck", "--config=haul.config.multi.js"]
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -166,7 +169,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':ReactAndroid')
 
     // JSC from node_modules
     if (useIntlJsc) {

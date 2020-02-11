@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -11,10 +17,13 @@ const instructions = Platform.select({
 export default class App extends Component {
   state = {
     counter: 0,
-  }
+  };
 
   render() {
-    const loadTime = Math.abs(Date.now() - this.props.navigation.state.params.loadStartTimestamp);
+    console.log(this.props.navigation);
+    const loadTime = Math.abs(
+      Date.now() - this.props.navigation.state.params.loadStartTimestamp
+    );
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>App 0</Text>
@@ -22,9 +31,13 @@ export default class App extends Component {
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
         <Text style={styles.instructions}>Counter: {this.state.counter}</Text>
-        <TouchableOpacity onPress={() => {
-          this.setState(state => ({ counter: state.counter + 1 }))
-        }}><Text style={styles.instructions}>Increment</Text></TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState(state => ({ counter: state.counter + 1 }));
+          }}
+        >
+          <Text style={styles.instructions}>Increment</Text>
+        </TouchableOpacity>
       </View>
     );
   }

@@ -1,4 +1,4 @@
-package com.react_native_with_haul_0_60x;
+package com.react_native_with_haul_0_60x_multibundle;
 
 import com.facebook.react.ReactActivity;
 
