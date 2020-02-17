@@ -119,13 +119,13 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           name: bundleConfig.name || bundleName,
           entry:
             typeof bundleConfig.entry === 'string'
-              ? { files: [bundleConfig.entry], initializeCoreLocation: '' }
+              ? { entryFiles: [bundleConfig.entry], setupFiles: [] }
               : Array.isArray(bundleConfig.entry)
               ? {
-                  files: bundleConfig.entry,
-                  initializeCoreLocation: '',
+                  entryFiles: bundleConfig.entry,
+                  setupFiles: [],
                 }
-              : bundleConfig.entry || { files: [], initializeCoreLocation: '' },
+              : bundleConfig.entry || { setupFiles: [], entryFiles: [] },
           type:
             // Force basic-bundle type when serving from packager server.
             env.bundleTarget === 'server'
@@ -284,13 +284,12 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         );
 
         if (
-          normalizedBundleConfig.entry.initializeCoreLocation &&
+          normalizedBundleConfig.entry.setupFiles.length > 0 &&
           featuresConfig.multiBundle >= 2
         ) {
           webpackConfig.plugins.push(
             new InitCoreDllPlugin({
-              initCoreLocation:
-                normalizedBundleConfig.entry.initializeCoreLocation,
+              setupFiles: normalizedBundleConfig.entry.setupFiles,
             })
           );
         }

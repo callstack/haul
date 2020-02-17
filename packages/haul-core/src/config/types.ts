@@ -29,10 +29,7 @@ export type EnvOptions = {
 export type BundleConfig = Assign<
   {
     name?: string;
-    entry:
-      | string
-      | string[]
-      | { files: string[]; initializeCoreLocation: string };
+    entry: string | string[] | { entryFiles: string[]; setupFiles: string[] };
     type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
     platform?: string;
     root?: string;
@@ -85,8 +82,8 @@ export type NormalizedBundleConfig = Assign<
     >,
     {
       entry: {
-        files: string[];
-        initializeCoreLocation: string;
+        entryFiles: string[];
+        setupFiles: string[];
       };
       minifyOptions: BundleConfig['minifyOptions'];
     }

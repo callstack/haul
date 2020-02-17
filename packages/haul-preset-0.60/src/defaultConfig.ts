@@ -22,7 +22,7 @@ export default function getDefaultConfig(
   projectConfig: NormalizedProjectConfig
 ): webpack.Configuration {
   const {
-    entry: { files },
+    entry: { entryFiles },
     platform,
     root,
     assetsDest,
@@ -39,7 +39,7 @@ export default function getDefaultConfig(
     mode: dev ? 'development' : 'production',
     context: root,
     devtool: false,
-    entry: files,
+    entry: entryFiles,
     output: {
       path: assetsDest || root,
       publicPath: `http://${host}:${port}/`,
