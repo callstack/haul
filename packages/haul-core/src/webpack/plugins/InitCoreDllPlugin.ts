@@ -3,6 +3,7 @@ import DllModuleFactory from 'webpack/lib/DllModuleFactory';
 import DllModule from 'webpack/lib/DllModule';
 import { RawSource } from 'webpack-sources';
 import webpack from 'webpack';
+import { ResolverFactory } from 'enhanced-resolve';
 
 class InitCoreDllModule extends DllModule {
   constructor(
@@ -49,13 +50,40 @@ class InitCoreDllModuleFactory extends DllModuleFactory {
 }
 
 export default class InitCoreDllPlugin {
-  private initCoreLocation: string = '';
+  private setupFiles: string[] = [];
+  private resolvedSetupFiles: string[] = [];
 
-  constructor({ initCoreLocation }: { initCoreLocation: string }) {
-    this.initCoreLocation = initCoreLocation;
+  constructor({ setupFiles }: { setupFiles: string[] }) {
+    this.setupFiles = setupFiles;
   }
 
   apply(compiler: webpack.Compiler) {
+    compiler.hooks.beforeRun.tapPromise('InitCoreDllPlugin', async compiler => {
+      const resolver = ResolverFactory.createResolver({
+        ...compiler.options.resolve,
+        fileSystem: compiler.inputFileSystem,
+      } as ResolverFactory.ResolverOption);
+      this.resolvedSetupFiles = await Promise.all(
+        this.setupFiles.map(
+          async setupFile =>
+            new Promise<string>((resolve, reject) => {
+              resolver.resolve(
+                {},
+                compiler.context,
+                setupFile,
+                (error, resolved) => {
+                  if (error) {
+                    reject(error);
+                  } else {
+                    resolve(resolved);
+                  }
+                }
+              );
+            })
+        )
+      );
+    });
+
     compiler.hooks.compilation.intercept({
       register: tap => {
         // Intercept tap from DllEntryPlugin in order to modify it.
@@ -72,18 +100,24 @@ export default class InitCoreDllPlugin {
               tap.fn(compilation, ...args);
               const initCoreDllModuleFactory = new InitCoreDllModuleFactory(
                 () => {
-                  const initCoreModule = compilation.modules.find(
+                  const setupFilesModules = compilation.modules.filter(
                     webpackModule => {
-                      return webpackModule.resource?.endsWith(
-                        this.initCoreLocation
+                      return this.resolvedSetupFiles.some(
+                        setupFile => webpackModule.resource === setupFile
                       );
                     }
                   );
-                  return initCoreModule
-                    ? `__webpack_require__(${JSON.stringify(
-                        initCoreModule.id
-                      )});`
-                    : '';
+
+                  const setupCode = setupFilesModules
+                    .map(
+                      webpackModule =>
+                        `__webpack_require__(${JSON.stringify(
+                          webpackModule.id
+                        )});`
+                    )
+                    .join('\n');
+
+                  return setupCode;
                 }
               );
               compilation.dependencyFactories.set(

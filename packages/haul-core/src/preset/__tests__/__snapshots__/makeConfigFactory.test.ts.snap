@@ -12,10 +12,10 @@ Object {
       "dev": false,
       "dll": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./spp.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -39,10 +39,10 @@ Object {
       "dev": false,
       "dll": true,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./dll.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -68,10 +68,10 @@ Object {
       "dev": false,
       "dll": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./host.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -109,10 +109,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./spp.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -179,10 +179,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./dll.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -246,10 +246,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./host.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -332,10 +332,10 @@ Object {
       "dev": false,
       "dll": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./spp.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -359,10 +359,10 @@ Object {
       "dev": false,
       "dll": true,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./dll.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -388,10 +388,10 @@ Object {
       "dev": false,
       "dll": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./host.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -429,10 +429,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./spp.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -505,10 +505,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./dll.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -578,10 +578,10 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "./host.js",
         ],
-        "initializeCoreLocation": "",
+        "setupFiles": Array [],
       },
       "mode": "production",
       "output": Object {
@@ -662,11 +662,13 @@ Object {
       "dev": false,
       "dll": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "react-native/Libraries/Core/InitializeCore.js",
           "index.js",
         ],
-        "initializeCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
+        "setupFiles": Array [
+          "react-native/Libraries/Core/InitializeCore.js",
+        ],
       },
       "external": false,
       "hasteOptions": Object {},
@@ -704,11 +706,13 @@ Object {
       "context": "<<REPLACED>>/packages/haul-core/src/preset/__tests__",
       "devtool": false,
       "entry": Object {
-        "files": Array [
+        "entryFiles": Array [
           "react-native/Libraries/Core/InitializeCore.js",
           "index.js",
         ],
-        "initializeCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
+        "setupFiles": Array [
+          "react-native/Libraries/Core/InitializeCore.js",
+        ],
       },
       "mode": "production",
       "output": Object {
@@ -762,9 +766,6 @@ Object {
         },
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
-        },
-        InitCoreDllPlugin {
-          "initCoreLocation": "react-native/Libraries/Core/InitializeCore.js",
         },
       ],
       "target": "webworker",
