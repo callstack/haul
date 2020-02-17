@@ -767,11 +767,6 @@ Object {
         LooseModeWebpackPlugin {
           "checkLooseMode": [Function],
         },
-        InitCoreDllPlugin {
-          "setupFiles": Array [
-            "react-native/Libraries/Core/InitializeCore.js",
-          ],
-        },
       ],
       "target": "webworker",
     },
