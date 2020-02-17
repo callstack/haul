@@ -1,5 +1,5 @@
 {
-  "version": "0.16.0",
+  "version": "0.17.0",
   "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
@@ -30,9 +30,10 @@
     "@haul-bundler/basic-bundle-webpack-plugin": "^0.16.0",
     "@haul-bundler/core-legacy": "^0.16.0",
     "@haul-bundler/inspector-events": "^0.16.0",
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.16.0",
+    "@haul-bundler/ram-bundle-webpack-plugin": "^0.17.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
+    "enhanced-resolve": "^4.1.1",
     "escape-string-regexp": "^2.0.0",
     "find-cache-dir": "^3.2.0",
     "hasha": "^5.1.0",
@@ -59,7 +60,6 @@
     "utility-types": "^3.10.0",
     "webpack": "^4.41.5",
     "webpack-sources": "^1.4.3",
-    "enhanced-resolve": "^4.1.1",
     "wrap-ansi": "^6.2.0",
     "ws": "^7.2.1"
   },
