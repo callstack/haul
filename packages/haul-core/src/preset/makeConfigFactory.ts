@@ -284,6 +284,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         );
 
         if (
+          normalizedBundleConfig.dll &&
           normalizedBundleConfig.entry.setupFiles.length > 0 &&
           featuresConfig.multiBundle >= 2
         ) {

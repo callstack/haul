@@ -40,11 +40,12 @@ Usually, the return value of `makeConfig` should be returned as default export w
 
 Decorate the entry file(s) with React Native polyfills. You can specify custom `root` directory and path to `InitializeCore.js` file.
 
-| Name      | Type                                  | Description                                                                                                                            |
-| --------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`   | `string` / `string[]`                 | Entry file(s) path(s)                                                                                                                  |
-| `options` | `{ initializeCoreLocation?: string }` | Specify custom path to `InitializeCore.js` file. Defaults: `initializeCoreLocation` - `react-native/Libraries/Core/InitializeCore.js`. |
-| _returns_ | `string[]`                            | Entry file(s) with polyfill paths                                                                                                      |
+| Name                             | Type                    | Description                                                                                                                            |
+| -------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `entry`                          | `string` / `string[]`   | Entry file(s) path(s)                                                                                                                  |
+| `options.initializeCoreLocation` | `string | undefined`    | Specify custom path to `InitializeCore.js` file. Defaults: `initializeCoreLocation` - `react-native/Libraries/Core/InitializeCore.js`. |
+| `options.additionalSetupFiles`   | `string[] | undefined ` | Specify additional files to be evaluated on startup. __Applies only to DLL bundle with `multiBundle: 2` feature version.__             |
+| _returns_                        | `string[]`              | Entry file(s) with polyfill paths                                                                                                      |
 
 ### Project configuration reference
 
@@ -75,6 +76,7 @@ Project configuration object (the one accepted by `makeConfig` function) consist
 
     You can use `[bundleName]`, `[platform]`, `[mode]` (`prod` or `dev`) and `[type]` (`default`, `app` or `dll`) placeholders in a template.
 
+- `features: { multiBundle?: 1 | 2 }` - Enable specific feature's version (_Advanced use only_).
 - `bundles: { [bundleName: string]: BundleConfigBuilder | BundleConfig }` (**required**) - An object where the property name (a key) will become bundle name and a bundle config or a bundle config builder. See below for bundle config reference.
 
 ### Bundle configuration reference
@@ -234,7 +236,11 @@ In `transform` function apart from `bundleName` and Webpack `config`, you have a
 - `runtime` - Runtime instance, useful for logging via `runtime.logger` ([check here](https://github.com/callstack/haul/blob/next/packages/haul-core/src/runtime/Logger.ts#L38-L42)).
 - `env` - Options received from the CLI arguments/options ([check here](https://github.com/callstack/haul/blob/next/packages/haul-core/src/config/types.ts#L14-L26)).
 
-### Multi-bundle mode
+### Multi-bundle mode (v2)
+
+For multi bundle support using v2 behavior, please check the example app here: https://github.com/react-native-community/react-native-multibundle
+
+### Multi-bundle mode (v1)
 
 Multi-bundle mode is a experimental and not-yet-available in React Native's public releases. Please check [this RFC](https://github.com/react-native-community/discussions-and-proposals/issues/127) and a [PR to React Native](https://github.com/facebook/react-native/pull/25518) for more info.
 
