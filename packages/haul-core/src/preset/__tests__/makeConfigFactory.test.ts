@@ -79,6 +79,7 @@ describe('makeConfig', () => {
           index: {
             entry: withPolyfillsFactory([])(['./a.js', './b.js'], {
               initializeCoreLocation: 'initCore.js',
+              additionalSetupFiles: ['registerBlankComponent.js'],
             }),
           },
         },
@@ -89,8 +90,8 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(config.webpackConfigs.index.entry).toEqual({
-        files: ['initCore.js', './a.js', './b.js'],
-        initializeCoreLocation: 'initCore.js',
+        entryFiles: ['initCore.js', './a.js', './b.js'],
+        setupFiles: ['initCore.js', 'registerBlankComponent.js'],
       });
     });
 
