@@ -6,6 +6,11 @@ export default makeConfig({
     index: {
       entry: withPolyfills('./index.js'),
       transform({ config }) {
+        config.module.rules.push({
+          test: /\.[j|t]sx?$/,
+          use: 'source-map-loader',
+          enforce: 'pre',
+        });
         config.resolve = {
           ...config.resolve,
           modules: [

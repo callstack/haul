@@ -1,4 +1,3 @@
-import fs from 'fs';
 import * as babel from '@babel/core';
 import cache from './vendor/cache';
 import transform from './vendor/transform';
@@ -20,7 +19,7 @@ const injectCaller = (opts: {
 
 export async function process(
   this: any,
-  sourceFilename: string,
+  source: string,
   inputSourceMap: string,
   filename: string,
   loaderOptions: {
@@ -32,8 +31,6 @@ export async function process(
   },
   sourceMap: string
 ) {
-  const source = fs.readFileSync(sourceFilename, 'utf8');
-
   if ('sourceMap' in loaderOptions && !('sourceMaps' in loaderOptions)) {
     loaderOptions = {
       ...loaderOptions,
