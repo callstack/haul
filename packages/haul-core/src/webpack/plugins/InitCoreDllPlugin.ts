@@ -100,23 +100,36 @@ export default class InitCoreDllPlugin {
               tap.fn(compilation, ...args);
               const initCoreDllModuleFactory = new InitCoreDllModuleFactory(
                 () => {
-                  const setupFilesModules = compilation.modules.filter(
-                    webpackModule => {
-                      return this.resolvedSetupFiles.some(
-                        setupFile => webpackModule.resource === setupFile
-                      );
-                    }
+                  const setupFilesModulesIds = compilation.modules.reduce(
+                    (acc, webpackModule) => {
+                      if (
+                        this.resolvedSetupFiles.some(
+                          setupFile => webpackModule.resource === setupFile
+                        )
+                      ) {
+                        return {
+                          ...acc,
+                          [webpackModule.resource]: webpackModule.id,
+                        };
+                      }
+
+                      return acc;
+                    },
+                    {}
                   );
 
-                  const setupCode = setupFilesModules
+                  const setupCode = this.resolvedSetupFiles
+                    .filter(
+                      resolvedSetupFile =>
+                        setupFilesModulesIds[resolvedSetupFile]
+                    )
                     .map(
-                      webpackModule =>
+                      resolvedSetupFile =>
                         `__webpack_require__(${JSON.stringify(
-                          webpackModule.id
+                          setupFilesModulesIds[resolvedSetupFile]
                         )});`
                     )
                     .join('\n');
-
                   return setupCode;
                 }
               );
