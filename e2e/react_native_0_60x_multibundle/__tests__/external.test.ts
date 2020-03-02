@@ -8,7 +8,6 @@ import {
   validateBaseBundle,
   validateHostBundle,
   validateAppBundle,
-  validateAppBundleWithChunk,
 } from '../../utils/validators';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -100,14 +99,12 @@ describe('for external bundle', () => {
     validateHostBundle(iosBundles.host);
     validateAppBundle(iosBundles.app0, { platform: 'ios' });
     validateAppBundle(iosBundles.app1, { platform: 'ios' });
-    validateAppBundleWithChunk(iosBundles.app1, iosBundles.app1Chunk);
 
     const androidBundles = await fetchBundles('android');
     validateBaseBundle(androidBundles.baseDll, { platform: 'android' });
     validateHostBundle(androidBundles.host);
     validateAppBundle(androidBundles.app0, { platform: 'android' });
     validateAppBundle(androidBundles.app1, { platform: 'android' });
-    validateAppBundleWithChunk(androidBundles.app1, androidBundles.app1Chunk);
 
     stopServer(server);
   });
@@ -175,9 +172,6 @@ async function fetchBundles(platform: string) {
   const app1 = await (
     await fetch(`http://localhost:9000/app1.${platform}.bundle`)
   ).buffer();
-  const app1Chunk = await (
-    await fetch(`http://localhost:9000/0.app1.${platform}.bundle`)
-  ).buffer();
 
   await (
     await fetch(
@@ -192,6 +186,5 @@ async function fetchBundles(platform: string) {
     host,
     app0,
     app1,
-    app1Chunk,
   };
 }

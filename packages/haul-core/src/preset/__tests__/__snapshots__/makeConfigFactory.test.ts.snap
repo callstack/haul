@@ -292,11 +292,9 @@ Object {
 //# sourceMappingURL=[url]",
         },
         WebpackBasicBundlePlugin {
-          "bundle": true,
           "preloadBundles": Array [
             "base_dll",
           ],
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
@@ -477,11 +475,9 @@ Object {
 //# sourceMappingURL=[url]",
         },
         WebpackBasicBundlePlugin {
-          "bundle": false,
           "preloadBundles": Array [
             "base_dll",
           ],
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
@@ -553,9 +549,7 @@ Object {
 //# sourceMappingURL=[url]",
         },
         WebpackBasicBundlePlugin {
-          "bundle": false,
           "preloadBundles": Array [],
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
@@ -624,11 +618,9 @@ Object {
 //# sourceMappingURL=[url]",
         },
         WebpackBasicBundlePlugin {
-          "bundle": false,
           "preloadBundles": Array [
             "base_dll",
           ],
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
@@ -755,9 +747,7 @@ Object {
 //# sourceMappingURL=[url]",
         },
         WebpackBasicBundlePlugin {
-          "bundle": false,
           "preloadBundles": Array [],
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
