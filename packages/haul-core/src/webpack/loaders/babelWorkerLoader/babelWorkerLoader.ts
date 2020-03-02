@@ -34,4 +34,4 @@ function makeLoader() {
 }
 
 export const custom = makeLoader;
-export const pitch = makeLoader();
+export default makeLoader();

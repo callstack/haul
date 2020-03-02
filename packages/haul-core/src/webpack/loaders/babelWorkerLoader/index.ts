@@ -1,1 +1,2 @@
-export * from './babelWorkerLoader';
+import babelWorkerLoader from './babelWorkerLoader';
+module.exports = babelWorkerLoader;
