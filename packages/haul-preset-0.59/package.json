@@ -1,5 +1,5 @@
 {
-  "version": "0.17.0",
+  "version": "0.18.0",
   "name": "@haul-bundler/preset-0.59",
   "description": "Haul preset for React Native 0.59",
   "main": "build/index.js",
