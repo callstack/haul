@@ -120,6 +120,15 @@ export default function getDefaultConfig(
         minimize: !!minify,
         debug: dev,
       }),
+      /**
+       * All chunks will be combined into a single bundle anyway - so
+       * combine all chunks into one to avoid creating other issues e.g.
+       * https://github.com/callstack/haul/issues/701. They might otherwise
+       * be created e.g. by calls to `import()`.
+       */
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      }),
     ],
     resolve: {
       alias:

@@ -281,7 +281,10 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
                 indexRamBundle:
                   normalizedBundleConfig.type === 'indexed-ram-bundle',
                 singleBundleMode: env.bundleMode === 'single-bundle',
-                preloadBundles: normalizedBundleConfig.dependsOn,
+                preloadBundles:
+                  featuresConfig.multiBundle === 1
+                    ? normalizedBundleConfig.dependsOn
+                    : [],
                 maxWorkers: env.maxWorkers || normalizedBundleConfig.maxWorkers,
                 bundleId:
                   featuresConfig.multiBundle === 1
