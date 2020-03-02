@@ -6,7 +6,6 @@ import {
   validateAppBundle,
   validateBaseBundle,
   validateHostBundle,
-  validateAppBundleWithChunk,
 } from '../../utils/validators';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -39,7 +38,6 @@ describe('packager server', () => {
     validateHostBundle(bundles.host);
     validateAppBundle(bundles.app0, { platform: 'ios' });
     validateAppBundle(bundles.app1, { platform: 'ios' });
-    validateAppBundleWithChunk(bundles.app1, bundles.app1Chunk);
   });
 
   it('compile bundles for Android', async () => {
@@ -48,32 +46,27 @@ describe('packager server', () => {
     validateHostBundle(bundles.host);
     validateAppBundle(bundles.app0, { platform: 'android' });
     validateAppBundle(bundles.app1, { platform: 'android' });
-    validateAppBundleWithChunk(bundles.app1, bundles.app1Chunk);
   });
 });
 
 async function fetchBundles(platform: string) {
-  const host = await (await fetch(
-    `http://localhost:${PORT}/host.${platform}.bundle`
-  )).buffer();
-  const baseDll = await (await fetch(
-    `http://localhost:${PORT}/base_dll.${platform}.bundle`
-  )).buffer();
-  const app0 = await (await fetch(
-    `http://localhost:${PORT}/app0.${platform}.bundle`
-  )).buffer();
-  const app1 = await (await fetch(
-    `http://localhost:${PORT}/app1.${platform}.bundle`
-  )).buffer();
-  const app1Chunk = await (await fetch(
-    `http://localhost:${PORT}/0.app1.${platform}.bundle`
-  )).buffer();
+  const host = await (
+    await fetch(`http://localhost:${PORT}/host.${platform}.bundle`)
+  ).buffer();
+  const baseDll = await (
+    await fetch(`http://localhost:${PORT}/base_dll.${platform}.bundle`)
+  ).buffer();
+  const app0 = await (
+    await fetch(`http://localhost:${PORT}/app0.${platform}.bundle`)
+  ).buffer();
+  const app1 = await (
+    await fetch(`http://localhost:${PORT}/app1.${platform}.bundle`)
+  ).buffer();
 
   return {
     baseDll,
     host,
     app0,
     app1,
-    app1Chunk,
   };
 }

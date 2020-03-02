@@ -63,22 +63,6 @@ export function validateAppBundle(
   expect(bundleBuffer.toString()).toMatch(/this\["\w+"\] =/);
 }
 
-export function validateAppBundleWithChunk(
-  bundleBuffer: Buffer,
-  chunkBuffer: Buffer
-) {
-  const bundle = bundleBuffer.toString();
-  expect(bundle).toMatch('function asyncEval');
-  expect(bundle).toMatch(
-    /return asyncEval\(__webpack_require__\.p \+ "" \+ chunkId \+ "\.app1\.(ios|android)\.bundle"\);/g
-  );
-
-  const chunk = chunkBuffer.toString();
-  expect(chunk).toMatch('this["webpackChunkapp1"]');
-  expect(chunk).toMatch('./src/async.js');
-  expect(chunk).not.toMatch('base_dll');
-}
-
 export async function fetchAndValidateBundle(url: string) {
   const res = await fetch(url);
   const bundle = await res.text();

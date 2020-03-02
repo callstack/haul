@@ -4,6 +4,8 @@ import webpack from 'webpack';
 import path from 'path';
 import { cpus } from 'os';
 import isCi from 'is-ci';
+import RamBundlePlugin from '@haul-bundler/ram-bundle-webpack-plugin';
+import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
 import {
   Runtime,
   EnvOptions,
@@ -23,7 +25,6 @@ import {
 } from '../config/types';
 import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
-import getBundlePlugin from './utils/getBundlePlugin';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
 import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
 
@@ -266,14 +267,28 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           .filter(Boolean);
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
-          getBundlePlugin(
-            env,
-            normalizedBundleConfig,
-            featuresConfig.multiBundle === 1
-              ? bundleName
-              : bundleIdsMap[bundleName],
-            bundleName
-          ),
+          normalizedBundleConfig.type === 'basic-bundle'
+            ? new BasicBundleWebpackPlugin({
+                preloadBundles:
+                  featuresConfig.multiBundle === 1
+                    ? normalizedBundleConfig.dependsOn
+                    : [],
+              })
+            : new RamBundlePlugin({
+                minify: normalizedBundleConfig.minify,
+                minifyOptions: normalizedBundleConfig.minifyOptions,
+                sourceMap: Boolean(normalizedBundleConfig.sourceMap),
+                indexRamBundle:
+                  normalizedBundleConfig.type === 'indexed-ram-bundle',
+                singleBundleMode: env.bundleMode === 'single-bundle',
+                preloadBundles: normalizedBundleConfig.dependsOn,
+                maxWorkers: env.maxWorkers || normalizedBundleConfig.maxWorkers,
+                bundleId:
+                  featuresConfig.multiBundle === 1
+                    ? bundleName
+                    : bundleIdsMap[bundleName],
+                bundleName,
+              }),
           new webpack.DefinePlugin({
             'process.env.HAUL_BUNDLES': JSON.stringify(bundleIdsMap),
           })
