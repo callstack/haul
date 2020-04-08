@@ -8,14 +8,13 @@ export default function setupLiveReload(
   server: Hapi.Server,
   compiler: any
 ) {
-  let watchers: Array<Request['raw'] & { notified: boolean }> = [];
+  let watchers: Request['raw'][] = [];
   const headers = {
     'Content-Type': 'application/json; charset=UTF-8',
   };
 
   function notifyAllWatchers() {
     watchers.forEach(watcher => {
-      watcher.notified = true;
       watcher.res.writeHead(205, headers);
       watcher.res.end(JSON.stringify({ changed: true }));
     });
@@ -36,11 +35,12 @@ export default function setupLiveReload(
          * React Native client opens connection at `/onchange`
          * and awaits reload signal (http status code - 205)
          */
-        const watcher = Object.assign(request.raw, { notified: false });
+        const watcher = request.raw;
         watchers.push(watcher);
         watcher.req.on('close', () => {
-          watchers.splice(watchers.indexOf(watcher), 1);
-          if (!watcher.notified) {
+          const index = watchers.indexOf(watcher);
+          if (index >= 0) {
+            watchers.splice(index, 1);
             resolve('OK');
           }
         });
