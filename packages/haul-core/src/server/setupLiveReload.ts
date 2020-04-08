@@ -38,8 +38,11 @@ export default function setupLiveReload(
         const watcher = request.raw;
         watchers.push(watcher);
         watcher.req.on('close', () => {
-          watchers.splice(watchers.indexOf(watcher), 1);
-          resolve('OK');
+          const index = watchers.indexOf(watcher);
+          if (index >= 0) {
+            watchers.splice(index, 1);
+            resolve('OK');
+          }
         });
       }),
   });
