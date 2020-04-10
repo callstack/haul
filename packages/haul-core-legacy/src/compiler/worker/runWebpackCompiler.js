@@ -48,7 +48,9 @@ module.exports = async function runWebpackCompiler({
   );
 
   const apps = [];
-  const bundles = sortBundlesByDependencies(projectConfig);
+  const bundles = sortBundlesByDependencies(projectConfig, {
+    skipHostCheck: configOptions.skipHostCheck,
+  });
   let totalProgress = 0;
   let bundlesBuilt = 0;
 
