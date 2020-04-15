@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint --ext '.js,.ts' './packages'",
     "test": "jest",
-    "clean": "rm -rf ./packages/*/build ./packages/*/tsconfig.tsbuildinfo",
+    "clean": "rimraf ./packages/*/build ./packages/*/tsconfig.tsbuildinfo",
     "watch": "yarn clean && concurrently \"yarn:watch:source\" \"yarn:watch:ts\"",
     "build:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js\"",
     "watch:source": "lerna exec --parallel \"babel src --out-dir build --extensions .js,.ts,.tsx --source-maps --config-file=../../babel.config.js --watch\"",
