@@ -8,11 +8,19 @@ import fetch from 'node-fetch';
 const PROJECT_FIXTURE = path.join(
   __dirname,
   '../../../fixtures',
-  'react_native_with_haul_0_60x_minimal'
+  'react_native_with_haul_0_60x'
 );
 const PROJECT_FIXTURE_MAIN = PROJECT_FIXTURE + '/App.js';
 
-describe('test exploring bundle', () => {
+const replaceInMain = (from, to) => {
+  const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN, {
+    encoding: 'utf8',
+  });
+  var replaceResult = appContents.replace(from, to);
+  fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult, { encoding: 'utf8' });
+};
+
+describe('test bundle refresh on edit', () => {
   const port = 8000;
   let instance: Instance;
   beforeAll(done => {
@@ -22,40 +30,22 @@ describe('test exploring bundle', () => {
   afterAll(() => {
     stopServer(instance);
     cleanup(PROJECT_FIXTURE);
-    // fs.readFile(PROJECT_FIXTURE_MAIN, 'utf8', function(err, data) {
-    //   if (err) {
-    //     return console.log(err);
-    //   }
-    //   var result = data.replace('Avocado', 'Donut');
-    //   console.log(result);
-
-    //   fs.writeFile(PROJECT_FIXTURE_MAIN, result, 'utf8', function(err) {
-    //     if (err) return console.log(err);
-    //   });
-    // });
+    replaceInMain('Avocado', 'Donut');
   });
 
   const url = `http://localhost:${port}/index.android.bundle`;
 
-  it('compile bundle for iOS platform', async () => {
-    const res = await fetch(url);
-    const bundle = await res.text();
-    fs.writeFileSync('./helloworld.txt', bundle);
+  it('should update returned bundle', async () => {
+    const resOriginal = await fetch(url);
+    const bundleOriginal = await resOriginal.text();
 
-    const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN, {
-      encoding: 'utf8',
-    });
-    var replaceResult = appContents.replace('Donut', 'Avocado');
+    replaceInMain('Donut', 'Avocado');
 
-    fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult, { encoding: 'utf8' });
-    console.log(replaceResult);
+    const resChanged = await fetch(url);
+    const bundleChanged = await resChanged.text();
 
-    const res2 = await fetch(url);
-    const bundle2 = await res2.text();
-    fs.writeFileSync('./helloworld2.txt', bundle2);
-
-    expect(bundle).toMatch('Donut');
-    expect(bundle2).not.toMatch('Donut');
-    expect(bundle2).toMatch('Avocado');
+    expect(bundleOriginal).toMatch('Donut');
+    expect(bundleChanged).not.toMatch('Donut');
+    expect(bundleChanged).toMatch('Avocado');
   });
 });
