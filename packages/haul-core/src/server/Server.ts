@@ -26,6 +26,7 @@ type ServerEnvOptions = Assign<
     eager: string[];
     bundleNames: string[];
     platforms: string[];
+    skipHostCheck: boolean;
   }
 >;
 

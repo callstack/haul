@@ -53,6 +53,11 @@ export default function startCommand(runtime: Runtime) {
         default: 'false',
         type: 'string',
       },
+      'skip-host-check': {
+        description: 'Skips check for "index" or "host" bundle in Haul config',
+        default: 'false',
+        type: 'boolean',
+      },
       'max-workers': {
         description:
           'Number of workers used to minify RAM bundle and load modules',
@@ -69,6 +74,7 @@ export default function startCommand(runtime: Runtime) {
         config: string;
         eager: string;
         maxWorkers?: number;
+        skipHostCheck: boolean;
       }>
     ) {
       let parsedEager;
@@ -151,6 +157,7 @@ export default function startCommand(runtime: Runtime) {
           eager: parsedEager,
           platforms: projectConfig.platforms,
           bundleNames: Object.keys(projectConfig.bundles),
+          skipHostCheck: argv.skipHostCheck,
         }).listen(projectConfig.server.host, projectConfig.server.port);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
