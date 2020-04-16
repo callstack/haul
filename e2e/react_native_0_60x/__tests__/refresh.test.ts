@@ -8,17 +8,9 @@ import fetch from 'node-fetch';
 const PROJECT_FIXTURE = path.join(
   __dirname,
   '../../../fixtures',
-  'react_native_with_haul_0_60x'
+  'react_native_with_haul_0_60x_minimal'
 );
 const PROJECT_FIXTURE_MAIN = PROJECT_FIXTURE + '/App.js';
-
-const replaceInMain = (from, to) => {
-  const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN, {
-    encoding: 'utf8',
-  });
-  var replaceResult = appContents.replace(from, to);
-  fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult, { encoding: 'utf8' });
-};
 
 describe('test exploring bundle', () => {
   const port = 8000;
@@ -30,7 +22,17 @@ describe('test exploring bundle', () => {
   afterAll(() => {
     stopServer(instance);
     cleanup(PROJECT_FIXTURE);
-    // replaceInMain('Avocado', 'Donut');
+    // fs.readFile(PROJECT_FIXTURE_MAIN, 'utf8', function(err, data) {
+    //   if (err) {
+    //     return console.log(err);
+    //   }
+    //   var result = data.replace('Avocado', 'Donut');
+    //   console.log(result);
+
+    //   fs.writeFile(PROJECT_FIXTURE_MAIN, result, 'utf8', function(err) {
+    //     if (err) return console.log(err);
+    //   });
+    // });
   });
 
   const url = `http://localhost:${port}/index.android.bundle`;
@@ -40,7 +42,13 @@ describe('test exploring bundle', () => {
     const bundle = await res.text();
     fs.writeFileSync('./helloworld.txt', bundle);
 
-    replaceInMain('Donut', 'Avocado');
+    const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN, {
+      encoding: 'utf8',
+    });
+    var replaceResult = appContents.replace('Donut', 'Avocado');
+
+    fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult, { encoding: 'utf8' });
+    console.log(replaceResult);
 
     const res2 = await fetch(url);
     const bundle2 = await res2.text();
