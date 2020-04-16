@@ -45,7 +45,6 @@ describe('test bundle refresh on edit', () => {
     const bundleChanged = await resChanged.text();
 
     expect(bundleOriginal).toMatch('Donut');
-    expect(bundleChanged).not.toMatch('Donut');
     expect(bundleChanged).toMatch('Avocado');
   });
 });
