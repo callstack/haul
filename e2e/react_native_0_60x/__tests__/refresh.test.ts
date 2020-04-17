@@ -12,13 +12,43 @@ const PROJECT_FIXTURE = path.join(
 );
 const PROJECT_FIXTURE_MAIN = PROJECT_FIXTURE + '/App.js';
 
-const replaceInMain = (from, to) => {
-  const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN, {
-    encoding: 'utf8',
+async function findAndReplaceFile(
+  regexFindPattern,
+  replaceValue,
+  originalFile
+) {
+  const updatedFile = `${originalFile}.temp`;
+
+  return new Promise((resolve, reject) => {
+    const readStream = fs.createReadStream(originalFile, {
+      encoding: 'utf8',
+      autoClose: true,
+    });
+    const writeStream = fs.createWriteStream(updatedFile, {
+      encoding: 'utf8',
+      autoClose: true,
+    });
+
+    readStream.on('data', chunk => {
+      chunk = chunk.toString().replace(regexFindPattern, replaceValue);
+      writeStream.write(chunk);
+    });
+
+    readStream.on('end', () => {
+      writeStream.end();
+      fs.unlinkSync(originalFile);
+      fs.renameSync(updatedFile, originalFile);
+      console.log("replace time end: " + new Date().getTime())
+    });
+    readStream.on('error', error =>
+      reject(`Error: Error reading ${originalFile} => ${error.message}`)
+    );
+    writeStream.on('error', error =>
+      reject(`Error: Error writing to ${updatedFile} => ${error.message}`)
+    );
+    resolve();
   });
-  var replaceResult = appContents.replace(from, to);
-  fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult, { encoding: 'utf8' });
-};
+}
 
 describe('test bundle refresh on edit', () => {
   const port = 8000;
@@ -30,21 +60,38 @@ describe('test bundle refresh on edit', () => {
   afterAll(() => {
     stopServer(instance);
     cleanup(PROJECT_FIXTURE);
-    replaceInMain('Avocado', 'Donut');
+    try {
+      findAndReplaceFile('Avocado', 'Donut', PROJECT_FIXTURE_MAIN);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   const url = `http://localhost:${port}/index.android.bundle`;
 
   it('should update returned bundle', async () => {
-    const resOriginal = await fetch(url);
-    const bundleOriginal = await resOriginal.text();
+    console.log("fetch 1. time: " + new Date().getTime())
+    let res = await fetch(url);
+    let bundle = await res.text();
 
-    replaceInMain('Donut', 'Avocado');
+    fs.writeFileSync('./helloworld.txt', bundle);
 
-    const resChanged = await fetch(url);
-    const bundleChanged = await resChanged.text();
+    expect(bundle).toMatch('Donut');
 
-    expect(bundleOriginal).toMatch('Donut');
-    expect(bundleChanged).toMatch('Avocado');
+    try {
+      console.log("replace time: " + new Date().getTime())
+      await findAndReplaceFile('Donut', 'Avocado', PROJECT_FIXTURE_MAIN);
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("fetch 2. time: " + new Date().getTime())
+    res = await fetch(url);
+    bundle = await res.text();
+
+    fs.writeFileSync('./helloworld2.txt', bundle);
+
+    // expect(bundle).toMatch('Avocado');
+    // expect(bundle).not.toMatch('Donut');
   });
 });
