@@ -49,7 +49,7 @@ describe('test bundle refresh on edit', () => {
     expect(bundle).toMatch('Donut');
 
     replaceInMain('Donut', 'Avocado');
-    sleep(500);
+    sleep(1000);
 
     res = await fetch(url);
     bundle = await res.text();
