@@ -1,4 +1,4 @@
-import WebpackBasicBundlePlugin from '..';
+import WebpackBasicBundlePlugin from '../WebpackBasicBundlePlugin';
 import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';

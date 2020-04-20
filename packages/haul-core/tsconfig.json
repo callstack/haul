@@ -10,9 +10,6 @@
       "path": "../haul-inspector-events"
     },
     {
-      "path": "../haul-basic-bundle-webpack-plugin"
-    },
-    {
       "path": "../haul-ram-bundle-webpack-plugin"
     }
   ]

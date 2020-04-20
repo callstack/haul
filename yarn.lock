@@ -2661,6 +2661,13 @@
     "@hapi/bourne" "1.x.x"
     "@hapi/hoek" "6.x.x"
 
+"@haul-bundler/basic-bundle-webpack-plugin@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@haul-bundler/basic-bundle-webpack-plugin/-/basic-bundle-webpack-plugin-0.18.0.tgz#cc9c1b990223aecb89325f88629d756ab5f57517"
+  integrity sha512-5TgwqVScAHePa2DhPCpgNJwmRRacAiSilYGlo8DTe9sprlHVLhrHVMhxmvT+gJJRhmxXJeXI8iKKCD9EiSItBg==
+  dependencies:
+    concat-with-sourcemaps "^1.1.0"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.0.0.tgz#10602de5570baea82f8afbfa2630b24e7a8cfe5b"
