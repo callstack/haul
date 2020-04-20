@@ -55,7 +55,7 @@ export default function startCommand(runtime: Runtime) {
       },
       'skip-host-check': {
         description: 'Skips check for "index" or "host" bundle in Haul config',
-        default: 'false',
+        default: false,
         type: 'boolean',
       },
       'max-workers': {
