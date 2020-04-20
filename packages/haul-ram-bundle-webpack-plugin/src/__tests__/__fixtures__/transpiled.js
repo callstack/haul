@@ -1,1 +1,0 @@
-Object.defineProperty(exports,"__esModule",{value:true});exports.default=crashNested;function crashNested(){var a=1;throw new Error('Nested test error');}
