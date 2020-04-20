@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import yargsParser from 'yargs-parser';
-import { Logger, Runtime, InspectorClient } from '@haul-bundler/core';
+import { Logger, Runtime } from '@haul-bundler/core';
 import initCommand from './commands/init';
 import bundleCommand from './commands/bundle';
 import ramBundleCommand from './commands/ramBundle';
@@ -9,28 +9,15 @@ import startCommand from './commands/start';
 import multiBundleCommand from './commands/multiBundle';
 
 export default async function main() {
-  const {
-    HAUL_INSPECTOR,
-    HAUL_INSPECTOR_PORT,
-    HAUL_INSPECTOR_HOST,
-    NODE_INSPECTOR,
-  } = process.env;
-  let { haulInspector, nodeInspector } = yargsParser(process.argv);
-  haulInspector = haulInspector || HAUL_INSPECTOR;
+  const { NODE_INSPECTOR } = process.env;
+  let { nodeInspector } = yargsParser(process.argv);
   nodeInspector = nodeInspector || NODE_INSPECTOR;
 
-  const runtime = new Runtime(
-    haulInspector || HAUL_INSPECTOR_PORT || HAUL_INSPECTOR_HOST
-      ? new InspectorClient(HAUL_INSPECTOR_HOST, HAUL_INSPECTOR_PORT)
-      : undefined
-  );
-
-  await runtime.ready(haulInspector === 'wait');
+  const runtime = new Runtime();
 
   // Experimental
   if (nodeInspector) {
     const wait = nodeInspector === 'wait';
-    runtime.nodeInspectorStarted(wait);
     const inspector = require('inspector');
     inspector.open(undefined, undefined, wait);
   }
@@ -48,11 +35,6 @@ export default async function main() {
       return yargsInstance.command({
         ...commandModule,
         handler(...args) {
-          runtime.startCommand(
-            commandModule.command || 'unknown',
-            process.argv
-          );
-
           if (args[0].verbose) {
             runtime.logger.minLoggingLevel = Logger.Level.Debug;
           }
