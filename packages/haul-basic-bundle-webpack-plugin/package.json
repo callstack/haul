@@ -1,0 +1,14 @@
+{
+  "version": "0.18.0",
+  "name": "@haul-bundler/basic-bundle-webpack-plugin",
+  "description": "Basic bundle plugin for Haul and Webpack",
+  "main": "./index.js",
+  "author": "Pawel Trysla <pawel.trysla@callstack.com>",
+  "repository": "github:callstack/haul",
+  "license": "MIT",
+  "bugs": "https://github.com/callstack/haul/issues",
+  "peerDependencies": {
+    "@haul-bundler/core": ">=0.19.0"
+  },
+  "gitHead": "c41becc82dfeafb07b642ebed8f082775647ec3f"
+}

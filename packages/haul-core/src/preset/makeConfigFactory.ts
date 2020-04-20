@@ -26,7 +26,7 @@ import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
 import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
-import WebpackBasicBundlePlugin from '../webpack/plugins/WebpackBasicBundlePlugin';
+import BasicBundleWebpackPlugin from '../webpack/plugins/BasicBundleWebpackPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -268,7 +268,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
           normalizedBundleConfig.type === 'basic-bundle'
-            ? new WebpackBasicBundlePlugin({
+            ? new BasicBundleWebpackPlugin({
                 preloadBundles:
                   featuresConfig.multiBundle === 1
                     ? normalizedBundleConfig.dependsOn

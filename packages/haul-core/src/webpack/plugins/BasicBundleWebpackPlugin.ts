@@ -3,7 +3,7 @@ import webpack from 'webpack';
 /**
  * Adds React Native specific tweaks to bootstrap logic.
  */
-export default class WebpackBasicBundlePlugin {
+export default class BasicBundleWebpackPlugin {
   private preloadBundles: string[];
 
   constructor({ preloadBundles }: { preloadBundles?: string[] }) {
@@ -11,9 +11,9 @@ export default class WebpackBasicBundlePlugin {
   }
 
   apply(compiler: webpack.Compiler) {
-    compiler.hooks.compilation.tap('WebpackBasicBundlePlugin', compilation => {
+    compiler.hooks.compilation.tap('BasicBundleWebpackPlugin', compilation => {
       (compilation.mainTemplate as any).hooks.bootstrap.tap(
-        'WebpackBasicBundlePlugin',
+        'BasicBundleWebpackPlugin',
         (source: string) => {
           const preload = this.preloadBundles.length
             ? `${this.preloadBundles.map(

@@ -1,4 +1,4 @@
-import WebpackBasicBundlePlugin from '../WebpackBasicBundlePlugin';
+import BasicBundleWebpackPlugin from '../BasicBundleWebpackPlugin';
 import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';
@@ -38,7 +38,7 @@ const getConfig = () =>
     target: 'webworker',
   } as webpack.Configuration);
 
-describe('WebpackBasicBundlePlugin', () => {
+describe('BasicBundleWebpackPlugin', () => {
   afterAll(async () => {
     await del(path.join(__dirname, './__fixtures__/tmp-*'));
   });
@@ -47,7 +47,7 @@ describe('WebpackBasicBundlePlugin', () => {
     const bundle = await build({
       ...getConfig(),
       plugins: [
-        new WebpackBasicBundlePlugin({
+        new BasicBundleWebpackPlugin({
           preloadBundles: ['test_bundle'],
         }),
       ],
