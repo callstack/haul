@@ -10,19 +10,13 @@ const PROJECT_FIXTURE = path.join(
   '../../../fixtures',
   'react_native_with_haul_0_60x'
 );
-const PROJECT_FIXTURE_MAIN = PROJECT_FIXTURE + '/App.js';
+const PROJECT_FIXTURE_MAIN = path.join(PROJECT_FIXTURE, 'App.js');
 
-const sleep = milliseconds => {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-};
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const replaceInMain = (from, to) => {
+const makeChangesToSource = (findPhrase, changeTo) => {
   const appContents = fs.readFileSync(PROJECT_FIXTURE_MAIN).toString();
-  const replaceResult = appContents.replace(from, to);
+  const replaceResult = appContents.replace(findPhrase, changeTo);
   fs.writeFileSync(PROJECT_FIXTURE_MAIN, replaceResult);
 };
 
@@ -37,7 +31,7 @@ describe('test bundle refresh on edit', () => {
   afterAll(() => {
     stopServer(instance);
     cleanup(PROJECT_FIXTURE);
-    replaceInMain('Avocado', 'Donut');
+    makeChangesToSource('Avocado', 'Donut');
   });
 
   test('should return updated bundle', async () => {
@@ -48,8 +42,8 @@ describe('test bundle refresh on edit', () => {
 
     expect(bundle).toMatch('Donut');
 
-    replaceInMain('Donut', 'Avocado');
-    sleep(200);
+    makeChangesToSource('Donut', 'Avocado');
+    await sleep(200);
 
     res = await fetch(url);
     bundle = await res.text();
