@@ -1,7 +1,7 @@
 {
   "version": "0.19.0",
   "name": "@haul-bundler/core",
-  "description": "Haul core library (legacy)",
+  "description": "Haul core library",
   "main": "build/index.js",
   "files": [
     "build/",
@@ -15,7 +15,11 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "react-native": ">=0.59.0"
+    "react-native": ">=0.59.0",
+    "metro": ">= 0.51.1 < 1",
+    "terser": "4.x",
+    "webpack": "4.x",
+    "webpack-sources": "1.x"
   },
   "dependencies": {
     "@babel/core": "7.4.0",
