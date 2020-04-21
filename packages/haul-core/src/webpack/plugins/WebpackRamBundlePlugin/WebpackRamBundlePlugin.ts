@@ -218,7 +218,10 @@ export default class WebpackRamBundlePlugin {
 
         const indent = (line: string) => `/*****/  ${line}`;
         let bootstrap = fs.readFileSync(
-          path.join(__dirname, './runtime/bootstrap.js'),
+          path.join(
+            __dirname,
+            '../../../../runtime/webpack/plugin/ram-bundle-webpack-plugin/bootstrap.js'
+          ),
           'utf8'
         );
         if (typeof this.bundleName !== 'string' || !this.bundleName.length) {
