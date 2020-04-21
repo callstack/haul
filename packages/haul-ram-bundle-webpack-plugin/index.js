@@ -1,1 +1,1 @@
-module.exports = require('@haul-bundler/core/dist/webpack/plugins/WebpackRamBundlePlugin');
+module.exports = require('@haul-bundler/core/dist/webpack/plugins/RamBundleWebpackPlugin');

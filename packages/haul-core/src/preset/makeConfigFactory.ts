@@ -25,7 +25,7 @@ import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
 import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
-import RamBundlePlugin from '../webpack/plugins/WebpackRamBundlePlugin';
+import RamBundlePlugin from '../webpack/plugins/RamBundleWebpackPlugin';
 import BasicBundleWebpackPlugin from '../webpack/plugins/BasicBundleWebpackPlugin';
 
 type GetDefaultConfig = (

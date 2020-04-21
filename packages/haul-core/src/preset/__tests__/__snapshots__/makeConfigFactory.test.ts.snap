@@ -142,7 +142,7 @@ Object {
             },
           },
         },
-        WebpackRamBundlePlugin {
+        RamBundleWebpackPlugin {
           "bundleId": "app",
           "bundleName": "app",
           "indexRamBundle": true,
@@ -150,7 +150,7 @@ Object {
           "minify": false,
           "minifyOptions": undefined,
           "modules": Array [],
-          "name": "WebpackRamBundlePlugin",
+          "name": "RamBundleWebpackPlugin",
           "preloadBundles": Array [
             "base_dll",
           ],
@@ -212,7 +212,7 @@ Object {
             },
           },
         },
-        WebpackRamBundlePlugin {
+        RamBundleWebpackPlugin {
           "bundleId": "base_dll",
           "bundleName": "base_dll",
           "indexRamBundle": true,
@@ -220,7 +220,7 @@ Object {
           "minify": false,
           "minifyOptions": undefined,
           "modules": Array [],
-          "name": "WebpackRamBundlePlugin",
+          "name": "RamBundleWebpackPlugin",
           "preloadBundles": Array [],
           "singleBundleMode": false,
           "sourceMap": true,

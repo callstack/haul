@@ -5,7 +5,8 @@
   "main": "build/index.js",
   "files": [
     "build/",
-    "assets/"
+    "assets/",
+    "runtime/"
   ],
   "engines": {
     "node": ">=10.x"

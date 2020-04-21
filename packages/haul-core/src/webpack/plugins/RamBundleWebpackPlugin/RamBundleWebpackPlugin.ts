@@ -38,7 +38,7 @@ type ModuleMappings = {
   chunks: { [key: string]: Array<number | string> };
 };
 
-type WebpackRamBundlePluginOptions = {
+type RamBundleWebpackPluginOptions = {
   singleBundleMode?: boolean;
   sourceMap?: boolean;
   indexRamBundle?: boolean;
@@ -63,8 +63,8 @@ const variableToString = (value?: string | number) => {
 const hasValue = (value: any): boolean =>
   typeof value === 'undefined' ? false : true;
 
-export default class WebpackRamBundlePlugin {
-  name = 'WebpackRamBundlePlugin';
+export default class RamBundleWebpackPlugin {
+  name = 'RamBundleWebpackPlugin';
 
   modules: Module[] = [];
   sourceMap: boolean = false;
@@ -74,7 +74,7 @@ export default class WebpackRamBundlePlugin {
   bundleName: string = 'index';
   singleBundleMode: boolean = true;
   minify: boolean = false;
-  minifyOptions: WebpackRamBundlePluginOptions['minifyOptions'] = undefined;
+  minifyOptions: RamBundleWebpackPluginOptions['minifyOptions'] = undefined;
   maxWorkers: number;
 
   constructor({
@@ -87,7 +87,7 @@ export default class WebpackRamBundlePlugin {
     maxWorkers,
     bundleId,
     bundleName,
-  }: WebpackRamBundlePluginOptions) {
+  }: RamBundleWebpackPluginOptions) {
     this.sourceMap = Boolean(sourceMap);
     this.indexRamBundle = Boolean(indexRamBundle);
     this.preloadBundles = preloadBundles || [];
@@ -103,7 +103,7 @@ export default class WebpackRamBundlePlugin {
 
   apply(compiler: webpack.Compiler) {
     compiler.hooks.emit.tapPromise(
-      'WebpackRamBundlePlugin',
+      'RamBundleWebpackPlugin',
       async _compilation => {
         // Cast compilation from @types/webpack to custom Compilation type
         // which contains additional properties.
@@ -139,17 +139,17 @@ export default class WebpackRamBundlePlugin {
 
         if (mainId === undefined) {
           throw new Error(
-            "WebpackRamBundlePlugin: couldn't find main chunk's entry module id"
+            "RamBundleWebpackPlugin: couldn't find main chunk's entry module id"
           );
         }
         if (!mainChunk) {
-          throw new Error("WebpackRamBundlePlugin: couldn't find main chunk");
+          throw new Error("RamBundleWebpackPlugin: couldn't find main chunk");
         }
         // Render modules to it's 'final' form with injected webpack variables
         // and wrapped with ModuleTemplate.
         const minifyWorker = new Worker(
           require.resolve(
-            '../../../../build/webpack/plugins/WebpackRamBundlePlugin/worker'
+            '../../../../build/webpack/plugins/RamBundleWebpackPlugin/worker'
           ),
           {
             numWorkers: this.maxWorkers,
@@ -226,7 +226,7 @@ export default class WebpackRamBundlePlugin {
         );
         if (typeof this.bundleName !== 'string' || !this.bundleName.length) {
           throw new Error(
-            'WebpackRamBundlePlugin: bundle name cannot be empty string'
+            'RamBundleWebpackPlugin: bundle name cannot be empty string'
           );
         }
 
