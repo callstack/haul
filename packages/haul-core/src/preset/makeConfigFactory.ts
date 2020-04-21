@@ -4,7 +4,6 @@ import webpack from 'webpack';
 import path from 'path';
 import { cpus } from 'os';
 import isCi from 'is-ci';
-import BasicBundleWebpackPlugin from '@haul-bundler/basic-bundle-webpack-plugin';
 import {
   Runtime,
   EnvOptions,
@@ -27,6 +26,7 @@ import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
 import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
 import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
 import RamBundlePlugin from '../webpack/plugins/WebpackRamBundlePlugin';
+import BasicBundleWebpackPlugin from '../webpack/plugins/BasicBundleWebpackPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,

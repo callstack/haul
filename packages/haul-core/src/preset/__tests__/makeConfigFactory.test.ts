@@ -68,7 +68,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
     });
@@ -213,7 +213,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(
         hasPlugin(config.webpackConfigs.index, 'WebpackRamBundlePlugin')
@@ -317,7 +317,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(
         hasPlugin(config.webpackConfigs.base_dll, 'WebpackRamBundlePlugin')
@@ -354,13 +354,13 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.base_dll, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.base_dll, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.app, 'WebpackBasicBundlePlugin')
+        hasPlugin(config.webpackConfigs.app, 'BasicBundleWebpackPlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
     });
