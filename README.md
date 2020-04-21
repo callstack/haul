@@ -43,8 +43,6 @@ Haul is a drop-in replacement for `react-native` CLI built on open tools like We
 | `@haul-bundler/ram-bundle-webpack-plugin`   | [![ram-bundle-webpack-plugin version][version-ram-bundle-webpack-plugin]][package-ram-bundle-webpack-plugin]       | Webpack plugin for RAM bundle support.                                                                        | Yes (installed with `cli`)                           |
 | `@haul-bundler/preset-0.59`                 | [![preset-0.59 version][version-preset-0.59]][package-preset-0.59]                                                 | Preset with configuration tweaked for RN 0.59.                                                                | Yes (installed by `init` command when using RN 0.59) |
 | `@haul-bundler/preset-0.60`                 | [![preset-0.60 version][version-preset-0.60]][package-preset-0.60]                                                 | Preset with configuration tweaked for RN 0.60.                                                                | Yes (installed by `init` command when using RN 0.60) |
-| `@haul-bundler/inspector`                   | [![inspector version][version-inspector]][package-inspector]                                                       | Haul inspector with `haul-inspector` binary.                                                                  | No (optional).                                       |
-| `@haul-bundler/inspector-events`            | [![inspector-events version][version-inspector-events]][package-inspector-events]                                  | Shared logic between `cli` and Haul `inspector`.                                                              | Yes (installed with `cli`)                           |
 | `@haul-bundler/explore`                     | [![explore version][version-explore]][package-explore]                                                             | Explore and analyse generated bundle                                                                          | No (optional)                                        |
 
 ## Getting started
@@ -148,10 +146,6 @@ Haul is an open source project and will always remain free to use. If you think 
 [package-basic-bundle-webpack-plugin]: https://www.npmjs.com/package/@haul-bundler/basic-bundle-webpack-plugin
 [version-ram-bundle-webpack-plugin]: https://img.shields.io/npm/v/@haul-bundler/ram-bundle-webpack-plugin.svg?style=flat-square
 [package-ram-bundle-webpack-plugin]: https://www.npmjs.com/package/@haul-bundler/ram-bundle-webpack-plugin
-[version-inspector]: https://img.shields.io/npm/v/@haul-bundler/inspector.svg?style=flat-square
-[package-inspector]: https://www.npmjs.com/package/@haul-bundler/inspector
-[version-inspector-events]: https://img.shields.io/npm/v/@haul-bundler/inspector-events.svg?style=flat-square
-[package-inspector-events]: https://www.npmjs.com/package/@haul-bundler/inspector-events
 [version-preset-0.59]: https://img.shields.io/npm/v/@haul-bundler/preset-0.59.svg?style=flat-square
 [package-preset-0.59]: https://www.npmjs.com/package/@haul-bundler/preset-0.59
 [version-preset-0.60]: https://img.shields.io/npm/v/@haul-bundler/preset-0.60.svg?style=flat-square

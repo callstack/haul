@@ -33,7 +33,6 @@
     "@hapi/joi": "^15.1.1",
     "@haul-bundler/basic-bundle-webpack-plugin": "^0.18.0",
     "@haul-bundler/core-legacy": "^0.17.0",
-    "@haul-bundler/inspector-events": "^0.16.0",
     "@haul-bundler/ram-bundle-webpack-plugin": "^0.17.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",

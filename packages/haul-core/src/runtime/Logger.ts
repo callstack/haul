@@ -2,7 +2,6 @@ import { inspect } from 'util';
 import fs from 'fs';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
-import { LoggerEvent } from '@haul-bundler/inspector-events';
 import {
   container,
   color,
@@ -11,7 +10,6 @@ import {
   AnsiColor,
   AnsiModifier,
 } from 'ansi-fragments';
-import InspectorClient from './InspectorClient';
 
 enum LoggerLevel {
   Debug = 'debug',
@@ -46,8 +44,6 @@ export default class Logger {
   private logFile: number | undefined;
   private logAsJson = false;
   public minLoggingLevel: LoggerLevel = LoggerLevel.Info;
-
-  constructor(private inspectorClient?: InspectorClient) {}
 
   /**
    * Enables logging all messages to file as well as to process' STDOUT.
@@ -145,10 +141,6 @@ export default class Logger {
 
   private createLoggingFunction(level: LoggerLevel) {
     return (...args: unknown[]) => {
-      if (this.inspectorClient) {
-        this.inspectorClient.emitEvent(new LoggerEvent(level, args));
-      }
-
       if (this.logFile !== undefined) {
         const rawArgs = this.stringify(args).map(stripAnsi);
         fs.appendFileSync(
