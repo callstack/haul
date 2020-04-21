@@ -37,6 +37,7 @@ namespace RNWTestApp
       InstanceSettings settings;
       settings.UseWebDebugger = false;
       settings.UseLiveReload = false;
+      settings.EnableDeveloperMenu = false;
 
       var instance = Instance.Create(JSFILENAME);
 
