@@ -6,7 +6,7 @@
     "start": "../../packages/haul-cli/bin/haul start",
     "test": "jest",
     "build:bundle": "node ../../packages/haul-cli/bin/haul.js bundle --platform windows --dev true --bundle-output windows/RNWTestApp/Bundle/index.windows.bundle --assets-dest windows/RNWTestApp/Bundle",
-    "start:app": "node_modules/.bin/react-native run-windows --arch x86 --no-packager"
+    "start:app": "node_modules/.bin/react-native run-windows --arch x64 --no-packager"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.3",
