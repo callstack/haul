@@ -8,6 +8,12 @@ import createDeltaBundle from './createDeltaBundle';
 import Runtime from '../runtime/Runtime';
 import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
+type Platform = 'android' | 'ios';
+type BundleOptions = { dev?: boolean; minify?: boolean };
+type PlatformsBundleOptions = {
+  [platform in Platform]: BundleOptions;
+};
+
 export default function setupCompilerRoutes(
   runtime: Runtime,
   server: Hapi.Server,
@@ -21,6 +27,10 @@ export default function setupCompilerRoutes(
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
   const bundleRegex = /^([^.]+)(\.[^.]+)?\.(bundle|delta)$/;
+  let bundleOptions: PlatformsBundleOptions = {
+    ios: {},
+    android: {},
+  };
 
   server.route({
     method: 'GET',
@@ -87,9 +97,34 @@ export default function setupCompilerRoutes(
           hasWarnedDelta = true;
         }
 
+        const bundleOptionsFromQuery: BundleOptions = {
+          dev: Boolean(request.query.dev),
+          minify: Boolean(request.query.minify),
+        };
+
+        if (areBundleOptionsSet(bundleOptions[platform as Platform])) {
+          bundleOptions = {
+            ...bundleOptions,
+            [platform]: { ...bundleOptionsFromQuery },
+          };
+        } else {
+          if (
+            bundleOptions[platform as Platform].dev !==
+              bundleOptionsFromQuery.dev ||
+            bundleOptionsFromQuery.minify !==
+              bundleOptions[platform as Platform].minify
+          ) {
+            return h
+              .response(
+                'To see the changes you need to restart the haul server'
+              )
+              .code(501);
+          }
+        }
         return new Promise(resolve => {
           const filename = `${bundleName}.${platform}.bundle`;
           compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+            bundleOptions: bundleOptions[platform as Platform],
             filename,
             platform,
             callback: (result: {
@@ -160,4 +195,8 @@ function makeResponseFromCompilerResults(
   }
 
   return response;
+}
+
+function areBundleOptionsSet(bundleOptions: BundleOptions) {
+  return bundleOptions.dev === undefined && bundleOptions.minify === undefined;
 }

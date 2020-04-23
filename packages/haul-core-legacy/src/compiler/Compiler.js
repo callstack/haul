@@ -34,9 +34,11 @@ module.exports = class Compiler extends EventEmitter {
     this.tasks = new TaskQueue();
     this.logger = logger;
 
-    this.on(Events.REQUEST_BUNDLE, async ({ platform, filename, callback }) => {
+    this.on(Events.REQUEST_BUNDLE, async ({ bundleOptions = {} , platform, filename, callback }) => {
       if (!this.forks[platform]) {
-        this.forks[platform] = await this.initFork({ platform, options });
+        this.forks[platform] = await this.initFork(
+          { platform,options: {...options, configOptions: {...options.configOptions, ...bundleOptions} } }
+          );
       }
 
       if (!this.forks[platform]) return;

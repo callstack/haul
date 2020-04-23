@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -27,14 +27,16 @@ import {
 import Assets from 'foo';
 
 const App = () => {
+  console.warn('warn');
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Assets />
+        {/* <Assets /> */}
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+          style={styles.scrollView}
+        >
           <Header />
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
