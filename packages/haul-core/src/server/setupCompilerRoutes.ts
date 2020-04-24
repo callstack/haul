@@ -8,8 +8,8 @@ import createDeltaBundle from './createDeltaBundle';
 import Runtime from '../runtime/Runtime';
 import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
-type Platform = 'android' | 'ios';
-type BundleOptions = { dev?: boolean; minify?: boolean };
+type Platform = string;
+type BundleOptions = { dev?: boolean; minify?: boolean; alreadySet?: boolean };
 type PlatformsBundleOptions = {
   [platform in Platform]: BundleOptions;
 };
@@ -22,14 +22,20 @@ export default function setupCompilerRoutes(
     port,
     bundleNames,
     platforms,
-  }: { port: number; bundleNames: string[]; platforms: string[] }
+    cliBundleOptions,
+  }: {
+    port: number;
+    bundleNames: string[];
+    platforms: string[];
+    cliBundleOptions: BundleOptions;
+  }
 ) {
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
   const bundleRegex = /^([^.]+)(\.[^.]+)?\.(bundle|delta)$/;
   let bundleOptions: PlatformsBundleOptions = {
-    ios: {},
-    android: {},
+    ios: { ...cliBundleOptions },
+    android: { ...cliBundleOptions },
   };
 
   server.route({
@@ -97,34 +103,48 @@ export default function setupCompilerRoutes(
           hasWarnedDelta = true;
         }
 
-        const bundleOptionsFromQuery: BundleOptions = {
-          dev: Boolean(request.query.dev),
-          minify: Boolean(request.query.minify),
-        };
+        const bundleOptionsFromQuery = getBundleOptionsFromQuery(request.query);
+        const {
+          alreadySet: alreadySetBundleOptions,
+          ...bundleOptionsForCompiler
+        } = bundleOptions[platform];
 
-        if (areBundleOptionsSet(bundleOptions[platform as Platform])) {
+        if (areBundleOptionsSet(bundleOptionsFromQuery)) {
+          if (alreadySetBundleOptions) {
+            const areBundleOptionsEqualAlreadySetOptions =
+              bundleOptions[platform].dev === bundleOptionsFromQuery.dev &&
+              bundleOptionsFromQuery.minify === bundleOptions[platform].minify;
+
+            if (!areBundleOptionsEqualAlreadySetOptions) {
+              return h
+                .response(
+                  'To see the changes you need to restart the haul server'
+                )
+                .code(501);
+            }
+          } else {
+            bundleOptions = {
+              ...bundleOptions,
+              [platform]: {
+                ...cliBundleOptions,
+                ...bundleOptionsFromQuery,
+                alreadySet: true,
+              },
+            };
+          }
+        } else {
           bundleOptions = {
             ...bundleOptions,
-            [platform]: { ...bundleOptionsFromQuery },
+            [platform]: {
+              ...cliBundleOptions,
+            },
           };
-        } else {
-          if (
-            bundleOptions[platform as Platform].dev !==
-              bundleOptionsFromQuery.dev ||
-            bundleOptionsFromQuery.minify !==
-              bundleOptions[platform as Platform].minify
-          ) {
-            return h
-              .response(
-                'To see the changes you need to restart the haul server'
-              )
-              .code(501);
-          }
         }
+
         return new Promise(resolve => {
           const filename = `${bundleName}.${platform}.bundle`;
           compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
-            bundleOptions: bundleOptions[platform as Platform],
+            bundleOptions: bundleOptionsForCompiler,
             filename,
             platform,
             callback: (result: {
@@ -198,5 +218,23 @@ function makeResponseFromCompilerResults(
 }
 
 function areBundleOptionsSet(bundleOptions: BundleOptions) {
-  return bundleOptions.dev === undefined && bundleOptions.minify === undefined;
+  return bundleOptions.dev !== undefined || bundleOptions.minify !== undefined;
+}
+
+function getBundleOptionsFromQuery(query: { minify?: boolean; dev?: boolean }) {
+  let bundleOptions: BundleOptions = {};
+
+  if (query.minify === true) {
+    bundleOptions.minify = true;
+  } else if (query.minify === false) {
+    bundleOptions.minify = false;
+  }
+
+  if (query.dev === true) {
+    bundleOptions.dev = true;
+  } else if (query.dev === false) {
+    bundleOptions.dev = false;
+  }
+
+  return bundleOptions;
 }

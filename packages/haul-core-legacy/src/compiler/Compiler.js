@@ -34,47 +34,38 @@ module.exports = class Compiler extends EventEmitter {
     this.tasks = new TaskQueue();
     this.logger = logger;
 
-    this.on(
-      Events.REQUEST_BUNDLE,
-      async ({ bundleOptions = {}, platform, filename, callback }) => {
-        if (!this.forks[platform]) {
-          this.forks[platform] = await this.initFork({
-            platform,
-            options: {
-              ...options,
-              configOptions: { ...options.configOptions, ...bundleOptions },
-            },
-          });
-        }
-
-        if (!this.forks[platform]) return;
-
-        // If the fork is compiling the bundle, attach listener to emit `REQUEST_FILE` once
-        // the bundle is created, otherwise simply request the file. Callback will be then invoked in
-        // `FILE_RECEIVED` listener.
-        if (this.forks[platform].isProcessing) {
-          this.forks[platform].once(Events.BUILD_FINISHED, ({ stats }) => {
-            if (stats.errors.length) {
-              callback({
-                errors: stats.errors,
-                platform,
-                mimeType: null,
-                file: null,
-              });
-            } else {
-              const taskId = this.tasks.add({ callback });
-              this.forks[platform].send(Events.REQUEST_FILE, {
-                filename,
-                taskId,
-              });
-            }
-          });
-        } else {
-          const taskId = this.tasks.add({ callback });
-          this.forks[platform].send(Events.REQUEST_FILE, { filename, taskId });
-        }
+    this.on(Events.REQUEST_BUNDLE, async ({ platform, filename, callback }) => {
+      if (!this.forks[platform]) {
+        this.forks[platform] = await this.initFork({ platform, options });
       }
-    );
+
+      if (!this.forks[platform]) return;
+
+      // If the fork is compiling the bundle, attach listener to emit `REQUEST_FILE` once
+      // the bundle is created, otherwise simply request the file. Callback will be then invoked in
+      // `FILE_RECEIVED` listener.
+      if (this.forks[platform].isProcessing) {
+        this.forks[platform].once(Events.BUILD_FINISHED, ({ stats }) => {
+          if (stats.errors.length) {
+            callback({
+              errors: stats.errors,
+              platform,
+              mimeType: null,
+              file: null,
+            });
+          } else {
+            const taskId = this.tasks.add({ callback });
+            this.forks[platform].send(Events.REQUEST_FILE, {
+              filename,
+              taskId,
+            });
+          }
+        });
+      } else {
+        const taskId = this.tasks.add({ callback });
+        this.forks[platform].send(Events.REQUEST_FILE, { filename, taskId });
+      }
+    });
 
     this.on(Events.REQUEST_FILE, ({ filename, callback }) => {
       // If there are no forks spawned, execute callback immediately

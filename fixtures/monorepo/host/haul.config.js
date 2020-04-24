@@ -9,7 +9,7 @@ export default makeConfig({
       dependsOn: ['base_dll'],
     },
     base_dll: makeBaseDllConfig(true), // copy bundle files
-    app0:  ({ platform, dev }) => {
+    app0: ({ platform, dev }) => {
       const basePath = join(
         __dirname,
         `node_modules/app0/dist/${platform}/${dev ? 'dev' : 'prod'}`
