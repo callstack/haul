@@ -65,6 +65,7 @@
     "@types/node-fetch": "^2.5.4",
     "@types/npm-registry-fetch": "^4.0.1",
     "@types/pify": "^3.0.2",
+    "@types/react-native-community__cli": "^2.0.0",
     "@types/resolve": "^1.14.0",
     "@types/rimraf": "^2.0.3",
     "@types/semver": "^6.2.0",
