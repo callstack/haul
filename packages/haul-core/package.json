@@ -5,7 +5,8 @@
   "main": "build/index.js",
   "files": [
     "build/",
-    "assets/"
+    "assets/",
+    "runtime/"
   ],
   "engines": {
     "node": ">=10.x"
@@ -15,7 +16,8 @@
   "license": "MIT",
   "bugs": "https://github.com/callstack/haul/issues",
   "peerDependencies": {
-    "react-native": ">=0.59.0"
+    "react-native": ">=0.59.0",
+    "metro": ">= 0.51.1 < 1"
   },
   "dependencies": {
     "@babel/core": "7.4.0",
@@ -29,7 +31,6 @@
     "@hapi/joi": "^15.1.1",
     "@haul-bundler/basic-bundle-webpack-plugin": "^0.18.0",
     "@haul-bundler/core-legacy": "^0.17.0",
-    "@haul-bundler/ram-bundle-webpack-plugin": "^0.17.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "enhanced-resolve": "^4.1.1",
