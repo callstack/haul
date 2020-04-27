@@ -104,42 +104,29 @@ export default function setupCompilerRoutes(
         }
 
         const bundleOptionsFromQuery = getBundleOptionsFromQuery(request.query);
-        const {
-          alreadySet: alreadySetBundleOptions,
-          ...bundleOptionsForCompiler
-        } = bundleOptions[platform];
+        const isUserChangedOptions = isUserChangedAlreadySetBundleOptions(
+          bundleOptions[platform],
+          bundleOptionsFromQuery
+        );
+
+        if (isUserChangedOptions) {
+          return h
+            .response('To see the changes you need to restart the haul server')
+            .code(501);
+        }
 
         if (areBundleOptionsSet(bundleOptionsFromQuery)) {
-          if (alreadySetBundleOptions) {
-            const areBundleOptionsEqualAlreadySetOptions =
-              bundleOptions[platform].dev === bundleOptionsFromQuery.dev &&
-              bundleOptionsFromQuery.minify === bundleOptions[platform].minify;
-
-            if (!areBundleOptionsEqualAlreadySetOptions) {
-              return h
-                .response(
-                  'To see the changes you need to restart the haul server'
-                )
-                .code(501);
-            }
-          } else {
-            bundleOptions = {
-              ...bundleOptions,
-              [platform]: {
-                ...cliBundleOptions,
-                ...bundleOptionsFromQuery,
-                alreadySet: true,
-              },
-            };
-          }
-        } else {
-          bundleOptions = {
-            ...bundleOptions,
-            [platform]: {
-              ...cliBundleOptions,
-            },
+          bundleOptions[platform] = {
+            ...bundleOptions[platform],
+            ...bundleOptionsFromQuery,
+            alreadySet: true,
           };
         }
+
+        const bundleOptionsForCompiler = {
+          minify: bundleOptions[platform].minify,
+          dev: bundleOptions[platform].dev,
+        };
 
         return new Promise(resolve => {
           const filename = `${bundleName}.${platform}.bundle`;
@@ -237,4 +224,19 @@ function getBundleOptionsFromQuery(query: { minify?: boolean; dev?: boolean }) {
   }
 
   return bundleOptions;
+}
+
+function isUserChangedAlreadySetBundleOptions(
+  bundleOptions: BundleOptions,
+  bundleOptionsFromQuery: BundleOptions
+) {
+  if (areBundleOptionsSet(bundleOptionsFromQuery)) {
+    if (bundleOptions.alreadySet) {
+      return (
+        bundleOptions.dev !== bundleOptionsFromQuery.dev ||
+        bundleOptionsFromQuery.minify !== bundleOptions.minify
+      );
+    }
+  }
+  return false;
 }
