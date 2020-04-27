@@ -2,17 +2,7 @@
   "version": "0.19.0",
   "name": "@haul-bundler/cli",
   "description": "Haul is a new command line tools for React Native",
-  "bin": {
-    "haul": "./bin/haul.js"
-  },
-  "main": "build/api.js",
-  "files": [
-    "build/",
-    "bin/"
-  ],
-  "engines": {
-    "node": ">=10.x"
-  },
+  "main": "./index.js",
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",
