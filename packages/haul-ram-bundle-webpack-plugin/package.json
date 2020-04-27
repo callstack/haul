@@ -1,5 +1,5 @@
 {
-  "version": "0.17.0",
+  "version": "0.18.0",
   "name": "@haul-bundler/ram-bundle-webpack-plugin",
   "description": "RAM bundle plugin for Haul and Webpack",
   "main": "index.js",
