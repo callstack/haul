@@ -1,6 +1,5 @@
 import path from 'path';
 import fetch from 'node-fetch';
-import fs from 'fs';
 import { Instance, startServer, stopServer } from '../../utils/server';
 import { installDeps, cleanup, run } from '../../utils/common';
 import { validateBaseBundle } from '../../utils/validators';
@@ -45,7 +44,8 @@ describe('packager server', () => {
         minify: false,
         dev: false,
       });
-      validateBaseBundle(devFirstBundle, { platform });
+
+      validateBaseBundle(devFirstBundle, { platform, log: true });
 
       expect(devFirstBundle.toString().includes('YellowBox.install()')).toBe(
         false

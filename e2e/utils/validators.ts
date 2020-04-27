@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 type ValidationOptions = {
   isIndexedRAMBundle?: boolean;
   platform?: string;
+  log?: boolean;
 };
 
 export function validateBaseBundle(
@@ -20,6 +21,10 @@ export function validateBaseBundle(
     expect(parser.getModule(parseInt(mainModuleId, 10)).length).toBeGreaterThan(
       0
     );
+  }
+
+  if (options.log) {
+    console.log(bundleBuffer.toString());
   }
   if (options.platform === 'windows') {
     expect(bundleBuffer.toString().includes('react-native-windows')).toBe(true);
