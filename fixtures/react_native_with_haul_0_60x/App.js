@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  YellowBox,
 } from 'react-native';
 
 import {
@@ -27,7 +28,6 @@ import {
 import Assets from 'foo';
 
 const App = () => {
-  console.warn('warn');
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
