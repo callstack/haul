@@ -14,8 +14,7 @@ const platforms = [['android'], ['ios']];
 
 describe('compiling bundle with options', () => {
   beforeAll(() => {
-    installDeps(TEST_PROJECT_DIR);
-    compileBundles();
+    compileBundle();
   });
 
   afterAll(() => {
@@ -28,9 +27,7 @@ describe('packager server', () => {
   let instance: Instance;
 
   beforeAll(done => {
-    instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done, {
-      skipInstall: true,
-    });
+    instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done);
   });
 
   afterAll(() => {
@@ -74,9 +71,7 @@ describe('packager server', () => {
           resolve(instance);
         };
         done.fail = reject;
-        instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done, {
-          skipInstall: true,
-        });
+        instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done);
       });
 
       const { bundle: minifiedBundleAfterServerRestart } = await fetchBundle(
@@ -110,7 +105,7 @@ async function fetchBundle(
   return { bundle: await response.buffer(), response };
 }
 
-function compileBundles() {
+function compileBundle() {
   const { stdout } = run('yarn build', TEST_PROJECT_DIR);
 
   if (stdout.match(/(error ▶︎ |ERROR)/g)) {

@@ -14,7 +14,6 @@ import {
   View,
   Text,
   StatusBar,
-  YellowBox,
 } from 'react-native';
 
 import {
@@ -32,7 +31,7 @@ const App = () => {
     <Fragment>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        {/* <Assets /> */}
+        <Assets />
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}
