@@ -23,9 +23,6 @@ export function validateBaseBundle(
     );
   }
 
-  if (options.log) {
-    console.log(bundleBuffer.toString());
-  }
   if (options.platform === 'windows') {
     expect(bundleBuffer.toString().includes('react-native-windows')).toBe(true);
     expect(bundleBuffer.toString().includes("OS: 'windows',")).toBe(true);

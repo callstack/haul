@@ -17,7 +17,7 @@ describe('packager server', () => {
       dev: false,
     });
 
-    validateBaseBundle(devFirstBundle, { platform: 'ios', log: true });
+    validateBaseBundle(devFirstBundle, { platform: 'ios' });
 
     expect(devFirstBundle.toString().includes('YellowBox.install()')).toBe(
       false
