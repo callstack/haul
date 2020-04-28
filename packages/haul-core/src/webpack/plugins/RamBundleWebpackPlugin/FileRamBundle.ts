@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import path from 'path';
 import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
-import { Module } from './WebpackRamBundlePlugin';
+import { Module } from './RamBundleWebpackPlugin';
 
 export default class FileRamBundle {
   constructor(

@@ -5,7 +5,7 @@ import fs from 'fs';
 import assert from 'assert';
 import { SourceMapConsumer } from 'source-map';
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
-import RamBundlePlugin from '../WebpackRamBundlePlugin';
+import RamBundlePlugin from '../RamBundleWebpackPlugin';
 
 function wait(ms: number) {
   return new Promise(resolve => {
