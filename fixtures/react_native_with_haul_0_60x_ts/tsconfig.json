@@ -7,7 +7,7 @@
     "lib": ["es2016"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "jsx": "react-native",
+    "jsx": "react",
     "resolveJsonModule": true
   }
 }
