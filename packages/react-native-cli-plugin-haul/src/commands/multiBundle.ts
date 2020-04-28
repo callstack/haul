@@ -1,9 +1,8 @@
-import { Arguments } from "yargs";
-import webpack from "webpack";
-import fs from "fs";
-import path from "path";
-import mkdirp from "mkdirp";
-import cpx from "cpx";
+import webpack from 'webpack';
+import fs from 'fs';
+import path from 'path';
+import mkdirp from 'mkdirp';
+import cpx from 'cpx';
 import {
   Runtime,
   getProjectConfigPath,
@@ -11,14 +10,14 @@ import {
   sortBundlesByDependencies,
   getBundleFilename,
   EnvOptions,
-} from "@haul-bundler/core";
-import SimpleProgressWebpackPlugin from "simple-progress-webpack-plugin";
-import { Command, Config } from "@react-native-community/cli";
+} from '@haul-bundler/core';
+import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
+import { Command, Config } from '@react-native-community/cli';
 
-import { getBoolFromString } from "./shared/parsers";
-import globalOptions from "./shared/globalOptions";
-import setupInspectorAndLogs from "./shared/setupInspectorAndLogs";
-import * as messages from "../messages/multiBundleMessages";
+import { getBoolFromString } from './shared/parsers';
+import globalOptions from './shared/globalOptions';
+import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import * as messages from '../messages/multiBundleMessages';
 
 interface Options {
   assetsDest?: string;
@@ -62,8 +61,8 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
       platform,
       root: directory,
       dev,
-      bundleMode: "multi-bundle",
-      bundleTarget: "file",
+      bundleMode: 'multi-bundle',
+      bundleTarget: 'file',
       bundleOutput,
       assetsDest,
       sourcemapOutput,
@@ -76,12 +75,12 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
         progress !== undefined
           ? progress
           : !dev
-          ? "none"
+          ? 'none'
           : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
           // only level that doesn't make Xcode think that the bundle failed.
           !process.stdin.isTTY
-          ? "verbose"
-          : "compact",
+          ? 'verbose'
+          : 'compact',
     };
     const projectConfig = normalizedProjectConfigBuilder(
       runtime,
@@ -94,21 +93,21 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
       const bundleConfig = projectConfig.bundles[bundleName];
       if (bundleConfig.external) {
         runtime.logger.info(
-          `Using external${bundleConfig.dll ? " DLL" : ""} bundle`,
-          runtime.logger.enhanceWithModifier("bold", bundleName)
+          `Using external${bundleConfig.dll ? ' DLL' : ''} bundle`,
+          runtime.logger.enhanceWithModifier('bold', bundleName)
         );
         runtime.logger.info(
-          "Bundle path",
+          'Bundle path',
           runtime.logger.enhanceWithColor(
-            "gray",
+            'gray',
             bundleConfig.external.bundlePath
           )
         );
         if (bundleConfig.dll) {
           runtime.logger.info(
-            "Manifest path",
+            'Manifest path',
             runtime.logger.enhanceWithColor(
-              "gray",
+              'gray',
               bundleConfig.external.manifestPath
             )
           );
@@ -125,7 +124,7 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
           let bundleOutputDirectory = bundleConfig.root;
           if (env.bundleOutput) {
             bundleOutputDirectory =
-              path.extname(env.bundleOutput) === ""
+              path.extname(env.bundleOutput) === ''
                 ? env.bundleOutput
                 : path.dirname(env.bundleOutput);
             bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
@@ -134,9 +133,9 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
           }
           mkdirp.sync(bundleOutputDirectory);
           runtime.logger.info(
-            "Copying bundle to",
+            'Copying bundle to',
             runtime.logger.enhanceWithColor(
-              "gray",
+              'gray',
               path.join(bundleOutputDirectory, filename)
             )
           );
@@ -150,9 +149,9 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
               path.join(bundleOutputDirectory, `${filename}.map`)
             );
             runtime.logger.info(
-              "Copying bundle source maps to",
+              'Copying bundle source maps to',
               runtime.logger.enhanceWithColor(
-                "gray",
+                'gray',
                 path.join(bundleOutputDirectory, `${filename}.map`)
               )
             );
@@ -171,7 +170,7 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
           cpx.copySync(
             path.join(
               bundleConfig.external.assetsPath,
-              "**/*.{aac,aiff,bmp,caf,gif,html,jpeg,jpg,m4a,m4v,mov,mp3,mp4,mpeg,mpg,obj,otf,pdf,png,psd,svg,ttf,wav,webm,webp}"
+              '**/*.{aac,aiff,bmp,caf,gif,html,jpeg,jpg,m4a,m4v,mov,mp3,mp4,mpeg,mpg,obj,otf,pdf,png,psd,svg,ttf,wav,webm,webp}'
             ),
             assetsOutputDirectory,
             {
@@ -186,7 +185,7 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
         const webpackConfig = projectConfig.webpackConfigs[bundleName];
 
         // Attach progress plugin
-        if (progress !== "none") {
+        if (progress !== 'none') {
           webpackConfig.plugins!.push(
             new SimpleProgressWebpackPlugin({
               format: progress,
@@ -199,7 +198,7 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
           webpackConfig,
         });
         const stats = await build(webpackConfig);
-        runtime.logger.print("");
+        runtime.logger.print('');
         messages.bundleBuilt(runtime, { stats });
       } catch (error) {
         runtime.logger.error(`${bundleName} bundle compilation failed`);
@@ -208,7 +207,7 @@ async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
     }
 
     runtime.logger.done(
-      "All bundles successfully compiled. You can now run your React Native multi-bundle app."
+      'All bundles successfully compiled. You can now run your React Native multi-bundle app.'
     );
     runtime.complete();
   } catch (error) {
@@ -226,7 +225,7 @@ function build(webpackConfig: webpack.Configuration) {
         reject(
           err
             ? err
-            : new Error(info.toJson({ errorDetails: true }).errors.join("\n"))
+            : new Error(info.toJson({ errorDetails: true }).errors.join('\n'))
         );
       } else {
         resolve(info);
@@ -236,68 +235,68 @@ function build(webpackConfig: webpack.Configuration) {
 }
 
 const command: Command = {
-  name: "haul-multi-bundle",
-  description: "Create multiple bundles to be used in multi-bundle mode",
+  name: 'haul-multi-bundle',
+  description: 'Create multiple bundles to be used in multi-bundle mode',
   // @ts-ignore
   func: multiBundle,
   options: [
     {
-      name: "--platform <ios|android>",
-      description: "Platform to bundle for",
+      name: '--platform <ios|android>',
+      description: 'Platform to bundle for',
       // experimental
       // @ts-ignore
-      required: true,
+      // required: true,
     },
     {
-      name: "--dev <bool>",
-      description: "Whether to build in development mode",
-      default: "true",
+      name: '--dev <bool>',
+      description: 'Whether to build in development mode',
+      default: 'true',
       parse: getBoolFromString,
     },
     {
-      name: "--minify <bool>",
+      name: '--minify <bool>',
       description:
-        "Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.",
+        'Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.',
       parse: getBoolFromString,
     },
     {
-      name: "--bundle-output <string>",
+      name: '--bundle-output <string>',
       description:
-        "File name where to store the resulting bundle, ex. /tmp/groups.bundle.",
+        'File name where to store the resulting bundle, ex. /tmp/groups.bundle.',
     },
     {
-      name: "--assets-dest <string>",
+      name: '--assets-dest <string>',
       description:
-        "Directory name where to store assets referenced in the bundle.",
+        'Directory name where to store assets referenced in the bundle.',
     },
     {
-      name: "--sourcemap-output <string>",
-      description: "File name where to store generated source map",
+      name: '--sourcemap-output <string>',
+      description: 'File name where to store generated source map',
     },
     {
-      name: "--config [path]",
-      description: "Path to the CLI configuration file",
-      default: "haul.config.js",
+      name: '--config [path]',
+      description: 'Path to the CLI configuration file',
+      default: 'haul.config.js',
     },
     {
-      name: "--progress <string>",
+      name: '--progress <string>',
       description:
         'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode. Choices: ["none", "minimal", "compact", "expanded", "verbose"].',
     },
     {
-      name: "--max-workers [int]",
-      description: "Number of workers used to load modules",
+      name: '--max-workers [int]',
+      description: 'Number of workers used to load modules',
       parse: parseInt,
-      default: "1",
+      default: '1',
     },
     {
-      name: "--skip-host-check [bool]",
+      name: '--skip-host-check [bool]',
       description: 'Skips check for "index" or "host" bundle in Haul config',
       parse: getBoolFromString,
-      default: "false",
+      default: 'false',
     },
     ...globalOptions,
   ],
 };
 
-export default command;
+module.exports = command;

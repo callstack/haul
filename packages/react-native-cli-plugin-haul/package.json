@@ -2,7 +2,7 @@
   "name": "@haul-bundler/react-native-cli-plugin",
   "version": "1.0.0",
   "description": "Haul plugin for react-native-community/cli",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "jest",
     "build": "rimraf ./build && tsc",

@@ -2,47 +2,47 @@ import {
   Runtime,
   getReactNativeVersion,
   DEFAULT_CONFIG_FILENAME,
-} from "@haul-bundler/core";
-import ora, { Ora } from "ora";
-import fs from "fs";
-import path from "path";
-import inquirer from "inquirer";
-import dedent from "dedent";
-import which from "which";
-import exec from "execa";
-import npmFetch from "npm-registry-fetch";
-import { Command } from "@react-native-community/cli";
+} from '@haul-bundler/core';
+import ora, { Ora } from 'ora';
+import fs from 'fs';
+import path from 'path';
+import inquirer from 'inquirer';
+import dedent from 'dedent';
+import which from 'which';
+import exec from 'execa';
+import npmFetch from 'npm-registry-fetch';
+import { Command } from '@react-native-community/cli';
 
-import setupInspectorAndLogs from "./shared/setupInspectorAndLogs";
+import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
 
 const delay = (time: number) =>
-  new Promise((resolve) => setTimeout(resolve, time));
+  new Promise(resolve => setTimeout(resolve, time));
 
 async function checkProject(progress: Ora, cwd: string, runtime: Runtime) {
-  progress.start("Checking project files");
+  progress.start('Checking project files');
   await delay(1000);
 
   // Are we inside a React Native project?
   if (getReactNativeVersion(cwd)) {
-    progress.succeed("Project looks good");
+    progress.succeed('Project looks good');
   } else {
     progress.fail(dedent`
     This doesn't seem to be a React Native project.
 
     Make sure you have a ${runtime.logger.enhanceWithModifier(
-      "bold",
-      "package.json"
+      'bold',
+      'package.json'
     )} file with ${runtime.logger.enhanceWithModifier(
-      "bold",
-      "react-native"
+      'bold',
+      'react-native'
     )} in dependencies, and you have installed these dependencies.
 
     To generate a React Native project, run ${runtime.logger.enhanceWithModifier(
-      "bold",
-      "react-native init <ProjectName>"
+      'bold',
+      'react-native init <ProjectName>'
     )}. See ${runtime.logger.enhanceWithColor(
-      "cyan",
-      "https://facebook.github.io/react-native/docs/getting-started.html"
+      'cyan',
+      'https://facebook.github.io/react-native/docs/getting-started.html'
     )} for details.
   `);
     runtime.complete(1);
@@ -60,8 +60,8 @@ async function createHaulProjectConfig(
   if (fs.existsSync(path.join(cwd, DEFAULT_CONFIG_FILENAME))) {
     overwrite = ((await inquirer.prompt([
       {
-        type: "confirm",
-        name: "overwrite",
+        type: 'confirm',
+        name: 'overwrite',
         message: `There is already a '${DEFAULT_CONFIG_FILENAME}'. Overwrite it?`,
       },
     ])) as { overwrite: boolean }).overwrite;
@@ -71,7 +71,7 @@ async function createHaulProjectConfig(
     return;
   }
 
-  progress.start("Generating config files");
+  progress.start('Generating config files');
 
   await delay(1000);
 
@@ -91,7 +91,7 @@ async function createHaulProjectConfig(
 
   progress.succeed(
     `Generated ${runtime.logger.enhanceWithModifier(
-      "bold",
+      'bold',
       DEFAULT_CONFIG_FILENAME
     )}`
   );
@@ -103,24 +103,24 @@ async function modifyBabelConfig(
   runtime: Runtime,
   babelPreset: string
 ) {
-  progress.start("Updating Babel config");
+  progress.start('Updating Babel config');
 
   const defaultBabelConfigPaths = [
-    path.join(cwd, "babel.config.js"),
-    path.join(cwd, ".babelrc.js"),
-    path.join(cwd, ".babelrc"),
+    path.join(cwd, 'babel.config.js'),
+    path.join(cwd, '.babelrc.js'),
+    path.join(cwd, '.babelrc'),
   ];
 
-  let babelConfigPath = defaultBabelConfigPaths.find((filePath) =>
+  let babelConfigPath = defaultBabelConfigPaths.find(filePath =>
     fs.existsSync(filePath)
   );
 
   if (!babelConfigPath) {
     const result = (await inquirer.prompt([
       {
-        type: "input",
-        name: "entry",
-        message: "Enter path to the Babel config file",
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the Babel config file',
         validate: (pathToFile: string) =>
           fs.existsSync(pathToFile) ? true : `${pathToFile} is not a valid`,
       },
@@ -132,12 +132,12 @@ async function modifyBabelConfig(
   const babelConfig = fs.readFileSync(babelConfigPath).toString();
   fs.writeFileSync(
     babelConfigPath,
-    babelConfig.replace("metro-react-native-babel-preset", babelPreset)
+    babelConfig.replace('metro-react-native-babel-preset', babelPreset)
   );
 
   progress.succeed(
     `Updated Babel config at ${runtime.logger.enhanceWithModifier(
-      "bold",
+      'bold',
       path.relative(cwd, babelConfigPath)
     )}`
   );
@@ -147,23 +147,23 @@ async function modifyXcodeProject(progress: Ora, cwd: string) {
   let xcodeProject;
 
   // Does `ios/*.xcodeproj` exist?
-  const iosPath = path.join(cwd, "ios");
+  const iosPath = path.join(cwd, 'ios');
   if (fs.existsSync(iosPath)) {
     xcodeProject = fs
       .readdirSync(iosPath)
-      .find((file) => file.includes(".xcodeproj"));
-    xcodeProject = path.join(iosPath, xcodeProject || "");
+      .find(file => file.includes('.xcodeproj'));
+    xcodeProject = path.join(iosPath, xcodeProject || '');
   }
 
   // Otherwise, ask for path to a file
   if (!xcodeProject) {
     const result = (await inquirer.prompt([
       {
-        type: "input",
-        name: "entry",
-        message: "Enter path to the .xcodeproj file",
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the .xcodeproj file',
         validate: (pathToFile: string) =>
-          fs.existsSync(pathToFile) && pathToFile.includes(".xcodeproj")
+          fs.existsSync(pathToFile) && pathToFile.includes('.xcodeproj')
             ? true
             : `${pathToFile} is not a valid .xcodeproj`,
       },
@@ -172,15 +172,15 @@ async function modifyXcodeProject(progress: Ora, cwd: string) {
     xcodeProject = path.resolve(result.entry);
   }
 
-  progress.start("Adding haul to your Xcode build scripts");
+  progress.start('Adding haul to your Xcode build scripts');
 
   await delay(1000);
 
   let project = fs
-    .readFileSync(path.join(xcodeProject, "project.pbxproj"))
+    .readFileSync(path.join(xcodeProject, 'project.pbxproj'))
     .toString();
 
-  const haulSignature = "added by Haul";
+  const haulSignature = 'added by Haul';
 
   /* Make sure we check both project iOS and iOS-TV, that's the magic behind "2" constant */
 
@@ -192,7 +192,7 @@ async function modifyXcodeProject(progress: Ora, cwd: string) {
 
   // Are we already integrated?
   if (countOccurrences(haulSignature) === PROJECTS_COUNT) {
-    progress.info("Haul is already part of your build scripts");
+    progress.info('Haul is already part of your build scripts');
     return;
   }
 
@@ -207,45 +207,45 @@ async function modifyXcodeProject(progress: Ora, cwd: string) {
 
   const haulTask = `shellScript = "# ${haulSignature}\\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\\nexport NODE_BINARY=node`;
 
-  project = project.replace(new RegExp(originalTask, "g"), haulTask);
+  project = project.replace(new RegExp(originalTask, 'g'), haulTask);
 
-  fs.writeFileSync(path.join(xcodeProject, "project.pbxproj"), project);
-  progress.succeed("Added haul to your Xcode build scripts");
+  fs.writeFileSync(path.join(xcodeProject, 'project.pbxproj'), project);
+  progress.succeed('Added haul to your Xcode build scripts');
 }
 
 async function modifyGradleBuild(progress: Ora, cwd: string) {
   let gradleBuildFile;
   // Does `android/app/build.gradle` exist?
-  const androidPath = path.join(cwd, "android/app");
+  const androidPath = path.join(cwd, 'android/app');
   if (fs.existsSync(androidPath)) {
     gradleBuildFile = fs
       .readdirSync(androidPath)
-      .find((file) => file.includes("build.gradle"));
-    gradleBuildFile = path.join(androidPath, gradleBuildFile || "");
+      .find(file => file.includes('build.gradle'));
+    gradleBuildFile = path.join(androidPath, gradleBuildFile || '');
   }
   // Otherwise, ask for path to a file
   if (!gradleBuildFile) {
     const result = (await inquirer.prompt([
       {
-        type: "input",
-        name: "entry",
-        message: "Enter path to the android/app/build.gradle file",
+        type: 'input',
+        name: 'entry',
+        message: 'Enter path to the android/app/build.gradle file',
         validate: (pathToFile: string) =>
-          fs.existsSync(pathToFile) && pathToFile.includes("build.gradle")
+          fs.existsSync(pathToFile) && pathToFile.includes('build.gradle')
             ? true
             : `${pathToFile} is not a valid build.gradle`,
       },
     ])) as { entry: string };
     gradleBuildFile = path.resolve(result.entry);
   }
-  progress.start("Adding haul to your build.gradle");
+  progress.start('Adding haul to your build.gradle');
   await delay(1000);
   let project = fs.readFileSync(gradleBuildFile).toString();
   const cliString = '"node_modules/@haul-bundler/cli/bin/haul.js"';
 
   // Are we already integrated?
   if (project.includes(cliString)) {
-    progress.info("Haul is already part of your build.gradle");
+    progress.info('Haul is already part of your build.gradle');
     return;
   }
 
@@ -259,7 +259,7 @@ async function modifyGradleBuild(progress: Ora, cwd: string) {
     `
   );
   fs.writeFileSync(gradleBuildFile, project);
-  progress.succeed("Added haul to your build.gradle");
+  progress.succeed('Added haul to your build.gradle');
 }
 
 function getRunScript(scriptName: string) {
@@ -267,29 +267,29 @@ function getRunScript(scriptName: string) {
 }
 
 async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
-  const packageJson = require(path.join(cwd, "package.json"));
+  const packageJson = require(path.join(cwd, 'package.json'));
   const scripts = packageJson.scripts || {};
   const haulScript = Object.keys(scripts).find(
-    (name) => scripts[name] === "haul"
+    name => scripts[name] === 'haul'
   );
 
   if (haulScript) {
-    progress.info("Haul already exists in your package.json.");
+    progress.info('Haul already exists in your package.json.');
     return haulScript;
   }
 
-  let scriptName = "start";
+  let scriptName = 'start';
   if (
     scripts.start &&
-    scripts.start !== "node node_modules/react-native/local-cli/cli.js start"
+    scripts.start !== 'node node_modules/react-native/local-cli/cli.js start'
   ) {
     const result = (await inquirer.prompt([
       {
-        type: "input",
-        name: "scriptName",
+        type: 'input',
+        name: 'scriptName',
         message:
-          "Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`",
-        default: "haul",
+          'Enter the name of the script to add to package.json, e.g. `haul` for `yarn run haul`',
+        default: 'haul',
       },
     ])) as { scriptName: string };
 
@@ -297,7 +297,7 @@ async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
   }
 
   packageJson.scripts = Object.assign({}, scripts, {
-    [scriptName]: "haul start",
+    [scriptName]: 'haul start',
   });
 
   progress.start(`Adding \`${scriptName}\` script to your package.json`);
@@ -305,7 +305,7 @@ async function addHaulScript(progress: Ora, cwd: string): Promise<string> {
   await delay(1000);
 
   fs.writeFileSync(
-    path.join(cwd, "package.json"),
+    path.join(cwd, 'package.json'),
     JSON.stringify(packageJson, null, 2)
   );
 
@@ -317,7 +317,7 @@ async function getAvailableHaulPreset(
   targetHaulPreset: string
 ): Promise<string> {
   // Stop searching on 0.59 - there's no preset below 0.59.
-  if (targetHaulPreset.includes("0.59")) {
+  if (targetHaulPreset.includes('0.59')) {
     return targetHaulPreset;
   }
 
@@ -329,13 +329,10 @@ async function getAvailableHaulPreset(
       progress.info(
         `${targetHaulPreset} not available. Trying older version...`
       );
-      const previousHaulPreset = targetHaulPreset.replace(
-        /-0\.\d+$/,
-        (match) => {
-          const [major, minor] = match.slice(1).split(".");
-          return `-${major}.${parseInt(minor, 10) - 1}`;
-        }
-      );
+      const previousHaulPreset = targetHaulPreset.replace(/-0\.\d+$/, match => {
+        const [major, minor] = match.slice(1).split('.');
+        return `-${major}.${parseInt(minor, 10) - 1}`;
+      });
       return await getAvailableHaulPreset(progress, previousHaulPreset);
     }
 
@@ -347,18 +344,18 @@ async function installDependencies(
   progress: Ora,
   { babelPreset, haulPreset }: { babelPreset: string; haulPreset: string }
 ) {
-  progress.info("Installing required devDependencies");
+  progress.info('Installing required devDependencies');
 
-  const useYarn = await new Promise<boolean>((resolve) => {
-    which("yarn", (_, resolved: string | undefined) => {
+  const useYarn = await new Promise<boolean>(resolve => {
+    which('yarn', (_, resolved: string | undefined) => {
       resolve(Boolean(resolved));
     });
   });
   const installArgs = (useYarn
-    ? ["add", "-D"]
-    : ["install", "--save-dev"]
+    ? ['add', '-D']
+    : ['install', '--save-dev']
   ).concat(babelPreset, haulPreset);
-  await exec(useYarn ? "yarn" : "npm", installArgs, { stdio: "inherit" });
+  await exec(useYarn ? 'yarn' : 'npm', installArgs, { stdio: 'inherit' });
 }
 
 async function init() {
@@ -371,14 +368,14 @@ async function init() {
 
     if (!rnVersion) {
       runtime.logger.error(
-        "Cannot find React Native. Are you in React Native project?"
+        'Cannot find React Native. Are you in React Native project?'
       );
       runtime.complete(1);
     }
 
-    const progress = ora().start("Detecting Haul preset version...");
+    const progress = ora().start('Detecting Haul preset version...');
 
-    const babelPreset = "@haul-bundler/babel-preset-react-native";
+    const babelPreset = '@haul-bundler/babel-preset-react-native';
     const haulPreset = await getAvailableHaulPreset(
       progress,
       `@haul-bundler/preset-${rnVersion!.major}.${rnVersion!.minor}`
@@ -397,7 +394,7 @@ async function init() {
       `You can now start Haul by running '${getRunScript(scriptName)}'`
     );
   } catch (error) {
-    runtime.logger.error("Command failed with error:", error);
+    runtime.logger.error('Command failed with error:', error);
     runtime.unhandledError(error);
     exitCode = 1;
   } finally {
@@ -406,9 +403,9 @@ async function init() {
 }
 
 const command: Command = {
-  name: "haul-init",
-  description: "Generates necessary configuration files",
+  name: 'haul-init',
+  description: 'Generates necessary configuration files',
   func: init,
 };
 
-export default command;
+module.exports = command;

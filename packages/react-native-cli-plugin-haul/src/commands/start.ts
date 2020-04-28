@@ -5,30 +5,30 @@ import {
   getNormalizedProjectConfigBuilder,
   Server,
   Runtime,
-} from "@haul-bundler/core";
-import { Command, Config } from "@react-native-community/cli";
-import inquirer from "inquirer";
-import net from "net";
-import { exec } from "child_process";
-import path from "path";
-import os from "os";
-import fs from "fs";
+} from '@haul-bundler/core';
+import { Command, Config } from '@react-native-community/cli';
+import inquirer from 'inquirer';
+import net from 'net';
+import { exec } from 'child_process';
+import path from 'path';
+import os from 'os';
+import fs from 'fs';
 
-import { getBoolFromString } from "./shared/parsers";
-import globalOptions from "./shared/globalOptions";
-import setupInspectorAndLogs from "./shared/setupInspectorAndLogs";
+import { getBoolFromString } from './shared/parsers';
+import globalOptions from './shared/globalOptions';
+import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
 
 /*
  * Check if the port is already in use
  */
 function isPortTaken(port: number, host: string): Promise<boolean> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const portTester = net
       .createServer()
-      .once("error", () => {
+      .once('error', () => {
         return resolve(true);
       })
-      .once("listening", () => {
+      .once('listening', () => {
         portTester.close();
         resolve(false);
       })
@@ -42,11 +42,11 @@ function killProcess(port: number): Promise<boolean> {
    * should be used to find process PID
    */
   const serviceToUse =
-    process.platform === "win32"
+    process.platform === 'win32'
       ? `netstat -ano | findstr :${port}`
       : `lsof -n -i:${port} | grep LISTEN`;
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     /*
      * Find PID that is listening at given port
      */
@@ -64,21 +64,21 @@ function killProcess(port: number): Promise<boolean> {
        */
       const PIDInfo = stdout
         .trim()
-        .split("\n")[0]
-        .split(" ")
-        .filter((entry) => entry);
+        .split('\n')[0]
+        .split(' ')
+        .filter(entry => entry);
 
       /* macOSX/Linux: PID is placed at index 1
        * Windows: PID is placed at last index
        */
-      const index = process.platform === "win32" ? PIDInfo.length - 1 : 1;
+      const index = process.platform === 'win32' ? PIDInfo.length - 1 : 1;
 
       const PID = PIDInfo[index];
 
       /*
        * Kill process
        */
-      process.kill(parseInt(PID, 10), "SIGKILL");
+      process.kill(parseInt(PID, 10), 'SIGKILL');
 
       resolve(true);
     });
@@ -104,9 +104,9 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
   const runtime = new Runtime();
   setupInspectorAndLogs(args, runtime);
   let parsedEager;
-  const list = (args.eager || "").split(",").map((item) => item.trim());
-  if (list.length === 1 && (list[0] === "true" || list[0] === "false")) {
-    parsedEager = list[0] === "true" ? ["ios", "android"] : [];
+  const list = (args.eager || '').split(',').map(item => item.trim());
+  if (list.length === 1 && (list[0] === 'true' || list[0] === 'false')) {
+    parsedEager = list[0] === 'true' ? ['ios', 'android'] : [];
   } else {
     parsedEager = list;
   }
@@ -119,19 +119,19 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
       ? args.tempDir
       : path.join(directory, args.tempDir);
   } else {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "haul-start-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
   }
 
   const configPath = getProjectConfigPath(directory, args.config);
   const projectConfig = getNormalizedProjectConfigBuilder(runtime, configPath)(
     runtime,
     {
-      platform: "",
+      platform: '',
       root: directory,
       dev: args.dev,
       port: args.port,
-      bundleMode: "multi-bundle",
-      bundleTarget: "server",
+      bundleMode: 'multi-bundle',
+      bundleTarget: 'server',
       assetsDest: tempDir,
       minify: args.minify === undefined ? !args.dev : args.minify,
       maxWorkers: args.maxWorkers,
@@ -146,15 +146,15 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
     if (isTaken) {
       if (args.interactive) {
         const { userChoice } = await inquirer.prompt({
-          type: "list",
-          name: "userChoice",
+          type: 'list',
+          name: 'userChoice',
           message: `Port ${projectConfig.server.port} is already in use. What should we do?`,
           choices: [
             `Kill process using port ${projectConfig.server.port} and start Haul`,
-            "Quit",
+            'Quit',
           ],
         });
-        if (userChoice === "Quit") {
+        if (userChoice === 'Quit') {
           runtime.complete(0);
         }
         try {
@@ -186,76 +186,76 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
       skipHostCheck: args.skipHostCheck,
     }).listen(projectConfig.server.host, projectConfig.server.port);
   } catch (error) {
-    runtime.logger.error("Command failed with error:", error);
+    runtime.logger.error('Command failed with error:', error);
     runtime.unhandledError(error);
     runtime.complete(1);
   }
 }
 const command: Command = {
-  name: "haul-start",
-  description: "Starts a new webpack server",
+  name: 'haul-start',
+  description: 'Starts a new webpack server',
   //@ts-ignore
   func: start,
   options: [
     {
-      name: "--port <number>",
-      description: "Port to run your webpack server",
+      name: '--port <number>',
+      description: 'Port to run your webpack server',
       parse: parseInt,
-      default: "8081",
+      default: '8081',
     },
     {
-      name: "--dev <bool>",
-      description: "Whether to build in development mode",
-      default: "true",
+      name: '--dev <bool>',
+      description: 'Whether to build in development mode',
+      default: 'true',
       parse: getBoolFromString,
     },
     {
-      name: "--interactive <bool>",
+      name: '--interactive <bool>',
       description:
         "If 'false', disables any user prompts and prevents the UI (which requires a TTY session) from being rendered",
       default: INTERACTIVE_MODE_DEFAULT,
       parse: getBoolFromString,
     },
     {
-      name: "--minify <bool>",
+      name: '--minify <bool>',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
       parse: getBoolFromString,
     },
     {
-      name: "--temp-dir <string>",
+      name: '--temp-dir <string>',
       description:
-        "Path to directory where to store temporary files, eg. /tmp/dist",
+        'Path to directory where to store temporary files, eg. /tmp/dist',
     },
     {
-      name: "--config [path]",
+      name: '--config [path]',
       description: `Path to config file, eg. ${DEFAULT_CONFIG_FILENAME}`,
       default: DEFAULT_CONFIG_FILENAME,
     },
     {
-      name: "--eager <ios,android,...|true>",
+      name: '--eager <ios,android,...|true>',
       description: `Disable lazy building for platforms (list is separated by ',', for example 'haul bundle --eager ios,android')`,
-      default: "false",
+      default: 'false',
       parse: (val: string) => {
-        if (val === "true") {
+        if (val === 'true') {
           return true;
         }
         return val;
       },
     },
     {
-      name: "--skip-host-check <bool>",
+      name: '--skip-host-check <bool>',
       description: 'Skips check for "index" or "host" bundle in Haul config',
-      default: "false",
+      default: 'false',
       parse: getBoolFromString,
     },
     {
-      name: "--max-workers [int]",
-      description: "Number of workers used to load modules",
+      name: '--max-workers [int]',
+      description: 'Number of workers used to load modules',
       parse: parseInt,
-      default: "1"
+      default: '1',
     },
     ...globalOptions,
   ],
 };
 
-export default command;
+module.exports = command;

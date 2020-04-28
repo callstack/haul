@@ -1,12 +1,12 @@
-import webpack from "webpack";
-import { Runtime } from "@haul-bundler/core";
-import { Command, Config } from "@react-native-community/cli";
+import webpack from 'webpack';
+import { Runtime } from '@haul-bundler/core';
+import { Command, Config } from '@react-native-community/cli';
 
-import * as messages from "../messages/bundleMessages";
-import { getBoolFromString } from "./shared/parsers";
-import globalOptions from "./shared/globalOptions";
-import setupInspectorAndLogs from "./shared/setupInspectorAndLogs";
-import prepareWebpackConfig from "./shared/prepareWebpackConfig";
+import * as messages from '../messages/bundleMessages';
+import { getBoolFromString } from './shared/parsers';
+import globalOptions from './shared/globalOptions';
+import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
 interface Options {
   assetsDest?: string;
@@ -24,7 +24,7 @@ interface Options {
   verbose?: boolean;
 }
 
-async function bundle(_argv: string[], _ctx: Config, args:Options) {
+async function bundle(_argv: string[], _ctx: Config, args: Options) {
   const runtime = new Runtime();
   setupInspectorAndLogs(args, runtime);
   try {
@@ -54,14 +54,14 @@ async function bundle(_argv: string[], _ctx: Config, args:Options) {
         progress !== undefined
           ? progress
           : !dev
-          ? "none"
+          ? 'none'
           : // Ensure that we don't trip Xcode's error detection. 'verbose' is the
           // only level that doesn't make Xcode think that the bundle failed.
           !process.stdin.isTTY
-          ? "verbose"
-          : "compact",
-      bundleType: "basic-bundle",
-      bundleMode: "single-bundle",
+          ? 'verbose'
+          : 'compact',
+      bundleType: 'basic-bundle',
+      bundleMode: 'single-bundle',
       maxWorkers,
     });
     messages.initialInformation(runtime, { config: webpackConfig });
@@ -77,7 +77,7 @@ async function bundle(_argv: string[], _ctx: Config, args:Options) {
         if (err || info.hasErrors()) {
           messages.buildFailed(runtime);
           reject(
-            err ? err : info.toJson({ errorDetails: true }).errors.join("\n")
+            err ? err : info.toJson({ errorDetails: true }).errors.join('\n')
           );
         } else {
           resolve(info);
@@ -100,68 +100,68 @@ async function bundle(_argv: string[], _ctx: Config, args:Options) {
 }
 
 const command: Command = {
-  name: "haul-bundle",
+  name: 'haul-bundle',
   description:
-    "Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].",
+    'Builds the app bundle for packaging. Run with `--platform` flag to specify the platform [ios|android].',
   // @ts-ignore
   func: bundle,
   options: [
     {
-      name: "--platform <ios|android>",
-      description: "Platform to bundle for",
+      name: '--platform <ios|android>',
+      description: 'Platform to bundle for',
       // experimental
       // @ts-ignore
-      required: true,
+      // required: true,
     },
     {
-      name: "--dev <bool>",
-      description: "Whether to build in development mode",
-      default: "true",
+      name: '--dev <bool>',
+      description: 'Whether to build in development mode',
+      default: 'true',
       parse: getBoolFromString,
     },
     {
-      name: "--entry-file <string>",
+      name: '--entry-file <string>',
       description:
-        "Path to the root JS file, either absolute or relative to JS root",
+        'Path to the root JS file, either absolute or relative to JS root',
     },
     {
-      name: "--minify <bool>",
+      name: '--minify <bool>',
       description:
-        "Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.",
+        'Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.',
       parse: getBoolFromString,
     },
     {
-      name: "--bundle-output <string>",
+      name: '--bundle-output <string>',
       description:
-        "File name where to store the resulting bundle, ex. /tmp/groups.bundle.",
+        'File name where to store the resulting bundle, ex. /tmp/groups.bundle.',
     },
     {
-      name: "--assets-dest <string>",
+      name: '--assets-dest <string>',
       description:
-        "Directory name where to store assets referenced in the bundle.",
+        'Directory name where to store assets referenced in the bundle.',
     },
     {
-      name: "--sourcemap-output <string>",
-      description: "File name where to store generated source map",
+      name: '--sourcemap-output <string>',
+      description: 'File name where to store generated source map',
     },
     {
-      name: "--config [path]",
-      description: "Path to the CLI configuration file",
-      default: "haul.config.js"
+      name: '--config [path]',
+      description: 'Path to the CLI configuration file',
+      default: 'haul.config.js',
     },
     {
-      name: "--progress <string>",
+      name: '--progress <string>',
       description:
         'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode. Choices: ["none", "minimal", "compact", "expanded", "verbose"].',
     },
     {
-      name: "--max-workers [int]",
-      description: "Number of workers used to load modules",
+      name: '--max-workers [int]',
+      description: 'Number of workers used to load modules',
       parse: parseInt,
-      default: "1"
+      default: '1',
     },
     ...globalOptions,
   ],
-}
+};
 
-export default command
+module.exports = command;
