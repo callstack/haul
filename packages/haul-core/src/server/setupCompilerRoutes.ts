@@ -110,9 +110,10 @@ export default function setupCompilerRoutes(
         );
 
         if (isUserChangedOptions) {
-          return h
-            .response('To see the changes you need to restart the haul server')
-            .code(501);
+          const warnMsg =
+            'To see the changes you need to restart the haul server';
+          runtime.logger.warn(warnMsg);
+          return h.response(warnMsg).code(501);
         }
 
         if (areBundleOptionsSet(bundleOptionsFromQuery)) {
