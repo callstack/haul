@@ -1,5 +1,6 @@
 import { runHaulSync } from './runHaul';
 import path from 'path';
+import fetch from 'node-fetch';
 import rimraf from 'rimraf';
 
 export function bundleForPlatform(
@@ -36,4 +37,20 @@ export function bundleForPlatform(
 
 export function cleanup(projectDir: string) {
   rimraf.sync(path.resolve(projectDir, 'dist'));
+}
+
+export async function fetchBundle(
+  port: number,
+  platform: string,
+  options?: { minify: boolean; dev: boolean }
+) {
+  const builtOptions = options
+    ? `?dev=${options.dev}&minify=${options.minify}`
+    : '';
+
+  const response = await fetch(
+    `http://localhost:${port}/index.${platform}.bundle${builtOptions}`
+  );
+
+  return { bundle: await response.buffer(), response };
 }

@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "haul start",
-    "haul": "haul"
+    "android": "react-native run-android",
+    "start": "node ../../packages/haul-cli/bin/haul.js start",
+    "haul": "node ../../packages/haul-cli/bin/haul.js"
   },
   "dependencies": {
     "react": "16.8.6",
