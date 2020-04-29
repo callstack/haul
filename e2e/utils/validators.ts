@@ -5,7 +5,6 @@ import fetch from 'node-fetch';
 type ValidationOptions = {
   isIndexedRAMBundle?: boolean;
   platform?: string;
-  log?: boolean;
 };
 
 export function validateBaseBundle(

@@ -1,6 +1,6 @@
 import path from 'path';
-import fetch from 'node-fetch';
-import { Instance, startServer, stopServer } from '../../utils/server';
+import { fetchBundle } from '../../utils/bundle';
+import { startServerAsync, stopServer } from '../../utils/server';
 import { validateBaseBundle } from '../../utils/validators';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -11,8 +11,8 @@ const PORT = 8086;
 
 describe('packager server', () => {
   it('platform: android requesting bundle is working correctly', async () => {
-    let instance = await startServerAsync();
-    const { bundle: devFirstBundle } = await fetchBundle('android', {
+    let instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
+    const { bundle: devFirstBundle } = await fetchBundle(PORT, 'android', {
       minify: false,
       dev: false,
     });
@@ -30,7 +30,7 @@ describe('packager server', () => {
     const {
       response: responseAfterBundleOptionsChanged,
       bundle: minifiedSecondBundle,
-    } = await fetchBundle('android', {
+    } = await fetchBundle(PORT, 'android', {
       minify: true,
       dev: false,
     });
@@ -41,9 +41,10 @@ describe('packager server', () => {
     );
 
     stopServer(instance);
-    instance = await startServerAsync();
+    instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
 
     const { bundle: minifiedBundleAfterServerRestart } = await fetchBundle(
+      PORT,
       'android',
       {
         minify: true,
@@ -58,28 +59,3 @@ describe('packager server', () => {
     stopServer(instance);
   });
 });
-
-async function fetchBundle(
-  platform: string,
-  options?: { minify: boolean; dev: boolean }
-) {
-  const builtOptions = options
-    ? `?dev=${options.dev}&minify=${options.minify}`
-    : '';
-
-  const response = await fetch(
-    `http://localhost:${PORT}/index.${platform}.bundle${builtOptions}`
-  );
-
-  return { bundle: await response.buffer(), response };
-}
-
-async function startServerAsync(): Promise<Instance> {
-  return new Promise((resolve, reject) => {
-    const done = () => {
-      resolve(instance);
-    };
-    done.fail = reject;
-    const instance = startServer(PORT, TEST_PROJECT_DIR, undefined, done);
-  });
-}
