@@ -9,5 +9,5 @@
     "moduleResolution": "node",
     "jsx": "react",
     "resolveJsonModule": true
-  }
+  },
 }
