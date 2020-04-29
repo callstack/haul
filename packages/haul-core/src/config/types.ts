@@ -2,10 +2,12 @@ import webpack from 'webpack';
 import { MinifyOptions } from 'terser';
 import { DeepNonNullable, Overwrite, Assign } from 'utility-types';
 import Runtime from '../runtime/Runtime';
+import { ServerRegisterOptions, ServerRegisterPluginObject } from '@hapi/hapi';
 
 export type ServerConfig = {
   port?: number;
   host?: string;
+  plugins?: Array<ServerRegisterPluginObject<any>>;
 };
 
 export type NormalizedServerConfig = DeepNonNullable<ServerConfig>;

@@ -1,6 +1,10 @@
 import { EnvOptions } from '../config/types';
 import { Assign } from 'utility-types';
-import Hapi, { ResponseObject } from '@hapi/hapi';
+import Hapi, {
+  ResponseObject,
+  ServerRegisterOptions,
+  ServerRegisterPluginObject,
+} from '@hapi/hapi';
 import http from 'http';
 import ws from 'ws';
 // @ts-ignore
@@ -27,6 +31,7 @@ type ServerEnvOptions = Assign<
     bundleNames: string[];
     platforms: string[];
     skipHostCheck: boolean;
+    plugins?: Array<ServerRegisterPluginObject<any>>;
   }
 >;
 
@@ -179,6 +184,9 @@ export default class Server {
       webSocketProxy
     );
 
+    if (Array.isArray(this.options.plugins)) {
+      await server.register(this.options.plugins);
+    }
     await server.register(require('@hapi/inert'));
 
     server.events.on('response', request => {
@@ -190,7 +198,6 @@ export default class Server {
         }
       }
     });
-
     setupSymbolication(this.runtime, server, {
       bundleNames: this.options.bundleNames,
     });

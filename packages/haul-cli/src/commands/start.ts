@@ -158,6 +158,7 @@ export default function startCommand(runtime: Runtime) {
           platforms: projectConfig.platforms,
           bundleNames: Object.keys(projectConfig.bundles),
           skipHostCheck: argv.skipHostCheck,
+          plugins: projectConfig.server.plugins,
         }).listen(projectConfig.server.host, projectConfig.server.port);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
