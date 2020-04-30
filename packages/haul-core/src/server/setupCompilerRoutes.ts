@@ -111,7 +111,7 @@ export default function setupCompilerRoutes(
 
         if (isUserChangedOptions) {
           const warnMsg =
-            'To see the changes you need to restart the haul server';
+            'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.';
           runtime.logger.warn(warnMsg);
           return h.response(warnMsg).code(501);
         }
