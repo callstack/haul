@@ -37,7 +37,7 @@ describe('packager server', () => {
 
     expect(responseAfterBundleOptionsChanged.status).toBe(501);
     expect(minifiedSecondBundle.toString()).toBe(
-      'To see the changes you need to restart the haul server'
+      'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.'
     );
 
     stopServer(instance);
