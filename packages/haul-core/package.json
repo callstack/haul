@@ -1,5 +1,5 @@
 {
-  "version": "0.20.0",
+  "version": "0.21.0",
   "name": "@haul-bundler/core",
   "description": "Haul core library (legacy)",
   "main": "build/index.js",
@@ -30,7 +30,7 @@
     "@hapi/inert": "^5.2.2",
     "@hapi/joi": "^15.1.1",
     "@haul-bundler/basic-bundle-webpack-plugin": "^0.19.0",
-    "@haul-bundler/core-legacy": "^0.17.0",
+    "@haul-bundler/core-legacy": "^0.18.0",
     "ansi-fragments": "^0.2.1",
     "dedent": "^0.7.0",
     "enhanced-resolve": "^4.1.1",
