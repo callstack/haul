@@ -57,3 +57,17 @@ export function stopServer(instance: Instance) {
   instance.disposed = true;
   instance.server.kill();
 }
+
+export async function startServerAsync(
+  port: number | undefined,
+  projectDir: string,
+  config?: string | undefined
+): Promise<Instance> {
+  return new Promise((resolve, reject) => {
+    const done = () => {
+      resolve(instance);
+    };
+    done.fail = reject;
+    const instance = startServer(port, projectDir, config, done);
+  });
+}

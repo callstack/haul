@@ -8,6 +8,12 @@ import createDeltaBundle from './createDeltaBundle';
 import Runtime from '../runtime/Runtime';
 import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
+type Platform = string;
+type BundleOptions = { dev?: boolean; minify?: boolean; alreadySet?: boolean };
+type PlatformsBundleOptions = {
+  [platform in Platform]: BundleOptions;
+};
+
 export default function setupCompilerRoutes(
   runtime: Runtime,
   server: Hapi.Server,
@@ -16,11 +22,21 @@ export default function setupCompilerRoutes(
     port,
     bundleNames,
     platforms,
-  }: { port: number; bundleNames: string[]; platforms: string[] }
+    cliBundleOptions,
+  }: {
+    port: number;
+    bundleNames: string[];
+    platforms: string[];
+    cliBundleOptions: BundleOptions;
+  }
 ) {
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
   const bundleRegex = /^([^.]+)(\.[^.]+)?\.(bundle|delta)$/;
+  let bundleOptions: PlatformsBundleOptions = {
+    ios: { ...cliBundleOptions },
+    android: { ...cliBundleOptions },
+  };
 
   server.route({
     method: 'GET',
@@ -87,9 +103,36 @@ export default function setupCompilerRoutes(
           hasWarnedDelta = true;
         }
 
+        const bundleOptionsFromQuery = getBundleOptionsFromQuery(request.query);
+        const isUserChangedOptions = isUserChangedAlreadySetBundleOptions(
+          bundleOptions[platform],
+          bundleOptionsFromQuery
+        );
+
+        if (isUserChangedOptions) {
+          const warnMsg =
+            'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.';
+          runtime.logger.warn(warnMsg);
+          return h.response(warnMsg).code(501);
+        }
+
+        if (areBundleOptionsSet(bundleOptionsFromQuery)) {
+          bundleOptions[platform] = {
+            ...bundleOptions[platform],
+            ...bundleOptionsFromQuery,
+            alreadySet: true,
+          };
+        }
+
+        const bundleOptionsForCompiler = {
+          minify: bundleOptions[platform].minify,
+          dev: bundleOptions[platform].dev,
+        };
+
         return new Promise(resolve => {
           const filename = `${bundleName}.${platform}.bundle`;
           compiler.emit(Compiler.Events.REQUEST_BUNDLE, {
+            bundleOptions: bundleOptionsForCompiler,
             filename,
             platform,
             callback: (result: {
@@ -160,4 +203,41 @@ function makeResponseFromCompilerResults(
   }
 
   return response;
+}
+
+function areBundleOptionsSet(bundleOptions: BundleOptions) {
+  return bundleOptions.dev !== undefined || bundleOptions.minify !== undefined;
+}
+
+function getBundleOptionsFromQuery(query: { minify?: boolean; dev?: boolean }) {
+  let bundleOptions: BundleOptions = {};
+
+  if (query.minify === true) {
+    bundleOptions.minify = true;
+  } else if (query.minify === false) {
+    bundleOptions.minify = false;
+  }
+
+  if (query.dev === true) {
+    bundleOptions.dev = true;
+  } else if (query.dev === false) {
+    bundleOptions.dev = false;
+  }
+
+  return bundleOptions;
+}
+
+function isUserChangedAlreadySetBundleOptions(
+  bundleOptions: BundleOptions,
+  bundleOptionsFromQuery: BundleOptions
+) {
+  if (areBundleOptionsSet(bundleOptionsFromQuery)) {
+    if (bundleOptions.alreadySet) {
+      return (
+        bundleOptions.dev !== bundleOptionsFromQuery.dev ||
+        bundleOptionsFromQuery.minify !== bundleOptions.minify
+      );
+    }
+  }
+  return false;
 }

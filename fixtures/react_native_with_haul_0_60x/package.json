@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "android": "react-native run-android",
     "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
     "haul": "node ../../packages/haul-cli/bin/haul.js",

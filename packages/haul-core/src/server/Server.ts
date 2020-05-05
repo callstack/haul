@@ -202,6 +202,10 @@ export default class Server {
       port,
       bundleNames: this.options.bundleNames,
       platforms: this.options.platforms,
+      cliBundleOptions: {
+        minify: this.options.minify,
+        dev: this.options.dev,
+      },
     });
 
     await server.start();
