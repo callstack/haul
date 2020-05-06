@@ -1,7 +1,16 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ * @format
+ */
+// @ts-check
+'use strict';
 const EOL = require('os').EOL;
 const fs = require('fs');
 const path = require('path');
 const child_process = require('child_process');
+
+const MSBUILD_VERSIONS = ['16.0'];
 
 function VSWhere(requires, version, property, verbose) {
   // This path is maintained and VS has promised to keep it valid.
@@ -55,6 +64,18 @@ function VSWhere(requires, version, property, verbose) {
   }
 }
 
+function getVCToolsByArch(buildArch) {
+  switch (buildArch.toLowerCase()) {
+    case 'x86':
+    case 'x64':
+      return 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64';
+    case 'arm':
+      return 'Microsoft.VisualStudio.Component.VC.Tools.ARM';
+    case 'arm64':
+      return 'Microsoft.VisualStudio.Component.VC.Tools.ARM64';
+  }
+}
+
 function checkMSBuildVersion(version, buildArch, verbose) {
   let toolsPath = null;
   if (verbose) {
@@ -62,10 +83,7 @@ function checkMSBuildVersion(version, buildArch, verbose) {
   }
 
   // https://aka.ms/vs/workloads
-  const requires = [
-    'Microsoft.Component.MSBuild',
-    'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
-  ];
+  const requires = ['Microsoft.Component.MSBuild', getVCToolsByArch(buildArch)];
 
   const vsPath = VSWhere(
     requires.join(' '),
@@ -111,10 +129,39 @@ function checkMSBuildVersion(version, buildArch, verbose) {
     console.log(
       `Found MSBuild v${version} at ${toolsPath} (${installationVersion})`
     );
-    // return new MSBuildTools(version, toolsPath, installationVersion);
+    return { version, toolsPath, installationVersion };
   } else {
     return null;
   }
 }
 
-checkMSBuildVersion('16.0', 'x64', true);
+function findAvailableVersion(buildArch, verbose) {
+  const versions =
+    process.env.VisualStudioVersion != null
+      ? [
+          checkMSBuildVersion(
+            process.env.VisualStudioVersion,
+            buildArch,
+            verbose
+          ),
+        ]
+      : MSBUILD_VERSIONS.map(function(value) {
+          return checkMSBuildVersion(value, buildArch, verbose);
+        });
+  const msbuildTools = versions.find(Boolean);
+
+  if (!msbuildTools) {
+    if (process.env.VisualStudioVersion != null) {
+      throw new Error(
+        `MSBuild tools not found for version ${process.env.VisualStudioVersion} (from environment). Make sure all required components have been installed`
+      );
+    } else {
+      throw new Error(
+        'MSBuild tools not found. Make sure all required components have been installed'
+      );
+    }
+  }
+  return msbuildTools;
+}
+
+console.log(findAvailableVersion('x64', true));
