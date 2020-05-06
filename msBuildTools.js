@@ -150,4 +150,4 @@ function findAvailableVersion(buildArch, verbose) {
   return msbuildTools;
 }
 
-console.log(findAvailableVersion('x86', true));
+console.log(findAvailableVersion('x64', true));
