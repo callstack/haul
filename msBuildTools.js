@@ -55,11 +55,66 @@ function VSWhere(requires, version, property, verbose) {
   }
 }
 
-const requires = [
-  'Microsoft.Component.MSBuild',
-  'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
-];
+function checkMSBuildVersion(version, buildArch, verbose) {
+  let toolsPath = null;
+  if (verbose) {
+    console.log('Searching for MSBuild version ' + version);
+  }
 
-const vs16 = VSWhere(requires.join(' '), '16.0', 'installationPath', true);
+  // https://aka.ms/vs/workloads
+  const requires = [
+    'Microsoft.Component.MSBuild',
+    'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
+  ];
 
-console.log(vs16);
+  const vsPath = VSWhere(
+    requires.join(' '),
+    version,
+    'installationPath',
+    verbose
+  );
+
+  if (verbose) {
+    console.log('VS path: ' + vsPath);
+  }
+
+  const installationVersion = VSWhere(
+    requires.join(' '),
+    version,
+    'installationVersion',
+    verbose
+  );
+
+  if (verbose) {
+    console.log('VS version: ' + installationVersion);
+  }
+
+  // VS 2019 changed path naming convention
+  const vsVersion = version === '16.0' ? 'Current' : version;
+
+  // look for the specified version of msbuild
+  const msBuildPath = path.join(
+    vsPath,
+    'MSBuild',
+    vsVersion,
+    'Bin/MSBuild.exe'
+  );
+
+  if (verbose) {
+    console.log('Looking for MSBuilt at: ' + msBuildPath);
+  }
+
+  toolsPath = fs.existsSync(msBuildPath) ? path.dirname(msBuildPath) : null;
+
+  // We found something so return MSBuild Tools.
+  if (toolsPath) {
+    console.log(
+      `Found MSBuild v${version} at ${toolsPath} (${installationVersion})`
+    );
+    // return new MSBuildTools(version, toolsPath, installationVersion);
+  } else {
+    return null;
+  }
+}
+
+checkMSBuildVersion('16.0', 'x64', true);
