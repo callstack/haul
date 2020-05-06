@@ -22,6 +22,12 @@ steps:
     sdkVersion: $(Win10Version)
 
 - task: PowerShell@2
+  displayName: List Visual Studio Components
+  inputs:
+    targetType: filePath
+    filePath: VSComponentList.ps1
+
+- task: PowerShell@2
   displayName: Display env
   inputs:
     targetType: "inline"
