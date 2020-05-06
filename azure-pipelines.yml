@@ -53,7 +53,7 @@ steps:
 - task: CmdLine@2
   displayName: run-windows
   inputs:
-    script: yarn run start:app --logging
+    script: yarn run start:app --logging --info
     workingDirectory: fixtures/react_native_windows_e2e_app
 
 - task: PowerShell@2
