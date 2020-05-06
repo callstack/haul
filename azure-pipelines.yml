@@ -11,21 +11,21 @@ variables:
   Win10Version: 18362
 
 steps:
-- checkout: self
-  clean: true
-  lfs: false
-  submodules: false
-  persistCredentials: false
+# - checkout: self
+#   clean: true
+#   lfs: false
+#   submodules: false
+#   persistCredentials: false
 
-- template: install-SDK.yml
-  parameters:
-    sdkVersion: $(Win10Version)
+# - template: install-SDK.yml
+#   parameters:
+#     sdkVersion: $(Win10Version)
 
-- task: PowerShell@2
-  displayName: List Visual Studio Components
-  inputs:
-    targetType: filePath
-    filePath: VSComponentList.ps1
+# - task: PowerShell@2
+#   displayName: List Visual Studio Components
+#   inputs:
+#     targetType: filePath
+#     filePath: VSComponentList.ps1
 
 - task: PowerShell@2
   displayName: Display env
@@ -33,38 +33,44 @@ steps:
     targetType: "inline"
     script:  gci env:* | sort-object name
 
-- task: CmdLine@2
-  displayName: Install Haul dependencies
-  inputs:
-    script: yarn install --frozen-lockfile
-
-- task: CmdLine@2
-  displayName: Install RNW E2E Test App dependencies
-  inputs:
-    script: yarn install --frozen-lockfile
-    workingDirectory: fixtures/react_native_windows_e2e_app
-
-- task: CmdLine@2
-  displayName: Create bundle
-  inputs:
-    script: yarn run build:bundle
-    workingDirectory: fixtures/react_native_windows_e2e_app
-
-- task: CmdLine@2
-  displayName: run-windows
-  inputs:
-    script: yarn run start:app --logging --info
-    workingDirectory: fixtures/react_native_windows_e2e_app
-
 - task: PowerShell@2
-  displayName: Wait for app to launch
+  displayName: Find MSBuild
   inputs:
-    targetType: inline # filePath | inline
-    script: |
-      Start-Sleep -Seconds 10
+    targetType: inline
+    script: node msBuildTools.js
 
-- task: CmdLine@2
-  displayName: Run tests
-  inputs:
-    script: yarn run test --forceExit
-    workingDirectory: fixtures/react_native_windows_e2e_app
+# - task: CmdLine@2
+#   displayName: Install Haul dependencies
+#   inputs:
+#     script: yarn install --frozen-lockfile
+
+# - task: CmdLine@2
+#   displayName: Install RNW E2E Test App dependencies
+#   inputs:
+#     script: yarn install --frozen-lockfile
+#     workingDirectory: fixtures/react_native_windows_e2e_app
+
+# - task: CmdLine@2
+#   displayName: Create bundle
+#   inputs:
+#     script: yarn run build:bundle
+#     workingDirectory: fixtures/react_native_windows_e2e_app
+
+# - task: CmdLine@2
+#   displayName: run-windows
+#   inputs:
+#     script: yarn run start:app --logging --info
+#     workingDirectory: fixtures/react_native_windows_e2e_app
+
+# - task: PowerShell@2
+#   displayName: Wait for app to launch
+#   inputs:
+#     targetType: inline # filePath | inline
+#     script: |
+#       Start-Sleep -Seconds 10
+
+# - task: CmdLine@2
+#   displayName: Run tests
+#   inputs:
+#     script: yarn run test --forceExit
+#     workingDirectory: fixtures/react_native_windows_e2e_app
