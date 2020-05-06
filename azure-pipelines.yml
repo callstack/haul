@@ -8,6 +8,7 @@ pool:
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  Win10SDKVersion: 18362
 
 steps:
 - checkout: self
@@ -20,7 +21,14 @@ steps:
   displayName: List Visual Studio Components
   inputs:
     targetType: filePath
-    filePath: VSComponentList.ps1
+    filePath: scripts/VSComponentList.ps1
+
+- task: PowerShell@2
+  inputs:
+    targetType: filePath
+    filePath: scripts/Install-WindowsSdkISO.ps1
+    arguments: ${{ Win10SDKVersion }}
+  displayName: 'Install Windows SDK (${{ Win10SDKVersion }})'
 
 - task: CmdLine@2
   displayName: Install Haul dependencies

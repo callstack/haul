@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "prepare": "patch-package",
     "start": "../../packages/haul-cli/bin/haul start",
     "test": "jest",
     "build:bundle": "node ../../packages/haul-cli/bin/haul.js bundle --platform windows --dev true --bundle-output windows/RNWTestApp/Bundle/index.windows.bundle --assets-dest windows/RNWTestApp/Bundle",
@@ -31,7 +30,6 @@
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "patch-package": "^6.1.2",
-    "postinstall-prepare": "^1.0.1",
     "wd": "^1.11.4"
   },
   "jest": {
