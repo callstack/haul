@@ -1,7 +1,16 @@
 diff --git a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
-index 802f7f9..63635c6 100644
+index 802f7f9..a4d52e9 100644
 --- a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
 +++ b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
+@@ -22,7 +22,7 @@ const {
+ } = require('./commandWithProgress');
+ const execSync = require('child_process').execSync;
+ 
+-const MSBUILD_VERSIONS = ['16.0', '15.0', '14.0', '12.0', '4.0'];
++const MSBUILD_VERSIONS = ['15.0', '14.0', '12.0', '4.0'];
+ 
+ class MSBuildTools {
+   // version is something like 16.0 for 2019
 @@ -174,12 +174,10 @@ function checkMSBuildVersion(version, buildArch, verbose) {
    const requires16 = [
      'Microsoft.Component.MSBuild',
