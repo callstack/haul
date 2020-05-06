@@ -21,6 +21,12 @@ steps:
   parameters:
     sdkVersion: $(Win10Version)
 
+- task: PowerShell@2
+  displayName: Display env
+  inputs:
+    targetType: "inline"
+    script:  gci env:* | sort-object name
+
 - task: CmdLine@2
   displayName: Install Haul dependencies
   inputs:
