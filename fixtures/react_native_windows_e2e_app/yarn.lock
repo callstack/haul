@@ -671,7 +671,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.8.4":
+"@babel/runtime@^7.4.0":
   version "7.9.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.6.tgz#a9102eb5cadedf3f31d08a9ecf294af7827ea29f"
   integrity sha512-64AF1xY3OAkFHqOb9s4jpgk1Mm5vDZ4L3acHvAml+53nO1XbXLuDodsVpO4OIUsmemlUHMxNdYMNJmsvOwLrvQ==
@@ -7663,12 +7663,13 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.1.tgz#0612786bf19df406502d935494f0450b40b8294f"
   integrity sha512-BXUMf9sIOPXXZWqr7+c5SeOKJykyVr2u0UDzEf4LNGc6taGkQe1A9DFD07umCIXz45RLr9oAAwZbAJ0Pkknfaw==
 
-react-native-windows@0.62.0-preview.2:
-  version "0.62.0-preview.2"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.62.0-preview.2.tgz#41d7637c219e9cb51ee4a3e18c423a2c2a0d54ce"
-  integrity sha512-w8iD1yI2dX5T84IbyONyM9DXUv/3czwly0FyfadJS16I1Z74VaYbX/NCGL/bksT27/RL6YtIRlQw1GHqtcog1g==
+react-native-windows@0.60.0-vnext.164:
+  version "0.60.0-vnext.164"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.60.0-vnext.164.tgz#a6cdbf01cc21eaa85e53715f355b98c4558368a8"
+  integrity sha512-lM8LEONfUOXTWNG5ok4bZT/puQmv6fUHEKbgT31GKV0Rt7ZNwflHRNN3BnDiDq0dML98JjMCEnlXFtCYBxEf8Q==
   dependencies:
-    "@babel/runtime" "^7.8.4"
+    "@babel/runtime" "^7.4.0"
+    "@react-native-community/cli" "^2.6.0"
     cli-spinners "^2.2.0"
     create-react-class "^15.6.3"
     envinfo "^7.5.0"

@@ -8,7 +8,6 @@ pool:
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
-  Win10Version: 18362
 
 steps:
 - checkout: self
@@ -16,28 +15,6 @@ steps:
   lfs: false
   submodules: false
   persistCredentials: false
-
-# - template: install-SDK.yml
-#   parameters:
-#     sdkVersion: $(Win10Version)
-
-# - task: PowerShell@2
-#   displayName: List Visual Studio Components
-#   inputs:
-#     targetType: filePath
-#     filePath: VSComponentList.ps1
-
-# - task: PowerShell@2
-#   displayName: Display env
-#   inputs:
-#     targetType: "inline"
-#     script:  gci env:* | sort-object name
-
-- task: PowerShell@2
-  displayName: Find MSBuild
-  inputs:
-    targetType: inline
-    script: node msBuildTools.js
 
 - task: CmdLine@2
   displayName: Install Haul dependencies
