@@ -8,6 +8,7 @@ pool:
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  Win10Version: 18362
 
 steps:
 - checkout: self
