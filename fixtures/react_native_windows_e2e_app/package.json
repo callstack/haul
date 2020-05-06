@@ -19,7 +19,7 @@
     "react": "16.10.1",
     "react-apollo": "^3.1.1",
     "react-native": "^0.60.0",
-    "react-native-windows": "0.60.0-vnext.164",
+    "react-native-windows": "0.62.0-preview.2",
     "rnpm-plugin-windows": "^0.3.5"
   },
   "devDependencies": {
