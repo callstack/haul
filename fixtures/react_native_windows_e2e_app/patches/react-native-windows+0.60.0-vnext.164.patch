@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
-index 802f7f9a8..61e00057c 100644
+index 802f7f9..63635c6 100644
 --- a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
 +++ b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
-@@ -174,17 +174,16 @@ function checkMSBuildVersion(version, buildArch, verbose) {
+@@ -174,12 +174,10 @@ function checkMSBuildVersion(version, buildArch, verbose) {
    const requires16 = [
      'Microsoft.Component.MSBuild',
      getVC141Component(version, buildArch),
@@ -13,11 +13,5 @@ index 802f7f9a8..61e00057c 100644
      getVC141Component(version, buildArch),
 -    'Microsoft.VisualStudio.ComponentGroup.UWP.VC',
    ];
-
+ 
    const requires = version === '16.0' ? requires16 : requires15;
-
-   const vsPath = VSWhere(requires.join(' '), version, 'installationPath');
-+  console.log('vsPath result:', vsPath);
-   const installationVersion = VSWhere(
-     requires.join(' '),
-     version,
