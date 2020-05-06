@@ -33,10 +33,12 @@ export default function setupCompilerRoutes(
   let hasRunAdbReverse = false;
   let hasWarnedDelta = false;
   const bundleRegex = /^([^.]+)(\.[^.]+)?\.(bundle|delta)$/;
-  let bundleOptions: PlatformsBundleOptions = {
-    ios: { ...cliBundleOptions },
-    android: { ...cliBundleOptions },
-  };
+  let bundleOptions: PlatformsBundleOptions = platforms.reduce<
+    PlatformsBundleOptions
+  >((options, platform) => {
+    options[platform] = { ...cliBundleOptions };
+    return options;
+  }, {});
 
   server.route({
     method: 'GET',
