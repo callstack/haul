@@ -16,6 +16,10 @@ steps:
   submodules: false
   persistCredentials: false
 
+- template: install-SDK.yml
+  parameters:
+    sdkVersion: $(Win10Version)
+
 - task: CmdLine@2
   displayName: Install Haul dependencies
   inputs:
