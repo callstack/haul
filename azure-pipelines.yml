@@ -4,7 +4,7 @@ pr:
 - master
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'vs2017-win2016'
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
@@ -15,6 +15,12 @@ steps:
   lfs: false
   submodules: false
   persistCredentials: false
+
+- task: PowerShell@2
+  displayName: List Visual Studio Components
+  inputs:
+    targetType: filePath
+    filePath: VSComponentList.ps1
 
 - task: CmdLine@2
   displayName: Install Haul dependencies
