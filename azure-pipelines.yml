@@ -19,15 +19,21 @@ steps:
 - task: PowerShell@2
   inputs:
     targetType: filePath
-    filePath: fixtures\react_native_windows_e2e_app\scripts\Install-WindowsSDKISO.ps1
+    filePath: fixtures/react_native_windows_e2e_app/scripts/Install-WindowsSDKISO.ps1
     arguments: 18362
   displayName: 'Install Windows SDK (18362)'
 
 - task: PowerShell@2
+  displayName: List Visual Studio Components
   inputs:
     targetType: filePath
-    filePath: fixtures\react_native_windows_e2e_app\scripts\ImportKey.ps1
-    arguments: fixtures\react_native_windows_e2e_app\windows\RNWTestApp\RNWTestApp_TemporaryKey.pfx password
+    filePath: fixtures/react_native_windows_e2e_app/scripts/VSComponentList.ps1
+
+- task: PowerShell@2
+  inputs:
+    targetType: filePath
+    filePath: fixtures/react_native_windows_e2e_app/scripts/ImportKey.ps1
+    arguments: fixtures/react_native_windows_e2e_app/windows/RNWTestApp/RNWTestApp_TemporaryKey.pfx password
   displayName: 'Import key'
 
 - task: CmdLine@2
