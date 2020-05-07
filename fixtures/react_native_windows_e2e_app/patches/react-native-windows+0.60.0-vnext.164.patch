@@ -1,0 +1,131 @@
+diff --git a/node_modules/react-native-windows/Common/Common.vcxproj b/node_modules/react-native-windows/Common/Common.vcxproj
+index 9f1bfa3..521e564 100644
+--- a/node_modules/react-native-windows/Common/Common.vcxproj
++++ b/node_modules/react-native-windows/Common/Common.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/Desktop.Test.DLL/React.Windows.Desktop.Test.DLL.vcxproj b/node_modules/react-native-windows/Desktop.Test.DLL/React.Windows.Desktop.Test.DLL.vcxproj
+index dd20a4a..ba83e9e 100644
+--- a/node_modules/react-native-windows/Desktop.Test.DLL/React.Windows.Desktop.Test.DLL.vcxproj
++++ b/node_modules/react-native-windows/Desktop.Test.DLL/React.Windows.Desktop.Test.DLL.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.props')" />
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+diff --git a/node_modules/react-native-windows/Folly/Folly.vcxproj b/node_modules/react-native-windows/Folly/Folly.vcxproj
+index af2c52e..8fabff9 100644
+--- a/node_modules/react-native-windows/Folly/Folly.vcxproj
++++ b/node_modules/react-native-windows/Folly/Folly.vcxproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|ARM">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/JSI/Desktop/JSI.Desktop.vcxproj b/node_modules/react-native-windows/JSI/Desktop/JSI.Desktop.vcxproj
+index 275fe6e..6d0f00c 100644
+--- a/node_modules/react-native-windows/JSI/Desktop/JSI.Desktop.vcxproj
++++ b/node_modules/react-native-windows/JSI/Desktop/JSI.Desktop.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/JSI/Universal/JSI.Universal.vcxproj b/node_modules/react-native-windows/JSI/Universal/JSI.Universal.vcxproj
+index 43ace64..b6b7dde 100644
+--- a/node_modules/react-native-windows/JSI/Universal/JSI.Universal.vcxproj
++++ b/node_modules/react-native-windows/JSI/Universal/JSI.Universal.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/Microsoft.ReactNative.Managed.UnitTests/Microsoft.ReactNative.Managed.UnitTests.csproj b/node_modules/react-native-windows/Microsoft.ReactNative.Managed.UnitTests/Microsoft.ReactNative.Managed.UnitTests.csproj
+index fdd45b7..8d1180f 100644
+--- a/node_modules/react-native-windows/Microsoft.ReactNative.Managed.UnitTests/Microsoft.ReactNative.Managed.UnitTests.csproj
++++ b/node_modules/react-native-windows/Microsoft.ReactNative.Managed.UnitTests/Microsoft.ReactNative.Managed.UnitTests.csproj
+@@ -169,8 +169,8 @@
+     </ProjectReference>
+   </ItemGroup>
+   <Import Project="..\Microsoft.ReactNative.SharedManaged\Microsoft.ReactNative.SharedManaged.projitems" Label="Shared" />
+-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+-    <VisualStudioVersion>14.0</VisualStudioVersion>
++  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
++    <VisualStudioVersion>16.0</VisualStudioVersion>
+   </PropertyGroup>
+   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+diff --git a/node_modules/react-native-windows/ReactCommon/ReactCommon.vcxproj b/node_modules/react-native-windows/ReactCommon/ReactCommon.vcxproj
+index 3658cd9..ed27564 100644
+--- a/node_modules/react-native-windows/ReactCommon/ReactCommon.vcxproj
++++ b/node_modules/react-native-windows/ReactCommon/ReactCommon.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|ARM">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/ReactUWP/ReactUWP.vcxproj b/node_modules/react-native-windows/ReactUWP/ReactUWP.vcxproj
+index 6d08aeb..b5413af 100644
+--- a/node_modules/react-native-windows/ReactUWP/ReactUWP.vcxproj
++++ b/node_modules/react-native-windows/ReactUWP/ReactUWP.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(SolutionDir)packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.props')" />
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|ARM">
+diff --git a/node_modules/react-native-windows/ReactWindowsCore/ReactWindowsCore.vcxproj b/node_modules/react-native-windows/ReactWindowsCore/ReactWindowsCore.vcxproj
+index 36f1525..e1733a6 100644
+--- a/node_modules/react-native-windows/ReactWindowsCore/ReactWindowsCore.vcxproj
++++ b/node_modules/react-native-windows/ReactWindowsCore/ReactWindowsCore.vcxproj
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|ARM">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/Test/React.Windows.Test.vcxproj b/node_modules/react-native-windows/Test/React.Windows.Test.vcxproj
+index 7c4c279..dc59e4b 100644
+--- a/node_modules/react-native-windows/Test/React.Windows.Test.vcxproj
++++ b/node_modules/react-native-windows/Test/React.Windows.Test.vcxproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+       <Configuration>Debug</Configuration>
+diff --git a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
+index 802f7f9..63635c6 100644
+--- a/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
++++ b/node_modules/react-native-windows/local-cli/runWindows/utils/msbuildtools.js
+@@ -174,12 +174,10 @@ function checkMSBuildVersion(version, buildArch, verbose) {
+   const requires16 = [
+     'Microsoft.Component.MSBuild',
+     getVC141Component(version, buildArch),
+-    'Microsoft.VisualStudio.ComponentGroup.UWP.VC.v141',
+   ];
+   const requires15 = [
+     'Microsoft.Component.MSBuild',
+     getVC141Component(version, buildArch),
+-    'Microsoft.VisualStudio.ComponentGroup.UWP.VC',
+   ];
+ 
+   const requires = version === '16.0' ? requires16 : requires15;
