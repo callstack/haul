@@ -1,5 +1,11 @@
-$pfxpath = 'fixtures\react_native_windows_e2e_app\windows\RNWTestApp\RNWTestApp_TemporaryKey.pfx'
-$password = 'password'
+[CmdletBinding()]
+param(
+     [Parameter(Mandatory=$true)]
+     [string]$pfxpath,
+ 
+     [Parameter(Mandatory=$true)]
+     [string]$password
+)
 
 Add-Type -AssemblyName System.Security
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2

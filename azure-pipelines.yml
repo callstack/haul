@@ -27,6 +27,7 @@ steps:
   inputs:
     targetType: filePath
     filePath: fixtures\react_native_windows_e2e_app\scripts\ImportKey.ps1
+    arguments: fixtures\react_native_windows_e2e_app\windows\RNWTestApp\RNWTestApp_TemporaryKey.pfx password
   displayName: 'Import key'
 
 - task: CmdLine@2
