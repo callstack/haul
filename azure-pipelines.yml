@@ -23,11 +23,20 @@ steps:
 #     arguments: 18362
 #   displayName: 'Install Windows SDK (18362)'
 # 
-# - task: PowerShell@2
-#   displayName: List Visual Studio Components
-#   inputs:
-#     targetType: filePath
-#     filePath: fixtures/react_native_windows_e2e_app/scripts/VSComponentList.ps1
+- task: PowerShell@2
+  displayName: Install Visual Studio dependencies
+  inputs:
+    targetType: filePath
+    filePath: fixtures/react_native_windows_e2e_app/scripts/Install-VsFeatures.ps1
+    arguments:
+      -Components "Microsoft.VisualStudio.ComponentGroup.UWP.VC.v141"
+      -Cleanup:$true
+
+- task: PowerShell@2
+  displayName: List Visual Studio Components
+  inputs:
+    targetType: filePath
+    filePath: fixtures/react_native_windows_e2e_app/scripts/VSComponentList.ps1
 # 
 # - task: PowerShell@2
 #   inputs:
