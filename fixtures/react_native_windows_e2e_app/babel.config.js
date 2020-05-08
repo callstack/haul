@@ -1,3 +1,3 @@
 module.exports = {
-  presets: [['module:../../packages/haul-babel-preset-react-native', { chakra: true }]],
+  presets: ['module:metro-react-native-babel-preset'],
 };

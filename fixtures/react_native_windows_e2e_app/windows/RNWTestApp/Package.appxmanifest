@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
  <Identity
-    Name="efa9d272-9e91-47f4-a44f-d113355582d3"
+    Name="83437361-3030-4584-9cc2-0cf49ab6289a"
     Publisher="CN=user"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="efa9d272-9e91-47f4-a44f-d113355582d3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="83437361-3030-4584-9cc2-0cf49ab6289a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>RNWTestApp</DisplayName>
