@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "prepare": "patch-package",
     "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
     "build:bundle": "node ../../packages/haul-cli/bin/haul.js bundle --platform windows --dev true --bundle-output windows/RNWTestApp/Bundle/index.windows.bundle --assets-dest windows/RNWTestApp/Bundle",
