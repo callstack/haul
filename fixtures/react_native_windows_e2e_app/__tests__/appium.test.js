@@ -9,9 +9,11 @@ const config = {
 };
 const driver = wd.promiseChainRemote('localhost', PORT);
 let appiumServer = { cancel() {} };
+let appiumLog = "";
 
 beforeAll(async () => {
   appiumServer = execa.command('yarn run appium');
+  appiumServer.stdout.on('data', (data) => { appiumLog += data; });
   await new Promise(resolve => setTimeout(resolve, 4000));
 
   await driver.init({ ...config, app: 'Root' });
@@ -31,6 +33,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  console.log('Appium log:');
+  console.log(appiumLog);
   await driver.quit();
   appiumServer.cancel();
 });
