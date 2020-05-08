@@ -143,6 +143,10 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bundle\index.windows.bundle">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Script</FileType>
+    </None>
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">
@@ -154,16 +158,13 @@
       <Project>{f7d32bd0-2749-483e-9a0d-1635ef7e3136}</Project>
     </ProjectReference>
   </ItemGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-
   <PropertyGroup>
     <BundleCommand>
       npx --no-install react-native bundle --platform windows --entry-file index.js --bundle-output $(MSBuildThisFileDirectory)/Bundle/index.windows.bundle --assets-dest $(MSBuildThisFileDirectory)/Bundle
     </BundleCommand>
   </PropertyGroup>
-  <Import Project="..\..\node_modules\react-native-windows\PropertySheets\Bundle.Cpp.targets"/>
-
+  <Import Project="..\..\node_modules\react-native-windows\PropertySheets\Bundle.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.190730.2\build\native\Microsoft.Windows.CppWinRT.targets')" />
     <Import Project="..\packages\Microsoft.UI.Xaml.2.3.191129002\build\native\Microsoft.UI.Xaml.targets" Condition="Exists('..\packages\Microsoft.UI.Xaml.2.3.191129002\build\native\Microsoft.UI.Xaml.targets')" />
