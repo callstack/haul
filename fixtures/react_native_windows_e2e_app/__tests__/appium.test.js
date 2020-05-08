@@ -11,7 +11,7 @@ const driver = wd.promiseChainRemote('localhost', PORT);
 let appiumServer = { cancel() {} };
 let appiumLog = "";
 
-beforeAll(async () => {
+beforeAll(async (done) => {
   appiumServer = execa.command('yarn run appium');
   appiumServer.stdout.on('data', (data) => { appiumLog += data; });
   await new Promise(resolve => setTimeout(resolve, 4000));
@@ -30,6 +30,7 @@ beforeAll(async () => {
     appTopLevelWindow: testAppHandle.toLowerCase(),
   });
   await driver.sleep(2000);
+  done();
 });
 
 afterAll(async () => {
