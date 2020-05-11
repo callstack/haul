@@ -53,7 +53,7 @@ test('RNWTestApp renders correctly', async () => {
   appiumServer = execa.command('yarn run appium');
   appiumServer.stdout.on('data', (data) => { console.log(`--> Appium: ${data}`); appiumLog += data.toString('utf8'); });
   const t = new Date().getTime();
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  await new Promise(resolve => setTimeout(resolve, 30000));
   console.log(new Date().getTime() - t);
 
   console.log('test start');
