@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "start": "node ../../packages/haul-cli/bin/haul.js start",
     "test": "jest",
     "haul": "node ../../packages/haul-cli/bin/haul.js",
