@@ -58,7 +58,7 @@ export default function createBuildTimeTestSuite(
         ).toBeTruthy();
       }
 
-      expect(processTime).toBeLessThan(24000);
+      expect(processTime).toBeLessThan(26000);
     });
   });
 }
