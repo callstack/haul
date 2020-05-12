@@ -9,8 +9,8 @@ import Runtime from '../runtime/Runtime';
 import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
 type Platform = string;
-type BundleOptions = { dev: boolean; minify: boolean; alreadySet?: boolean };
-type QueryBundleOptions = { dev?: boolean; minify?: boolean };
+type BundleOptions = { dev?: boolean; minify?: boolean; alreadySet?: boolean };
+type QueryBundleOptions = Omit<BundleOptions, 'alreadySet'>;
 type PlatformsBundleOptions = {
   [platform in Platform]: BundleOptions;
 };
@@ -219,7 +219,7 @@ function getBundleOptionsFromQuery(
   query: QueryBundleOptions,
   defaultOptions: BundleOptions
 ) {
-  let bundleOptions: Partial<BundleOptions> = {};
+  let bundleOptions: BundleOptions = {};
 
   if (query.minify === true) {
     bundleOptions.minify = true;
