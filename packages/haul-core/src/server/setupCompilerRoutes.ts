@@ -10,6 +10,7 @@ import getBundleDataFromURL from '../utils/getBundleDataFromURL';
 
 type Platform = string;
 type BundleOptions = { dev?: boolean; minify?: boolean; alreadySet?: boolean };
+type QueryBundleOptions = Omit<BundleOptions, 'alreadySet'>;
 type PlatformsBundleOptions = {
   [platform in Platform]: BundleOptions;
 };
@@ -105,7 +106,10 @@ export default function setupCompilerRoutes(
           hasWarnedDelta = true;
         }
 
-        const bundleOptionsFromQuery = getBundleOptionsFromQuery(request.query);
+        const bundleOptionsFromQuery = getBundleOptionsFromQuery(
+          request.query,
+          cliBundleOptions
+        );
         const isUserChangedOptions = isUserChangedAlreadySetBundleOptions(
           bundleOptions[platform],
           bundleOptionsFromQuery
@@ -207,23 +211,30 @@ function makeResponseFromCompilerResults(
   return response;
 }
 
-function areBundleOptionsSet(bundleOptions: BundleOptions) {
+function areBundleOptionsSet(bundleOptions: QueryBundleOptions) {
   return bundleOptions.dev !== undefined || bundleOptions.minify !== undefined;
 }
 
-function getBundleOptionsFromQuery(query: { minify?: boolean; dev?: boolean }) {
+function getBundleOptionsFromQuery(
+  query: QueryBundleOptions,
+  defaultOptions: BundleOptions
+) {
   let bundleOptions: BundleOptions = {};
 
   if (query.minify === true) {
     bundleOptions.minify = true;
   } else if (query.minify === false) {
     bundleOptions.minify = false;
+  } else if (query.minify === undefined) {
+    bundleOptions.minify = defaultOptions.minify;
   }
 
   if (query.dev === true) {
     bundleOptions.dev = true;
   } else if (query.dev === false) {
     bundleOptions.dev = false;
+  } else if (query.dev === undefined) {
+    bundleOptions.dev = defaultOptions.dev;
   }
 
   return bundleOptions;
@@ -231,7 +242,7 @@ function getBundleOptionsFromQuery(query: { minify?: boolean; dev?: boolean }) {
 
 function isUserChangedAlreadySetBundleOptions(
   bundleOptions: BundleOptions,
-  bundleOptionsFromQuery: BundleOptions
+  bundleOptionsFromQuery: QueryBundleOptions
 ) {
   if (areBundleOptionsSet(bundleOptionsFromQuery)) {
     if (bundleOptions.alreadySet) {

@@ -17,7 +17,6 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = () => {
-  console.log('dev check', __DEV__);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />

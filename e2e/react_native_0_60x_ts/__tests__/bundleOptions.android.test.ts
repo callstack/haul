@@ -94,4 +94,32 @@ describe('packager server', () => {
 
     stopServer(instance);
   });
+
+  it('platform: android requesting bundle is working correctly with unspecified query bundle options', async () => {
+    const defaultMinifyOption = false;
+    let instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
+    let results = await fetchBundle(PORT, 'android', {
+      dev: true,
+    });
+    validateBaseBundle(results.bundle, { platform: 'android' });
+    await fetchBundle(PORT, 'android', {
+      dev: true,
+    });
+
+    await fetchBundle(PORT, 'android', {
+      dev: true,
+      minify: defaultMinifyOption,
+    });
+
+    results = await fetchBundle(PORT, 'android', {
+      dev: false,
+    });
+
+    expect(results.response.status).toBe(501);
+    expect(results.bundle.toString()).toEqual(
+      'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.'
+    );
+
+    stopServer(instance);
+  });
 });
