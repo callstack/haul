@@ -16,6 +16,21 @@ steps:
   submodules: false
   persistCredentials: false
 
+- task: PowerShell@2
+  displayName: Install Visual Studio dependencies
+  inputs:
+    targetType: filePath
+    filePath: fixtures/react_native_windows_e2e_app/scripts/Install-VsFeatures.ps1
+    arguments:
+      -Components "Microsoft.VisualStudio.ComponentGroup.UWP.VC.v141"
+      -Cleanup:$true
+
+- task: PowerShell@2
+  displayName: List Visual Studio Components
+  inputs:
+    targetType: filePath
+    filePath: fixtures/react_native_windows_e2e_app/scripts/VSComponentList.ps1
+
 - task: CmdLine@2
   displayName: Install Haul dependencies
   inputs:
@@ -36,7 +51,7 @@ steps:
 - task: CmdLine@2
   displayName: run-windows
   inputs:
-    script: yarn run start:app --logging --force
+    script: yarn run start:app --logging
     workingDirectory: fixtures/react_native_windows_e2e_app
 
 - task: PowerShell@2
