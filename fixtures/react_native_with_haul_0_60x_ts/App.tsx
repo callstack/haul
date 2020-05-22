@@ -17,7 +17,6 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = () => {
-  console.log('dev check', __DEV__);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
@@ -33,6 +32,7 @@ const App = () => {
             </View>
           )}
           <View style={styles.body}>
+            <Text>running in {__DEV__ ? 'dev' : 'prod'}</Text>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>

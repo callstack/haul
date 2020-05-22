@@ -1,7 +1,7 @@
 import wd from 'wd';
 import execa from 'execa';
 
-jest.setTimeout(60000);
+jest.setTimeout(80000);
 const PORT = 4723;
 const config = {
   platformName: 'Windows',
@@ -12,7 +12,7 @@ let appiumServer = { cancel() {} };
 
 beforeAll(async () => {
   appiumServer = execa.command('yarn run appium');
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  await new Promise(resolve => setTimeout(resolve, 20000));
 
   await driver.init({ ...config, app: 'Root' });
   await driver.sleep(2000);

@@ -42,11 +42,21 @@ export function cleanup(projectDir: string) {
 export async function fetchBundle(
   port: number,
   platform: string,
-  options?: { minify: boolean; dev: boolean }
+  options?: { minify?: boolean; dev?: boolean }
 ) {
-  const builtOptions = options
-    ? `?dev=${options.dev}&minify=${options.minify}`
-    : '';
+  let builtOptions = '';
+  if (options) {
+    const queryBundleOptions = [
+      options.dev !== undefined ? { name: 'dev', value: options.dev } : null,
+      options.minify !== undefined
+        ? { name: 'minify', value: options.minify }
+        : null,
+    ]
+      .filter(Boolean)
+      .map(option => `${option!.name}=${option!.value}`)
+      .join('&');
+    builtOptions = `?${queryBundleOptions}`;
+  }
 
   const response = await fetch(
     `http://localhost:${port}/index.${platform}.bundle${builtOptions}`

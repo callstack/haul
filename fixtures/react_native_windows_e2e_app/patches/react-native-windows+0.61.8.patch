@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-windows/local-cli/runWindows/utils/deploy.js b/node_modules/react-native-windows/local-cli/runWindows/utils/deploy.js
+index 5bddc23..b04cc32 100644
+--- a/node_modules/react-native-windows/local-cli/runWindows/utils/deploy.js
++++ b/node_modules/react-native-windows/local-cli/runWindows/utils/deploy.js
+@@ -80,7 +80,9 @@ function getAppxManifest(options) {
+   const configuration = getBuildConfiguration(options);
+   const appxManifestGlob = `windows/{*/bin/${
+     options.arch
+-  }/${configuration},${configuration}/*}/AppxManifest.xml`;
++  }/${configuration},${
++    options.arch
++  }/${configuration}/*}/AppxManifest.xml`;
+   const appxPath = glob.sync(path.join(options.root, appxManifestGlob))[0];
+ 
+   if (!appxPath) {

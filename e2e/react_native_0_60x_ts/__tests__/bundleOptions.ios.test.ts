@@ -1,6 +1,6 @@
 import path from 'path';
 import { fetchBundle } from '../../utils/bundle';
-import { stopServer, startServerAsync } from '../../utils/server';
+import { startServerAsync, stopServer } from '../../utils/server';
 import { validateBaseBundle } from '../../utils/validators';
 
 const TEST_PROJECT_DIR = path.resolve(
@@ -12,50 +12,114 @@ const PORT = 8086;
 describe('packager server', () => {
   it('platform: ios requesting bundle is working correctly', async () => {
     let instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
-    const { bundle: devFirstBundle } = await fetchBundle(PORT, 'ios', {
+    let results = await fetchBundle(PORT, 'ios', {
       minify: false,
       dev: false,
     });
 
-    validateBaseBundle(devFirstBundle, { platform: 'ios' });
+    validateBaseBundle(results.bundle, { platform: 'ios' });
 
-    expect(devFirstBundle.toString().includes('YellowBox.install()')).toBe(
+    expect(results.bundle.toString().includes('YellowBox.install()')).toBe(
       false
     );
-
     expect(
-      devFirstBundle.toString().includes(`console.log('dev check', false)`)
+      results.bundle
+        .toString()
+        .includes(`"running in ",  false ? undefined : 'prod'`)
     ).toBe(true);
 
-    const {
-      response: responseAfterBundleOptionsChanged,
-      bundle: minifiedSecondBundle,
-    } = await fetchBundle(PORT, 'ios', {
-      minify: true,
-      dev: false,
+    const nonMinifiedBundleLength = results.bundle.toString().length;
+
+    results = await fetchBundle(PORT, 'ios', {
+      minify: false,
+      dev: true,
     });
 
-    expect(responseAfterBundleOptionsChanged.status).toBe(501);
-    expect(minifiedSecondBundle.toString()).toBe(
+    expect(results.response.status).toBe(501);
+    expect(results.bundle.toString()).toEqual(
       'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.'
     );
 
     stopServer(instance);
     instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
 
-    const { bundle: minifiedBundleAfterServerRestart } = await fetchBundle(
-      PORT,
-      'ios',
-      {
-        minify: true,
-        dev: false,
-      }
+    results = await fetchBundle(PORT, 'ios', {
+      minify: false,
+      dev: true,
+    });
+
+    expect(
+      results.bundle
+        .toString()
+        .includes(`"running in ",  true ? 'dev' : undefined`)
+    ).toBe(true);
+
+    results = await fetchBundle(PORT, 'ios', {
+      minify: true,
+      dev: false,
+    });
+
+    expect(results.response.status).toBe(501);
+    expect(results.bundle.toString()).toEqual(
+      'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.'
     );
 
-    validateBaseBundle(minifiedBundleAfterServerRestart);
-    expect(minifiedBundleAfterServerRestart.toString().length).toBeLessThan(
-      devFirstBundle.toString().length
+    stopServer(instance);
+    instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
+
+    results = await fetchBundle(PORT, 'ios', {
+      minify: true,
+      dev: false,
+    });
+
+    validateBaseBundle(results.bundle);
+    expect(results.bundle.toString().length).toBeLessThan(
+      nonMinifiedBundleLength
     );
+
+    stopServer(instance);
+    instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
+
+    results = await fetchBundle(PORT, 'ios', {
+      minify: true,
+      dev: true,
+    });
+
+    expect(results.bundle.toString().length).toBeLessThan(
+      nonMinifiedBundleLength
+    );
+    expect(results.bundle.toString().includes(`"running in ","dev"`)).toBe(
+      true
+    );
+
+    stopServer(instance);
+  });
+
+  it('platform: ios requesting bundle is working correctly with unspecified query bundle options', async () => {
+    const defaultMinifyOption = false;
+    let instance = await startServerAsync(PORT, TEST_PROJECT_DIR);
+    let results = await fetchBundle(PORT, 'ios', {
+      dev: true,
+    });
+    validateBaseBundle(results.bundle, { platform: 'ios' });
+    await fetchBundle(PORT, 'ios', {
+      dev: true,
+    });
+
+    await fetchBundle(PORT, 'ios', {
+      dev: true,
+      minify: defaultMinifyOption,
+    });
+
+    results = await fetchBundle(PORT, 'ios', {
+      dev: false,
+    });
+
+    expect(results.response.status).toBe(501);
+    expect(results.bundle.toString()).toEqual(
+      'Changing query params after the bundle has been created is not supported. To see the changes you need to restart the Haul server.'
+    );
+
     stopServer(instance);
   });
 });
