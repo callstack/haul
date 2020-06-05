@@ -8,7 +8,7 @@ import globalOptions from './shared/globalOptions';
 import setupLogging from './shared/setupLogging';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
-interface Options {
+type Options = {
   assetsDest?: string;
   bundleOutput?: string;
   config?: string;
@@ -21,7 +21,7 @@ interface Options {
   progress?: string;
   sourcemapOutput?: string;
   verbose?: boolean;
-}
+};
 
 async function bundle(
   _argv: string[],

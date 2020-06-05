@@ -5,10 +5,10 @@ import { Command, Config } from '@react-native-community/cli';
 import * as messages from '../messages/bundleMessages';
 import { getBoolFromString } from './shared/parsers';
 import globalOptions from './shared/globalOptions';
-import setupInspectorAndLogs from './shared/setupLogging';
+import setupLogging from './shared/setupLogging';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
-interface Options {
+type Options = {
   assetsDest?: string;
   bundleOutput?: string;
   config?: string;
@@ -16,32 +16,39 @@ interface Options {
   json?: boolean;
   maxWorkers?: number;
   minify?: boolean;
-  nodeInspector?: string;
   outputFile?: string;
   platform: string;
   progress?: string;
   sourcemapOutput?: string;
   verbose?: boolean;
   indexedRamBundle?: boolean;
-}
+};
 
-async function ramBundle(_argv: string[], _ctx: Config, args: Options) {
+async function ramBundle(
+  _argv: string[],
+  _ctx: Config,
+  args: Record<string, any>
+) {
+  const {
+    assetsDest,
+    bundleOutput,
+    config,
+    dev,
+    json,
+    maxWorkers,
+    minify,
+    outputFile,
+    platform,
+    progress,
+    sourcemapOutput,
+    verbose,
+    indexedRamBundle,
+  } = args as Options;
+
   const runtime = new Runtime();
-  setupInspectorAndLogs(args, runtime);
-  try {
-    const {
-      config,
-      dev,
-      minify,
-      platform,
-      assetsDest,
-      bundleOutput,
-      sourcemapOutput,
-      progress,
-      indexedRamBundle,
-      maxWorkers,
-    } = args;
+  setupLogging({ verbose, json, outputFile }, runtime);
 
+  try {
     process.env.HAUL_PLATFORM = platform;
 
     const webpackConfig = prepareWebpackConfig(runtime, {
@@ -107,51 +114,47 @@ async function ramBundle(_argv: string[], _ctx: Config, args: Options) {
 const command: Command = {
   name: 'haul-ram-bundle',
   description: 'Create ram-bundle',
-  // @ts-ignore
   func: ramBundle,
   options: [
     {
       name: '--platform <ios|android>',
       description: 'Platform to bundle for',
-      // experimental
-      // @ts-ignore
-      // required: true,
     },
     {
-      name: '--dev <bool>',
+      name: '--dev [bool]',
       description: 'Whether to build in development mode',
       default: 'true',
       parse: getBoolFromString,
     },
     {
-      name: '--entry-file <string>',
+      name: '--entry-file [string]',
       description:
         'Path to the root JS file, either absolute or relative to JS root',
     },
     {
-      name: '--indexed-ram-bundle',
+      name: '--indexed-ram-bundle [bool]',
       description:
         'Force the "Indexed RAM" bundle file format, even when building for android.',
       parse: getBoolFromString,
     },
     {
-      name: '--minify <bool>',
+      name: '--minify [bool]',
       description:
         'Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.',
       parse: getBoolFromString,
     },
     {
-      name: '--bundle-output <string>',
+      name: '--bundle-output [string]',
       description:
         'File name where to store the resulting bundle, ex. /tmp/groups.bundle.',
     },
     {
-      name: '--assets-dest <string>',
+      name: '--assets-dest [string]',
       description:
         'Directory name where to store assets referenced in the bundle.',
     },
     {
-      name: '--sourcemap-output <string>',
+      name: '--sourcemap-output [string]',
       description: 'File name where to store generated source map',
     },
     {
@@ -160,7 +163,7 @@ const command: Command = {
       default: 'haul.config.js',
     },
     {
-      name: '--progress <string>',
+      name: '--progress [string]',
       description:
         'Display bundle compilation progress with different verbosity levels. Note that logging the compilation progress will increase build time. Defaults to `none` when you are building in production mode. Choices: ["none", "minimal", "compact", "expanded", "verbose"].',
     },
