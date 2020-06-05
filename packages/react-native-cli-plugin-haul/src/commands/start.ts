@@ -16,7 +16,7 @@ import fs from 'fs';
 
 import { getBoolFromString } from './shared/parsers';
 import globalOptions from './shared/globalOptions';
-import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import setupLogging from './shared/setupLogging';
 
 /*
  * Check if the port is already in use
@@ -84,7 +84,8 @@ function killProcess(port: number): Promise<boolean> {
     });
   });
 }
-interface Options {
+
+type Options = {
   port?: number;
   config: string;
   dev: boolean;
@@ -95,16 +96,34 @@ interface Options {
   minify?: boolean;
   outputFile?: string;
   skipHostCheck: boolean;
-  sourcemapOutput?: string;
   tempDir?: string;
   verbose?: boolean;
-}
+};
 
-async function start(_argv: string[], _ctx: Config, args: Options) {
+async function start(_argv: string[], _ctx: Config, args: Record<string, any>) {
+  const {
+    port,
+    config,
+    dev,
+    eager,
+    interactive,
+    json,
+    maxWorkers,
+    minify,
+    outputFile,
+    skipHostCheck,
+    tempDir,
+    verbose,
+  } = args as Options;
+
   const runtime = new Runtime();
-  setupInspectorAndLogs(args, runtime);
+  setupLogging({ verbose, json, outputFile }, runtime);
+
   let parsedEager;
-  const list = (args.eager || '').split(',').map(item => item.trim());
+  const list = (eager || '')
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean);
   if (list.length === 1 && (list[0] === 'true' || list[0] === 'false')) {
     parsedEager = list[0] === 'true' ? ['ios', 'android'] : [];
   } else {
@@ -113,28 +132,28 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
 
   const directory = process.cwd();
 
-  let tempDir: string;
-  if (args.tempDir) {
-    tempDir = path.isAbsolute(args.tempDir)
-      ? args.tempDir
-      : path.join(directory, args.tempDir);
+  let targetTempDir: string;
+  if (tempDir) {
+    targetTempDir = path.isAbsolute(tempDir)
+      ? tempDir
+      : path.join(directory, tempDir);
   } else {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
+    targetTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
   }
 
-  const configPath = getProjectConfigPath(directory, args.config);
+  const configPath = getProjectConfigPath(directory, config);
   const projectConfig = getNormalizedProjectConfigBuilder(runtime, configPath)(
     runtime,
     {
       platform: '',
       root: directory,
-      dev: args.dev,
-      port: args.port,
+      dev,
+      port,
       bundleMode: 'multi-bundle',
       bundleTarget: 'server',
-      assetsDest: tempDir,
-      minify: args.minify === undefined ? !args.dev : args.minify,
-      maxWorkers: args.maxWorkers,
+      assetsDest: targetTempDir,
+      minify: minify === undefined ? !dev : minify,
+      maxWorkers,
     }
   );
 
@@ -144,7 +163,7 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
       projectConfig.server.host
     );
     if (isTaken) {
-      if (args.interactive) {
+      if (interactive) {
         const { userChoice } = await inquirer.prompt({
           type: 'list',
           name: 'userChoice',
@@ -175,15 +194,15 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
     }
 
     new Server(runtime, configPath, {
-      dev: args.dev,
-      noInteractive: !args.interactive,
-      minify: args.minify === undefined ? !args.dev : args.minify,
-      assetsDest: tempDir,
+      dev,
+      noInteractive: !interactive,
+      minify: minify === undefined ? !dev : minify,
+      assetsDest: targetTempDir,
       root: directory,
       eager: parsedEager,
       platforms: projectConfig.platforms,
       bundleNames: Object.keys(projectConfig.bundles),
-      skipHostCheck: args.skipHostCheck,
+      skipHostCheck: skipHostCheck,
     }).listen(projectConfig.server.host, projectConfig.server.port);
   } catch (error) {
     runtime.logger.error('Command failed with error:', error);
@@ -194,35 +213,34 @@ async function start(_argv: string[], _ctx: Config, args: Options) {
 const command: Command = {
   name: 'haul-start',
   description: 'Starts a new webpack server',
-  //@ts-ignore
   func: start,
   options: [
     {
-      name: '--port <number>',
+      name: '--port [number]',
       description: 'Port to run your webpack server',
       parse: parseInt,
       default: '8081',
     },
     {
-      name: '--dev <bool>',
+      name: '--dev [bool]',
       description: 'Whether to build in development mode',
       default: 'true',
       parse: getBoolFromString,
     },
     {
-      name: '--interactive <bool>',
+      name: '--interactive [bool]',
       description:
         "If 'false', disables any user prompts and prevents the UI (which requires a TTY session) from being rendered",
       default: INTERACTIVE_MODE_DEFAULT,
       parse: getBoolFromString,
     },
     {
-      name: '--minify <bool>',
+      name: '--minify [bool]',
       description: `Whether to minify the bundle, 'true' by default when dev=false`,
       parse: getBoolFromString,
     },
     {
-      name: '--temp-dir <string>',
+      name: '--temp-dir [string]',
       description:
         'Path to directory where to store temporary files, eg. /tmp/dist',
     },
@@ -232,7 +250,7 @@ const command: Command = {
       default: DEFAULT_CONFIG_FILENAME,
     },
     {
-      name: '--eager <ios,android,...|true>',
+      name: '--eager [ios,android,...|true]',
       description: `Disable lazy building for platforms (list is separated by ',', for example 'haul bundle --eager ios,android')`,
       default: 'false',
       parse: (val: string) => {
@@ -243,7 +261,7 @@ const command: Command = {
       },
     },
     {
-      name: '--skip-host-check <bool>',
+      name: '--skip-host-check [bool]',
       description: 'Skips check for "index" or "host" bundle in Haul config',
       default: 'false',
       parse: getBoolFromString,
@@ -258,4 +276,4 @@ const command: Command = {
   ],
 };
 
-module.exports = command;
+export default command;

@@ -16,7 +16,7 @@ import { Command, Config } from '@react-native-community/cli';
 
 import { getBoolFromString } from './shared/parsers';
 import globalOptions from './shared/globalOptions';
-import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import setupLogging from './shared/setupLogging';
 import * as messages from '../messages/multiBundleMessages';
 
 interface Options {
@@ -35,7 +35,7 @@ interface Options {
 
 async function multiBundle(_argv: string[], _ctx: Config, args: Options) {
   const runtime = new Runtime();
-  setupInspectorAndLogs(args, runtime);
+  setupLogging(args, runtime);
   try {
     const {
       config,
@@ -299,4 +299,4 @@ const command: Command = {
   ],
 };
 
-module.exports = command;
+export default command;

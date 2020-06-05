@@ -13,7 +13,7 @@ import exec from 'execa';
 import npmFetch from 'npm-registry-fetch';
 import { Command } from '@react-native-community/cli';
 
-import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import setupInspectorAndLogs from './shared/setupLogging';
 
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -408,4 +408,4 @@ const command: Command = {
   func: init,
 };
 
-module.exports = command;
+export default command;

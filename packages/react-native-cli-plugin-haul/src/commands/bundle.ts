@@ -5,7 +5,7 @@ import { Command, Config } from '@react-native-community/cli';
 import * as messages from '../messages/bundleMessages';
 import { getBoolFromString } from './shared/parsers';
 import globalOptions from './shared/globalOptions';
-import setupInspectorAndLogs from './shared/setupInspectorAndLogs';
+import setupInspectorAndLogs from './shared/setupLogging';
 import prepareWebpackConfig from './shared/prepareWebpackConfig';
 
 interface Options {
@@ -164,4 +164,4 @@ const command: Command = {
   ],
 };
 
-module.exports = command;
+export default command;

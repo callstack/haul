@@ -1,9 +1,9 @@
 import { UserDependencyConfig } from '@react-native-community/cli';
-var initCommand = require('./commands/init');
-var bundleCommand = require('./commands/bundle');
-var ramBundleCommand = require('./commands/ramBundle');
-var startCommand = require('./commands/start');
-var multiBundleCommand = require('./commands/multiBundle');
+import initCommand from './commands/init';
+import bundleCommand from './commands/bundle';
+import ramBundleCommand from './commands/ramBundle';
+import startCommand from './commands/start';
+import multiBundleCommand from './commands/multiBundle';
 
 const pluginConfig: UserDependencyConfig = {
   commands: [
@@ -15,4 +15,4 @@ const pluginConfig: UserDependencyConfig = {
   ],
 };
 
-module.exports = pluginConfig;
+export default pluginConfig;

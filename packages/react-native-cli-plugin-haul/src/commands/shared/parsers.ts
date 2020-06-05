@@ -1,1 +1,1 @@
-export const getBoolFromString = (val:String) => val === "true"
+export const getBoolFromString = (val: string) => val === 'true';

@@ -3,13 +3,8 @@
   "version": "1.0.0",
   "description": "Haul plugin for react-native-community/cli",
   "main": "build/index.js",
-  "scripts": {
-    "test": "jest",
-    "build": "rimraf ./build && tsc",
-    "lint": "eslint"
-  },
   "files": [
-    "build",
+    "build/",
     "react-native.config.js"
   ],
   "repository": {
@@ -31,14 +26,12 @@
   },
   "homepage": "https://github.com/callstack/haul#readme",
   "peerDependencies": {
+    "@react-native-community/cli": ">= 3.0.0",
     "react-native": ">=0.59.0",
-    "webpack": "4.x",
-    "@react-native-community/cli": ">= 3.0.0"
+    "webpack": "4.x"
   },
   "dependencies": {
-    "@haul-bundler/core": "^0.19.0",
-    "@haul-bundler/core-legacy": "^0.17.0",
-    "ansi-fragments": "^0.2.1",
+    "@haul-bundler/core": "*",
     "cpx": "^1.5.0",
     "dedent": "^0.7.0",
     "execa": "^4.0.0",
@@ -47,7 +40,6 @@
     "npm-registry-fetch": "^6.0.0",
     "ora": "^4.0.3",
     "simple-progress-webpack-plugin": "^1.1.2",
-    "which": "2.0.2",
-    "ws": "^7.2.1"
+    "which": "2.0.2"
   }
 }

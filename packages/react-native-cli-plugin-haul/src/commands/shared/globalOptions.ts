@@ -2,7 +2,7 @@ import { getBoolFromString } from './parsers';
 
 const globalOptions = [
   {
-    name: 'output-file <filename>',
+    name: 'output-file [filename]',
     description: 'Log all messages to a file.',
   },
   {
@@ -15,14 +15,6 @@ const globalOptions = [
     name: 'verbose',
     description: 'Print all logs including debug messages.',
     parse: getBoolFromString,
-  },
-  {
-    name: 'node-inspector <true|false|"wait">',
-    description: 'Print all logs including debug messages.',
-    parse: (val: string) => {
-      if (val === 'wait') return val;
-      return val === 'true';
-    },
   },
 ];
 

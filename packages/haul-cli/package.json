@@ -1,8 +1,7 @@
 {
   "version": "0.22.1",
   "name": "@haul-bundler/cli",
-  "description": "Haul is a new command line tools for React Native",
-  "main": "./index.js",
+  "description": "Haul is a new command line tools for React Native", 
   "author": "Pawel Trysla <pawel.trysla@callstack.com>",
   "repository": "github:callstack/haul",
   "license": "MIT",
