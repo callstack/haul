@@ -4,7 +4,6 @@ import makeConfigFactory from '../makeConfigFactory';
 import { Runtime, ProjectConfig, EnvOptions } from '../../';
 // @ts-ignore
 import { replacePathsInObject } from 'jest/helpers'; // eslint-disable-line
-import LooseModeWebpackPlugin from '../../webpack/plugins/LooseModeWebpackPlugin';
 import withPolyfillsFactory from '../withPolyfillsFactory';
 
 const makeConfig = makeConfigFactory(
@@ -68,7 +67,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
     });
@@ -138,7 +137,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'RamBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'RamBundlePlugin')
       ).toBeTruthy();
     });
 
@@ -157,7 +156,7 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'RamBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'RamBundlePlugin')
       ).toBeTruthy();
     });
 
@@ -213,10 +212,10 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.index, 'RamBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'RamBundlePlugin')
       ).toBeFalsy();
     });
 
@@ -317,13 +316,13 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.base_dll, 'RamBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.base_dll, 'RamBundlePlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.app, 'RamBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.app, 'RamBundlePlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
     });
@@ -354,74 +353,15 @@ describe('makeConfig', () => {
       };
       const config = makeConfig(projectConfig)(runtime, env);
       expect(
-        hasPlugin(config.webpackConfigs.index, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.index, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.base_dll, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.base_dll, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(
-        hasPlugin(config.webpackConfigs.app, 'BasicBundleWebpackPlugin')
+        hasPlugin(config.webpackConfigs.app, 'PreloadBundlesPlugin')
       ).toBeTruthy();
       expect(replacePathsInObject(config)).toMatchSnapshot();
-    });
-  });
-
-  describe('with looseMode', () => {
-    const baseEnv: EnvOptions = {
-      platform: 'ios',
-      root: __dirname,
-      dev: false,
-      bundleMode: 'single-bundle',
-      bundleTarget: 'file',
-    };
-
-    it('should build all modules in loose mode', () => {
-      const projectConfig: ProjectConfig = {
-        bundles: {
-          index: {
-            entry: './index.js',
-            looseMode: true,
-          },
-        },
-      };
-      const env: EnvOptions = {
-        ...baseEnv,
-        bundleTarget: 'server',
-      };
-      const config = makeConfig(projectConfig)(runtime, env);
-      const looseModePlugin = config.webpackConfigs.index.plugins.find(
-        plugin => {
-          return plugin.constructor.name === 'LooseModeWebpackPlugin';
-        }
-      ) as LooseModeWebpackPlugin;
-      expect(looseModePlugin.checkLooseMode('')).toBe(true);
-    });
-
-    it('should build some modules in loose mode', () => {
-      const moduleFilename = path.join(__dirname, 'someModule.js');
-
-      const projectConfig: ProjectConfig = {
-        bundles: {
-          index: {
-            entry: './index.js',
-            looseMode: [moduleFilename, /haul/],
-          },
-        },
-      };
-      const env: EnvOptions = {
-        ...baseEnv,
-        bundleTarget: 'server',
-      };
-      const config = makeConfig(projectConfig)(runtime, env);
-      const looseModePlugin = config.webpackConfigs.index.plugins.find(
-        plugin => {
-          return plugin.constructor.name === 'LooseModeWebpackPlugin';
-        }
-      ) as LooseModeWebpackPlugin;
-      expect(looseModePlugin.checkLooseMode('')).toBe(false);
-      expect(looseModePlugin.checkLooseMode(moduleFilename)).toBe(true);
-      expect(looseModePlugin.checkLooseMode(__filename)).toBe(true);
-      expect(looseModePlugin.checkLooseMode('path')).toBe(false);
     });
   });
 });

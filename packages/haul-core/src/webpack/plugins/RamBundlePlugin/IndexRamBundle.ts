@@ -1,7 +1,7 @@
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
 import webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
-import { Module } from './RamBundleWebpackPlugin';
+import { Module } from './RamBundlePlugin';
 
 /***
  * Reference: https://github.com/facebook/metro/blob/master/packages/metro/src/shared/output/RamBundle/as-indexed-file.js
@@ -15,7 +15,7 @@ type ModuleBuffer = {
   buffer: Buffer;
 };
 
-export default class IndexRamBundle {
+export class IndexRamBundle {
   encoding: 'ascii' | 'utf16le' | 'utf8' = 'utf8';
   header: Buffer = Buffer.alloc(4);
   bootstrap: Buffer = Buffer.alloc(0);

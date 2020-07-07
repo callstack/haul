@@ -2,6 +2,7 @@ import webpack from 'webpack';
 import { MinifyOptions } from 'terser';
 import { DeepNonNullable, Overwrite, Assign } from 'utility-types';
 import Runtime from '../runtime/Runtime';
+import { LooseModeConfig, BundleType, BundlingMode } from '../types';
 
 export type ServerConfig = {
   port?: number;
@@ -15,8 +16,8 @@ export type EnvOptions = {
   platform: string;
   root: string;
   dev: boolean;
-  bundleType?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
-  bundleMode: 'single-bundle' | 'multi-bundle';
+  bundleType?: BundleType;
+  bundleMode: BundlingMode;
   bundleTarget?: 'file' | 'server';
   assetsDest?: string;
   bundleOutput?: string;
@@ -30,7 +31,7 @@ export type BundleConfig = Assign<
   {
     name?: string;
     entry: string | string[] | { entryFiles: string[]; setupFiles: string[] };
-    type?: 'basic-bundle' | 'indexed-ram-bundle' | 'file-ram-bundle';
+    type?: BundleType;
     platform?: string;
     root?: string;
     dev?: boolean;
@@ -41,7 +42,7 @@ export type BundleConfig = Assign<
       Exclude<keyof MinifyOptions, 'sourceMap'>
     >;
     sourceMap?: boolean | 'inline';
-    looseMode?: true | Array<string | RegExp> | ((filename: string) => boolean);
+    looseMode?: LooseModeConfig;
     dll?: boolean;
     app?: boolean;
     dependsOn?: string[];
@@ -95,7 +96,7 @@ export type NormalizedBundleConfig = Assign<
           DeepNonNullable<ExternalBundleConfig>,
           { manifestPath: ExternalBundleConfig['manifestPath'] }
         >;
-    looseMode: (filename: string) => boolean;
+    looseMode?: LooseModeConfig;
   }
 >;
 

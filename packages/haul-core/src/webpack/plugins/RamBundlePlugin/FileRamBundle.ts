@@ -2,15 +2,14 @@ import webpack from 'webpack';
 import path from 'path';
 import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
-import { Module } from './RamBundleWebpackPlugin';
+import { Module } from './RamBundlePlugin';
 
-export default class FileRamBundle {
+export class FileRamBundle {
   constructor(
     public bootstrap: string,
     public modules: Module[],
     public sourceMap: boolean,
-    public bundleName: string,
-    public singleBundleMode: boolean
+    public outputPrefix: string
   ) {}
 
   build({
@@ -24,12 +23,11 @@ export default class FileRamBundle {
     sourceMapFilename: string;
     compilation: webpack.compilation.Compilation;
   }) {
-    const jsModulesDir = this.singleBundleMode
-      ? path.join(path.dirname(outputFilename), 'js-modules')
-      : path.join(
-          path.dirname(outputFilename),
-          `${this.bundleName}-js-modules`
-        );
+    const jsModulesDir = path.join(
+      path.dirname(outputFilename),
+      `${this.outputPrefix}js-modules`
+    );
+
     // UNBUNDLE file tells React Native it's a RAM bundle.
     const UNBUNDLE = Buffer.alloc(4);
     UNBUNDLE.writeUInt32LE(MAGIC_NUMBER, 0);

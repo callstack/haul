@@ -1,7 +1,7 @@
 {
   "version": "0.22.1",
   "name": "@haul-bundler/core",
-  "description": "Haul core library (legacy)",
+  "description": "Haul core library",
   "main": "build/index.js",
   "files": [
     "build/",

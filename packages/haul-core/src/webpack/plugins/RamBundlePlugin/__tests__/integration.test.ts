@@ -5,7 +5,8 @@ import fs from 'fs';
 import assert from 'assert';
 import { SourceMapConsumer } from 'source-map';
 import RamBundleParser from 'metro/src/lib/RamBundleParser';
-import RamBundlePlugin from '../RamBundleWebpackPlugin';
+import { RamBundlePlugin } from '../RamBundlePlugin';
+import { RamBundleType } from '../../../../types';
 
 function wait(ms: number) {
   return new Promise(resolve => {
@@ -18,12 +19,12 @@ const BUNDLE_PATH = path.join(__dirname, './__fixtures__/dist/main.jsbundle');
 function build({
   namedModules,
   sourceMap,
-  indexRamBundle,
+  type,
 }: {
   namedModules?: boolean;
   sourceMap?: boolean;
-  indexRamBundle?: boolean;
-} = {}) {
+  type: RamBundleType;
+}) {
   const compiler = webpack({
     entry: path.join(__dirname, './__fixtures__/index.js'),
     mode: 'development',
@@ -53,9 +54,10 @@ function build({
     plugins: [
       new RamBundlePlugin({
         sourceMap,
-        indexRamBundle,
+        type,
         minify: false,
         maxWorkers: 1,
+        bundlingMode: 'single-bundle',
         bundleName: 'index',
         bundleId: 'index',
       }),
@@ -109,7 +111,7 @@ describe('Indexed RAM bundle should build and successfully evaluate bundle', () 
   });
 
   it('with namedModules:false', async () => {
-    await build({ indexRamBundle: true });
+    await build({ type: 'indexed-ram-bundle' });
 
     const bundle = fs.readFileSync(BUNDLE_PATH);
     const parser = new RamBundleParser(bundle);
@@ -151,7 +153,7 @@ describe('Indexed RAM bundle should build and successfully evaluate bundle', () 
   });
 
   it('with namedModules:true', async () => {
-    await build({ namedModules: true, indexRamBundle: true });
+    await build({ namedModules: true, type: 'indexed-ram-bundle' });
 
     const bundle = fs.readFileSync(BUNDLE_PATH);
     const parser = new RamBundleParser(bundle);
@@ -185,7 +187,7 @@ describe('Indexed RAM bundle should build and successfully evaluate bundle', () 
   });
 
   it('with source maps', async () => {
-    await build({ sourceMap: true, indexRamBundle: true });
+    await build({ sourceMap: true, type: 'indexed-ram-bundle' });
 
     const bundle = fs.readFileSync(BUNDLE_PATH);
     const indexSourceMap = JSON.parse(
@@ -253,7 +255,7 @@ describe('File RAM bundle should build and successfully evaluate bundle', () => 
   });
 
   it('with namedModules:false', async () => {
-    await build();
+    await build({ type: 'file-ram-bundle' });
 
     const bootstrap = fs.readFileSync(BUNDLE_PATH).toString();
     expect(bootstrap).toBeDefined();
@@ -297,7 +299,7 @@ describe('File RAM bundle should build and successfully evaluate bundle', () => 
   });
 
   it('with namedModules:true', async () => {
-    await build({ namedModules: true });
+    await build({ namedModules: true, type: 'file-ram-bundle' });
 
     const bootstrap = fs.readFileSync(BUNDLE_PATH).toString();
     expect(bootstrap).toBeDefined();
@@ -333,7 +335,7 @@ describe('File RAM bundle should build and successfully evaluate bundle', () => 
   });
 
   it('with source maps', async () => {
-    await build({ sourceMap: true });
+    await build({ sourceMap: true, type: 'file-ram-bundle' });
 
     const indexSourceMap = JSON.parse(
       fs.readFileSync(`${BUNDLE_PATH}.map`).toString()
