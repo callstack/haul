@@ -1,6 +1,6 @@
 import { RawSource } from 'webpack-sources';
 import MAGIC_NUMBER from 'metro/src/shared/output/RamBundle/magic-number';
-import FileRamBundle from '../FileRamBundle';
+import { FileRamBundle } from '../FileRamBundle';
 
 test('FileRamBundle should create valid RAM bundle', () => {
   const bootstrapper = '(function() { /* bootstrap */ })()';
@@ -22,13 +22,7 @@ test('FileRamBundle should create valid RAM bundle', () => {
   ];
 
   const compilation = { assets: {} as { [key: string]: RawSource } };
-  const ramBundle = new FileRamBundle(
-    bootstrapper,
-    modules,
-    false,
-    'index',
-    true
-  );
+  const ramBundle = new FileRamBundle(bootstrapper, modules, false, '');
   ramBundle.build({
     outputDest: '',
     outputFilename: 'main.jsbundle',

@@ -23,10 +23,10 @@ import {
 } from '../config/types';
 import applySingleBundleTweaks from './utils/applySingleBundleTweaks';
 import applyMultiBundleTweaks from './utils/applyMultiBundleTweaks';
-import LooseModeWebpackPlugin from '../webpack/plugins/LooseModeWebpackPlugin';
-import InitCoreDllPlugin from '../webpack/plugins/InitCoreDllPlugin';
-import RamBundlePlugin from '../webpack/plugins/RamBundleWebpackPlugin';
-import BasicBundleWebpackPlugin from '../webpack/plugins/BasicBundleWebpackPlugin';
+import { LooseModePlugin } from '../webpack/plugins/LooseModePlugin';
+import { PreloadModulesDllPlugin } from '../webpack/plugins/PreloadModulesDllPlugin';
+import { RamBundlePlugin } from '../webpack/plugins/RamBundlePlugin';
+import { PreloadBundlesPlugin } from '../webpack/plugins/PreloadBundlesPlugin';
 
 type GetDefaultConfig = (
   runtime: Runtime,
@@ -89,30 +89,6 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             ? bundleConfigBuilder(env, runtime)
             : bundleConfigBuilder;
 
-        let looseMode: NormalizedBundleConfig['looseMode'] = () => false;
-        if (bundleConfig.looseMode === true) {
-          looseMode = () => true;
-        } else if (Array.isArray(bundleConfig.looseMode)) {
-          looseMode = (filename: string) => {
-            return (bundleConfig.looseMode as Array<string | RegExp>).some(
-              element => {
-                if (typeof element === 'string') {
-                  if (!path.isAbsolute(element)) {
-                    throw new Error(
-                      `${element} in 'looseMode' property must be an absolute path or regex`
-                    );
-                  }
-                  return element === filename;
-                }
-
-                return element.test(filename);
-              }
-            );
-          };
-        } else if (typeof bundleConfig.looseMode === 'function') {
-          looseMode = bundleConfig.looseMode;
-        }
-
         // TODO: use minifyOptions to configure terser for basic bundle
         const dev = bundleConfig.dev || env.dev;
         const root = bundleConfig.root || env.root;
@@ -142,7 +118,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
             typeof bundleConfig.sourceMap !== 'undefined'
               ? bundleConfig.sourceMap
               : true,
-          looseMode,
+          looseMode: bundleConfig.looseMode,
           app: Boolean(bundleConfig.app),
           dll: Boolean(bundleConfig.dll),
           dependsOn: bundleConfig.dependsOn || [],
@@ -268,8 +244,8 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
 
         webpackConfig.plugins = (webpackConfig.plugins || []).concat(
           normalizedBundleConfig.type === 'basic-bundle'
-            ? new BasicBundleWebpackPlugin({
-                preloadBundles:
+            ? new PreloadBundlesPlugin({
+                bundles:
                   featuresConfig.multiBundle === 1
                     ? normalizedBundleConfig.dependsOn
                     : [],
@@ -278,9 +254,8 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
                 minify: normalizedBundleConfig.minify,
                 minifyOptions: normalizedBundleConfig.minifyOptions,
                 sourceMap: Boolean(normalizedBundleConfig.sourceMap),
-                indexRamBundle:
-                  normalizedBundleConfig.type === 'indexed-ram-bundle',
-                singleBundleMode: env.bundleMode === 'single-bundle',
+                type: normalizedBundleConfig.type,
+                bundlingMode: env.bundleMode,
                 preloadBundles:
                   featuresConfig.multiBundle === 1
                     ? normalizedBundleConfig.dependsOn
@@ -298,7 +273,7 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
         );
 
         webpackConfig.plugins.push(
-          new LooseModeWebpackPlugin(normalizedBundleConfig.looseMode)
+          new LooseModePlugin(normalizedBundleConfig.looseMode || false)
         );
 
         if (
@@ -307,8 +282,8 @@ export default function makeConfigFactory(getDefaultConfig: GetDefaultConfig) {
           featuresConfig.multiBundle >= 2
         ) {
           webpackConfig.plugins.push(
-            new InitCoreDllPlugin({
-              setupFiles: normalizedBundleConfig.entry.setupFiles,
+            new PreloadModulesDllPlugin({
+              modules: normalizedBundleConfig.entry.setupFiles,
             })
           );
         }

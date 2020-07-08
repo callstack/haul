@@ -19,7 +19,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -46,7 +46,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -75,7 +75,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -142,28 +142,29 @@ Object {
             },
           },
         },
-        RamBundleWebpackPlugin {
-          "bundleId": "app",
-          "bundleName": "app",
-          "indexRamBundle": true,
-          "maxWorkers": 7,
-          "minify": false,
-          "minifyOptions": undefined,
+        RamBundlePlugin {
+          "config": Object {
+            "bundleId": "app",
+            "bundleName": "app",
+            "bundlingMode": "multi-bundle",
+            "maxWorkers": 7,
+            "minify": false,
+            "minifyOptions": undefined,
+            "preloadBundles": Array [
+              "base_dll",
+            ],
+            "sourceMap": true,
+            "type": "indexed-ram-bundle",
+          },
           "modules": Array [],
-          "name": "RamBundleWebpackPlugin",
-          "preloadBundles": Array [
-            "base_dll",
-          ],
-          "singleBundleMode": false,
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllReferencePlugin {
           "options": Object {
@@ -212,26 +213,27 @@ Object {
             },
           },
         },
-        RamBundleWebpackPlugin {
-          "bundleId": "base_dll",
-          "bundleName": "base_dll",
-          "indexRamBundle": true,
-          "maxWorkers": 7,
-          "minify": false,
-          "minifyOptions": undefined,
+        RamBundlePlugin {
+          "config": Object {
+            "bundleId": "base_dll",
+            "bundleName": "base_dll",
+            "bundlingMode": "multi-bundle",
+            "maxWorkers": 7,
+            "minify": false,
+            "minifyOptions": undefined,
+            "preloadBundles": Array [],
+            "sourceMap": true,
+            "type": "indexed-ram-bundle",
+          },
           "modules": Array [],
-          "name": "RamBundleWebpackPlugin",
-          "preloadBundles": Array [],
-          "singleBundleMode": false,
-          "sourceMap": true,
         },
         DefinePlugin {
           "definitions": Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllPlugin {
           "options": Object {
@@ -291,8 +293,8 @@ Object {
           "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
         },
-        BasicBundleWebpackPlugin {
-          "preloadBundles": Array [
+        PreloadBundlesPlugin {
+          "bundles": Array [
             "base_dll",
           ],
         },
@@ -301,8 +303,8 @@ Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllReferencePlugin {
           "options": Object {
@@ -337,7 +339,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -364,7 +366,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -393,7 +395,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -474,8 +476,8 @@ Object {
           "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
         },
-        BasicBundleWebpackPlugin {
-          "preloadBundles": Array [
+        PreloadBundlesPlugin {
+          "bundles": Array [
             "base_dll",
           ],
         },
@@ -484,8 +486,8 @@ Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllReferencePlugin {
           "options": Object {
@@ -548,16 +550,16 @@ Object {
           "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
         },
-        BasicBundleWebpackPlugin {
-          "preloadBundles": Array [],
+        PreloadBundlesPlugin {
+          "bundles": Array [],
         },
         DefinePlugin {
           "definitions": Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllPlugin {
           "options": Object {
@@ -617,8 +619,8 @@ Object {
           "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
         },
-        BasicBundleWebpackPlugin {
-          "preloadBundles": Array [
+        PreloadBundlesPlugin {
+          "bundles": Array [
             "base_dll",
           ],
         },
@@ -627,8 +629,8 @@ Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0,\\"base_dll\\":1,\\"app\\":2}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
         DllReferencePlugin {
           "options": Object {
@@ -664,7 +666,7 @@ Object {
       },
       "external": false,
       "hasteOptions": Object {},
-      "looseMode": [Function],
+      "looseMode": undefined,
       "maxWorkers": 7,
       "minify": false,
       "minifyOptions": undefined,
@@ -746,16 +748,16 @@ Object {
           "sourceMappingURLComment": "
 //# sourceMappingURL=[url]",
         },
-        BasicBundleWebpackPlugin {
-          "preloadBundles": Array [],
+        PreloadBundlesPlugin {
+          "bundles": Array [],
         },
         DefinePlugin {
           "definitions": Object {
             "process.env.HAUL_BUNDLES": "{\\"index\\":0}",
           },
         },
-        LooseModeWebpackPlugin {
-          "checkLooseMode": [Function],
+        LooseModePlugin {
+          "shouldUseLoosMode": [Function],
         },
       ],
       "target": "webworker",

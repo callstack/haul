@@ -6,10 +6,14 @@ export { default as getBabelConfigPath } from './preset/getBabelConfigPath';
 export { default as makeConfigFactory } from './preset/makeConfigFactory';
 export { getBundleFilename } from './preset/utils/applyMultiBundleTweaks';
 
-// Webpack utils
+// Webpack
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
 export { default as HasteResolver } from './webpack/resolvers/HasteResolver';
 export { default as resolveModule } from './webpack/resolvers/resolveModule';
+export { LooseModePlugin } from './webpack/plugins/LooseModePlugin';
+export { PreloadBundlesPlugin } from './webpack/plugins/PreloadBundlesPlugin';
+export { PreloadModulesDllPlugin } from './webpack/plugins/PreloadModulesDllPlugin';
+export { RamBundlePlugin } from './webpack/plugins/RamBundlePlugin';
 
 // Shared CLI utils
 export { default as Runtime } from './runtime/Runtime';
@@ -36,6 +40,12 @@ export {
   NormalizedProjectConfig,
   NormalizedProjectConfigBuilder,
 } from './config/types';
+export {
+  BundleType,
+  BundlingMode,
+  RamBundleType,
+  LooseModeConfig,
+} from './types';
 export { default as getReactNativeVersion } from './utils/getReactNativeVersion';
 export { default as parseEntry } from './utils/parseEntry';
 export { default as sortBundlesByDependencies } from './utils/sortBundlesByDependencies';

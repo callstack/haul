@@ -1,4 +1,4 @@
-import BasicBundleWebpackPlugin from '../BasicBundleWebpackPlugin';
+import { PreloadBundlesPlugin } from '../PreloadBundlesPlugin';
 import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';
@@ -47,8 +47,8 @@ describe('BasicBundleWebpackPlugin', () => {
     const bundle = await build({
       ...getConfig(),
       plugins: [
-        new BasicBundleWebpackPlugin({
-          preloadBundles: ['test_bundle'],
+        new PreloadBundlesPlugin({
+          bundles: ['test_bundle'],
         }),
       ],
     });

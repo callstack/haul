@@ -22,4 +22,4 @@ do
 
 Get-Content $dir\err
 Get-Content $dir\out
-Get-Content $vsconfig 
+Get-Content $vsconfig
