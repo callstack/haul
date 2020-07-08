@@ -2,7 +2,14 @@ import webpack from 'webpack';
 import { MinifyOptions } from 'terser';
 import { DeepNonNullable, Overwrite, Assign } from 'utility-types';
 import Runtime from '../runtime/Runtime';
-import { LooseModeConfig, BundleType, BundlingMode } from '../types';
+import {
+  LooseModeConfig,
+  BundleType,
+  BundlingMode,
+  BundleOutputType,
+  BundleFormat,
+  SourceMap,
+} from '../types';
 
 export type ServerConfig = {
   port?: number;
@@ -16,9 +23,9 @@ export type EnvOptions = {
   platform: string;
   root: string;
   dev: boolean;
-  bundleType?: BundleType;
+  bundleType?: BundleFormat;
   bundleMode: BundlingMode;
-  bundleTarget?: 'file' | 'server';
+  bundleTarget?: BundleOutputType;
   assetsDest?: string;
   bundleOutput?: string;
   sourcemapOutput?: string;
@@ -31,7 +38,7 @@ export type BundleConfig = Assign<
   {
     name?: string;
     entry: string | string[] | { entryFiles: string[]; setupFiles: string[] };
-    type?: BundleType;
+    type?: BundleFormat;
     platform?: string;
     root?: string;
     dev?: boolean;
@@ -41,7 +48,7 @@ export type BundleConfig = Assign<
       MinifyOptions,
       Exclude<keyof MinifyOptions, 'sourceMap'>
     >;
-    sourceMap?: boolean | 'inline';
+    sourceMap?: SourceMap;
     looseMode?: LooseModeConfig;
     dll?: boolean;
     app?: boolean;
