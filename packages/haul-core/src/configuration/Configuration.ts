@@ -13,7 +13,7 @@ import {
   WebpackConfigTransform,
 } from '../types';
 import { ExternalBundle } from './ExternalBundle';
-import { OwnedBundle } from './OwnedBundle';
+import { OwnedBundle, OwnedBundleProperties } from './OwnedBundle';
 import Runtime from '../runtime/Runtime';
 import { ConfigurationLoader } from './ConfigurationLoader';
 import { DEFAULT_PORT } from '../constants';
@@ -123,6 +123,8 @@ export class Configuration {
   readonly templates: TemplatesConfig;
   readonly features: FinalFeaturesConfig;
   readonly bundleNames: string[];
+  ownedBundles: OwnedBundle[] = [];
+  externalBundles: ExternalBundle[] = [];
 
   constructor(
     private readonly projectConfig: ProjectConfig,
@@ -154,7 +156,7 @@ export class Configuration {
   }
 
   createBundles(runtime: Runtime): Array<OwnedBundle | ExternalBundle> {
-    return this.bundleNames.map(bundleName => {
+    const bundles = this.bundleNames.map(bundleName => {
       const bundleConfigBuilder = this.projectConfig.bundles[bundleName];
       const bundleConfig =
         typeof bundleConfigBuilder === 'function'
@@ -190,49 +192,107 @@ export class Configuration {
         preloadModuleNames.push(...bundleConfig.entry.setupFiles);
       }
 
+      const name = bundleConfig.name || bundleName;
+      const properties: OwnedBundleProperties = {
+        mode: bundleConfig.dev || this.envOptions.dev ? 'dev' : 'prod',
+        platform: bundleConfig.platform || this.envOptions.platform,
+        bundlingMode: this.envOptions.bundleMode,
+        outputType:
+          this.envOptions.bundleTarget === 'server' ? 'server' : 'file',
+        outputPath: this.envOptions.bundleOutput,
+        format:
+          this.envOptions.bundleTarget === 'server'
+            ? 'basic-bundle'
+            : bundleConfig.type || this.envOptions.bundleType || 'basic-bundle',
+        type: bundleConfig.dll ? 'dll' : bundleConfig.app ? 'app' : 'default',
+        context: bundleConfig.root || this.envOptions.root,
+        inputModuleNames,
+        preloadModuleNames,
+        assetsDestination:
+          bundleConfig.assetsDest || this.envOptions.assetsDest,
+        minify: bundleConfig.minify || Boolean(this.envOptions.minify),
+        minifyOptions: bundleConfig.minifyOptions || undefined,
+        sourceMap:
+          typeof bundleConfig.sourceMap !== 'undefined'
+            ? bundleConfig.sourceMap
+            : true,
+        sourceMapDestination: this.envOptions.sourcemapOutput,
+        looseMode: bundleConfig.looseMode || false,
+        dependsOn: bundleConfig.dependsOn || [],
+        providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
+          'react-native',
+        ],
+        hasteOptions: bundleConfig.hasteOptions || {},
+        maxWorkers:
+          bundleConfig.maxWorkers !== undefined
+            ? Math.max(1, bundleConfig.maxWorkers)
+            : this.envOptions.maxWorkers !== undefined
+            ? Math.max(1, this.envOptions.maxWorkers)
+            : Math.max(
+                isCi ? Math.min(cpus().length - 1, 7) : cpus().length - 1,
+                1
+              ),
+      };
+
+      // Make sure the target platform is supported. Do not run this check when target is set
+      // to server, since the initial configuration loading is done with `platform` set
+      // to "".
+      if (
+        !this.platforms.includes(properties.platform) &&
+        this.envOptions.bundleTarget !== 'server'
+      ) {
+        throw new Error(
+          `Platform "${
+            properties.platform
+          }" is not supported - only: ${this.platforms
+            .map(platform => `"${platform}"`)
+            .join(', ')} are available.`
+        );
+      }
+
       return new OwnedBundle(
-        bundleConfig.name || bundleName,
-        {
-          mode: bundleConfig.dev || this.envOptions.dev ? 'dev' : 'prod',
-          platform: bundleConfig.platform || this.envOptions.platform,
-          format:
-            this.envOptions.bundleTarget === 'server'
-              ? 'basic-bundle'
-              : bundleConfig.type ||
-                this.envOptions.bundleType ||
-                'basic-bundle',
-          type: bundleConfig.dll ? 'dll' : bundleConfig.app ? 'app' : 'default',
-          context: bundleConfig.root || this.envOptions.root,
-          inputModuleNames,
-          preloadModuleNames,
-          assetsDestination:
-            bundleConfig.assetsDest || this.envOptions.assetsDest || '',
-          minify: bundleConfig.minify || Boolean(this.envOptions.minify),
-          minifyOptions: bundleConfig.minifyOptions || undefined,
-          sourceMap:
-            typeof bundleConfig.sourceMap !== 'undefined'
-              ? bundleConfig.sourceMap
-              : true,
-          looseMode: bundleConfig.looseMode || false,
-          dependsOn: bundleConfig.dependsOn || [],
-          providesModuleNodeModules: bundleConfig.providesModuleNodeModules || [
-            'react-native',
-          ],
-          hasteOptions: bundleConfig.hasteOptions || {},
-          maxWorkers:
-            bundleConfig.maxWorkers !== undefined
-              ? Math.max(1, bundleConfig.maxWorkers)
-              : this.envOptions.maxWorkers !== undefined
-              ? Math.max(1, this.envOptions.maxWorkers)
-              : Math.max(
-                  isCi ? Math.min(cpus().length - 1, 7) : cpus().length - 1,
-                  1
-                ),
-        },
-        this.envOptions,
+        name,
+        properties,
+        // TODO: move creation of base config to OwnedBundle#makeWebpackConfig
+        this.getBaseWebpackConfig(runtime, this.envOptions, name, {
+          server: this.server,
+          bundles: {
+            [name]: {
+              entry: { entryFiles: properties.inputModuleNames },
+              platform: properties.platform,
+              root: properties.context,
+              assetsDest: properties.assetsDestination || '',
+              dev: properties.mode.startsWith('dev'),
+              minify: properties.minify,
+              providesModuleNodeModules: properties.providesModuleNodeModules,
+              hasteOptions: properties.hasteOptions,
+              maxWorkers: properties.maxWorkers,
+              type: properties.format,
+            },
+          },
+        }),
         bundleConfig.transform
+          ? (config: webpack.Configuration) => {
+              return bundleConfig.transform?.({
+                bundleName: name,
+                runtime,
+                env: this.envOptions,
+                config,
+              });
+            }
+          : undefined
       );
     });
+
+    bundles.forEach(bundle => {
+      if (bundle instanceof OwnedBundle) {
+        this.ownedBundles.push(bundle);
+      } else {
+        this.externalBundles.push(bundle);
+      }
+    });
+
+    return bundles;
   }
 
   createBundlesSorted(

@@ -58,7 +58,7 @@ export default function prepareWebpackConfig(
     throw new Error('External bundles are not supported for this command');
   }
 
-  const webpackConfig = bundle.makeWebpackConfig();
+  const webpackConfig = bundle.makeWebpackConfig(configuration);
   // Attach progress plugin
   if (options.progress !== 'none') {
     webpackConfig.plugins!.push(

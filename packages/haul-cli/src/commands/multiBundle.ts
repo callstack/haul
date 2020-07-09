@@ -222,7 +222,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           }
 
           try {
-            const webpackConfig = bundle.makeWebpackConfig();
+            const webpackConfig = bundle.makeWebpackConfig(configuration);
 
             // Attach progress plugin
             if (progress !== 'none') {

@@ -143,7 +143,7 @@ module.exports = async function runWebpackCompiler({
       continue;
     }
 
-    let config = bundle.makeWebpackConfig(runtime);
+    let config = bundle.makeWebpackConfig(configuration);
 
     /**
      * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
