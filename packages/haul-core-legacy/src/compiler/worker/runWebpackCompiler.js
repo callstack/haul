@@ -5,10 +5,10 @@
  * @flow
  */
 import {
-  sortBundlesByDependencies,
-  getNormalizedProjectConfigBuilder,
+  Configuration,
   Runtime,
-  getBundleFilename,
+  BundleOutputPlugin,
+  ExternalBundle,
 } from '@haul-bundler/core';
 import fs from 'fs';
 import path from 'path';
@@ -39,42 +39,40 @@ module.exports = async function runWebpackCompiler({
   });
 
   const outputPath = configOptions.assetsDest;
-  const projectConfig = getNormalizedProjectConfigBuilder(runtime, configPath)(
+  const configuration = Configuration.getLoader(
     runtime,
-    {
-      ...configOptions,
-      platform,
-    }
-  );
+    process.cwd(),
+    configPath
+  ).load({
+    ...configOptions,
+    platform,
+  });
 
   const apps = [];
-  const bundles = sortBundlesByDependencies(projectConfig, {
+  const bundles = configuration.createBundlesSorted(runtime, {
     skipHostCheck: configOptions.skipHostCheck,
   });
   let totalProgress = 0;
   let bundlesBuilt = 0;
 
-  for (const bundleName of bundles) {
-    const bundleConfig = projectConfig.bundles[bundleName];
-    if (bundleConfig.external) {
-      const bundleFilename = getBundleFilename(
-        {
-          ...configOptions,
-          platform,
-        },
-        projectConfig.templates,
-        bundleConfig
-      );
+  for (const bundle of bundles) {
+    if (bundle instanceof ExternalBundle) {
+      const bundleFilename = new BundleOutputPlugin({
+        mode: configOptions.dev ? 'dev' : 'prod',
+        platform,
+        bundlingMode: 'multi-bundle',
+        bundleName: bundle.name,
+        bundleType: bundle.properties.type,
+        templatesConfig: configuration.templates,
+      }).compileFilenameTemplate();
 
       try {
         fs.copyFileSync(
-          bundleConfig.external.bundlePath,
+          bundle.properties.bundlePath,
           path.join(outputPath, bundleFilename)
         );
         runtime.logger.done(
-          `Copied external${
-            bundleConfig.dll ? ' DLL' : ''
-          } bundle "${bundleName}"`
+          `Copied external ${bundle.properties.type} bundle "${bundle.name}"`
         );
       } catch (error) {
         // Log original message
@@ -89,9 +87,9 @@ module.exports = async function runWebpackCompiler({
             permissions = '0' + (stats.mode & parseInt('777', 8)).toString(8);
           }
 
-          message = `Failed to copy${
-            bundleConfig.dll ? ' DLL' : ''
-          } bundle "${bundleName}": ${error.code} ${error.path}${
+          message = `Failed to copy ${bundle.properties.type} bundle "${
+            bundle.name
+          }": ${error.code} ${error.path}${
             permissions ? ` | permissions: ${permissions}` : ''
           }`;
         } catch (statError) {
@@ -111,43 +109,41 @@ module.exports = async function runWebpackCompiler({
       }
 
       try {
-        if (fs.existsSync(`${bundleConfig.external.bundlePath}.map`)) {
+        if (fs.existsSync(`${bundle.properties.bundlePath}.map`)) {
           fs.copyFileSync(
-            `${bundleConfig.external.bundlePath}.map`,
+            `${bundle.properties.bundlePath}.map`,
             path.join(
               outputPath,
-              `${path.basename(bundleConfig.external.bundlePath)}.map`
+              `${path.basename(bundle.properties.bundlePath)}.map`
             )
           );
-          runtime.logger.done(`Copied external source maps for ${bundleName}`);
+          runtime.logger.done(`Copied external source maps for ${bundle.name}`);
         }
       } catch (error) {
-        const message = `Failed to copy source maps for ${bundleName}`;
+        const message = `Failed to copy source maps for ${bundle.name}`;
         runtime.logger.error(message, error.message);
       }
 
       try {
         cpx.copySync(
-          path.join(bundleConfig.external.assetsPath, '**'),
+          path.join(bundle.properties.assetsPath, '**'),
           path.join(outputPath, 'assets'),
           {
             preserve: true,
           }
         );
         runtime.logger.done(
-          `Copied assets for external${
-            bundleConfig.dll ? ' DLL' : ''
-          } bundle "${bundleName}"`
+          `Copied assets for external${bundle.properties.type} bundle "${bundle.name}"`
         );
       } catch (error) {
-        const message = `Failed to copy assets for ${bundleName}`;
+        const message = `Failed to copy assets for ${bundle.name}`;
         runtime.logger.error(message, error.message);
       }
 
       continue;
     }
 
-    let config = projectConfig.webpackConfigs[bundleName];
+    let config = bundle.makeWebpackConfig(runtime);
 
     /**
      * Let's add ProgressPlugin, but let's be sure that we don't mutate the user's config
@@ -170,7 +166,7 @@ module.exports = async function runWebpackCompiler({
       ],
     };
 
-    if (projectConfig.bundles[bundleName].dll) {
+    if (bundle.properties.type === 'dll') {
       await new Promise((resolve, reject) =>
         webpack(config).run(err => {
           if (err) {

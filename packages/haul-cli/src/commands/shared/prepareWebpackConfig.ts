@@ -1,9 +1,9 @@
 import webpack from 'webpack';
 import {
-  getProjectConfigPath,
-  getNormalizedProjectConfigBuilder,
+  Configuration,
   Runtime,
   EnvOptions,
+  ExternalBundle,
 } from '@haul-bundler/core';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 
@@ -26,12 +26,11 @@ export default function prepareWebpackConfig(
   options: Options
 ): webpack.Configuration {
   const directory = process.cwd();
-  const configPath = getProjectConfigPath(directory, options.config);
-  const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
+  const configuration = Configuration.getLoader(
     runtime,
-    configPath
-  );
-  const projectConfig = normalizedProjectConfigBuilder(runtime, {
+    directory,
+    options.config
+  ).load({
     platform: options.platform,
     root: directory,
     dev: options.dev,
@@ -45,15 +44,21 @@ export default function prepareWebpackConfig(
     maxWorkers: options.maxWorkers,
   });
 
-  const webpackConfig =
-    projectConfig.webpackConfigs.index || projectConfig.webpackConfigs.main;
+  const bundle = configuration
+    .createBundles(runtime)
+    .find(bundle => bundle.name === 'index' || bundle.name === 'main');
 
-  if (!webpackConfig) {
+  if (!bundle) {
     throw new Error(
-      'Cannot find webpack config `index` nor `main`. Make sure you have bundle config for `index` or `main'
+      'Cannot find Webpack config `index` nor `main`. Make sure you have bundle config for `index` or `main'
     );
   }
 
+  if (bundle instanceof ExternalBundle) {
+    throw new Error('External bundles are not supported for this command');
+  }
+
+  const webpackConfig = bundle.makeWebpackConfig();
   // Attach progress plugin
   if (options.progress !== 'none') {
     webpackConfig.plugins!.push(

@@ -1,10 +1,26 @@
-// Preset & project utils
-export { default as getNormalizedProjectConfigBuilder } from './config/getNormalizedProjectConfigBuilder';
-export { default as getProjectConfigPath } from './config/getProjectConfigPath';
-export { default as withPolyfillsFactory } from './preset/withPolyfillsFactory';
-export { default as getBabelConfigPath } from './preset/getBabelConfigPath';
-export { default as makeConfigFactory } from './preset/makeConfigFactory';
-export { getBundleFilename } from './preset/utils/applyMultiBundleTweaks';
+// Configuration
+export {
+  Configuration,
+  ServerConfig,
+  FinalServerConfig,
+  FeaturesConfig,
+  FinalFeaturesConfig,
+  BundleConfig,
+  ExternalBundleConfig,
+  GetBaseWebpackConfig,
+  BundleConfigBuilder,
+  ProjectConfig,
+  LegacyProjectConfig as NormalizedProjectConfig,
+} from './configuration/Configuration';
+export {
+  ConfigurationLoader,
+  ConfigurationBuilder,
+} from './configuration/ConfigurationLoader';
+export { OwnedBundle } from './configuration/OwnedBundle';
+export { ExternalBundle } from './configuration/ExternalBundle';
+export { withPolyfillsFactory } from './configuration/utils/withPolyfillsFactory';
+export { getBabelConfigPath } from './configuration/utils/getBabelConfigPath';
+export { makeConfigFactory } from './configuration/utils/makeConfigFactory';
 
 // Webpack
 export { default as AssetResolver } from './webpack/resolvers/AssetResolver';
@@ -14,6 +30,9 @@ export { LooseModePlugin } from './webpack/plugins/LooseModePlugin';
 export { PreloadBundlesPlugin } from './webpack/plugins/PreloadBundlesPlugin';
 export { PreloadModulesDllPlugin } from './webpack/plugins/PreloadModulesDllPlugin';
 export { RamBundlePlugin } from './webpack/plugins/RamBundlePlugin';
+export { BundleOutputPlugin } from './webpack/plugins/BundleOutputPlugin';
+export { MultiBundlePlugin } from './webpack/plugins/MultiBundlePlugin';
+export { SourceMapPlugin } from './webpack/plugins/SourceMapPlugin';
 
 // Shared CLI utils
 export { default as Runtime } from './runtime/Runtime';
@@ -30,23 +49,13 @@ export {
   ASSET_LOADER_PATH,
 } from './constants';
 export {
-  EnvOptions,
-  ServerConfig,
-  BundleConfig,
-  NormalizedBundleConfig,
-  WebpackConfigTransform,
-  BundleConfigBuilder,
-  ProjectConfig,
-  NormalizedProjectConfig,
-  NormalizedProjectConfigBuilder,
-} from './config/types';
-export {
   BundleType,
   BundlingMode,
   RamBundleType,
   LooseModeConfig,
+  EnvOptions,
+  WebpackConfigTransform,
 } from './types';
 export { default as getReactNativeVersion } from './utils/getReactNativeVersion';
 export { default as parseEntry } from './utils/parseEntry';
-export { default as sortBundlesByDependencies } from './utils/sortBundlesByDependencies';
 export { default as importModule } from './utils/importModule';

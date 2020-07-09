@@ -3,7 +3,7 @@ type Options = {
   additionalSetupFiles?: string[];
 };
 
-export default function withPolyfillsFactory(polyfills: string[]) {
+export function withPolyfillsFactory(polyfills: string[]) {
   return function withPolyfills(
     entry: string | string[],
     {

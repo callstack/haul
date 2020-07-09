@@ -6,11 +6,10 @@ import mkdirp from 'mkdirp';
 import cpx from 'cpx';
 import {
   Runtime,
-  getProjectConfigPath,
-  getNormalizedProjectConfigBuilder,
-  sortBundlesByDependencies,
-  getBundleFilename,
+  Configuration,
   EnvOptions,
+  ExternalBundle,
+  BundleOutputPlugin,
 } from '@haul-bundler/core';
 import * as messages from '../messages/multiBundleMessages';
 import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
@@ -98,11 +97,6 @@ export default function multiBundleCommand(runtime: Runtime) {
         process.env.HAUL_PLATFORM = platform;
 
         const directory = process.cwd();
-        const configPath = getProjectConfigPath(directory, config);
-        const normalizedProjectConfigBuilder = getNormalizedProjectConfigBuilder(
-          runtime,
-          configPath
-        );
         const env: EnvOptions = {
           platform,
           root: directory,
@@ -128,55 +122,55 @@ export default function multiBundleCommand(runtime: Runtime) {
               ? 'verbose'
               : 'compact',
         };
-        const projectConfig = normalizedProjectConfigBuilder(
-          runtime,
-          optionsWithProgress
-        );
 
-        for (const bundleName of sortBundlesByDependencies(projectConfig, {
+        const configuration = Configuration.getLoader(
+          runtime,
+          directory,
+          config
+        ).load(optionsWithProgress);
+
+        const bundles = configuration.createBundlesSorted(runtime, {
           skipHostCheck,
-        })) {
-          const bundleConfig = projectConfig.bundles[bundleName];
-          if (bundleConfig.external) {
+        });
+
+        for (const bundle of bundles) {
+          const bundleName = bundle.name;
+          if (bundle instanceof ExternalBundle) {
             runtime.logger.info(
-              `Using external${bundleConfig.dll ? ' DLL' : ''} bundle`,
+              `Using external ${bundle.properties.type} bundle`,
               runtime.logger.enhanceWithModifier('bold', bundleName)
             );
             runtime.logger.info(
               'Bundle path',
               runtime.logger.enhanceWithColor(
                 'gray',
-                bundleConfig.external.bundlePath
+                bundle.properties.bundlePath
               )
             );
-            if (bundleConfig.dll) {
+            if (bundle.properties.type === 'dll') {
               runtime.logger.info(
                 'Manifest path',
                 runtime.logger.enhanceWithColor(
                   'gray',
-                  bundleConfig.external.manifestPath
+                  bundle.properties.manifestPath
                 )
               );
             }
 
-            if (bundleConfig.external.copyBundle) {
-              const filename = getBundleFilename(
-                env,
-                projectConfig.templates,
-                projectConfig.bundles[bundleName]
+            if (bundle.properties.shouldCopy) {
+              const filename = new BundleOutputPlugin({
+                mode: env.dev ? 'dev' : 'prod',
+                platform: env.platform,
+                bundlingMode: 'multi-bundle',
+                bundleName,
+                bundleType: bundle.properties.type,
+                templatesConfig: configuration.templates,
+              }).compileFilenameTemplate();
+              const bundleOutputDirectory = BundleOutputPlugin.getBundleOutputDirectory(
+                env.root,
+                env.root,
+                env.bundleOutput
               );
-              // `bundleOutput` should be a directory, but for backward-compatibility,
-              // we also handle the case with a filename.
-              let bundleOutputDirectory = bundleConfig.root;
-              if (env.bundleOutput) {
-                bundleOutputDirectory =
-                  path.extname(env.bundleOutput) === ''
-                    ? env.bundleOutput
-                    : path.dirname(env.bundleOutput);
-                bundleOutputDirectory = path.isAbsolute(bundleOutputDirectory)
-                  ? bundleOutputDirectory
-                  : path.join(bundleConfig.root, bundleOutputDirectory);
-              }
               mkdirp.sync(bundleOutputDirectory);
               runtime.logger.info(
                 'Copying bundle to',
@@ -186,12 +180,12 @@ export default function multiBundleCommand(runtime: Runtime) {
                 )
               );
               fs.copyFileSync(
-                bundleConfig.external.bundlePath,
+                bundle.properties.bundlePath,
                 path.join(bundleOutputDirectory, filename)
               );
-              if (fs.existsSync(`${bundleConfig.external.bundlePath}.map`)) {
+              if (fs.existsSync(`${bundle.properties.bundlePath}.map`)) {
                 fs.copyFileSync(
-                  `${bundleConfig.external.bundlePath}.map`,
+                  `${bundle.properties.bundlePath}.map`,
                   path.join(bundleOutputDirectory, `${filename}.map`)
                 );
                 runtime.logger.info(
@@ -203,7 +197,7 @@ export default function multiBundleCommand(runtime: Runtime) {
                 );
               }
 
-              let assetsOutputDirectory = bundleConfig.root;
+              let assetsOutputDirectory = env.root;
               if (env.assetsDest) {
                 assetsOutputDirectory = env.assetsDest;
               } else if (env.bundleOutput) {
@@ -211,11 +205,11 @@ export default function multiBundleCommand(runtime: Runtime) {
               }
               assetsOutputDirectory = path.isAbsolute(assetsOutputDirectory)
                 ? assetsOutputDirectory
-                : path.join(bundleConfig.root, assetsOutputDirectory);
+                : path.join(env.root, assetsOutputDirectory);
 
               cpx.copySync(
                 path.join(
-                  bundleConfig.external.assetsPath,
+                  bundle.properties.assetsPath,
                   '**/*.{aac,aiff,bmp,caf,gif,html,jpeg,jpg,m4a,m4v,mov,mp3,mp4,mpeg,mpg,obj,otf,pdf,png,psd,svg,ttf,wav,webm,webp}'
                 ),
                 assetsOutputDirectory,
@@ -228,7 +222,7 @@ export default function multiBundleCommand(runtime: Runtime) {
           }
 
           try {
-            const webpackConfig = projectConfig.webpackConfigs[bundleName];
+            const webpackConfig = bundle.makeWebpackConfig();
 
             // Attach progress plugin
             if (progress !== 'none') {

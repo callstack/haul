@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import path from 'path';
 import { BundleOutputType, Mode, BundleType, BundlingMode } from '../../types';
-import { NormalizedTemplatesConfig } from '../../config/types';
+import { TemplatesConfig } from '../../configuration/Configuration';
 import compileTemplate from '../../utils/compileTemplate';
 
 type BundleOutputPluginConfig = {
@@ -12,7 +12,7 @@ type BundleOutputPluginConfig = {
   bundleType: BundleType;
   bundleOutputType?: BundleOutputType;
   bundleOutputPath?: string;
-  templatesConfig?: NormalizedTemplatesConfig;
+  templatesConfig?: TemplatesConfig;
 };
 
 export class BundleOutputPlugin {

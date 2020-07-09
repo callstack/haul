@@ -1,4 +1,4 @@
-import { EnvOptions } from '../config/types';
+import { EnvOptions } from '../types';
 import { Assign } from 'utility-types';
 import Hapi, { ResponseObject } from '@hapi/hapi';
 import http from 'http';

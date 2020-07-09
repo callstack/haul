@@ -2,8 +2,7 @@ import yargs from 'yargs';
 import {
   DEFAULT_CONFIG_FILENAME,
   INTERACTIVE_MODE_DEFAULT,
-  getProjectConfigPath,
-  getNormalizedProjectConfigBuilder,
+  Configuration,
   Server,
 } from '@haul-bundler/core';
 import { Runtime } from '@haul-bundler/core';
@@ -96,11 +95,13 @@ export default function startCommand(runtime: Runtime) {
         tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'haul-start-'));
       }
 
-      const configPath = getProjectConfigPath(directory, argv.config);
-      const projectConfig = getNormalizedProjectConfigBuilder(
+      const configurationLoader = Configuration.getLoader(
         runtime,
-        configPath
-      )(runtime, {
+        directory,
+        argv.config
+      );
+      const configPath = configurationLoader.getConfigPath();
+      const configuration = configurationLoader.load({
         platform: '',
         root: directory,
         dev: argv.dev,
@@ -114,17 +115,17 @@ export default function startCommand(runtime: Runtime) {
 
       try {
         const isTaken = await isPortTaken(
-          projectConfig.server.port,
-          projectConfig.server.host
+          configuration.server.port,
+          configuration.server.host
         );
         if (isTaken) {
           if (argv.interactive) {
             const { userChoice } = await inquirer.prompt({
               type: 'list',
               name: 'userChoice',
-              message: `Port ${projectConfig.server.port} is already in use. What should we do?`,
+              message: `Port ${configuration.server.port} is already in use. What should we do?`,
               choices: [
-                `Kill process using port ${projectConfig.server.port} and start Haul`,
+                `Kill process using port ${configuration.server.port} and start Haul`,
                 'Quit',
               ],
             });
@@ -132,7 +133,7 @@ export default function startCommand(runtime: Runtime) {
               runtime.complete(0);
             }
             try {
-              await killProcess(projectConfig.server.port);
+              await killProcess(configuration.server.port);
             } catch (e) {
               runtime.logger.error(
                 `Could not kill process! Reason: \n ${e.message}`
@@ -142,7 +143,7 @@ export default function startCommand(runtime: Runtime) {
             runtime.logger.info(`Successfully killed processes.`);
           } else {
             runtime.logger.error(
-              `Could not spawn process! Reason: Port ${projectConfig.server.port} already in use.`
+              `Could not spawn process! Reason: Port ${configuration.server.port} already in use.`
             );
             runtime.complete(1);
           }
@@ -155,10 +156,10 @@ export default function startCommand(runtime: Runtime) {
           assetsDest: tempDir,
           root: directory,
           eager: parsedEager,
-          platforms: projectConfig.platforms,
-          bundleNames: Object.keys(projectConfig.bundles),
+          platforms: configuration.platforms,
+          bundleNames: Object.keys(configuration.bundleNames),
           skipHostCheck: argv.skipHostCheck,
-        }).listen(projectConfig.server.host, projectConfig.server.port);
+        }).listen(configuration.server.host, configuration.server.port);
       } catch (error) {
         runtime.logger.error('Command failed with error:', error);
         runtime.complete(1);
