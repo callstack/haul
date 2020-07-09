@@ -107,14 +107,15 @@ export default function ramBundleCommand(runtime: Runtime) {
           bundleMode: 'single-bundle',
           maxWorkers,
         });
-        messages.initialInformation(runtime, { config: webpackConfig });
-
-        messages.initialBundleInformation(runtime, {
-          entry: webpackConfig.entry,
-          dev,
-        });
 
         const compiler = webpack(webpackConfig);
+        compiler.hooks.compile.tap('HaulBundleCommand', () => {
+          messages.initialInformation(runtime, { compiler });
+          messages.initialBundleInformation(runtime, {
+            compiler,
+          });
+        });
+
         const stats = await new Promise<webpack.Stats>((resolve, reject) =>
           compiler.run((err, info) => {
             if (err || info.hasErrors()) {

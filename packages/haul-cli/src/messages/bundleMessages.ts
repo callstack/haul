@@ -4,33 +4,36 @@ import path from 'path';
 
 export function initialInformation(
   runtime: Runtime,
-  { config }: { config: webpack.Configuration }
+  { compiler }: { compiler: webpack.Compiler }
 ) {
   runtime.logger.info(
     `Assets Destination: ${runtime.logger.enhanceWithColor(
       'gray',
-      config.output!.path
+      compiler.options.output?.path
     )}`
   );
   runtime.logger.info(
     `Bundle output: ${runtime.logger.enhanceWithColor(
       'gray',
-      config.output!.filename
+      compiler.options.output?.filename
     )}`
   );
   runtime.logger.info(
     `Bundle output (resolved): ${runtime.logger.enhanceWithColor(
       'gray',
-      path.resolve(config.output!.filename! as string)
+      path.join(
+        compiler.options.output?.path || '',
+        (compiler.options.output?.filename as string | undefined) || ''
+      )
     )}`
   );
 }
 
 export function initialBundleInformation(
   runtime: Runtime,
-  { entry, dev }: { entry: webpack.Configuration['entry']; dev: boolean }
+  { compiler }: { compiler: webpack.Compiler }
 ) {
-  const mode = dev ? 'development' : 'production';
+  const mode = compiler.options.mode;
   runtime.logger.info(
     `Haul is now bundling your React Native app in ${runtime.logger.enhanceWithModifier(
       'bold',
@@ -40,7 +43,7 @@ export function initialBundleInformation(
   runtime.logger.info(
     `Starting from:\n${runtime.logger.enhanceWithColor(
       'gray',
-      parseEntry(entry)
+      parseEntry(compiler.options.entry)
     )}`
   );
 }

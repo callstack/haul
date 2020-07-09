@@ -233,11 +233,7 @@ export default function multiBundleCommand(runtime: Runtime) {
               );
             }
 
-            messages.initialBundleInformation(runtime, {
-              bundleName,
-              webpackConfig,
-            });
-            const stats = await build(webpackConfig);
+            const stats = await build(bundleName, runtime, webpackConfig);
             runtime.logger.print('');
             messages.bundleBuilt(runtime, { stats });
           } catch (error) {
@@ -258,8 +254,19 @@ export default function multiBundleCommand(runtime: Runtime) {
   };
 }
 
-function build(webpackConfig: webpack.Configuration) {
+function build(
+  bundleName: string,
+  runtime: Runtime,
+  webpackConfig: webpack.Configuration
+) {
   const compiler = webpack(webpackConfig);
+  compiler.hooks.compile.tap('HaulBundleCommand', () => {
+    messages.initialBundleInformation(runtime, {
+      bundleName,
+      compiler,
+    });
+  });
+
   return new Promise<webpack.Stats>((resolve, reject) =>
     compiler.run((err, info) => {
       if (err || info.hasErrors()) {

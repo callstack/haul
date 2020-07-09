@@ -4,40 +4,40 @@ import path from 'path';
 
 export function initialBundleInformation(
   runtime: Runtime,
-  {
-    bundleName,
-    webpackConfig,
-  }: { bundleName: string; webpackConfig: webpack.Configuration }
+  { bundleName, compiler }: { bundleName: string; compiler: webpack.Compiler }
 ) {
   const name = runtime.logger.enhanceWithModifier('bold', bundleName);
-  const mode = runtime.logger.enhanceWithModifier('bold', webpackConfig.mode);
+  const mode = runtime.logger.enhanceWithModifier(
+    'bold',
+    compiler.options.mode
+  );
 
   runtime.logger.info(`Haul is now compiling ${name} bundle in ${mode} mode\n`);
   runtime.logger.info(
     `Assets Destination: ${runtime.logger.enhanceWithColor(
       'gray',
-      webpackConfig.output!.path
+      compiler.options.output?.path
     )}`
   );
   runtime.logger.info(
     `Bundle output: ${runtime.logger.enhanceWithColor(
       'gray',
-      webpackConfig.output!.filename
+      compiler.options.output?.filename
     )}`
   );
   runtime.logger.info(
     `Bundle output (resolved): ${runtime.logger.enhanceWithColor(
       'gray',
       path.join(
-        webpackConfig.output!.path!,
-        webpackConfig.output!.filename! as string
+        compiler.options.output?.path || '',
+        (compiler.options.output?.filename as string | undefined) || ''
       )
     )}`
   );
   runtime.logger.info(
     `Starting from:\n${runtime.logger.enhanceWithColor(
       'gray',
-      ((parseEntry(webpackConfig.entry!) as unknown) as string)
+      (parseEntry(compiler.options.entry) as string)
         .split('\n')
         .map((line: string) => `${' '.repeat(7)}${line}`)
         .join('\n')
