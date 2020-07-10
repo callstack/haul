@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import path from 'path';
 import { BundleFormat, SourceMap } from '../../types';
 
 type SourceMapPluginConfig = {
@@ -25,11 +26,24 @@ export class SourceMapPlugin {
       return;
     }
 
+    let filename = '[file].map';
+    if (this.config.sourceMapOutput) {
+      filename = path.isAbsolute(this.config.sourceMapOutput)
+        ? path.relative(
+            compiler.options.output!.path!,
+            this.config.sourceMapOutput
+          )
+        : path.relative(
+            compiler.options.output!.path!,
+            path.join(compiler.options.context!, this.config.sourceMapOutput)
+          );
+    }
+
     let plugin:
       | webpack.EvalSourceMapDevToolPlugin
       | webpack.SourceMapDevToolPlugin;
 
-    if (this.config.sourceMap === 'inline' || !this.config.sourceMapOutput) {
+    if (this.config.sourceMap === 'inline') {
       plugin = new webpack.EvalSourceMapDevToolPlugin({
         ...this.config.devToolOptions,
         publicPath: `http://${this.config.serverHost}:${this.config.serverPort}/`,
@@ -37,11 +51,11 @@ export class SourceMapPlugin {
     } else {
       plugin = new webpack.SourceMapDevToolPlugin({
         ...this.config.devToolOptions,
-        filename: this.config.sourceMapOutput,
+        filename,
         moduleFilenameTemplate: '[absolute-resource-path]',
       });
     }
 
-    compiler.options.plugins = (compiler.options.plugins || []).concat(plugin);
+    plugin.apply(compiler);
   }
 }

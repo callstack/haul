@@ -9,7 +9,6 @@ import {
   Mode,
   BundlingMode,
   BundleOutputType,
-  RamBundleType,
 } from '../types';
 import { LooseModePlugin } from '../webpack/plugins/LooseModePlugin';
 import { Configuration } from './Configuration';
@@ -56,7 +55,9 @@ export class OwnedBundle {
     private transform?: (
       config: webpack.Configuration
     ) => webpack.Configuration | void
-  ) {}
+  ) {
+    console.log(this.properties);
+  }
 
   makeWebpackConfig(configuration: Configuration): webpack.Configuration {
     const bundleIdsMap: {
@@ -77,32 +78,13 @@ export class OwnedBundle {
         : path.join(this.properties.context, this.properties.assetsDestination);
     }
 
-    // TODO: move to SourceMapPlugin
-    if (this.properties.sourceMapDestination) {
-      webpackConfig.output!.sourceMapFilename = path.isAbsolute(
-        this.properties.sourceMapDestination
-      )
-        ? path.relative(
-            webpackConfig.output!.path!,
-            this.properties.sourceMapDestination
-          )
-        : path.relative(
-            webpackConfig.output!.path!,
-            path.join(
-              this.properties.context,
-              this.properties.sourceMapDestination
-            )
-          );
-    } else {
-      webpackConfig.output!.sourceMapFilename = '[file].map';
-    }
-
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
       new SourceMapPlugin({
         bundleFormat: this.properties.format,
         sourceMap: this.properties.sourceMap,
+        sourceMapOutput: this.properties.sourceMapDestination,
       })
     );
 
@@ -127,14 +109,35 @@ export class OwnedBundle {
 
     webpackConfig.plugins.push(new LooseModePlugin(this.properties.looseMode));
 
-    if (
-      this.properties.bundlingMode === 'multi-bundle' &&
-      this.properties.type === 'dll' &&
-      configuration.features.multiBundle >= 2
-    ) {
+    if (this.properties.format === 'basic-bundle') {
+      if (this.properties.bundlingMode === 'multi-bundle') {
+        webpackConfig.plugins.push(
+          new PreloadBundlesPlugin({
+            bundles:
+              configuration.features.multiBundle < 2
+                ? this.properties.dependsOn
+                : [],
+          })
+        );
+      }
+    } else {
       webpackConfig.plugins.push(
-        new PreloadModulesDllPlugin({
-          modules: this.properties.preloadModuleNames,
+        new RamBundlePlugin({
+          type: this.properties.format,
+          bundlingMode: this.properties.bundlingMode,
+          minify: this.properties.minify,
+          minifyOptions: this.properties.minifyOptions,
+          sourceMap: Boolean(this.properties.sourceMap),
+          preloadBundles:
+            configuration.features.multiBundle < 2
+              ? this.properties.dependsOn
+              : [],
+          maxWorkers: this.properties.maxWorkers,
+          bundleId:
+            configuration.features.multiBundle < 2
+              ? this.name
+              : bundleIdsMap[this.name],
+          bundleName: this.name,
         })
       );
     }
@@ -154,33 +157,15 @@ export class OwnedBundle {
         })
       );
 
-      if (this.properties.format === 'basic-bundle') {
+      if (
+        this.properties.type === 'dll' &&
+        configuration.features.multiBundle >= 2
+      ) {
         webpackConfig.plugins.push(
-          new PreloadBundlesPlugin({
-            bundles:
-              configuration.features.multiBundle < 2
-                ? this.properties.dependsOn
-                : [],
+          new PreloadModulesDllPlugin({
+            modules: this.properties.preloadModuleNames,
           })
         );
-      } else {
-        new RamBundlePlugin({
-          type: this.properties.type as RamBundleType,
-          bundlingMode: this.properties.bundlingMode,
-          minify: this.properties.minify,
-          minifyOptions: this.properties.minifyOptions,
-          sourceMap: Boolean(this.properties.sourceMap),
-          preloadBundles:
-            configuration.features.multiBundle < 2
-              ? this.properties.dependsOn
-              : [],
-          maxWorkers: this.properties.maxWorkers,
-          bundleId:
-            configuration.features.multiBundle < 2
-              ? this.name
-              : bundleIdsMap[this.name],
-          bundleName: this.name,
-        });
       }
     }
 
