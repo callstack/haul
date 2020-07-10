@@ -1,12 +1,14 @@
+import { BundleType } from '../types';
+
 export type ExternalBundleProperties = {
-  /** Type of the bundle. External bundle must be a DLL bundle. */
-  type: 'dll';
+  /** Type of the bundle. */
+  type: BundleType;
   /** Absolute path to where the bundle is located. */
   bundlePath: string;
   /** Absolute path to where the assets for the bundle are located. */
   assetsPath: string;
   /** Absolute path to where the manifest file is located. */
-  manifestPath: string;
+  manifestPath?: string;
   /** Whether to copy the bundle and it's assets to output directory. */
   shouldCopy: boolean;
   /** What other bundles, this one depends on if any. */
@@ -15,7 +17,6 @@ export type ExternalBundleProperties = {
 
 /**
  * Class representing external (pre-built) bundle.
- * External bundle must be a DLL bundle.
  */
 export class ExternalBundle {
   /**
