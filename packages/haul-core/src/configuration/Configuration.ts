@@ -66,7 +66,6 @@ export type BundleConfig =
 export type ExternalBundleConfig = {
   name?: string;
   dll?: boolean;
-  app?: boolean;
   dependsOn?: string[];
   copyBundle?: boolean;
   bundlePath: string;
@@ -166,7 +165,7 @@ export class Configuration {
 
       if ('manifestPath' in bundleConfig) {
         return new ExternalBundle(bundleConfig.name || bundleName, {
-          type: bundleConfig.dll ? 'dll' : 'app',
+          type: 'dll',
           bundlePath: bundleConfig.bundlePath,
           assetsPath: bundleConfig.assetsPath
             ? path.isAbsolute(bundleConfig.assetsPath)

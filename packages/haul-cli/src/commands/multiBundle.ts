@@ -135,7 +135,7 @@ export default function multiBundleCommand(runtime: Runtime) {
 
         for (const bundle of bundles) {
           const bundleName = bundle.name;
-          if (bundle instanceof ExternalBundle) {
+          if (ExternalBundle.isExternal(bundle)) {
             runtime.logger.info(
               `Using external ${bundle.properties.type} bundle`,
               runtime.logger.enhanceWithModifier('bold', bundleName)
