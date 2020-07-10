@@ -56,7 +56,7 @@ module.exports = async function runWebpackCompiler({
   let bundlesBuilt = 0;
 
   for (const bundle of bundles) {
-    if (bundle instanceof ExternalBundle) {
+    if (ExternalBundle.isExternal(bundle)) {
       const bundleFilename = new BundleOutputPlugin({
         mode: configOptions.dev ? 'dev' : 'prod',
         platform,
@@ -64,6 +64,7 @@ module.exports = async function runWebpackCompiler({
         bundleName: bundle.name,
         bundleType: bundle.properties.type,
         templatesConfig: configuration.templates,
+        bundleOutputType: 'server',
       }).compileFilenameTemplate();
 
       try {
@@ -133,7 +134,7 @@ module.exports = async function runWebpackCompiler({
           }
         );
         runtime.logger.done(
-          `Copied assets for external${bundle.properties.type} bundle "${bundle.name}"`
+          `Copied assets for external ${bundle.properties.type} bundle "${bundle.name}"`
         );
       } catch (error) {
         const message = `Failed to copy assets for ${bundle.name}`;
