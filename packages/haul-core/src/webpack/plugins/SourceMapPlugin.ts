@@ -41,14 +41,15 @@ export class SourceMapPlugin {
 
     let plugin:
       | webpack.EvalSourceMapDevToolPlugin
-      | webpack.SourceMapDevToolPlugin;
+      | webpack.SourceMapDevToolPlugin
+      | undefined;
 
     if (this.config.sourceMap === 'inline') {
       plugin = new webpack.EvalSourceMapDevToolPlugin({
         ...this.config.devToolOptions,
         publicPath: `http://${this.config.serverHost}:${this.config.serverPort}/`,
       });
-    } else {
+    } else if (this.config.sourceMap) {
       plugin = new webpack.SourceMapDevToolPlugin({
         ...this.config.devToolOptions,
         filename,
@@ -56,6 +57,6 @@ export class SourceMapPlugin {
       });
     }
 
-    plugin.apply(compiler);
+    plugin?.apply(compiler);
   }
 }
