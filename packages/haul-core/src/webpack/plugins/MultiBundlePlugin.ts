@@ -15,7 +15,20 @@ type MultiBundlePluginConfig = {
   dependsOn: BundleDependency[];
 };
 
+/**
+ * A Webpack plugin for configuring multi-bundle support.
+ */
 export class MultiBundlePlugin {
+  /**
+   * Constructs new `MultiBundlePlugin`.
+   *
+   * @param config - Plugin configuration:
+   * - `bundleName` - name of the bundle,
+   * - `bundleType` - type of the bundle,
+   * - `bundleOutputPath?` - custom path to or filename of the bundle output destination,
+   * - `dependsOn` - array with DLL bundle dependencies (with: `bundleName` - name of the bundle;
+   * `manifestPath` - absolute path to manifest file), that this bundle depends on.
+   */
   constructor(private config: MultiBundlePluginConfig) {}
 
   apply(compiler: webpack.Compiler) {

@@ -7,13 +7,26 @@ import importModule from '../utils/importModule';
 
 export type ConfigurationBuilder = (envOptions: EnvOptions) => Configuration;
 
+/**
+ * Haul project configuration loader.
+ */
 export class ConfigurationLoader {
+  /**
+   * Constructs a `ConfigurationLoader` instance.
+   *
+   * @param runtime A `Runtime` instance.
+   * @param root Absolute path to project root, usually a command working directory.
+   * @param customPath A optional path to or filename of a Haul project config.
+   */
   constructor(
     private runtime: Runtime,
     private root: string,
     private customPath?: string
   ) {}
 
+  /**
+   * Compute a path to Haul project config.
+   */
   getConfigPath() {
     return this.customPath
       ? path.isAbsolute(this.customPath)
@@ -22,6 +35,10 @@ export class ConfigurationLoader {
       : path.join(this.root, DEFAULT_CONFIG_FILENAME);
   }
 
+  /**
+   * Load Haul project config and return a builder for it.
+   * A configuration builder requires `EnvOptions` to be supplied to create `Configuration` instance.
+   */
   loadBuilder(): ConfigurationBuilder {
     let configBuilder;
 
@@ -52,6 +69,11 @@ export class ConfigurationLoader {
     return configBuilder;
   }
 
+  /**
+   * Load Haul project config and instantiate `Configuration` object.
+   *
+   * @param envOptions `EnvOptions` with parameters from CLI.
+   */
   load(envOptions: EnvOptions): Configuration {
     return this.loadBuilder()(envOptions);
   }

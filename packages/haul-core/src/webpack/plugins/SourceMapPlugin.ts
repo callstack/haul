@@ -11,7 +11,21 @@ type SourceMapPluginConfig = {
   devToolOptions?: any;
 };
 
+/**
+ * Webpack plugins that enables Source Map generation.
+ */
 export class SourceMapPlugin {
+  /**
+   * Constructs new `SourceMapPlugin`
+   *
+   * @param config Plugin configuration:
+   * - `bundleFormat` - format of a bundle,
+   * - `sourceMap` - whether to enable (`true`), disable (`false`) or inline (`'inline'`) source map,
+   * - `sourceMapOutput?` - custom path to a source map file,
+   * - `serverHost?` - Packager server host address,
+   * - `serverPort?` - Packager server port,
+   * - `devToolOptions` - Options for Webpack's `EvalSourceMapDevToolPlugin` or `SourceMapDevToolPlugin`.
+   */
   constructor(private config: SourceMapPluginConfig) {
     this.config.devToolOptions = {
       test: /\.(js|jsx|css|ts|tsx|(js)?bundle)($|\?)/i,

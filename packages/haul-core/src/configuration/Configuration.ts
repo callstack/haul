@@ -113,7 +113,17 @@ export type ProjectConfig = {
   bundles: { [bundleName: string]: BundleConfigBuilder | BundleConfig };
 };
 
+/**
+ * A class representing a project configuration.
+ */
 export class Configuration {
+  /**
+   * Construct and return a `ConfigurationLoader` instance.
+   *
+   * @param runtime A `Runtime` instance.
+   * @param root Absolute path to project root, usually a command working directory.
+   * @param customPath A optional path to or filename of a Haul project config.
+   */
   static getLoader(runtime: Runtime, root: string, customPath?: string) {
     return new ConfigurationLoader(runtime, root, customPath);
   }
@@ -126,6 +136,13 @@ export class Configuration {
   ownedBundles: OwnedBundle[] = [];
   externalBundles: ExternalBundle[] = [];
 
+  /**
+   * Constructs an instance of `Configuration` class.
+   *
+   * @param projectConfig A (unprocessed) project configuration object.
+   * @param getBaseWebpackConfig A function to construct base Webpack config.
+   * @param envOptions `EnvOptions` with settings from CLI.
+   */
   constructor(
     private readonly projectConfig: ProjectConfig,
     public readonly getBaseWebpackConfig: GetBaseWebpackConfig,
@@ -156,6 +173,14 @@ export class Configuration {
     this.bundleNames = Object.keys(projectConfig.bundles);
   }
 
+  /**
+   * Construct instances of `OwnedBundle` or `ExternalBundle` based on supplied
+   * in constructor `projectConfig`.
+   *
+   * @param runtime A `Runtime` instance.
+   *
+   * @returns Unsorted array with `OwnedBundle | ExternalBundle` instances.
+   */
   createBundles(runtime: Runtime): Array<OwnedBundle | ExternalBundle> {
     const bundles = this.bundleNames.map(bundleName => {
       const bundleConfigBuilder = this.projectConfig.bundles[bundleName];
@@ -296,6 +321,15 @@ export class Configuration {
     return bundles;
   }
 
+  /**
+   * Construct instances of `OwnedBundle` or `ExternalBundle` based on supplied
+   * in constructor `projectConfig`, sorted based on their type and dependencies
+   * specified in `dependsOn`.
+   *
+   * @param runtime A `Runtime` instance.
+   *
+   * @returns Sorted array with `OwnedBundle | ExternalBundle` instances.
+   */
   createBundlesSorted(
     runtime: Runtime,
     { skipHostCheck }: { skipHostCheck?: boolean } = {}

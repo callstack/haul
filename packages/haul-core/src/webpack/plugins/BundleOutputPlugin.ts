@@ -15,7 +15,17 @@ type BundleOutputPluginConfig = {
   templatesConfig?: TemplatesConfig;
 };
 
+/**
+ * A Webpack plugin that configures path and filename of a compiled bundle.
+ */
 export class BundleOutputPlugin {
+  /**
+   * Compute output directory for bundle.
+   *
+   * @param context Absolute path to project directory, usually a command working directory.
+   * @param outputPath Absolute path to output directory for all bundle related files (eg assets).
+   * @param bundleOutputPath Path to or filename of output bundle exclusive destination.
+   */
   static getBundleOutputDirectory(
     context: string,
     outputPath: string,
@@ -38,8 +48,25 @@ export class BundleOutputPlugin {
     return bundleOutputDirectory;
   }
 
+  /**
+   * Constructs a new `BundleOutputPlugin`.
+   *
+   * @param config Plugin configuration:
+   * - `mode` - mode in which the bundle will be compiled,
+   * - `platform` - platform for which the bundle will be compiled,
+   * - `bundlingMode` - bundling mode,
+   * - `bundleName` - name of the bundle,
+   * - `bundleType` - type of the bundle,
+   * - `bundleOutputType?` - type of the bundle output,
+   * - `bundleOutputPath?` - custom path to or filename of the bundle destination,
+   * - `templatesConfig?` - templates config.
+   */
   constructor(private config: BundleOutputPluginConfig) {}
 
+  /**
+   * Compute filename for a bundle (eg. `hello.platform.bundle`) from provided
+   * in constructor temples.
+   */
   compileFilenameTemplate() {
     const templateName =
       this.config.bundleOutputType === 'server'
@@ -66,6 +93,14 @@ export class BundleOutputPlugin {
     });
   }
 
+  /**
+   * Compute final bundle filename when running in single-bundle bundling mode.
+   * If `bundleOutputPath` was provided in constructor, it will be used for computing
+   * the output filename, otherwise the filename will be compiled for templates.
+   *
+   * @param context Absolute path to project directory, usually a command working directory.
+   * @param outputPath Absolute path to output directory for all bundle related files (eg assets).
+   */
   getOutputFilenameForSingleBundle(context: string, outputPath: string) {
     let filename: string;
 
@@ -83,6 +118,14 @@ export class BundleOutputPlugin {
     return filename;
   }
 
+  /**
+   * Compute final bundle filename when running in multi-bundle bundling mode.
+   * The output filename is compiled from templates, but can be altered if the `bundleOutputPath`
+   * was provided in the constructor.
+   *
+   * @param context Absolute path to project directory, usually a command working directory.
+   * @param outputPath Absolute path to output directory for all bundle related files (eg assets).
+   */
   getOutputFilenameForMultiBundle(context: string, outputPath: string) {
     let filename = this.compileFilenameTemplate();
     if (this.config.bundleOutputPath) {
