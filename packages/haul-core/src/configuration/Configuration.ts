@@ -142,6 +142,7 @@ export class Configuration {
           ios: '[bundleName].jsbundle',
           android: '[bundleName].[platform].bundle',
           __server__: '[bundleName].[platform].bundle',
+          __fallback__: '[bundleName].[platform].bundle',
         },
       },
       projectConfig.templates

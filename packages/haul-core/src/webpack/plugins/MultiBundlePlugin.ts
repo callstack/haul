@@ -19,11 +19,6 @@ export class MultiBundlePlugin {
   constructor(private config: MultiBundlePluginConfig) {}
 
   apply(compiler: webpack.Compiler) {
-    // Sanity check
-    if (this.config.bundleType === 'default') {
-      return;
-    }
-
     const context = compiler.options.context || '';
     const outputPath = compiler.options.output?.path || '';
     const bundleOutputDirectory = BundleOutputPlugin.getBundleOutputDirectory(
@@ -59,13 +54,14 @@ export class MultiBundlePlugin {
       );
     });
 
-    compiler.options.output = {
-      ...compiler.options.output,
-      library,
-      libraryTarget,
-    };
-    compiler.options.plugins = (compiler.options.plugins || []).concat(
-      ...plugins
-    );
+    if (this.config.bundleType === 'app') {
+      compiler.options.output = {
+        ...compiler.options.output,
+        library,
+        libraryTarget,
+      };
+    }
+
+    plugins.forEach(plugin => plugin.apply(compiler));
   }
 }

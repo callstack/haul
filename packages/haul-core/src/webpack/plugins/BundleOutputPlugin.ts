@@ -45,7 +45,11 @@ export class BundleOutputPlugin {
       this.config.bundleOutputType === 'server'
         ? '__server__'
         : this.config.platform;
-    const template = this.config.templatesConfig?.filename?.[templateName];
+    let template = this.config.templatesConfig?.filename?.[templateName];
+    if (template === undefined) {
+      template = this.config.templatesConfig?.filename?.['__fallback__'];
+    }
+
     if (template === undefined) {
       throw new Error(
         `Cannot find template for ${templateName} in ${JSON.stringify(
