@@ -12,11 +12,11 @@ export default function launchBrowser(runtime: Runtime, url: string) {
    * Run Chrome (Chrome Canary) or supported platform.
    * In case of macOS, we can eventually fallback to Safari.
    *
-   * select(attemp1, attemp2, attemp3,...) // attempt to run is from left to right
+   * select(attempt1, attempt2, attempt3,...) // attempt to run is from left to right
    */
-  select(
+  const resolutions: Record<string, ReturnType<typeof openWith>>[] = [
     {
-      // try to find & run Google Chrome
+      // Try to find & run Google Chrome
       darwin: openWith('google chrome'),
       win32: openWith('chrome'),
       _: openWith('google-chrome'),
@@ -28,8 +28,17 @@ export default function launchBrowser(runtime: Runtime, url: string) {
     {
       // No Canary / Chrome, let's run Safari
       darwin: openWith('safari'),
-    }
-  ).catch((error: Error) => {
+    },
+  ];
+
+  // If the user has provided a specific browser preference, try that one first.
+  if (process.env.RCT_DEBUGGER_BROWSER) {
+    resolutions.unshift({
+      _: openWith(process.env.RCT_DEBUGGER_BROWSER),
+    });
+  }
+
+  select(resolutions).catch((error: Error) => {
     runtime.logger.warn(
       `Cannot start browser for debugging. Navigate manually to "${url}": ${error.message}`
     );
