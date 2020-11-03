@@ -80,7 +80,13 @@ export default function setupDevtoolRoutes(
         filename
       )}\nYou can open the trace report in Google Chrome by navigating to 'chrome://tracing' and clicking 'load'.`;
       try {
-        await promisify(fs.writeFile)(filename, request.payload);
+        await promisify(fs.writeFile)(
+          filename,
+          typeof request.payload === 'string' ||
+            request.payload instanceof Buffer
+            ? request.payload
+            : JSON.stringify(request.payload)
+        );
         runtime.logger.info(message);
       } catch (error) {
         return h.response().code(200);
