@@ -63,6 +63,7 @@ export default async function main() {
       });
     }, yargs)
     .demandCommand(1)
+    .strict()
     .help('h')
     .alias('h', 'help')
     .alias('v', 'version')
