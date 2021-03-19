@@ -37,7 +37,7 @@ export default function getDefaultConfig(
   return {
     mode: dev ? 'development' : 'production',
     context: root,
-    devtool: false,
+    devtool: type === 'basic-bundle' ? false : 'source-map',
     entry: entryFiles,
     output: {
       path: assetsDest || root,
