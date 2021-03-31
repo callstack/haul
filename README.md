@@ -18,6 +18,18 @@
 [![Chat][chat-badge]][chat]
 [![tweet][tweet-badge]][tweet]
 
+---
+
+## Notice
+
+We're actively working on a Haul successor, which would provide long awaited features like Hot Module Replacement + React Refresh and better feature-parity with Metro. The version `1.0.0` is already released!
+
+If you're investigating using Haul, we highly recommend giving a [react-native-webpack-toolkit](https://github.com/callstack/react-native-webpack-toolkit) a go.
+
+If you're already using Haul, we recommend migrating to [react-native-webpack-toolkit](https://github.com/callstack/react-native-webpack-toolkit) for better developer experience and feature set. The migration process is fairly straighforward, since you now have full access to `webpack.config.js`.
+
+---
+
 Haul is a drop-in replacement for `react-native` CLI built on open tools like Webpack. It can act as a development server or bundle your React Native app for production.
 
 `@haul-bundler/cli` and other packages under `@haul-bundler` scope are a overhaul of `haul` package __and support only React Native 0.59.0 and above__. If you need to support older versions, please check [`legacy` branch](https://github.com/callstack/haul/tree/legacy).
