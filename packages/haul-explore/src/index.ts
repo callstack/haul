@@ -89,7 +89,7 @@ const outputFile = argv[outputFormat] || '';
 
 function writeResults(result: ExploreResult) {
   if (outputFile.length > 0) {
-    fs.writeFileSync(outputFile, result.output);
+    fs.writeFileSync(outputFile, result.output || 'undefined');
   } else {
     writeHtmlToTempFile(result.output);
   }

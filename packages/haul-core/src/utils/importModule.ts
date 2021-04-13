@@ -86,9 +86,11 @@ function loadModule(
   provided.cache[module.id] = module;
 
   // Create resolver for this module.
-  const currentResolve = ((Module.createRequireFromPath(
-    module.filename
-  ) as unknown) as {
+
+  // createRequireFromPath was deprecated in Node v12.2.0, createRequire has taken its place
+  const createRequire = Module.createRequire || Module.createRequireFromPath;
+
+  const currentResolve = ((createRequire(module.filename) as unknown) as {
     resolve: RequireResolve;
   }).resolve;
 
