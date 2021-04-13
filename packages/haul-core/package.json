@@ -1,5 +1,5 @@
 {
-  "version": "0.22.1",
+  "version": "0.23.0",
   "name": "@haul-bundler/core",
   "description": "Haul core library",
   "main": "build/index.js",
