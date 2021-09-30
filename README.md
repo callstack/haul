@@ -24,9 +24,9 @@
 
 We're actively working on a Haul successor, which would provide long awaited features like Hot Module Replacement + React Refresh and better feature-parity with Metro. The version `1.0.0` is already released!
 
-If you're investigating using Haul, we highly recommend giving a [react-native-webpack-toolkit](https://github.com/callstack/react-native-webpack-toolkit) a go.
+If you're investigating using Haul, we highly recommend giving a [Re.pack](https://github.com/callstack/repack) a go.
 
-If you're already using Haul, we recommend migrating to [react-native-webpack-toolkit](https://github.com/callstack/react-native-webpack-toolkit) for better developer experience and feature set. The migration process is fairly straighforward, since you now have full access to `webpack.config.js`.
+If you're already using Haul, we recommend migrating to [Re.pack](https://github.com/callstack/repack) for better developer experience and feature set. The migration process is fairly straighforward, since you now have full access to `webpack.config.js`.
 
 ---
 
